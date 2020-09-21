@@ -1,0 +1,19 @@
+
+.navbar-brand {
+	padding-left: 10px;
+}
+
+#scanbot-camera-container {
+	width: 98%;
+	height: 500px;
+	margin-top: 1%;
+	margin-left: 1%;
+}
+
+.version-info {
+    bottom: 5px;
+    right: 5px;
+    position: fixed;
+    color: gray;
+    font-size: 0.8em;
+}
