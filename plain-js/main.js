@@ -1,26 +1,20 @@
 
 const containerId = "scanbot-camera-container";
 const licenseKey =
-    "Fb+wAM65FKYR9rCXZ6Ts9PSUK9YGR0" +
-    "/XLT1Tj4fUrylAnQHfiRFTD3lYQ9ZH" +
-    "5tdZm42A3kg5FYUoEBi3hMeHBC/YZT" +
-    "vbS7eg9t7j95yjZHHImgXjNc8X5kse" +
-    "I9z4LhIspE5+aSHNh6OShY48ToY1oU" +
-    "/WWdIn5gWZo19GahCmifVLsC1d81Tj" +
-    "XlAj/6F3llOK+trHpYIHtik3gEORyu" +
-    "2TY+KtjcZxW3c+xhsmvdVD0V6bhwua" +
-    "VnXCXpTLZ1M0DOMh7pfDaZ4pfEnpR8" +
-    "62mamP7t5AcofW4np3SxnOe96H3hRB" +
-    "Me8VJgc+W6zr9RaYEFzVtjjW6Vn0eI" +
-    "BL/G2CmMMrYQ==\nU2NhbmJvdFNESw" +
-    "psb2NhbGhvc3R8c2NhbmJvdHNkay13" +
-    "YXNtLWRlYnVnaG9zdC5zMy1ldS13ZX" +
-    "N0LTEuYW1hem9uYXdzLmNvbXxzY2Fu" +
-    "Ym90c2RrLXdlYnNkay1kZW1vLnMzLW" +
-    "V1LXdlc3QtMS5hbWF6b25hd3MuY29t" +
-    "fHdlYnNkay1kZW1vLWludGVybmFsLn" +
-    "NjYW5ib3QuaW8KMTYwOTQ1OTE5OQox" +
-    "MDQ4NTc1Cjg=\n";
+	"HFShPXMA9HVCFTe7rSDyB2BNGYympq" +
+	"j/Rd7fUkiSGNiUT1mfXnvNwP00AqjO" +
+	"CNQg6XXxr+GVzyIXME1txuN/5wqg6u" +
+	"4B50PPM9P9K5g2VRpAJMIpd53lCXF5" +
+	"slOHXCv04c1TX8Nya965nD1pASkPB5" +
+	"UMexC18OOfuSlmvihCxBcP5i2h5NK8" +
+	"HVxIdFfYvccFVUc2AEIcUsyrx9Dif/" +
+	"sPFAdFbZt20auIXng5sIg5JMJlsm70" +
+	"yy7UnsTtz5NDjes9j1w8iyfui2P/0r" +
+	"tYq7MImYOUW/T39pv550y1Xa4WqRg2" +
+	"9BeL1YdbGRgaRhqOIorY+PkDBawfGw" +
+	"kZgRU1lbfSwg==\nU2NhbmJvdFNESw" +
+	"psb2NhbGhvc3QKMTYwOTQ1OTE5OQox" +
+	"MDQ4NTc1Cjg=\n";
 
 let scanbotSDK;
 let documentScanner;
