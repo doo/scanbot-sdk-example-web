@@ -17,3 +17,21 @@
     color: gray;
     font-size: 0.8em;
 }
+
+#image-modal {
+    position: absolute;
+    opacity: 1 !important;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+#document-image {
+    width: 100%;
+    height: 400px;
+    object-fit: contain;
+}
+
+#popup-close-button {
+    margin-left: .7rem;
+}
