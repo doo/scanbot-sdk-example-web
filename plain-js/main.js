@@ -23,6 +23,8 @@ window.onload = async function() {
     	containerId: containerId,
         onDocumentDetected: e => {
             console.log("Detected Document:", e);
+            // If a document was found, 'cropped' will contain its base64 representation.
+            // 'original' is the image you snapped, that always contains the image you took
             document.getElementById("document-image").src = e.cropped ? e.cropped : e.original;
             document.getElementById("image-modal").classList.toggle("modal");
         },
