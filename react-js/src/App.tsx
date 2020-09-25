@@ -39,7 +39,7 @@ export default class App extends React.Component<any, any> {
     render() {
         return (
             <div className="App">
-                <div id={this.SCANNER_CONTAINER} style={this.props.style}/>
+                <div id={this.SCANNER_CONTAINER} style={{width: "96vw", height: "90vh", padding: "1vh"}}/>
             </div>
         );
     }
