@@ -15,7 +15,8 @@
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.3",
     "scanbot-web-sdk": "1.0.0",
-    "typescript": "3.7.5"
+    "typescript": "3.7.5",
+    "react-image-lightbox": "latest"
   },
   "scripts": {
     "start": "react-scripts start",

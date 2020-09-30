@@ -3,7 +3,9 @@ import './App.css';
 
 import ScanbotSDK from "scanbot-web-sdk/webpack";
 import {DocumentScannerConfiguration} from "scanbot-web-sdk/component/model/document-scanner-configuration";
-import {AppBar, Button, Container, IconButton, Toolbar, Typography} from "@material-ui/core";
+import {AppBar, Container, Toolbar, Typography} from "@material-ui/core";
+import Lightbox from 'react-image-lightbox';
+import 'react-image-lightbox/style.css'; // This only needs to be imported once in your app
 
 export default class App extends React.Component<any, any> {
 
@@ -11,8 +13,11 @@ export default class App extends React.Component<any, any> {
     license = "";
     SDK: ScanbotSDK | undefined;
 
+    document: any;
+
     constructor(props: any) {
         super(props);
+        this.state = { isOpen: false };
     }
 
     async componentDidMount() {
@@ -30,6 +35,8 @@ export default class App extends React.Component<any, any> {
         const configuration: DocumentScannerConfiguration = {
             onDocumentDetected: async (result: any) => {
                 console.log("Detected document:", result);
+                this.document = result;
+                this.setState({ isOpen: true });
             },
             containerId: this.SCANNER_CONTAINER
         };
@@ -50,6 +57,13 @@ export default class App extends React.Component<any, any> {
                 <Container style={{height: "100vh"}}>
                     <div id={this.SCANNER_CONTAINER} style={{width: "100%", height: "100%"}}/>
                 </Container>
+
+                {this.state.isOpen && (
+                    <Lightbox
+                        mainSrc={this.document.cropped ? this.document.cropped : this.document.original}
+                        onCloseRequest={() => this.setState({ isOpen: false })}
+
+                    />)}
             </div>
         );
     }
