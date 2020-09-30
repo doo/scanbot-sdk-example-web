@@ -43,7 +43,13 @@ cd plain-js/
 php -S localhost:8000
 ```
 
-### Please note
+
+## Documentation
+For the developer guide and full API reference of the Scanbot Web Document Scanner SDK please check out the 
+[documentation](https://scanbotsdk.github.io/documentation/web/).
+
+
+## Please note
 The Scanbot Web Document Scanner SDK will run without a license for one minute per session!
 
 After the trial period is over all Scanbot Web SDK functions 
