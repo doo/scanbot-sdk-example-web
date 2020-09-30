@@ -3,6 +3,7 @@ import './App.css';
 
 import ScanbotSDK from "scanbot-web-sdk/webpack";
 import {DocumentScannerConfiguration} from "scanbot-web-sdk/component/model/document-scanner-configuration";
+import {AppBar, Button, Container, IconButton, Toolbar, Typography} from "@material-ui/core";
 
 export default class App extends React.Component<any, any> {
 
@@ -39,7 +40,16 @@ export default class App extends React.Component<any, any> {
     render() {
         return (
             <div className="App">
-                <div id={this.SCANNER_CONTAINER} style={{width: "96vw", height: "90vh", padding: "1vh"}}/>
+                <AppBar position="fixed">
+                    <Toolbar>
+                        <Typography variant="h6" >
+                            Scanbot Web SDK Example
+                        </Typography>
+                    </Toolbar>
+                </AppBar>
+                <Container style={{height: "100vh"}}>
+                    <div id={this.SCANNER_CONTAINER} style={{width: "100%", height: "100%"}}/>
+                </Container>
             </div>
         );
     }
