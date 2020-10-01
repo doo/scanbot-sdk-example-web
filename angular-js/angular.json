@@ -28,7 +28,9 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "node_modules/scanbot-web-sdk/component/styles/main.css",
+              "node_modules/scanbot-web-sdk/component/styles/shutter.css"
             ],
             "scripts": []
           },

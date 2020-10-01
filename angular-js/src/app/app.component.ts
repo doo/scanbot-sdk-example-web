@@ -1,9 +1,7 @@
 import { Component } from '@angular/core';
-import ScanbotSDK from "scanbot-web-sdk/component/scanbot-sdk";
+import ScanbotSDK from "scanbot-web-sdk";
 import {InitializationOptions} from "scanbot-web-sdk/component/model/initialization-options";
 import {DocumentScannerConfiguration} from "scanbot-web-sdk/component/model/document-scanner-configuration";
-import "scanbot-web-sdk/component/styles/main.css";
-import "scanbot-web-sdk/component/styles/shutter.css";
 
 @Component({
   selector: 'app-root',
