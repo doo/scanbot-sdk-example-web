@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import ScanbotSDK from "scanbot-web-sdk";
 import {InitializationOptions} from "scanbot-web-sdk/component/model/initialization-options";
 import {DocumentScannerConfiguration} from "scanbot-web-sdk/component/model/document-scanner-configuration";
+import ScanbotSDK from "scanbot-web-sdk/webpack";
 
 @Component({
   selector: 'app-root',
@@ -22,6 +22,7 @@ export class AppComponent {
       // Optional: configure another source for the engine
       // engine: "lib/"
     };
+
     this.SDK = await ScanbotSDK.initialize(options);
 
     const configuration: DocumentScannerConfiguration = {
