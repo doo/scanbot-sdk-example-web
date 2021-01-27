@@ -2,7 +2,7 @@ import React from 'react';
 import './App.css';
 
 import ScanbotSDK from "scanbot-web-sdk/webpack";
-import {DocumentScannerConfiguration} from "scanbot-web-sdk/component/model/document-scanner-configuration";
+import {DocumentScannerConfiguration} from "scanbot-web-sdk/component/model/configuration/document-scanner-configuration";
 import {AppBar, Container, Toolbar, Typography} from "@material-ui/core";
 import Lightbox from 'react-image-lightbox';
 import 'react-image-lightbox/style.css'; // This only needs to be imported once in your app

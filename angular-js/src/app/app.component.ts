@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
-import {InitializationOptions} from "scanbot-web-sdk/component/model/initialization-options";
-import {DocumentScannerConfiguration} from "scanbot-web-sdk/component/model/document-scanner-configuration";
-import ScanbotSDK from "scanbot-web-sdk/webpack";
+import {Component} from "@angular/core";
+import {InitializationOptions} from "scanbot-web-sdk/typings/model/configuration/initialization-options";
+import {DocumentScannerConfiguration} from "scanbot-web-sdk/typings/model/configuration/document-scanner-configuration";
+import ScanbotSDK from "scanbot-web-sdk/typings";
+
 
 @Component({
   selector: 'app-root',
