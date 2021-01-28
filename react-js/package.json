@@ -14,7 +14,7 @@
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-scripts": "3.4.3",
-    "scanbot-web-sdk": "../../scanbot-sdk-web/scanbot-web-sdk-react-component-2.0.0-alpha1.tgz",
+    "scanbot-web-sdk": "2.0.0-alpha1",
     "typescript": "3.7.5",
     "react-image-lightbox": "latest"
   },
