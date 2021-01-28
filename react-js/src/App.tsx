@@ -20,8 +20,6 @@ export default class App extends React.Component<any, any> {
     license = "";
     SDK: ScanbotSDK | undefined;
 
-    document: any;
-
     documentScanner?: IDocumentScannerHandle;
     croppingView?: ICroppingViewHandle;
 
