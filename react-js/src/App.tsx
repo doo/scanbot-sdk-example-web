@@ -42,23 +42,22 @@ export default class App extends React.Component<any, any> {
             return;
         }
 
-        const configuration: DocumentScannerConfiguration = {
+        const scanner: DocumentScannerConfiguration = {
             onDocumentDetected: async (result: DetectionResult) => {
                 console.log("Detected document: ", result);
                 const image = result.cropped ?? result.original;
                 this.setState({
                     image: await this.SDK?.toDataUrl(image),
                     configuration: {
-                        ...configuration,
+                        ...scanner,
                         cropping: {image: image, polygon: result.polygon}
                     }
                 });
             },
-            containerId: this.SCANNER_CONTAINER
+
         };
 
-        await this.SDK.createDocumentScanner(configuration);
-        // this.setState({configuration: {document: document}});
+        this.setState({configuration: {scanner: scanner}});
     }
 
     render() {
@@ -68,17 +67,22 @@ export default class App extends React.Component<any, any> {
                     <Toolbar><Typography variant="h6">Scanbot Web SDK Example</Typography></Toolbar>
                 </AppBar>
                 <div style={{height: "100vh"}}>
-                    {/*{this.state.configuration.document && <DocumentScannerView configuration={this.state.configuration.document}/>}*/}
-                    <div id={this.SCANNER_CONTAINER} style={{width: "100%", height: "100%"}}/>
+                    {this.decideContent()}
                 </div>
-                {this.state.image && <Lightbox mainSrc={this.state.image} onCloseRequest={this.closePopup.bind(this)}/>}
-                {/*<div style={{height: "100vh"}}>*/}
-                {/*    {this.state.image && <CroppingView configuration={this.state.configuration.cropping}/>}*/}
-                {/*</div>*/}
             </div>
         );
     }
 
+    decideContent() {
+        if (this.state.image) {
+            return <CroppingView configuration={this.state.configuration.cropping}/>;
+        }
+
+        if (this.state.configuration.scanner) {
+            return <DocumentScannerView configuration={this.state.configuration.scanner}/>
+        }
+        // this.state.image && <Lightbox mainSrc={this.state.image} onCloseRequest={this.closePopup.bind(this)}/>}
+    }
     closePopup() {
         this.setState({image: undefined});
     }
