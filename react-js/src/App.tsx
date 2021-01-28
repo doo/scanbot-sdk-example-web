@@ -1,11 +1,15 @@
 import React from 'react';
 import './App.css';
-
-import ScanbotSDK from "scanbot-web-sdk/webpack";
-import {DocumentScannerConfiguration} from "scanbot-web-sdk/component/model/configuration/document-scanner-configuration";
 import {AppBar, Container, Toolbar, Typography} from "@material-ui/core";
 import Lightbox from 'react-image-lightbox';
 import 'react-image-lightbox/style.css'; // This only needs to be imported once in your app
+
+// Import SDK from webpack directory to ensure web assembly binary and worker and bundled with webpack
+import ScanbotSDK from "scanbot-web-sdk/webpack";
+
+// Other typings should be imported from the component folder
+import {DocumentScannerConfiguration} from "scanbot-web-sdk/component/model/configuration/document-scanner-configuration";
+import DocumentScannerView from "scanbot-web-sdk/component/document-scanner-view";
 
 export default class App extends React.Component<any, any> {
 
@@ -17,7 +21,10 @@ export default class App extends React.Component<any, any> {
 
     constructor(props: any) {
         super(props);
-        this.state = { isOpen: false };
+        this.state = {
+            isOpen: false,
+            configuration: undefined
+        };
     }
 
     async componentDidMount() {
@@ -41,12 +48,12 @@ export default class App extends React.Component<any, any> {
             containerId: this.SCANNER_CONTAINER
         };
 
-        await this.SDK.createDocumentScanner(configuration);
+        this.setState({configuration: configuration});
     }
 
     render() {
         return (
-            <div className="App">
+            <div>
                 <AppBar position="fixed">
                     <Toolbar>
                         <Typography variant="h6" >
@@ -54,9 +61,9 @@ export default class App extends React.Component<any, any> {
                         </Typography>
                     </Toolbar>
                 </AppBar>
-                <Container style={{height: "100vh"}}>
-                    <div id={this.SCANNER_CONTAINER} style={{width: "100%", height: "100%"}}/>
-                </Container>
+                <div     style={{height: "100vh", backgroundColor: "red"}}>
+                    {this.state.configuration && <DocumentScannerView configuration={this.state.configuration}/>}
+                </div>
 
                 {this.state.isOpen && (
                     <Lightbox
