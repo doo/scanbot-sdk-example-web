@@ -11,6 +11,8 @@ import ScanbotSDK from "scanbot-web-sdk/webpack";
 import {DocumentScannerConfiguration} from "scanbot-web-sdk/component/model/configuration/document-scanner-configuration";
 import DocumentScannerView from "scanbot-web-sdk/component/document-scanner-view";
 import {DetectionResult} from "scanbot-web-sdk/component/model/response/detection-result";
+import {CroppingViewConfiguration} from "scanbot-web-sdk/component/model/configuration/cropping-view-configuration";
+import CroppingView from "scanbot-web-sdk/component/cropping-view";
 
 export default class App extends React.Component<any, any> {
 
@@ -24,7 +26,10 @@ export default class App extends React.Component<any, any> {
         super(props);
         this.state = {
             image: undefined,
-            configuration: undefined
+            configuration: {
+                scanner: undefined,
+                cropping: undefined
+            }
         };
     }
 
@@ -39,12 +44,21 @@ export default class App extends React.Component<any, any> {
 
         const configuration: DocumentScannerConfiguration = {
             onDocumentDetected: async (result: DetectionResult) => {
-                this.setState({image: await this.SDK?.toDataUrl(result.cropped ?? result.original)});
+                console.log("Detected document: ", result);
+                const image = result.cropped ?? result.original;
+                this.setState({
+                    image: await this.SDK?.toDataUrl(image),
+                    configuration: {
+                        ...configuration,
+                        cropping: {image: image, polygon: result.polygon}
+                    }
+                });
             },
             containerId: this.SCANNER_CONTAINER
         };
 
-        this.setState({configuration: configuration});
+        await this.SDK.createDocumentScanner(configuration);
+        // this.setState({configuration: {document: document}});
     }
 
     render() {
@@ -53,10 +67,14 @@ export default class App extends React.Component<any, any> {
                 <AppBar position="fixed">
                     <Toolbar><Typography variant="h6">Scanbot Web SDK Example</Typography></Toolbar>
                 </AppBar>
-                <div style={{height: "100vh", backgroundColor: "red"}}>
-                    {this.state.configuration && <DocumentScannerView configuration={this.state.configuration}/>}
+                <div style={{height: "100vh"}}>
+                    {/*{this.state.configuration.document && <DocumentScannerView configuration={this.state.configuration.document}/>}*/}
+                    <div id={this.SCANNER_CONTAINER} style={{width: "100%", height: "100%"}}/>
                 </div>
                 {this.state.image && <Lightbox mainSrc={this.state.image} onCloseRequest={this.closePopup.bind(this)}/>}
+                {/*<div style={{height: "100vh"}}>*/}
+                {/*    {this.state.image && <CroppingView configuration={this.state.configuration.cropping}/>}*/}
+                {/*</div>*/}
             </div>
         );
     }
