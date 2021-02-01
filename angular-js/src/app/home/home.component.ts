@@ -3,11 +3,11 @@ import {Router} from "@angular/router";
 import {RoutePaths} from "../app-routing.module";
 import {ScanbotSdkService} from "../service/scanbot-sdk-service";
 import {NavigationUtils} from "../service/navigation-utils";
+import {ImageUtils} from "../service/image-utils";
+import {DocumentRepository} from "../service/document-repository";
 
 export enum FeatureId {
-  Scanner,
   Picker,
-  Results,
   License
 }
 @Component({
@@ -18,16 +18,20 @@ export enum FeatureId {
 export class HomeComponent implements OnInit {
 
   router: Router;
+  sdk: ScanbotSdkService;
+  documents: DocumentRepository;
 
   features: any = [
-    { route: RoutePaths.DocumentScanner, name: "Scan Documents"},
-    { id: FeatureId.Picker,  name: "Pick image"},
-    { route: RoutePaths.ImageResults, name: "Image Results"},
-    { id: FeatureId.License, name: "Check License"}
+    {route: RoutePaths.DocumentScanner, name: "Scan Documents"},
+    {id: FeatureId.Picker, name: "Pick image"},
+    {route: RoutePaths.ImageResults, name: "Image Results"},
+    {id: FeatureId.License, name: "Check License"}
   ];
 
-  constructor(_router: Router, sdk: ScanbotSdkService) {
+  constructor(_router: Router, _sdk: ScanbotSdkService, _repository: DocumentRepository) {
     this.router = _router;
+    this.sdk = _sdk;
+    this.documents = _repository;
   }
 
   ngOnInit(): void {
@@ -40,21 +44,9 @@ export class HomeComponent implements OnInit {
       return;
     }
 
-    switch (e.id) {
-      case FeatureId.Scanner:
-        console.log("start scanner");
-        break;
-      case FeatureId.Picker:
-        console.log("pick image");
-        break;
-      case FeatureId.Results:
-        console.log("results");
-        break;
-      case FeatureId.License:
-        console.log("license");
-        break;
-      default:
-        console.error("Unknown feature")
+    if (e.id === FeatureId.Picker) {
+      const result = await ImageUtils.pick();
+      this.documents.add(result);
     }
   }
 }

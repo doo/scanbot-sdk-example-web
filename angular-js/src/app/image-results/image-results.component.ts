@@ -3,7 +3,6 @@ import {Router} from "@angular/router";
 import {ScanbotSdkService} from "../service/scanbot-sdk-service";
 import {DocumentRepository} from "../service/document-repository";
 import {NavigationUtils} from "../service/navigation-utils";
-import {ancestorWhere} from "tslint";
 
 @Component({
   selector: 'app-image-results',
@@ -30,6 +29,10 @@ export class ImageResultsComponent implements OnInit {
     NavigationUtils.showBackButton(true);
 
     const pages = this.repository.getPages();
+    if (pages.length > 0) {
+      NavigationUtils.getElementByClassName("nothing-to-display-hint").style.display = "none";
+    }
+
     for (const page of pages) {
       this.documents.push({image: await this.sdk.toDataUrl(page)});
     }
