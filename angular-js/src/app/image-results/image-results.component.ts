@@ -1,0 +1,38 @@
+import { Component, OnInit } from '@angular/core';
+import {Router} from "@angular/router";
+import {ScanbotSdkService} from "../service/scanbot-sdk-service";
+import {DocumentRepository} from "../service/document-repository";
+import {NavigationUtils} from "../service/navigation-utils";
+import {ancestorWhere} from "tslint";
+
+@Component({
+  selector: 'app-image-results',
+  templateUrl: './image-results.component.html',
+  styleUrls: ['./image-results.component.scss']
+})
+export class ImageResultsComponent implements OnInit {
+
+  documents: any[];
+
+  router: Router;
+  sdk: ScanbotSdkService;
+  repository: DocumentRepository;
+
+  constructor(_router: Router, _sdk: ScanbotSdkService, _documents: DocumentRepository) {
+    this.router = _router;
+    this.sdk = _sdk;
+    this.repository = _documents;
+
+    this.documents = [];
+  }
+
+  async ngOnInit(): Promise<void> {
+    NavigationUtils.showBackButton(true);
+
+    const pages = this.repository.getPages();
+    for (const page of pages) {
+      this.documents.push({image: await this.sdk.toDataUrl(page)});
+    }
+  }
+
+}

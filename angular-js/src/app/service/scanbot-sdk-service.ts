@@ -41,4 +41,8 @@ export class ScanbotSdkService {
   disposeScanner() {
     this.scanner.dispose();
   }
+
+  async toDataUrl(page: any) {
+    return await this.instance.toDataUrl(page.cropped ?? page.original);
+  }
 }

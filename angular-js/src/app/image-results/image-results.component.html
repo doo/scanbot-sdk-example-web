@@ -1,0 +1,9 @@
+
+<mat-grid-list cols="3" rowHeight="120px">
+  <mat-grid-tile
+    *ngFor="let document of documents"
+    [colspan]="1"
+    [rowspan]="1">
+    <img [src]="document.image">
+  </mat-grid-tile>
+</mat-grid-list>

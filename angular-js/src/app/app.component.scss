@@ -41,7 +41,8 @@ svg#clouds {
 }
 
 .toolbar-logo {
-  //display: none;
+  margin-left: 5px !important;
+  margin-right: 5px !important;
 }
 .back-button {
   height: 50px;
@@ -49,5 +50,4 @@ svg#clouds {
   line-height: 50px;
   font-size: 25px;
   text-align: center;
-  //display: none;
 }

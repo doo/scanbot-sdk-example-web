@@ -6,6 +6,7 @@ import {ScanbotSdkService} from "../service/scanbot-sdk-service";
 import {DocumentScannerConfiguration} from "scanbot-web-sdk/@types/model/configuration/document-scanner-configuration";
 import {Router} from "@angular/router";
 import {NavigationUtils} from "../service/navigation-utils";
+import {DocumentRepository} from "../service/document-repository";
 
 @Component({
   selector: 'app-document-scanner',
@@ -14,17 +15,17 @@ import {NavigationUtils} from "../service/navigation-utils";
 })
 export class DocumentScannerComponent implements OnInit {
 
-  documentScanner?: IDocumentScannerHandle;
-
   router: Router;
   sdk: ScanbotSdkService;
+  documents: DocumentRepository;
 
-  constructor(_router: Router, sdk: ScanbotSdkService) {
+  constructor(_router: Router, _sdk: ScanbotSdkService, _documents: DocumentRepository) {
     this.router = _router;
-    this.sdk = sdk;
+    this.sdk = _sdk;
+    this.documents = _documents;
   }
-  async ngOnInit(): Promise<void> {
 
+  async ngOnInit(): Promise<void> {
     NavigationUtils.showBackButton(true);
     if (!this.sdk.isReady()) {
       this.sdk.onReady = () => {
@@ -46,14 +47,13 @@ export class DocumentScannerComponent implements OnInit {
   }
 
   async onDocumentDetected(result: DetectionResult) {
-    console.log("Detected document: ", result);
-    const image = result.cropped ?? result.original;
-    this.documentScanner?.dispose();
-    // const config: CroppingViewConfiguration = {
-    //   image: image,
-    //   polygon: result.polygon,
-    //   containerId: ScanbotSDKService.CONTAINER_ID
-    // };
-    // this.croppingView = await this.SDK?.openCroppingView(config);
+    this.documents.add(result);
+    const counter = NavigationUtils.getElementByClassName("scanner-page-counter");
+    counter.innerText = this.documents.count() + " PAGES";
+  }
+
+  async onScanningDone() {
+    this.sdk.disposeScanner();
+    await this.router.navigateByUrl("/");
   }
 }

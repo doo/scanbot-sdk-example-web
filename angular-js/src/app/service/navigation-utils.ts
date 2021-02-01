@@ -2,7 +2,7 @@ import {RoutePaths} from "../app-routing.module";
 
 export class NavigationUtils {
 
-  private static getElementByClassName(name: string) {
+  public static getElementByClassName(name: string) {
     return document.getElementsByClassName(name)[0] as HTMLElement;
   }
 

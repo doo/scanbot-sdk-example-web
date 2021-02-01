@@ -1,7 +1,6 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 import {RoutePaths} from "../app-routing.module";
-import ScanbotSDK from "scanbot-web-sdk/webpack";
 import {ScanbotSdkService} from "../service/scanbot-sdk-service";
 import {NavigationUtils} from "../service/navigation-utils";
 
@@ -23,7 +22,7 @@ export class HomeComponent implements OnInit {
   features: any = [
     { route: RoutePaths.DocumentScanner, name: "Scan Documents"},
     { id: FeatureId.Picker,  name: "Pick image"},
-    { id: FeatureId.Results, name: "Image Results"},
+    { route: RoutePaths.ImageResults, name: "Image Results"},
     { id: FeatureId.License, name: "Check License"}
   ];
 
@@ -40,7 +39,6 @@ export class HomeComponent implements OnInit {
       await this.router.navigateByUrl(e.route);
       return;
     }
-
 
     switch (e.id) {
       case FeatureId.Scanner:
