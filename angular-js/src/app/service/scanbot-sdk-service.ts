@@ -40,12 +40,24 @@ export class ScanbotSdkService {
     this.scanner = await this.instance.createDocumentScanner(configuration);
   }
 
+  disposeScanner() {
+    this.scanner.dispose();
+  }
+
   async crop(configuration: CroppingViewConfiguration) {
     this.cropper = await this.instance.openCroppingView(configuration);
   }
 
-  disposeScanner() {
-    this.scanner.dispose();
+  async detectInCropper() {
+    await this.cropper.detect();
+  }
+
+  async rotateInCropper() {
+    await this.cropper.rotate(1);
+  }
+
+  async applyCrop() {
+    return await this.cropper.apply();
   }
 
   async toDataUrl(page: any) {

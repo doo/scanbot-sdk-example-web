@@ -1,10 +1,11 @@
 import {Injectable} from "@angular/core";
+import {Polygon} from "scanbot-web-sdk/@types/model/response/detection-result";
 
 @Injectable()
 export class DocumentRepository {
 
   private readonly pages: any[];
-  private page: any;
+  private activeIndex: number;
 
   constructor() {
     this.pages = [];
@@ -22,11 +23,16 @@ export class DocumentRepository {
     return this.pages;
   }
 
+  updateActiveItem(image: Uint8Array, polygon: Polygon) {
+    this.pages[this.activeIndex].cropped = image;
+    this.pages[this.activeIndex].polygon = polygon;
+  }
+  
   getActiveItem() {
-    return this.page;
+    return this.pages[this.activeIndex];
   }
 
   setActiveItem(index: number) {
-    this.page = this.pages[index];
+    this.activeIndex = index;
   }
 }

@@ -3,6 +3,7 @@ import {Router} from "@angular/router";
 import {ScanbotSdkService} from "../service/scanbot-sdk-service";
 import {DocumentRepository} from "../service/document-repository";
 import {NavigationUtils} from "../service/navigation-utils";
+import {RoutePaths} from "../app-routing.module";
 
 @Component({
   selector: 'app-cropping',
@@ -58,15 +59,19 @@ export class CroppingComponent implements OnInit {
     await this.sdk.crop(options);
   }
 
-  onDetectClick() {
-
+  async onDetectClick() {
+    await this.sdk.detectInCropper();
   }
 
-  onRotateClick() {
-
+  async onRotateClick() {
+    await this.sdk.rotateInCropper();
   }
 
-  onApplyClick() {
-
+  async onApplyClick() {
+    const result = await this.sdk.applyCrop();
+    console.log("result", result);
+    console.log("active", this.repository.getActiveItem());
+    this.repository.updateActiveItem(result.image, result.polygon);
+    await this.router.navigateByUrl(RoutePaths.ImageDetails);
   }
 }
