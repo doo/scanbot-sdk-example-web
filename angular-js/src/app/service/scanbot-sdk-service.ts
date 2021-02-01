@@ -7,6 +7,7 @@ import ScanbotSDK from "scanbot-web-sdk/webpack";
 import {DocumentScannerConfiguration} from "scanbot-web-sdk/@types/model/configuration/document-scanner-configuration";
 import {IDocumentScannerHandle} from "scanbot-web-sdk/@types/interfaces/i-document-scanner-handle";
 import {ICroppingViewHandle} from "scanbot-web-sdk/@types/interfaces/i-cropping-view-handle";
+import {ImageUtils} from "./image-utils";
 
 @Injectable()
 export class ScanbotSdkService {
@@ -48,5 +49,23 @@ export class ScanbotSdkService {
 
   async licenseInfoString() {
     return JSON.stringify(await this.instance.getLicenseInfo());
+  }
+
+  async generatePDF(pages: any[]) {
+    const generator = await this.instance.beginPdf({standardPaperSize: "A4", landscape: true, dpi: 100});
+    this.addAllPagesTo(generator, pages);
+    return await generator.complete();
+  }
+
+  async generateTIFF(pages: any[]) {
+    const generator = await this.instance.beginTiff({binarizationFilter: "deepBinarization", dpi: 123});
+    this.addAllPagesTo(generator, pages);
+    return await generator.complete();
+  }
+
+  private async addAllPagesTo(generator: any, pages: any[]) {
+    for (const page of pages) {
+      await generator.addPage(page);
+    }
   }
 }

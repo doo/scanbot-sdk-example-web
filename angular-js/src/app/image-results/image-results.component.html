@@ -1,10 +1,18 @@
 
-<mat-grid-list cols="3" rowHeight="120px">
-  <mat-grid-tile
-    *ngFor="let document of documents"
-    [colspan]="1"
-    [rowspan]="1">
-    <img [src]="document.image">
-  </mat-grid-tile>
-</mat-grid-list>
-<h4 class="nothing-to-display-hint">Nothing to display. Scan or import some documents!</h4>
+<div class="content-container">
+  <mat-grid-list cols="3" rowHeight="120px">
+    <mat-grid-tile
+      *ngFor="let document of documents"
+      [colspan]="1"
+      [rowspan]="1">
+      <img [src]="document.image">
+    </mat-grid-tile>
+  </mat-grid-list>
+
+  <h4 class="nothing-to-display-hint">Nothing to display. Scan or import some documents!</h4>
+</div>
+
+<div class="bottom-bar">
+  <button class="bottom-bar-button save-pdf" (click)="savePDF()">SAVE PDF</button>
+  <button class="bottom-bar-button save-tiff" (click)="saveTIFF()">SAVE TIFF</button>
+</div>

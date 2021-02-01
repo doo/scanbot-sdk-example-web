@@ -3,6 +3,8 @@ import {Router} from "@angular/router";
 import {ScanbotSdkService} from "../service/scanbot-sdk-service";
 import {DocumentRepository} from "../service/document-repository";
 import {NavigationUtils} from "../service/navigation-utils";
+import {ImageUtils} from "../service/image-utils";
+import {Utils} from "../service/utils";
 
 @Component({
   selector: 'app-image-results',
@@ -38,4 +40,13 @@ export class ImageResultsComponent implements OnInit {
     }
   }
 
+  async savePDF() {
+      const bytes = await this.sdk.generatePDF(this.repository.getPages());
+      ImageUtils.saveBytes(bytes, Utils.generateUUID() + ".pdf");
+  }
+
+  async saveTIFF() {
+    const bytes = await this.sdk.generateTIFF(this.repository.getPages());
+    ImageUtils.saveBytes(bytes, Utils.generateUUID() + ".tiff");
+  }
 }

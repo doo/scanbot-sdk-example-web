@@ -22,4 +22,18 @@ export class ImageUtils {
       };
     });
   }
+
+  static saveBytes(data: any, name: string) {
+    const extension = name.split(".")[1];
+    const a = document.createElement("a");
+    document.body.appendChild(a);
+    // @ts-ignore
+    a.style = "display: none";
+    const blob = new Blob([data], {type: `application/${extension}`});
+    const url = window.URL.createObjectURL(blob);
+    a.href = url;
+    a.download = name;
+    a.click();
+    window.URL.revokeObjectURL(url);
+  }
 }
