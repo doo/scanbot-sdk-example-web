@@ -17,7 +17,7 @@ export class ImageUtils {
 
         reader.onload = async (e) => {
           // @ts-ignore
-          resolve({original: new Int8Array(reader.result)});
+          resolve({original: new Uint8Array(reader.result)});
         };
       };
     });

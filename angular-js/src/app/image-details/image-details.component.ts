@@ -3,6 +3,7 @@ import {Router} from "@angular/router";
 import {ScanbotSdkService} from "../service/scanbot-sdk-service";
 import {DocumentRepository} from "../service/document-repository";
 import {NavigationUtils} from "../service/navigation-utils";
+import {RoutePaths} from "../app-routing.module";
 
 @Component({
   selector: 'app-image-details',
@@ -46,8 +47,8 @@ export class ImageDetailsComponent implements OnInit {
 
   }
 
-  openCroppingView() {
-
+  async openCroppingView() {
+    await this.router.navigateByUrl(RoutePaths.Cropping);
   }
 
   applyFilter() {

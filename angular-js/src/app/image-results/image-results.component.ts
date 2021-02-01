@@ -38,6 +38,7 @@ export class ImageResultsComponent implements OnInit {
 
     let i = 0;
     for (const page of pages) {
+      console.log("page", page);
       this.documents.push({image: await this.sdk.toDataUrl(page), index: i});
       i++;
     }

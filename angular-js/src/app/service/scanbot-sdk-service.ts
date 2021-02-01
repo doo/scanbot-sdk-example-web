@@ -8,6 +8,7 @@ import {DocumentScannerConfiguration} from "scanbot-web-sdk/@types/model/configu
 import {IDocumentScannerHandle} from "scanbot-web-sdk/@types/interfaces/i-document-scanner-handle";
 import {ICroppingViewHandle} from "scanbot-web-sdk/@types/interfaces/i-cropping-view-handle";
 import {ImageUtils} from "./image-utils";
+import {CroppingViewConfiguration} from "scanbot-web-sdk/@types/model/configuration/cropping-view-configuration";
 
 @Injectable()
 export class ScanbotSdkService {
@@ -37,6 +38,10 @@ export class ScanbotSdkService {
 
   async scan(configuration: DocumentScannerConfiguration) {
     this.scanner = await this.instance.createDocumentScanner(configuration);
+  }
+
+  async crop(configuration: CroppingViewConfiguration) {
+    this.cropper = await this.instance.openCroppingView(configuration);
   }
 
   disposeScanner() {
@@ -69,4 +74,5 @@ export class ScanbotSdkService {
       await generator.addPage(page.cropped ?? page.original);
     }
   }
+
 }

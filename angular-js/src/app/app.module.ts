@@ -8,6 +8,7 @@ import { DocumentScannerComponent } from './document-scanner/document-scanner.co
 import { ImageResultsComponent } from './image-results/image-results.component';
 import {MatGridListModule} from "@angular/material/grid-list";
 import { ImageDetailsComponent } from './image-details/image-details.component';
+import { CroppingComponent } from './cropping/cropping.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { ImageDetailsComponent } from './image-details/image-details.component';
     HomeComponent,
     DocumentScannerComponent,
     ImageResultsComponent,
-    ImageDetailsComponent
+    ImageDetailsComponent,
+    CroppingComponent
   ],
   imports: [
     BrowserModule,

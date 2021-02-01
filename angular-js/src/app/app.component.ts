@@ -30,6 +30,11 @@ export class AppComponent {
     if (NavigationUtils.isAtPath(RoutePaths.ImageDetails)) {
       destination = RoutePaths.ImageResults;
     }
+
+    if (NavigationUtils.isAtPath(RoutePaths.Cropping)) {
+      destination = RoutePaths.ImageDetails;
+    }
+
     await this.router.navigateByUrl(destination);
   }
 }
