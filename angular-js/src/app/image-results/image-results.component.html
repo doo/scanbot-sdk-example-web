@@ -2,6 +2,7 @@
 <div class="content-container">
   <mat-grid-list cols="3" rowHeight="120px">
     <mat-grid-tile
+      (click)="onImageClick(document)"
       *ngFor="let document of documents"
       [colspan]="1"
       [rowspan]="1">

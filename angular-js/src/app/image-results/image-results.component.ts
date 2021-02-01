@@ -5,6 +5,7 @@ import {DocumentRepository} from "../service/document-repository";
 import {NavigationUtils} from "../service/navigation-utils";
 import {ImageUtils} from "../service/image-utils";
 import {Utils} from "../service/utils";
+import {RoutePaths} from "../app-routing.module";
 
 @Component({
   selector: 'app-image-results',
@@ -35,8 +36,10 @@ export class ImageResultsComponent implements OnInit {
       NavigationUtils.getElementByClassName("nothing-to-display-hint").style.display = "none";
     }
 
+    let i = 0;
     for (const page of pages) {
-      this.documents.push({image: await this.sdk.toDataUrl(page)});
+      this.documents.push({image: await this.sdk.toDataUrl(page), index: i});
+      i++;
     }
   }
 
@@ -48,5 +51,10 @@ export class ImageResultsComponent implements OnInit {
   async saveTIFF() {
     const bytes = await this.sdk.generateTIFF(this.repository.getPages());
     ImageUtils.saveBytes(bytes, Utils.generateUUID() + ".tiff");
+  }
+
+  async onImageClick(document: any) {
+    this.repository.setActiveItem(document.index);
+    await this.router.navigateByUrl(RoutePaths.ImageDetails);
   }
 }

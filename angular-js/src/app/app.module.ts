@@ -7,13 +7,15 @@ import { HomeComponent } from './home/home.component';
 import { DocumentScannerComponent } from './document-scanner/document-scanner.component';
 import { ImageResultsComponent } from './image-results/image-results.component';
 import {MatGridListModule} from "@angular/material/grid-list";
+import { ImageDetailsComponent } from './image-details/image-details.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     DocumentScannerComponent,
-    ImageResultsComponent
+    ImageResultsComponent,
+    ImageDetailsComponent
   ],
   imports: [
     BrowserModule,

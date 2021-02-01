@@ -3,7 +3,8 @@ import {Injectable} from "@angular/core";
 @Injectable()
 export class DocumentRepository {
 
-  private pages: any[];
+  private readonly pages: any[];
+  private page: any;
 
   constructor() {
     this.pages = [];
@@ -19,5 +20,13 @@ export class DocumentRepository {
 
   getPages() {
     return this.pages;
+  }
+
+  getActiveItem() {
+    return this.page;
+  }
+
+  setActiveItem(index: number) {
+    this.page = this.pages[index];
   }
 }

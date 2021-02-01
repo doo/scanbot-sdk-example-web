@@ -5,11 +5,13 @@ import {DocumentScannerComponent} from "./document-scanner/document-scanner.comp
 import {ScanbotSdkService} from "./service/scanbot-sdk-service";
 import {DocumentRepository} from "./service/document-repository";
 import {ImageResultsComponent} from "./image-results/image-results.component";
+import {ImageDetailsComponent} from "./image-details/image-details.component";
 
 export enum RoutePaths {
   Home            = "home",
   DocumentScanner = "document-scanner",
   ImageResults    = "image-results",
+  ImageDetails    = "image-details",
 }
 
 const routes: Routes = [
@@ -18,6 +20,7 @@ const routes: Routes = [
   { path: RoutePaths.Home,            component: HomeComponent },
   { path: RoutePaths.DocumentScanner, component: DocumentScannerComponent },
   { path: RoutePaths.ImageResults,    component: ImageResultsComponent },
+  { path: RoutePaths.ImageDetails,    component: ImageDetailsComponent },
 ];
 
 @NgModule({

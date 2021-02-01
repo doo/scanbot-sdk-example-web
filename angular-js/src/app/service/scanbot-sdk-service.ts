@@ -65,7 +65,8 @@ export class ScanbotSdkService {
 
   private async addAllPagesTo(generator: any, pages: any[]) {
     for (const page of pages) {
-      await generator.addPage(page);
+      console.log("page", page);
+      await generator.addPage(page.cropped ?? page.original);
     }
   }
 }
