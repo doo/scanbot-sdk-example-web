@@ -5,6 +5,7 @@ import {ScanbotSdkService} from "../service/scanbot-sdk-service";
 import {NavigationUtils} from "../service/navigation-utils";
 import {ImageUtils} from "../service/image-utils";
 import {DocumentRepository} from "../service/document-repository";
+import Swal from 'sweetalert2';
 
 export enum FeatureId {
   Picker,
@@ -47,6 +48,10 @@ export class HomeComponent implements OnInit {
     if (e.id === FeatureId.Picker) {
       const result = await ImageUtils.pick();
       this.documents.add(result);
+    }
+
+    if (e.id === FeatureId.License) {
+      await Swal.fire({ title: "License Info", text: await this.sdk.licenseInfoString()})
     }
   }
 }

@@ -45,4 +45,8 @@ export class ScanbotSdkService {
   async toDataUrl(page: any) {
     return await this.instance.toDataUrl(page.cropped ?? page.original);
   }
+
+  async licenseInfoString() {
+    return JSON.stringify(await this.instance.getLicenseInfo());
+  }
 }
