@@ -22,9 +22,14 @@ export class AppComponent {
   }
   async onBackButtonClick() {
 
+    let destination = "/";
     if (NavigationUtils.isAtPath(RoutePaths.DocumentScanner)) {
       this.SDK.disposeScanner();
     }
-    await this.router.navigateByUrl("/");
+
+    if (NavigationUtils.isAtPath(RoutePaths.ImageDetails)) {
+      destination = RoutePaths.ImageResults;
+    }
+    await this.router.navigateByUrl(destination);
   }
 }
