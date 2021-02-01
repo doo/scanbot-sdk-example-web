@@ -18,6 +18,13 @@ import {CroppingViewConfiguration} from "scanbot-web-sdk/@types/model/configurat
 })
 export class AppComponent {
 
+  features: any = [
+    { name: "Scan Documents", action: () => {}},
+    { name: "Pick image", action: () => {}},
+    { name: "Image Results", action: () => {}},
+    { name: "Check License", action: () => {}}
+  ];
+
   SCANNER_CONTAINER = "scanbot-camera-container";
 
   license = "";
@@ -34,14 +41,14 @@ export class AppComponent {
       // engine: "lib/"
     };
 
-    this.SDK = await ScanbotSDK.initialize(options);
+    // this.SDK = await ScanbotSDK.initialize(options);
 
-    const configuration: DocumentScannerConfiguration = {
-      onDocumentDetected: this.onDocumentDetected.bind(this),
-      containerId: this.SCANNER_CONTAINER
-    };
-
-    await this.SDK.createDocumentScanner(configuration);
+    // const configuration: DocumentScannerConfiguration = {
+    //   onDocumentDetected: this.onDocumentDetected.bind(this),
+    //   containerId: this.SCANNER_CONTAINER
+    // };
+    //
+    // await this.SDK.createDocumentScanner(configuration);
   }
 
   async onDocumentDetected(result: DetectionResult) {

@@ -35,13 +35,7 @@ svg#clouds {
 }
 
 .content {
-  height: calc(100vh - 16px);
+  margin-top: calc(8px + 60px);
+  height: calc(100vh - (2 * 8px + 60px));
   width: calc(100vw - 16px);
-
-}
-
-#scanbot-camera-container {
-  margin-top: 68px;
-  width: 100%;
-  height: calc(100% - 60px);
 }
