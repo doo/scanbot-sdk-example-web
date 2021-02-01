@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {Router} from "@angular/router";
 import {RoutePaths} from "../app-routing.module";
 import ScanbotSDK from "scanbot-web-sdk/webpack";
-import {ScanbotSDKService} from "../service/ScanbotSDKService";
+import {ScanbotSdkService} from "../service/scanbot-sdk-service";
+import {NavigationUtils} from "../service/navigation-utils";
 
 export enum FeatureId {
   Scanner,
@@ -26,11 +27,12 @@ export class HomeComponent implements OnInit {
     { id: FeatureId.License, name: "Check License"}
   ];
 
-  constructor(_router: Router, sdk: ScanbotSDKService) {
+  constructor(_router: Router, sdk: ScanbotSdkService) {
     this.router = _router;
   }
 
   ngOnInit(): void {
+    NavigationUtils.showBackButton(false);
   }
 
   async onItemClick(e) {

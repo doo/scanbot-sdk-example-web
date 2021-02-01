@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import {DetectionResult} from "scanbot-web-sdk/@types/model/response/detection-result";
 import {CroppingViewConfiguration} from "scanbot-web-sdk/@types/model/configuration/cropping-view-configuration";
 import {IDocumentScannerHandle} from "scanbot-web-sdk/@types/interfaces/i-document-scanner-handle";
-import {ScanbotSDKService} from "../service/ScanbotSDKService";
+import {ScanbotSdkService} from "../service/scanbot-sdk-service";
 import {DocumentScannerConfiguration} from "scanbot-web-sdk/@types/model/configuration/document-scanner-configuration";
 import {Router} from "@angular/router";
+import {NavigationUtils} from "../service/navigation-utils";
 
 @Component({
   selector: 'app-document-scanner',
@@ -16,14 +17,15 @@ export class DocumentScannerComponent implements OnInit {
   documentScanner?: IDocumentScannerHandle;
 
   router: Router;
-  sdk: ScanbotSDKService;
+  sdk: ScanbotSdkService;
 
-  constructor(_router: Router, sdk: ScanbotSDKService) {
+  constructor(_router: Router, sdk: ScanbotSdkService) {
     this.router = _router;
     this.sdk = sdk;
   }
   async ngOnInit(): Promise<void> {
 
+    NavigationUtils.showBackButton(true);
     if (!this.sdk.isReady()) {
       this.sdk.onReady = () => {
         this.startScanner();
@@ -37,11 +39,12 @@ export class DocumentScannerComponent implements OnInit {
   async startScanner() {
     const configuration: DocumentScannerConfiguration = {
       onDocumentDetected: this.onDocumentDetected.bind(this),
-      containerId: ScanbotSDKService.CONTAINER_ID
+      containerId: ScanbotSdkService.CONTAINER_ID
     };
 
-    await this.sdk.instance.createDocumentScanner(configuration);
+    await this.sdk.scan(configuration);
   }
+
   async onDocumentDetected(result: DetectionResult) {
     console.log("Detected document: ", result);
     const image = result.cropped ?? result.original;

@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import {HomeComponent} from "./home/home.component";
 import {DocumentScannerComponent} from "./document-scanner/document-scanner.component";
-import {ScanbotSDKService} from "./service/ScanbotSDKService";
+import {ScanbotSdkService} from "./service/scanbot-sdk-service";
 
 export enum RoutePaths {
   Home = "home",
@@ -19,6 +19,6 @@ const routes: Routes = [
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
-  providers: [ScanbotSDKService]
+  providers: [ScanbotSdkService]
 })
 export class AppRoutingModule { }

@@ -39,3 +39,15 @@ svg#clouds {
   height: calc(100vh - (2 * 8px + 60px));
   width: calc(100vw - 16px);
 }
+
+.toolbar-logo {
+  //display: none;
+}
+.back-button {
+  height: 50px;
+  width: 50px;
+  line-height: 50px;
+  font-size: 25px;
+  text-align: center;
+  //display: none;
+}
