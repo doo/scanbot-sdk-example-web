@@ -75,8 +75,6 @@ export class CroppingComponent implements OnInit {
 
   async onApplyClick() {
     const result = await this.sdk.applyCrop();
-    console.log("result", result);
-    console.log("active", this.repository.getActiveItem());
     this.repository.updateActiveItem(result.image, result.polygon);
     await this.router.navigateByUrl(RoutePaths.ImageDetails);
   }

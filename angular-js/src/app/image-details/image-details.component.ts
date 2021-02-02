@@ -62,13 +62,13 @@ export class ImageDetailsComponent implements OnInit {
 
     const filter = this.sdk.filterByIndex(result.value);
 
+    const page = this.repository.getActiveItem();
     if (filter === "none") {
-      this.repository.getActiveItem().filter = undefined;
-      this.repository.getActiveItem().filtered = undefined;
+      page.filter = undefined;
+      page.filtered = undefined;
     } else {
-      this.repository.getActiveItem().filter = filter;
-      const image = this.repository.getActiveItem().cropped ?? this.repository.getActiveItem().original;
-      this.repository.getActiveItem().filtered = await this.sdk.applyFilter(image, filter as ImageFilter);
+      page.filter = filter;
+      page.filtered = await this.sdk.applyFilter(page.cropped ?? page.original, filter as ImageFilter);
     }
 
     await this.loadImage();
