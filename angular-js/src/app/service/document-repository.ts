@@ -5,7 +5,7 @@ import {Polygon} from "scanbot-web-sdk/@types/model/response/detection-result";
 export class DocumentRepository {
 
   private readonly pages: any[];
-  private activeIndex: number;
+  private activeIndex: number = -1;
 
   constructor() {
     this.pages = [];
@@ -28,6 +28,9 @@ export class DocumentRepository {
     this.pages[this.activeIndex].polygon = polygon;
   }
 
+  hasActiveItem() {
+    return this.activeIndex !== -1
+  }
   getActiveItem() {
     return this.pages[this.activeIndex];
   }

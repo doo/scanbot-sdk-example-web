@@ -4,6 +4,8 @@ import {ScanbotSdkService} from "../service/scanbot-sdk-service";
 import {DocumentRepository} from "../service/document-repository";
 import {NavigationUtils} from "../service/navigation-utils";
 import {RoutePaths} from "../app-routing.module";
+import Swal from "sweetalert2";
+import {ImageFilter} from "scanbot-web-sdk/@types/model/filter-types";
 
 @Component({
   selector: 'app-image-details',
@@ -44,14 +46,31 @@ export class ImageDetailsComponent implements OnInit {
     } else {
       this.image = await this.sdk.toDataUrl(this.repository.getActiveItem());
     }
-
   }
 
   async openCroppingView() {
     await this.router.navigateByUrl(RoutePaths.Cropping);
   }
 
-  applyFilter() {
+  async applyFilter() {
+    const result = await Swal.fire({
+      title: 'Select filter',
+      input: 'select',
+      inputOptions: this.sdk.availableFilters(),
+      inputPlaceholder: this.repository.getActiveItem().filter ?? "none"
+    });
 
+    const filter = this.sdk.filterByIndex(result.value);
+
+    if (filter === "none") {
+      this.repository.getActiveItem().filter = undefined;
+      this.repository.getActiveItem().filtered = undefined;
+    } else {
+      this.repository.getActiveItem().filter = filter;
+      const image = this.repository.getActiveItem().cropped ?? this.repository.getActiveItem().original;
+      this.repository.getActiveItem().filtered = await this.sdk.applyFilter(image, filter as ImageFilter);
+    }
+
+    await this.loadImage();
   }
 }

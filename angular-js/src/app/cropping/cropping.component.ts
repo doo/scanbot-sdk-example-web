@@ -34,6 +34,12 @@ export class CroppingComponent implements OnInit {
   }
 
   async openCroppingView() {
+    if (!this.repository.hasActiveItem()) {
+      console.log("No active item, returning to Home");
+      await this.router.navigateByUrl(RoutePaths.Home);
+      return;
+    }
+
     const options = {
       containerId: "cropping-view-container",
       image: this.repository.getActiveItem().original,
