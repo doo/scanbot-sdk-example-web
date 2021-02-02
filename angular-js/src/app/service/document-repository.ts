@@ -27,7 +27,7 @@ export class DocumentRepository {
     this.pages[this.activeIndex].cropped = image;
     this.pages[this.activeIndex].polygon = polygon;
   }
-  
+
   getActiveItem() {
     return this.pages[this.activeIndex];
   }
