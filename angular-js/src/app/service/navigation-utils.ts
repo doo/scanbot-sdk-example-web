@@ -1,4 +1,4 @@
-import {RoutePaths} from "../app-routing.module";
+import {RoutePaths} from "../model/RoutePaths";
 
 export class NavigationUtils {
 

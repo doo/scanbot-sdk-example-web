@@ -1,11 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
-import {RoutePaths} from "../app-routing.module";
 import {ScanbotSdkService} from "../service/scanbot-sdk-service";
 import {NavigationUtils} from "../service/navigation-utils";
 import {ImageUtils} from "../service/image-utils";
 import {DocumentRepository} from "../service/document-repository";
 import Swal from 'sweetalert2';
+import {RoutePaths} from "../model/RoutePaths";
 
 export enum FeatureId {
   Picker,

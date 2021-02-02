@@ -7,14 +7,7 @@ import {DocumentRepository} from "./service/document-repository";
 import {ImageResultsComponent} from "./image-results/image-results.component";
 import {ImageDetailsComponent} from "./image-details/image-details.component";
 import {CroppingComponent} from "./cropping/cropping.component";
-
-export enum RoutePaths {
-  Home            = "home",
-  DocumentScanner = "document-scanner",
-  ImageResults    = "image-results",
-  ImageDetails    = "image-details",
-  Cropping        = "cropping",
-}
+import {RoutePaths} from "./model/RoutePaths";
 
 const routes: Routes = [
   { path: '', redirectTo: RoutePaths.Home, pathMatch: 'full' },

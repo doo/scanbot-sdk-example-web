@@ -5,7 +5,7 @@ import {DocumentRepository} from "../service/document-repository";
 import {NavigationUtils} from "../service/navigation-utils";
 import {ImageUtils} from "../service/image-utils";
 import {Utils} from "../service/utils";
-import {RoutePaths} from "../app-routing.module";
+import {RoutePaths} from "../model/RoutePaths";
 
 @Component({
   selector: 'app-image-results',

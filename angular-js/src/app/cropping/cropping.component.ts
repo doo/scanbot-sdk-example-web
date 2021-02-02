@@ -3,7 +3,7 @@ import {Router} from "@angular/router";
 import {ScanbotSdkService} from "../service/scanbot-sdk-service";
 import {DocumentRepository} from "../service/document-repository";
 import {NavigationUtils} from "../service/navigation-utils";
-import {RoutePaths} from "../app-routing.module";
+import {RoutePaths} from "../model/RoutePaths";
 
 @Component({
   selector: 'app-cropping',

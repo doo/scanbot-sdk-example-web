@@ -3,7 +3,7 @@ import {Component} from "@angular/core";
 import {Router} from "@angular/router";
 import {ScanbotSdkService} from "./service/scanbot-sdk-service";
 import {NavigationUtils} from "./service/navigation-utils";
-import {RoutePaths} from "./app-routing.module";
+import {RoutePaths} from "./model/RoutePaths";
 
 @Component({
   selector: 'app-root',
