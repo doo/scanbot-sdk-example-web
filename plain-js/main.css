@@ -1,58 +1,178 @@
 
-body {
-    height: 100vh;
+.loading-screen {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 1000;
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.progress-bar {
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid #c8193c;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    margin: 30% auto;
+    background-color: transparent;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.file-picker {
+    display: none;
+}
+
+.navbar {
+    filter: drop-shadow(5px 2px 4px #000000);
+    margin-bottom: 5px;
+    background-color: #c8193c;
 }
 
 .navbar-brand {
-	padding-left: 10px;
+    font-size: 17px;
+    height: 43px;
+    line-height: 37px;
 }
 
-.navbar-dark {
-    height: 6.6%;
+.back-button {
+    display: inline-block;
+    width: 40px;
+    padding-left: 20px;
+    font-size: 20px;
 }
 .content-container {
-    height: 93.4%;
+    display: flex;
+    flex-direction: column;
+}
+
+.main-list-item {
+    width: 100%;
+    height: 50px;
+    line-height: 50px;
+    padding-left: 20px;
+    margin-top: 2px;
+    border: 1px solid lightgray;
+}
+.main-list-item:hover {
+    background-color: rgb(245, 245, 245);
+}
+
+.controller {
+    display: none;
+    position: absolute;
+    z-index: 500;
+    width: 100%;
+    height: 500px;
+    top: 0;
+
+}
+
+.scanbot-camera-controller {
+
+}
+
+.detection-results-controller {
+
+}
+
+.cropping-controller {
+
+}
+
+.action-bar {
+    width: 100%;
+    height: 50px;
+    background-color: #28a745;
+    display: flex;
+}
+
+.action-bar-button {
+    width: 80px;
+    font-size: 14px;
+    height: 100%;
+    text-align: center;
+    line-height: 50px;
+    background-color: #28a745;
+    color: white;
+    padding: 0;
+    margin: 0;
+    border: none;
+}
+
+.align-right-button {
+    right: 0;
+    position: absolute;
 }
 
 #scanbot-camera-container {
-	width: 98%;
-    height: 99%;
-	margin-top: 1%;
-	margin-left: 1%;
-}
-
-.version-info {
-    bottom: 5px;
-    right: 5px;
-    position: fixed;
-    color: gray;
-    font-size: 0.8em;
-}
-
-#image-modal {
-    position: absolute;
-    opacity: 1 !important;
-    height: 100%;
     width: 100%;
-    top: 0;
+    height: 100%;
+    display: flex;
+}
+
+#cropping-view-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+}
+
+.detection-result-list-image {
+    object-fit: contain;
     background-color: rgba(0, 0, 0, 0.5);
 }
 
-#document-image {
+.view-controller-container {
+    background-color: rgba(50, 50, 50, 0.5);
+}
+
+.detection-results-container {
     width: 100%;
-    height: auto;
+    height: 100%;
+    overflow: scroll;
+}
+
+.detection-result-container {
+    width: 100%;
+    height: 100%;
+}
+
+.detection-result-image {
     object-fit: contain;
+    width: 100%;
+    height: 100%;
 }
 
-#popup-close-button {
-    margin-left: .7rem;
+.filter-selector-container {
+
 }
 
-@media all and (orientation: landscape) {
-    .navbar-dark {
-        height: 11%;
-    }
-    .content-container {
-        height: 87%;
-    }
+.filter-selector-label {
+    color: white;
+    background-color: #28a745;
+    font-size: 12px;
+    height: 20px;
+    width: 80px;
+}
+
+.action-bar-filter-select {
+    height: 30px;
+    width: 80px;
+    color: white;
+    background-color: #28a745;
+}
+
+.flash {
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background-color:#fff;
+    display: none;
+    z-index: 5000;
 }
