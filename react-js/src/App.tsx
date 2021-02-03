@@ -1,7 +1,6 @@
 import React from 'react';
-import {AppBar, Toolbar, Typography} from "@material-ui/core";
-import Lightbox from 'react-image-lightbox';
-import 'react-image-lightbox/style.css'; // This only needs to be imported once in your app
+import {AppBar, Snackbar, Toolbar} from "@material-ui/core";
+import MuiAlert from '@material-ui/lab/Alert';
 
 // Import SDK from webpack directory to ensure web assembly binary and worker and bundled with webpack
 import ScanbotSDK from "scanbot-web-sdk/webpack";
@@ -14,6 +13,13 @@ import {IDocumentScannerHandle} from "scanbot-web-sdk/@types/interfaces/i-docume
 import {ICroppingViewHandle} from "scanbot-web-sdk/@types/interfaces/i-cropping-view-handle";
 import FeatureList from "./subviews/FeatureList";
 import {HashRouter, Route, Routes} from "react-router-dom";
+import DocumentScannerPage from "./pages/document-scanner-page";
+import ImageResultsPage from "./pages/image-results-page";
+import {FeatureId} from "./model/Features";
+
+function Alert(props: any) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 export default class App extends React.Component<any, any> {
 
@@ -27,6 +33,7 @@ export default class App extends React.Component<any, any> {
     constructor(props: any) {
         super(props);
         this.state = {
+            alert: undefined,
             image: undefined,
             configuration: {
                 scanner: undefined,
@@ -64,9 +71,18 @@ export default class App extends React.Component<any, any> {
         this.croppingView = await this.SDK?.openCroppingView(config);
     }
 
+    onAlertClose() {
+        this.setState({alert: undefined});
+    }
+
     render() {
         return (
             <div>
+                <Snackbar open={!!this.state.alert} autoHideDuration={2000} onClose={this.onAlertClose.bind(this)}>
+                    <Alert onClose={this.onAlertClose.bind(this)} severity={this.state.alert?.color}>
+                        {this.state.alert?.text}
+                    </Alert>
+                </Snackbar>
                 <AppBar position="fixed">
                     <Toolbar>SCANBOT WEB SDK EXAMPLE</Toolbar>
                 </AppBar>
@@ -76,24 +92,28 @@ export default class App extends React.Component<any, any> {
                 <HashRouter>
                 <Routes>
                     <Route path="/" element={<FeatureList onItemClick={this.onFeatureClick.bind(this)}/>}/>
+                    <Route path="/document-scanner" element={<DocumentScannerPage/>}/>
+                    <Route path="/image-results" element={<ImageResultsPage/>}/>
                 </Routes>
                 </HashRouter>
             </div>
-
         );
     }
 
-    onFeatureClick(feature: any) {
-        console.log(feature);
-        // if (feature.route) {
-        //     hist.push(feature.route);
-        // } else {
-        //     hist.push("/");
-        // }
-    }
+    async onFeatureClick(feature: any) {
+        if (feature.route) {
+            // Features with their own routes have links. This is only for handling other click events
+            return;
+        }
 
-    closePopup() {
-        this.setState({image: undefined});
+        if (feature.id === FeatureId.LicenseInfo) {
+            const info = await this.SDK?.getLicenseInfo();
+            const color = (info?.status === "Trial") ? "success" : "error";
+            this.setState({alert: {color: color, text: JSON.stringify(info)}});
+        } else if (feature.id === FeatureId.ImagePicker) {
+
+        }
+
     }
 }
 

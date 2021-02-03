@@ -1,2 +1,2 @@
-rm -rf node_modules/ && rm package-lock.json && npm cache clean --force && npm install
+rm -rf node_modules/ && rm -f package-lock.json && npm cache clean --force && npm install
 
