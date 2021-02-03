@@ -1,5 +1,4 @@
 import React from 'react';
-import './App.css';
 import {AppBar, Toolbar, Typography} from "@material-ui/core";
 import Lightbox from 'react-image-lightbox';
 import 'react-image-lightbox/style.css'; // This only needs to be imported once in your app
@@ -13,6 +12,8 @@ import {DetectionResult} from "scanbot-web-sdk/@types/model/response/detection-r
 import {CroppingViewConfiguration} from "scanbot-web-sdk/@types/model/configuration/cropping-view-configuration";
 import {IDocumentScannerHandle} from "scanbot-web-sdk/@types/interfaces/i-document-scanner-handle";
 import {ICroppingViewHandle} from "scanbot-web-sdk/@types/interfaces/i-cropping-view-handle";
+import FeatureList from "./subviews/FeatureList";
+import {HashRouter, Route, Routes} from "react-router-dom";
 
 export default class App extends React.Component<any, any> {
 
@@ -67,16 +68,32 @@ export default class App extends React.Component<any, any> {
         return (
             <div>
                 <AppBar position="fixed">
-                    <Toolbar><Typography variant="h6">Scanbot Web SDK Example</Typography></Toolbar>
+                    <Toolbar>SCANBOT WEB SDK EXAMPLE</Toolbar>
                 </AppBar>
-                <div style={{height: "100vh"}}>
-                    <div id={this.SCANNER_CONTAINER} style={{width: "100%", height: "100%"}}/>
-                </div>
+                {/*<div style={{height: "100vh"}}>*/}
+                {/*    <div id={this.SCANNER_CONTAINER} style={{width: "100%", height: "100%"}}/>*/}
+                {/*</div>*/}
+                <HashRouter>
+                <Routes>
+                    <Route path="/" element={<FeatureList onItemClick={this.onFeatureClick.bind(this)}/>}/>
+                </Routes>
+                </HashRouter>
             </div>
+
         );
+    }
+
+    onFeatureClick(feature: any) {
+        console.log(feature);
+        // if (feature.route) {
+        //     hist.push(feature.route);
+        // } else {
+        //     hist.push("/");
+        // }
     }
 
     closePopup() {
         this.setState({image: undefined});
     }
 }
+
