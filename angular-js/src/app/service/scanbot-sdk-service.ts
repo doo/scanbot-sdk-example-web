@@ -69,13 +69,18 @@ export class ScanbotSdkService {
 
   async generatePDF(pages: any[]) {
     const generator = await this.instance.beginPdf({standardPaperSize: "A4", landscape: true, dpi: 100});
-    this.addAllPagesTo(generator, pages);
+    // await this.addAllPagesTo(generator, pages);
+    for (const page of pages) {
+      await generator.addPage(page.cropped ?? page.original);
+    }
     return await generator.complete();
   }
 
   async generateTIFF(pages: any[]) {
     const generator = await this.instance.beginTiff({binarizationFilter: BinarizationFilter.DeepBinarization, dpi: 123});
-    this.addAllPagesTo(generator, pages);
+    for (const page of pages) {
+      await generator.addPage(page.cropped ?? page.original);
+    }
     return await generator.complete();
   }
 
