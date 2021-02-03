@@ -48,7 +48,7 @@ export default class App extends React.Component<any, any> {
             containerId: this.SCANNER_CONTAINER
         };
 
-        this.documentScanner = await this.SDK.createDocumentScanner(config);
+        // this.documentScanner = await this.SDK.createDocumentScanner(config);
     }
 
     async onDocumentDetected(result: DetectionResult) {
