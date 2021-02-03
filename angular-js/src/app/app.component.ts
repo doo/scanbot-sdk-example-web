@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
-import ScanbotSDK from "scanbot-web-sdk/component/scanbot-sdk";
-import {InitializationOptions} from "scanbot-web-sdk/component/model/initialization-options";
-import {DocumentScannerConfiguration} from "scanbot-web-sdk/component/model/document-scanner-configuration";
-import "scanbot-web-sdk/component/styles/main.css";
-import "scanbot-web-sdk/component/styles/shutter.css";
+import {Component} from "@angular/core";
+
+import {Router} from "@angular/router";
+import {ScanbotSdkService} from "./service/scanbot-sdk-service";
+import {NavigationUtils} from "./service/navigation-utils";
+import {RoutePaths} from "./model/RoutePaths";
 
 @Component({
   selector: 'app-root',
@@ -12,24 +12,29 @@ import "scanbot-web-sdk/component/styles/shutter.css";
 })
 export class AppComponent {
 
-  SDK: ScanbotSDK;
-  constructor() {
-    console.log("constructed")
+  SDK: ScanbotSdkService;
+
+  router: Router;
+
+  constructor(_router: Router, _sdk: ScanbotSdkService) {
+    this.router = _router;
+    this.SDK = _sdk;
   }
+  async onBackButtonClick() {
 
-  async ngOnInit() {
-    const options: InitializationOptions = {
-      // License key is a required parameter, leave empty for trial
-      licenseKey: ""
-      // Optional: configure another source for the engine
-      // engine: "lib/"
-    };
-    this.SDK = await ScanbotSDK.initialize(options);
+    let destination = "/";
+    if (NavigationUtils.isAtPath(RoutePaths.DocumentScanner)) {
+      this.SDK.disposeScanner();
+    }
 
-    const configuration: DocumentScannerConfiguration = {
-      containerId: "scanbot-camera-container"
-    };
-    await this.SDK.createDocumentScanner(configuration);
+    if (NavigationUtils.isAtPath(RoutePaths.ImageDetails)) {
+      destination = RoutePaths.ImageResults;
+    }
+
+    if (NavigationUtils.isAtPath(RoutePaths.Cropping)) {
+      destination = RoutePaths.ImageDetails;
+    }
+
+    await this.router.navigateByUrl(destination);
   }
-
 }

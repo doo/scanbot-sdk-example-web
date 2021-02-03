@@ -1,0 +1,25 @@
+
+.bottom-bar-button {
+  width: 80px;
+  font-size: 14px;
+  font-weight: bold;
+  height: 100%;
+  text-align: center;
+  line-height: 50px;
+  color: white;
+  padding: 0;
+  margin: 0;
+  border: none;
+  background-color: transparent;
+}
+
+.align-right-bottom-bar-button {
+  right: 8px;
+  position: absolute;
+}
+
+.bottom-bar {
+  display: flex;
+  height: 50px;
+  background-color: #c8193c;
+}

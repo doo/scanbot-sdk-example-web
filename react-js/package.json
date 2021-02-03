@@ -11,12 +11,15 @@
     "@types/node": "12.12.62",
     "@types/react": "16.9.49",
     "@types/react-dom": "16.9.8",
+    "@types/react-router-dom": "5.1.7",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-scripts": "3.4.3",
-    "scanbot-web-sdk": "1.0.2",
+    "scanbot-web-sdk": "2.0.0-alpha1",
     "typescript": "3.7.5",
-    "react-image-lightbox": "latest"
+    "history": "5.0.0",
+    "react-router-dom": "6.0.0-beta.0",
+    "@material-ui/lab": "latest"
   },
   "scripts": {
     "start": "react-scripts start",

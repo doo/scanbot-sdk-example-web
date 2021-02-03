@@ -1,70 +1,86 @@
 import React from 'react';
-import './App.css';
+import {AppBar, Snackbar, Toolbar} from "@material-ui/core";
+import MuiAlert from '@material-ui/lab/Alert';
 
+// Import SDK from webpack directory to ensure web assembly binary and worker and bundled with webpack
 import ScanbotSDK from "scanbot-web-sdk/webpack";
-import {DocumentScannerConfiguration} from "scanbot-web-sdk/component/model/document-scanner-configuration";
-import {AppBar, Container, Toolbar, Typography} from "@material-ui/core";
-import Lightbox from 'react-image-lightbox';
-import 'react-image-lightbox/style.css'; // This only needs to be imported once in your app
+
+// Other typings should be imported from @types
+import {DocumentScannerConfiguration} from "scanbot-web-sdk/@types/model/configuration/document-scanner-configuration";
+import {DetectionResult} from "scanbot-web-sdk/@types/model/response/detection-result";
+import {CroppingViewConfiguration} from "scanbot-web-sdk/@types/model/configuration/cropping-view-configuration";
+import {IDocumentScannerHandle} from "scanbot-web-sdk/@types/interfaces/i-document-scanner-handle";
+import {ICroppingViewHandle} from "scanbot-web-sdk/@types/interfaces/i-cropping-view-handle";
+import FeatureList from "./subviews/FeatureList";
+import {HashRouter, Route, Routes} from "react-router-dom";
+import DocumentScannerPage from "./pages/document-scanner-page";
+import ImageResultsPage from "./pages/image-results-page";
+import {FeatureId} from "./model/Features";
+
+function Alert(props: any) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 export default class App extends React.Component<any, any> {
 
-    SCANNER_CONTAINER = "document-scanner-view";
     license = "";
-    SDK: ScanbotSDK | undefined;
 
-    document: any;
+    croppingView?: ICroppingViewHandle;
 
     constructor(props: any) {
         super(props);
-        this.state = { isOpen: false };
+        this.state = {
+            alert: undefined,
+            image: undefined,
+            sdk: undefined
+        };
     }
 
     async componentDidMount() {
-        this.SDK = await ScanbotSDK.initialize({
-            licenseKey: this.license,
-            engine: "/"
-        });
+        const sdk = await ScanbotSDK.initialize({licenseKey: this.license, engine: "/"});
+        this.setState({sdk: sdk});
+    }
 
-        if (!this.SDK.initialized) {
-            const info = await this.SDK.getLicenseInfo();
-            console.log("Something went wrong. Here's your license info:", info);
-            return;
-        }
-
-        const configuration: DocumentScannerConfiguration = {
-            onDocumentDetected: async (result: any) => {
-                console.log("Detected document:", result);
-                this.document = result;
-                this.setState({ isOpen: true });
-            },
-            containerId: this.SCANNER_CONTAINER
-        };
-
-        await this.SDK.createDocumentScanner(configuration);
+    onAlertClose() {
+        this.setState({alert: undefined});
     }
 
     render() {
         return (
-            <div className="App">
+            <div>
+                <Snackbar open={!!this.state.alert} autoHideDuration={2000} onClose={this.onAlertClose.bind(this)}>
+                    <Alert onClose={this.onAlertClose.bind(this)} severity={this.state.alert?.color}>
+                        {this.state.alert?.text}
+                    </Alert>
+                </Snackbar>
                 <AppBar position="fixed">
-                    <Toolbar>
-                        <Typography variant="h6" >
-                            Scanbot Web SDK Example
-                        </Typography>
-                    </Toolbar>
+                    <Toolbar>SCANBOT WEB SDK EXAMPLE</Toolbar>
                 </AppBar>
-                <Container style={{height: "100vh"}}>
-                    <div id={this.SCANNER_CONTAINER} style={{width: "100%", height: "100%"}}/>
-                </Container>
-
-                {this.state.isOpen && (
-                    <Lightbox
-                        mainSrc={this.document.cropped ? this.document.cropped : this.document.original}
-                        onCloseRequest={() => this.setState({ isOpen: false })}
-
-                    />)}
+                <HashRouter>
+                <Routes>
+                    <Route path="/" element={<FeatureList onItemClick={this.onFeatureClick.bind(this)}/>}/>
+                    <Route path="/document-scanner" element={<DocumentScannerPage sdk={this.state.sdk}/>}/>
+                    <Route path="/image-results" element={<ImageResultsPage/>}/>
+                </Routes>
+                </HashRouter>
             </div>
         );
     }
+
+    async onFeatureClick(feature: any) {
+        if (feature.route) {
+            // Features with their own routes have links. This is only for handling other click events
+            return;
+        }
+
+        if (feature.id === FeatureId.LicenseInfo) {
+            const info = await this.state.sdk?.getLicenseInfo();
+            const color = (info?.status === "Trial") ? "success" : "error";
+            this.setState({alert: {color: color, text: JSON.stringify(info)}});
+        } else if (feature.id === FeatureId.ImagePicker) {
+
+        }
+
+    }
 }
+
