@@ -23,11 +23,8 @@ function Alert(props: any) {
 
 export default class App extends React.Component<any, any> {
 
-    SCANNER_CONTAINER = "document-scanner-view";
     license = "";
-    SDK: ScanbotSDK | undefined;
 
-    documentScanner?: IDocumentScannerHandle;
     croppingView?: ICroppingViewHandle;
 
     constructor(props: any) {
@@ -35,40 +32,13 @@ export default class App extends React.Component<any, any> {
         this.state = {
             alert: undefined,
             image: undefined,
-            configuration: {
-                scanner: undefined,
-                cropping: undefined
-            }
+            sdk: undefined
         };
     }
 
     async componentDidMount() {
-        this.SDK = await ScanbotSDK.initialize({licenseKey: this.license, engine: "/"});
-
-        if (!this.SDK.initialized) {
-            const info = await this.SDK.getLicenseInfo();
-            console.log("Something went wrong. Here's your license info:", info);
-            return;
-        }
-
-        const config: DocumentScannerConfiguration = {
-            onDocumentDetected: this.onDocumentDetected.bind(this),
-            containerId: this.SCANNER_CONTAINER
-        };
-
-        // this.documentScanner = await this.SDK.createDocumentScanner(config);
-    }
-
-    async onDocumentDetected(result: DetectionResult) {
-        console.log("Detected document: ", result);
-        const image = result.cropped ?? result.original;
-        this.documentScanner?.dispose();
-        const config: CroppingViewConfiguration = {
-            image: image,
-            polygon: result.polygon,
-            containerId: this.SCANNER_CONTAINER
-        };
-        this.croppingView = await this.SDK?.openCroppingView(config);
+        const sdk = await ScanbotSDK.initialize({licenseKey: this.license, engine: "/"});
+        this.setState({sdk: sdk});
     }
 
     onAlertClose() {
@@ -86,13 +56,10 @@ export default class App extends React.Component<any, any> {
                 <AppBar position="fixed">
                     <Toolbar>SCANBOT WEB SDK EXAMPLE</Toolbar>
                 </AppBar>
-                {/*<div style={{height: "100vh"}}>*/}
-                {/*    <div id={this.SCANNER_CONTAINER} style={{width: "100%", height: "100%"}}/>*/}
-                {/*</div>*/}
                 <HashRouter>
                 <Routes>
                     <Route path="/" element={<FeatureList onItemClick={this.onFeatureClick.bind(this)}/>}/>
-                    <Route path="/document-scanner" element={<DocumentScannerPage/>}/>
+                    <Route path="/document-scanner" element={<DocumentScannerPage sdk={this.state.sdk}/>}/>
                     <Route path="/image-results" element={<ImageResultsPage/>}/>
                 </Routes>
                 </HashRouter>
@@ -107,7 +74,7 @@ export default class App extends React.Component<any, any> {
         }
 
         if (feature.id === FeatureId.LicenseInfo) {
-            const info = await this.SDK?.getLicenseInfo();
+            const info = await this.state.sdk?.getLicenseInfo();
             const color = (info?.status === "Trial") ? "success" : "error";
             this.setState({alert: {color: color, text: JSON.stringify(info)}});
         } else if (feature.id === FeatureId.ImagePicker) {
