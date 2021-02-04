@@ -5,6 +5,7 @@ export default class Pages {
     public static instance = new Pages();
 
     private list: any[] = [];
+    private activeIndex: number = -1;
 
     public add(page: DetectionResult) {
         this.list.push(page);
@@ -32,5 +33,12 @@ export default class Pages {
         }
         return this.list[index];
 
+    }
+
+    setActiveItem(index: number) {
+        this.activeIndex = index;
+    }
+    getActiveIndex() {
+        return this.activeIndex;
     }
 }

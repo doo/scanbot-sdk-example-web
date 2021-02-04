@@ -103,7 +103,10 @@ export default class App extends React.Component<any, any> {
         }
         if (route === FeatureId.ImageDetails) {
             return [
-                {text: "CROP", action: () => { history.push("#/" + FeatureId.CroppingView); this.forceUpdate() }},
+                {text: "CROP", action: () => {
+                    const path = "#/" + FeatureId.CroppingView + "?index=" + Pages.instance.getActiveIndex();
+                    history.push(path);
+                }},
                 {text: "FILTER", action: () => {}}
             ];
         }
@@ -138,23 +141,6 @@ export default class App extends React.Component<any, any> {
                 </AppBar>
                 <div style={{height: this.containerHeight(), marginTop: this.toolbarHeight()}}>
                     {this.decideContent()}
-                    <HashRouter>
-                        <Routes>
-                            <Route path="/" element={<FeatureList onItemClick={this.onFeatureClick.bind(this)}/>}/>
-
-                            <Route path={FeatureId.DocumentScanner} element={
-                                <DocumentScannerPage sdk={this.state.sdk}
-                                                     onDocumentDetected={this.onDocumentDetected.bind(this)}/>}/>
-                            <Route path={FeatureId.ImageResults} element={
-                                <ImageResultsPage
-                                    sdk={this.state.sdk}
-                                    onDetailButtonClick={() => {
-                                        this.forceUpdate();
-                                    }}/>}/>
-                            <Route path={FeatureId.ImageDetails} element={<ImageDetailPage sdk={this.state.sdk}/>}/>
-                            <Route path={"#/cropping-view"} element={<CroppingPage sdk={this.state.sdk}/>}/>
-                        </Routes>
-                    </HashRouter>
                 </div>
                 <BottomBar hidden={this.isAtRoot()} style={{height: this.toolbarHeight()}}
                            buttons={this.addButtonsBasedOnRoute()}
@@ -164,8 +150,31 @@ export default class App extends React.Component<any, any> {
     }
     decideContent() {
         const route = this.findRoute();
+        console.log("route", route);
+        if (this.isAtRoot()) {
+            return <FeatureList onItemClick={(feature: any) => {
+                if (feature.route) {
+                    history.push("#/" + feature.route);
+                }
+            }}/>
+        }
+        if (route == FeatureId.DocumentScanner) {
+            return <DocumentScannerPage sdk={this.state.sdk}
+                                        onDocumentDetected={this.onDocumentDetected.bind(this)}/>;
+        }
         if (route === FeatureId.CroppingView) {
             return <CroppingPage sdk={this.state.sdk}/>;
+        }
+        if (route === FeatureId.ImageDetails) {
+            return <ImageDetailPage sdk={this.state.sdk}/>
+        }
+        if (route === FeatureId.ImageResults) {
+            return <ImageResultsPage
+                sdk={this.state.sdk}
+                onDetailButtonClick={(index: number) => {
+                    Pages.instance.setActiveItem(index);
+                    history.push("#/image-details?index=" + index);
+                }}/>
         }
     }
     async onDocumentDetected(result: DetectionResult) {

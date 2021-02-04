@@ -9,9 +9,7 @@ export default class FeatureList extends React.Component<any, any> {
         return (
             <div>
                 {Features.LIST.map(feature =>
-                    <Link  key={feature.id} style={{textDecoration: "none", color: "rgb(50, 50, 50)"}} to={feature.route ?? "/"}>
-                        <FeatureListItem onClick={this.props.onItemClick} data={feature}/>
-                    </Link>
+                    <FeatureListItem key={feature.id} onClick={() => {this.props.onItemClick(feature)}} data={feature}/>
                 )}
             </div>
         )
