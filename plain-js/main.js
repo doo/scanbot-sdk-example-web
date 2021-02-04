@@ -215,6 +215,7 @@ async function reloadDetectionResults() {
         item.onclick = onDetectionResultClick;
     }
 }
+
 async function onDetectionResultClick(e) {
     Utils.getElementByClassName("detection-results-controller").style.display = "none";
     Utils.getElementByClassName("detection-result-controller").style.display = "block";

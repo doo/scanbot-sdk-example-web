@@ -22,6 +22,10 @@ export default class DocumentScannerPage extends React.Component<any, any>{
         }
     }
 
+    componentWillUnmount(): void {
+        this.documentScanner?.dispose();
+    }
+
     async onDocumentDetected(result: DetectionResult) {
         Pages.instance.add(result);
     }

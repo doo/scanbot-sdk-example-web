@@ -75,7 +75,7 @@ export default class App extends React.Component<any, any> {
                 <Routes>
                     <Route path="/" element={<FeatureList onItemClick={this.onFeatureClick.bind(this)}/>}/>
                     <Route path="/document-scanner" element={<DocumentScannerPage sdk={this.state.sdk}/>}/>
-                    <Route path="/image-results" element={<ImageResultsPage/>}/>
+                    <Route path="/image-results" element={<ImageResultsPage sdk={this.state.sdk}/>}/>
                 </Routes>
                 </HashRouter>
             </div>
