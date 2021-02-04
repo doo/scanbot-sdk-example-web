@@ -40,4 +40,9 @@ export default class Pages {
     getActiveIndex() {
         return this.activeIndex;
     }
+
+    updateActiveItem(result: any) {
+        this.list[this.getActiveIndex()].cropped = result.image;
+        this.list[this.getActiveIndex()].polygon = result.polygon;
+    }
 }

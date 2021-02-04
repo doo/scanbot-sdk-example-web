@@ -121,9 +121,17 @@ export default class App extends React.Component<any, any> {
         }
         if (route == FeatureId.CroppingView) {
             return [
-                {text: "DETECT", action: () => {}},
-                {text: "ROTATE", action: () => {}},
-                {text: "APPLY", action: () => {}, right: true}
+                {text: "DETECT", action: async () => {
+                        await ScanbotSdkService.instance.croppingView?.detect()
+                    }},
+                {text: "ROTATE", action: async () => {
+                        await ScanbotSdkService.instance.croppingView?.rotate(1)
+                    }},
+                {text: "APPLY", action: async () => {
+                        const result = await ScanbotSdkService.instance.croppingView?.apply();
+                        Pages.instance.updateActiveItem(result);
+                        this.onBackPress();
+                    }, right: true}
             ]
         }
     }
