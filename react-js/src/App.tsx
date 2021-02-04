@@ -17,6 +17,7 @@ import DocumentScannerPage from "./pages/document-scanner-page";
 import ImageResultsPage from "./pages/image-results-page";
 import {FeatureId} from "./model/Features";
 import {createBrowserHistory} from "history";
+import ImageDetailPage from "./pages/image-detail-page";
 
 const history = createBrowserHistory();
 
@@ -67,16 +68,26 @@ export default class App extends React.Component<any, any> {
                         {this.state.alert?.text}
                     </Alert>
                 </Snackbar>
+
                 <AppBar position="fixed" style={{display: "flex", flexDirection: "row"}}>
-                    {!this.isAtRoot() && <button onClick={() => this.onBackPress()}>Back</button>}
+                    {!this.isAtRoot() && <button style={{
+                        backgroundColor: "transparent",
+                        border: "none",
+                        color: "white",
+                        width: "50px",
+                        fontSize: "30px",
+                        textAlign: "center"
+                    }} onClick={() => this.onBackPress()} dangerouslySetInnerHTML={{__html: "&#8249"}}/>}
                     <Toolbar>SCANBOT WEB SDK EXAMPLE</Toolbar>
                 </AppBar>
                 <HashRouter>
-                <Routes>
-                    <Route path="/" element={<FeatureList onItemClick={this.onFeatureClick.bind(this)}/>}/>
-                    <Route path="/document-scanner" element={<DocumentScannerPage sdk={this.state.sdk}/>}/>
-                    <Route path="/image-results" element={<ImageResultsPage sdk={this.state.sdk}/>}/>
-                </Routes>
+                    <Routes>
+                        <Route path="/" element={<FeatureList onItemClick={this.onFeatureClick.bind(this)}/>}/>
+
+                        <Route path="/document-scanner" element={<DocumentScannerPage sdk={this.state.sdk}/>}/>
+                        <Route path="/image-results" element={<ImageResultsPage sdk={this.state.sdk}/>}/>
+                        <Route path="/image-details" element={<ImageDetailPage sdk={this.state.sdk}/>}/>
+                    </Routes>
                 </HashRouter>
             </div>
         );

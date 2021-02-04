@@ -2,6 +2,7 @@
 import React, {CSSProperties} from "react";
 import Pages from "../model/Pages";
 import {GridList, GridListTile} from "@material-ui/core";
+import {Link} from "react-router-dom";
 
 export default class ImageResultsPage extends React.Component<any, any>{
 
@@ -35,9 +36,15 @@ export default class ImageResultsPage extends React.Component<any, any>{
             <div style={{marginTop: "65px", width: "100%", height: "100%"}}>
                 <GridList cellHeight={160} cols={3}>
                     {this.state.images.map((image: any) => {
-                        return <GridListTile key={image.index} cols={1}>
-                            <img style={imageStyle} src={image.base64} alt={"image"}/>
-                        </GridListTile>
+                        return (
+
+                                <GridListTile key={image.index} cols={1}>
+                                    <Link key={image.index} to={{pathname: "/image-details", search: "?index=" + image.index }}>
+                                    <img style={imageStyle} src={image.base64} alt={"image"}/>
+                                    </Link>
+                                </GridListTile>
+
+                        )
                     })}
                 </GridList>
             </div>
