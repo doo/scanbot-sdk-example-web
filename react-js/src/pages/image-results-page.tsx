@@ -33,17 +33,16 @@ export default class ImageResultsPage extends React.Component<any, any>{
             objectFit: "contain"
         };
         return (
-            <div style={{marginTop: "65px", width: "100%", height: "100%"}}>
-                <GridList cellHeight={160} cols={3}>
+            <div style={{width: "100%", height: "100%"}}>
+                <GridList style={{height: "100%", margin: 0}} cellHeight={160} cols={3}>
                     {this.state.images.map((image: any) => {
                         return (
-
-                                <GridListTile key={image.index} cols={1}>
-                                    <Link key={image.index} to={{pathname: "/image-details", search: "?index=" + image.index }}>
+                            <GridListTile key={image.index} cols={1}>
+                                <Link key={image.index}
+                                      to={{pathname: "/image-details", search: "?index=" + image.index}}>
                                     <img style={imageStyle} src={image.base64} alt={"image"}/>
-                                    </Link>
-                                </GridListTile>
-
+                                </Link>
+                            </GridListTile>
                         )
                     })}
                 </GridList>

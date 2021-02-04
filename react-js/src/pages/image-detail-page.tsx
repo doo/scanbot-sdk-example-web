@@ -32,7 +32,7 @@ export default class ImageDetailPage extends React.Component<any, any>{
             objectFit: "contain"
         };
         return (
-            <div style={{marginTop: "65px", width: "100%", height: "100%"}}>
+            <div style={{width: "100%", height: "100%"}}>
                 <img style={imageStyle} src={this.state.image} alt={"."}/>
             </div>
         );

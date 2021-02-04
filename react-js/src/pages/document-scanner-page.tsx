@@ -32,7 +32,7 @@ export default class DocumentScannerPage extends React.Component<any, any>{
 
     render() {
         return (
-            <div style={{height: "100vh"}}>
+            <div style={{height: "100%"}}>
                 <div id={this.SCANNER_CONTAINER} style={{width: "100%", height: "100%"}}/>
             </div>
         );

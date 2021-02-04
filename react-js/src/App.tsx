@@ -18,6 +18,7 @@ import ImageResultsPage from "./pages/image-results-page";
 import {FeatureId} from "./model/Features";
 import {createBrowserHistory} from "history";
 import ImageDetailPage from "./pages/image-detail-page";
+import {BottomBar} from "./subviews/BottomBar";
 
 const history = createBrowserHistory();
 
@@ -46,7 +47,11 @@ export default class App extends React.Component<any, any> {
 
         history.listen(update => {
             this.forceUpdate();
-        })
+        });
+
+        window.addEventListener('resize', (asdf) => {
+            console.log("resize", asdf);
+        });
     }
 
     onAlertClose() {
@@ -60,6 +65,17 @@ export default class App extends React.Component<any, any> {
         history.back();
     }
 
+    navigation?: any;
+
+    toolbarHeight() {
+        return (this.navigation as HTMLHeadingElement)?.clientHeight ?? 0;
+    }
+    containerHeight() {
+        if (!this.navigation) {
+            return "100%";
+        }
+        return (window.innerHeight - 2 * this.toolbarHeight()) ?? 0;
+    }
     render() {
         return (
             <div>
@@ -69,7 +85,7 @@ export default class App extends React.Component<any, any> {
                     </Alert>
                 </Snackbar>
 
-                <AppBar position="fixed" style={{display: "flex", flexDirection: "row"}}>
+                <AppBar position="fixed" style={{display: "flex", flexDirection: "row"}} ref={ref => this.navigation = ref}>
                     {!this.isAtRoot() && <button style={{
                         backgroundColor: "transparent",
                         border: "none",
@@ -80,6 +96,7 @@ export default class App extends React.Component<any, any> {
                     }} onClick={() => this.onBackPress()} dangerouslySetInnerHTML={{__html: "&#8249"}}/>}
                     <Toolbar>SCANBOT WEB SDK EXAMPLE</Toolbar>
                 </AppBar>
+                <div style={{height: this.containerHeight(), marginTop: this.toolbarHeight()}}>
                 <HashRouter>
                     <Routes>
                         <Route path="/" element={<FeatureList onItemClick={this.onFeatureClick.bind(this)}/>}/>
@@ -89,6 +106,8 @@ export default class App extends React.Component<any, any> {
                         <Route path="/image-details" element={<ImageDetailPage sdk={this.state.sdk}/>}/>
                     </Routes>
                 </HashRouter>
+                </div>
+                <BottomBar style={{height: this.toolbarHeight()}}/>
             </div>
         );
     }
