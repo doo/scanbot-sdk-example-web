@@ -45,4 +45,8 @@ export default class Pages {
         this.list[this.getActiveIndex()].cropped = result.image;
         this.list[this.getActiveIndex()].polygon = result.polygon;
     }
+
+    getActiveItem() {
+        return this.objectAtIndex(this.activeIndex);
+    }
 }

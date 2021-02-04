@@ -15,6 +15,8 @@ import {Toast} from "./subviews/toast";
 import {NavigationContent} from "./subviews/navigation-content";
 import {NavigationUtils} from "./utils/navigation-utils";
 import {ScanbotSdkService} from "./service/scanbot-sdk-service";
+import Swal from "sweetalert2";
+import {FilterType} from "scanbot-web-sdk/@types/model/filter-types";
 
 const history = createBrowserHistory();
 
@@ -24,7 +26,7 @@ export default class App extends React.Component<any, any> {
         super(props);
         this.state = {
             alert: undefined,
-            image: undefined,
+            activeImage: undefined,
             sdk: undefined
         };
     }
@@ -84,13 +86,14 @@ export default class App extends React.Component<any, any> {
             return <CroppingPage sdk={this.state.sdk}/>;
         }
         if (route === FeatureId.ImageDetails) {
-            return <ImageDetailPage sdk={this.state.sdk}/>
+            return <ImageDetailPage image={this.state.activeImage}/>
         }
         if (route === FeatureId.ImageResults) {
             return <ImageResultsPage
                 sdk={this.state.sdk}
-                onDetailButtonClick={(index: number) => {
+                onDetailButtonClick={async (index: number) => {
                     Pages.instance.setActiveItem(index);
+                    this.setState({activeImage: await ScanbotSdkService.instance.documentImageAsBase64(index)});
                     history.push("#/image-details?index=" + index);
                 }}/>
         }
@@ -101,37 +104,85 @@ export default class App extends React.Component<any, any> {
         if (route === FeatureId.DocumentScanner) {
             return [
                 {text: Pages.instance.count() + " PAGES", action: undefined},
-                {text: "DONE", action: () => {this.onBackPress()}, right: true}
+                {
+                    text: "DONE", action: () => {
+                        this.onBackPress()
+                    }, right: true
+                }
             ];
         }
         if (route === FeatureId.ImageResults) {
             return [
-                {text: "SAVE PDF", action: () => {}},
-                {text: "DELETE", action: () => {}, right: true}
+                {
+                    text: "SAVE PDF", action: () => {
+                    }
+                },
+                {
+                    text: "DELETE", action: () => {
+                    }, right: true
+                }
             ];
         }
         if (route === FeatureId.ImageDetails) {
             return [
-                {text: "CROP", action: () => {
+                {
+                    text: "CROP", action: async () => {
+                        const index = parseInt(window.location.href.split("?")[1].split("=")[1]);
+                        const bytes = Pages.instance.imageAtIndex(index);
+                        if (bytes) {
+                            this.setState({detailImage: await this.props.sdk.toDataUrl(bytes)});
+                        }
                         const path = "#/" + FeatureId.CroppingView + "?index=" + Pages.instance.getActiveIndex();
                         history.push(path);
-                    }},
-                {text: "FILTER", action: () => {}}
+                    }
+                },
+                {
+                    text: "FILTER", action: async () => {
+
+                        const page = Pages.instance.getActiveItem();
+                        const result = await Swal.fire({
+                            title: 'Select filter',
+                            input: 'select',
+                            inputOptions: ScanbotSdkService.instance.availableFilters(),
+                            inputPlaceholder: page.filter ?? "none"
+                        });
+
+                        const filter = ScanbotSdkService.instance.filterByIndex(result.value);
+
+                        if (filter === "none") {
+                            page.filter = undefined;
+                            page.filtered = undefined;
+                        } else {
+                            page.filter = filter;
+                            page.filtered = await ScanbotSdkService.instance.applyFilter(page.cropped ?? page.original, filter as FilterType);
+                        }
+
+                        const index = Pages.instance.getActiveIndex();
+                        this.setState({activeImage: await ScanbotSdkService.instance.documentImageAsBase64(index)});
+                    }
+                }
             ];
         }
+
         if (route == FeatureId.CroppingView) {
             return [
-                {text: "DETECT", action: async () => {
+                {
+                    text: "DETECT", action: async () => {
                         await ScanbotSdkService.instance.croppingView?.detect()
-                    }},
-                {text: "ROTATE", action: async () => {
+                    }
+                },
+                {
+                    text: "ROTATE", action: async () => {
                         await ScanbotSdkService.instance.croppingView?.rotate(1)
-                    }},
-                {text: "APPLY", action: async () => {
+                    }
+                },
+                {
+                    text: "APPLY", action: async () => {
                         const result = await ScanbotSdkService.instance.croppingView?.apply();
                         Pages.instance.updateActiveItem(result);
                         this.onBackPress();
-                    }, right: true}
+                    }, right: true
+                }
             ]
         }
     }
