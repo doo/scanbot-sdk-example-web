@@ -59,7 +59,7 @@ export default class App extends React.Component<any, any> {
 
     ROOT_HASH = "#/";
     isAtRoot() {
-        return window.location.hash === this.ROOT_HASH;
+        return window.location.hash === this.ROOT_HASH || window.location.hash === "";
     }
     onBackPress() {
         history.back();
@@ -77,8 +77,18 @@ export default class App extends React.Component<any, any> {
         return (window.innerHeight - 2 * this.toolbarHeight()) ?? 0;
     }
 
+    findRoute() {
+        const route = window.location.hash?.replace(this.ROOT_HASH, "");
+        if (route) {
+            const split = route.split("?");
+            if (split.length > 0) {
+                return split[0];
+            }
+        }
+        return undefined;
+    }
     private addButtonsBasedOnRoute() {
-        const route = window.location.hash?.replace(this.ROOT_HASH, "").split("?")[0];
+        const route = this.findRoute();
         if (route === FeatureId.DocumentScanner) {
             return [
                 {text: Pages.instance.count() + " PAGES", action: undefined},
@@ -93,7 +103,7 @@ export default class App extends React.Component<any, any> {
         }
         if (route === FeatureId.ImageDetails) {
             return [
-                {text: "CROP", action: () => {}},
+                {text: "CROP", action: () => { history.push("#/" + FeatureId.CroppingView); this.forceUpdate() }},
                 {text: "FILTER", action: () => {}}
             ];
         }
@@ -127,6 +137,7 @@ export default class App extends React.Component<any, any> {
                     <Toolbar>SCANBOT WEB SDK EXAMPLE</Toolbar>
                 </AppBar>
                 <div style={{height: this.containerHeight(), marginTop: this.toolbarHeight()}}>
+                    {this.decideContent()}
                     <HashRouter>
                         <Routes>
                             <Route path="/" element={<FeatureList onItemClick={this.onFeatureClick.bind(this)}/>}/>
@@ -141,7 +152,7 @@ export default class App extends React.Component<any, any> {
                                         this.forceUpdate();
                                     }}/>}/>
                             <Route path={FeatureId.ImageDetails} element={<ImageDetailPage sdk={this.state.sdk}/>}/>
-                            <Route path={FeatureId.CroppingView} element={<CroppingPage sdk={this.state.sdk}/>}/>
+                            <Route path={"#/cropping-view"} element={<CroppingPage sdk={this.state.sdk}/>}/>
                         </Routes>
                     </HashRouter>
                 </div>
@@ -151,7 +162,12 @@ export default class App extends React.Component<any, any> {
             </div>
         );
     }
-
+    decideContent() {
+        const route = this.findRoute();
+        if (route === FeatureId.CroppingView) {
+            return <CroppingPage sdk={this.state.sdk}/>;
+        }
+    }
     async onDocumentDetected(result: DetectionResult) {
         Pages.instance.add(result);
         this.forceUpdate();

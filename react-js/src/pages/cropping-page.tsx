@@ -18,6 +18,11 @@ export default class CroppingPage extends React.Component<any, any>{
     }
 
     async componentDidMount(): Promise<void> {
+        const href = window.location.href.split("?");
+        if (href.length === 1) {
+            console.log("No query parameters");
+            return;
+        }
         const index = parseInt(window.location.href.split("?")[1].split("=")[1]);
         const page = Pages.instance.objectAtIndex(index);
 
