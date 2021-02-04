@@ -15,13 +15,22 @@ export default class Pages {
     }
 
     imageAtIndex(index: number) {
-        if (index === -1) {
-            return undefined;
-        }
-        const page = this.list[index];
+        const page = this.objectAtIndex(index);
         if (!page) {
             return undefined;
         }
         return page.filtered ?? page.cropped ?? page.original;
+    }
+
+    count() {
+        return this.list.length;
+    }
+
+    objectAtIndex(index: number) {
+        if (index === -1) {
+            return undefined;
+        }
+        return this.list[index];
+
     }
 }

@@ -4,7 +4,8 @@ export enum FeatureId {
     ImagePicker = "image-picker",
     ImageResults = "image-results",
     ImageDetails = "image-details",
-    LicenseInfo = "license-info"
+    LicenseInfo = "license-info",
+    CroppingView = "cropping-view"
 }
 export class Features {
 

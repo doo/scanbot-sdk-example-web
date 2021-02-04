@@ -1,9 +1,7 @@
 
 import React from "react";
-import {DetectionResult} from "scanbot-web-sdk/@types/model/response/detection-result";
 import {DocumentScannerConfiguration} from "scanbot-web-sdk/@types/model/configuration/document-scanner-configuration";
 import {IDocumentScannerHandle} from "scanbot-web-sdk/@types/interfaces/i-document-scanner-handle";
-import Pages from "../model/Pages";
 
 export default class DocumentScannerPage extends React.Component<any, any>{
 
@@ -13,7 +11,7 @@ export default class DocumentScannerPage extends React.Component<any, any>{
 
     async componentDidMount(): Promise<void> {
         const config: DocumentScannerConfiguration = {
-            onDocumentDetected: this.onDocumentDetected.bind(this),
+            onDocumentDetected: this.props.onDocumentDetected,
             containerId: this.SCANNER_CONTAINER
         };
 
@@ -24,10 +22,6 @@ export default class DocumentScannerPage extends React.Component<any, any>{
 
     componentWillUnmount(): void {
         this.documentScanner?.dispose();
-    }
-
-    async onDocumentDetected(result: DetectionResult) {
-        Pages.instance.add(result);
     }
 
     render() {

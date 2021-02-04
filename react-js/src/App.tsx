@@ -19,6 +19,8 @@ import {FeatureId} from "./model/Features";
 import {createBrowserHistory} from "history";
 import ImageDetailPage from "./pages/image-detail-page";
 import {BottomBar} from "./subviews/BottomBar";
+import Pages from "./model/Pages";
+import CroppingPage from "./pages/cropping-page";
 
 const history = createBrowserHistory();
 
@@ -46,11 +48,8 @@ export default class App extends React.Component<any, any> {
         this.setState({sdk: sdk});
 
         history.listen(update => {
+            console.log("listening to history ", update);
             this.forceUpdate();
-        });
-
-        window.addEventListener('resize', (asdf) => {
-            console.log("resize", asdf);
         });
     }
 
@@ -58,8 +57,9 @@ export default class App extends React.Component<any, any> {
         this.setState({alert: undefined});
     }
 
+    ROOT_HASH = "#/";
     isAtRoot() {
-        return window.location.hash === "#/";
+        return window.location.hash === this.ROOT_HASH;
     }
     onBackPress() {
         history.back();
@@ -76,6 +76,35 @@ export default class App extends React.Component<any, any> {
         }
         return (window.innerHeight - 2 * this.toolbarHeight()) ?? 0;
     }
+
+    private addButtonsBasedOnRoute() {
+        const route = window.location.hash?.replace(this.ROOT_HASH, "").split("?")[0];
+        if (route === FeatureId.DocumentScanner) {
+            return [
+                {text: Pages.instance.count() + " PAGES", action: undefined},
+                {text: "DONE", action: () => {this.onBackPress()}, right: true}
+            ];
+        }
+        if (route === FeatureId.ImageResults) {
+            return [
+                {text: "SAVE PDF", action: () => {}},
+                {text: "DELETE", action: () => {}, right: true}
+            ];
+        }
+        if (route === FeatureId.ImageDetails) {
+            return [
+                {text: "CROP", action: () => {}},
+                {text: "FILTER", action: () => {}}
+            ];
+        }
+        if (route == FeatureId.CroppingView) {
+            return [
+                {text: "DETECT", action: () => {}},
+                {text: "ROTATE", action: () => {}},
+                {text: "APPLY", action: () => {}, right: true}
+            ]
+        }
+    }
     render() {
         return (
             <div>
@@ -85,7 +114,8 @@ export default class App extends React.Component<any, any> {
                     </Alert>
                 </Snackbar>
 
-                <AppBar position="fixed" style={{display: "flex", flexDirection: "row"}} ref={ref => this.navigation = ref}>
+                <AppBar position="fixed" style={{display: "flex", flexDirection: "row"}}
+                        ref={ref => this.navigation = ref}>
                     {!this.isAtRoot() && <button style={{
                         backgroundColor: "transparent",
                         border: "none",
@@ -97,19 +127,34 @@ export default class App extends React.Component<any, any> {
                     <Toolbar>SCANBOT WEB SDK EXAMPLE</Toolbar>
                 </AppBar>
                 <div style={{height: this.containerHeight(), marginTop: this.toolbarHeight()}}>
-                <HashRouter>
-                    <Routes>
-                        <Route path="/" element={<FeatureList onItemClick={this.onFeatureClick.bind(this)}/>}/>
+                    <HashRouter>
+                        <Routes>
+                            <Route path="/" element={<FeatureList onItemClick={this.onFeatureClick.bind(this)}/>}/>
 
-                        <Route path={FeatureId.DocumentScanner} element={<DocumentScannerPage sdk={this.state.sdk}/>}/>
-                        <Route path={FeatureId.ImageResults} element={<ImageResultsPage sdk={this.state.sdk}/>}/>
-                        <Route path={FeatureId.ImageDetails} element={<ImageDetailPage sdk={this.state.sdk}/>}/>
-                    </Routes>
-                </HashRouter>
+                            <Route path={FeatureId.DocumentScanner} element={
+                                <DocumentScannerPage sdk={this.state.sdk}
+                                                     onDocumentDetected={this.onDocumentDetected.bind(this)}/>}/>
+                            <Route path={FeatureId.ImageResults} element={
+                                <ImageResultsPage
+                                    sdk={this.state.sdk}
+                                    onDetailButtonClick={() => {
+                                        this.forceUpdate();
+                                    }}/>}/>
+                            <Route path={FeatureId.ImageDetails} element={<ImageDetailPage sdk={this.state.sdk}/>}/>
+                            <Route path={FeatureId.CroppingView} element={<CroppingPage sdk={this.state.sdk}/>}/>
+                        </Routes>
+                    </HashRouter>
                 </div>
-                <BottomBar hidden={this.isAtRoot()} style={{height: this.toolbarHeight()}}/>
+                <BottomBar hidden={this.isAtRoot()} style={{height: this.toolbarHeight()}}
+                           buttons={this.addButtonsBasedOnRoute()}
+                />
             </div>
         );
+    }
+
+    async onDocumentDetected(result: DetectionResult) {
+        Pages.instance.add(result);
+        this.forceUpdate();
     }
 
     async onFeatureClick(feature: any) {

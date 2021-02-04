@@ -23,7 +23,6 @@ export default class ImageDetailPage extends React.Component<any, any>{
     }
 
     render() {
-        console.log(this.props);
         const imageStyle: CSSProperties = {
             width: "100%",
             height: "100%",

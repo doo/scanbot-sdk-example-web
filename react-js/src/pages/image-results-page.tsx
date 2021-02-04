@@ -39,7 +39,11 @@ export default class ImageResultsPage extends React.Component<any, any>{
                         return (
                             <GridListTile key={image.index} cols={1}>
                                 <Link key={image.index}
-                                      to={{pathname: "/image-details", search: "?index=" + image.index}}>
+                                      to={{pathname: "/image-details", search: "?index=" + image.index}}
+                                      onClick={(e) => {
+                                          this.props.onDetailButtonClick()
+                                      }}
+                                >
                                     <img style={imageStyle} src={image.base64} alt={"image"}/>
                                 </Link>
                             </GridListTile>
