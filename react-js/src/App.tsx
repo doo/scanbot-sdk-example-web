@@ -1,15 +1,6 @@
 import React from 'react';
-import {AppBar, Snackbar, Toolbar} from "@material-ui/core";
-import MuiAlert from '@material-ui/lab/Alert';
+import {AppBar} from "@material-ui/core";
 
-// Import SDK from webpack directory to ensure web assembly binary and worker and bundled with webpack
-import ScanbotSDK from "scanbot-web-sdk/webpack";
-
-// Other typings should be imported from @types
-import {DocumentScannerConfiguration} from "scanbot-web-sdk/@types/model/configuration/document-scanner-configuration";
-import {DetectionResult} from "scanbot-web-sdk/@types/model/response/detection-result";
-
-import {ICroppingViewHandle} from "scanbot-web-sdk/@types/interfaces/i-cropping-view-handle";
 import FeatureList from "./subviews/FeatureList";
 import DocumentScannerPage from "./pages/document-scanner-page";
 import ImageResultsPage from "./pages/image-results-page";
@@ -23,14 +14,11 @@ import {ImageUtils} from "./utils/image-utils";
 import {Toast} from "./subviews/toast";
 import {NavigationContent} from "./subviews/navigation-content";
 import {NavigationUtils} from "./utils/navigation-utils";
+import {ScanbotSdkService} from "./service/scanbot-sdk-service";
 
 const history = createBrowserHistory();
 
 export default class App extends React.Component<any, any> {
-
-    license = "";
-
-    croppingView?: ICroppingViewHandle;
 
     constructor(props: any) {
         super(props);
@@ -42,7 +30,7 @@ export default class App extends React.Component<any, any> {
     }
 
     async componentDidMount() {
-        const sdk = await ScanbotSDK.initialize({licenseKey: this.license, engine: "/"});
+        const sdk = await ScanbotSdkService.instance.initialize();
         this.setState({sdk: sdk});
 
         history.listen(update => {
@@ -90,8 +78,7 @@ export default class App extends React.Component<any, any> {
             return <FeatureList onItemClick={this.onFeatureClick.bind(this)}/>
         }
         if (route == FeatureId.DocumentScanner) {
-            return <DocumentScannerPage sdk={this.state.sdk}
-                                        onDocumentDetected={this.onDocumentDetected.bind(this)}/>;
+            return <DocumentScannerPage sdk={this.state.sdk} onDocumentDetected={this.onDocumentDetected.bind(this)}/>;
         }
         if (route === FeatureId.CroppingView) {
             return <CroppingPage sdk={this.state.sdk}/>;
@@ -141,7 +128,7 @@ export default class App extends React.Component<any, any> {
         }
     }
 
-    async onDocumentDetected(result: DetectionResult) {
+    async onDocumentDetected(result: any) {
         Pages.instance.add(result);
         this.forceUpdate();
     }
