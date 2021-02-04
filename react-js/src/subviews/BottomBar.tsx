@@ -1,4 +1,5 @@
 import React from "react";
+import {Styles} from "../model/Styles";
 
 export class BottomBar extends React.Component<any, any> {
 
@@ -7,7 +8,7 @@ export class BottomBar extends React.Component<any, any> {
             return null;
         }
         return <div
-            style={{width: "100%", height: this.props.style.height, backgroundColor: "#c8193c", display: "flex"}}>
+            style={{width: "100%", height: this.props.height, backgroundColor: "#c8193c", display: "flex"}}>
             {this.props.buttons && this.createButtons()}
         </div>
     }
@@ -16,19 +17,7 @@ export class BottomBar extends React.Component<any, any> {
         return this.props.buttons.map((button: any) => this.createButton(button));
     }
     private createButton(data: any) {
-        const button = <button key={data.text} style={{
-            width: "80px",
-            fontSize: "14px",
-            fontWeight: "bold",
-            height: "100%",
-            textAlign: "center",
-            lineHeight: "50px",
-            color: "white",
-            padding: 0,
-            margin: 0,
-            border: "none",
-            backgroundColor: "transparent"
-        }} onClick={data.action}>{data.text}</button>;
+        const button = <button key={data.text} style={Styles.bottomBarButton} onClick={data.action}>{data.text}</button>;
 
         if (data.right) {
             return <div key={data.text} style={{right: "8px", position: "absolute"}}>{button}</div>

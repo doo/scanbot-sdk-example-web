@@ -18,5 +18,18 @@ export class Styles {
         top: "0",
         objectFit: "contain"
     };
+    static bottomBarButton: CSSProperties = {
+        width: "80px",
+        fontSize: "14px",
+        fontWeight: "bold",
+        height: "100%",
+        textAlign: "center",
+        lineHeight: "50px",
+        color: "white",
+        padding: 0,
+        margin: 0,
+        border: "none",
+        backgroundColor: "transparent"
+    };
 
 }

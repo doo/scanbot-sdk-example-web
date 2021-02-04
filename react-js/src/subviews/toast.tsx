@@ -1,6 +1,10 @@
 import React from "react";
 import {Snackbar} from "@material-ui/core";
-import {Alert} from "@material-ui/lab";
+import MuiAlert from "@material-ui/lab/Alert";
+
+function Alert(props: any) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 export class Toast extends React.Component<any, any> {
     render() {
