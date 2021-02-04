@@ -2,6 +2,7 @@
 
 import React, {CSSProperties} from "react";
 import Pages from "../model/Pages";
+import {Styles} from "../model/Styles";
 
 export default class ImageDetailPage extends React.Component<any, any>{
 
@@ -23,16 +24,9 @@ export default class ImageDetailPage extends React.Component<any, any>{
     }
 
     render() {
-        const imageStyle: CSSProperties = {
-            width: "100%",
-            height: "100%",
-            transform: "none",
-            top: "0",
-            objectFit: "contain"
-        };
         return (
             <div style={{width: "100%", height: "100%"}}>
-                <img style={imageStyle} src={this.state.image} alt={"."}/>
+                <img style={Styles.documentImage} src={this.state.image} alt={"."}/>
             </div>
         );
     }

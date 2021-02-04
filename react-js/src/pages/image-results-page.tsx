@@ -3,6 +3,7 @@ import React, {CSSProperties} from "react";
 import Pages from "../model/Pages";
 import {GridList, GridListTile} from "@material-ui/core";
 import {Link} from "react-router-dom";
+import {Styles} from "../model/Styles";
 
 export default class ImageResultsPage extends React.Component<any, any>{
 
@@ -25,13 +26,7 @@ export default class ImageResultsPage extends React.Component<any, any>{
     }
 
     render() {
-        const imageStyle: CSSProperties = {
-            width: "100%",
-            height: "100%",
-            transform: "none",
-            top: "0",
-            objectFit: "contain"
-        };
+
         return (
             <div style={{width: "100%", height: "100%"}}>
                 <GridList style={{height: "100%", margin: 0}} cellHeight={160} cols={3}>
@@ -40,7 +35,7 @@ export default class ImageResultsPage extends React.Component<any, any>{
                             <GridListTile key={image.index} cols={1} onClick={(e) => {
                                 this.props.onDetailButtonClick(image.index)}
                             }>
-                                    <img style={imageStyle} src={image.base64} alt={"image"}/>
+                                    <img style={Styles.documentImage} src={image.base64} alt={"image"}/>
 
                             </GridListTile>
                         )

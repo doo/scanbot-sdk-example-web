@@ -1,4 +1,3 @@
-import {DetectionResult} from "scanbot-web-sdk/@types/model/response/detection-result";
 
 export default class Pages {
 
@@ -7,7 +6,7 @@ export default class Pages {
     private list: any[] = [];
     private activeIndex: number = -1;
 
-    public add(page: DetectionResult) {
+    public add(page: any) {
         this.list.push(page);
     }
 

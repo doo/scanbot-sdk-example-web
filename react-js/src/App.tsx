@@ -21,6 +21,9 @@ import ImageDetailPage from "./pages/image-detail-page";
 import {BottomBar} from "./subviews/BottomBar";
 import Pages from "./model/Pages";
 import CroppingPage from "./pages/cropping-page";
+import {Styles} from "./model/Styles";
+import {ImageUtils} from "./utils/image-utils";
+import {Toast} from "./subviews/toast";
 
 const history = createBrowserHistory();
 
@@ -48,7 +51,6 @@ export default class App extends React.Component<any, any> {
         this.setState({sdk: sdk});
 
         history.listen(update => {
-            console.log("listening to history ", update);
             this.forceUpdate();
         });
     }
@@ -121,22 +123,14 @@ export default class App extends React.Component<any, any> {
     render() {
         return (
             <div>
-                <Snackbar open={!!this.state.alert} autoHideDuration={2000} onClose={this.onAlertClose.bind(this)}>
-                    <Alert onClose={this.onAlertClose.bind(this)} severity={this.state.alert?.color}>
-                        {this.state.alert?.text}
-                    </Alert>
-                </Snackbar>
+                <input className="file-picker" type="file" accept="image/jpeg" width="48"
+                       height="48" style={{display: "none"}}/>
+                <Toast alert={this.state.alert} onClose={this.onAlertClose.bind(this)}/>
 
                 <AppBar position="fixed" style={{display: "flex", flexDirection: "row"}}
                         ref={ref => this.navigation = ref}>
-                    {!this.isAtRoot() && <button style={{
-                        backgroundColor: "transparent",
-                        border: "none",
-                        color: "white",
-                        width: "50px",
-                        fontSize: "30px",
-                        textAlign: "center"
-                    }} onClick={() => this.onBackPress()} dangerouslySetInnerHTML={{__html: "&#8249"}}/>}
+                    {!this.isAtRoot() && <button style={Styles.backButton} onClick={() => this.onBackPress()}
+                                                 dangerouslySetInnerHTML={{__html: "&#8249"}}/>}
                     <Toolbar>SCANBOT WEB SDK EXAMPLE</Toolbar>
                 </AppBar>
                 <div style={{height: this.containerHeight(), marginTop: this.toolbarHeight()}}>
@@ -148,15 +142,11 @@ export default class App extends React.Component<any, any> {
             </div>
         );
     }
+
     decideContent() {
         const route = this.findRoute();
-        console.log("route", route);
         if (this.isAtRoot()) {
-            return <FeatureList onItemClick={(feature: any) => {
-                if (feature.route) {
-                    history.push("#/" + feature.route);
-                }
-            }}/>
+            return <FeatureList onItemClick={this.onFeatureClick.bind(this)}/>
         }
         if (route == FeatureId.DocumentScanner) {
             return <DocumentScannerPage sdk={this.state.sdk}
@@ -184,9 +174,7 @@ export default class App extends React.Component<any, any> {
 
     async onFeatureClick(feature: any) {
         if (feature.route) {
-            // Features with their own routes have links. This is only for handling other click events.
-            // However, do refresh the UI to ensure correct back button behavior
-            this.forceUpdate();
+            history.push("#/" + feature.route);
             return;
         }
 
@@ -195,9 +183,8 @@ export default class App extends React.Component<any, any> {
             const color = (info?.status === "Trial") ? "success" : "error";
             this.setState({alert: {color: color, text: JSON.stringify(info)}});
         } else if (feature.id === FeatureId.ImagePicker) {
-
-        } else {
-
+            const result = await ImageUtils.pick();
+            Pages.instance.add(result)
         }
 
     }
