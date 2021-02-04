@@ -16,6 +16,9 @@ import {HashRouter, Route, Routes} from "react-router-dom";
 import DocumentScannerPage from "./pages/document-scanner-page";
 import ImageResultsPage from "./pages/image-results-page";
 import {FeatureId} from "./model/Features";
+import {createBrowserHistory} from "history";
+
+const history = createBrowserHistory();
 
 function Alert(props: any) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -39,10 +42,21 @@ export default class App extends React.Component<any, any> {
     async componentDidMount() {
         const sdk = await ScanbotSDK.initialize({licenseKey: this.license, engine: "/"});
         this.setState({sdk: sdk});
+
+        history.listen(update => {
+            this.forceUpdate();
+        })
     }
 
     onAlertClose() {
         this.setState({alert: undefined});
+    }
+
+    isAtRoot() {
+        return window.location.hash === "#/";
+    }
+    onBackPress() {
+        history.back();
     }
 
     render() {
@@ -53,7 +67,8 @@ export default class App extends React.Component<any, any> {
                         {this.state.alert?.text}
                     </Alert>
                 </Snackbar>
-                <AppBar position="fixed">
+                <AppBar position="fixed" style={{display: "flex", flexDirection: "row"}}>
+                    {!this.isAtRoot() && <button onClick={() => this.onBackPress()}>Back</button>}
                     <Toolbar>SCANBOT WEB SDK EXAMPLE</Toolbar>
                 </AppBar>
                 <HashRouter>
@@ -69,7 +84,9 @@ export default class App extends React.Component<any, any> {
 
     async onFeatureClick(feature: any) {
         if (feature.route) {
-            // Features with their own routes have links. This is only for handling other click events
+            // Features with their own routes have links. This is only for handling other click events.
+            // However, do refresh the UI to ensure correct back button behavior
+            this.forceUpdate();
             return;
         }
 
