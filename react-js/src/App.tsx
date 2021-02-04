@@ -101,13 +101,13 @@ export default class App extends React.Component<any, any> {
                     <Routes>
                         <Route path="/" element={<FeatureList onItemClick={this.onFeatureClick.bind(this)}/>}/>
 
-                        <Route path="/document-scanner" element={<DocumentScannerPage sdk={this.state.sdk}/>}/>
-                        <Route path="/image-results" element={<ImageResultsPage sdk={this.state.sdk}/>}/>
-                        <Route path="/image-details" element={<ImageDetailPage sdk={this.state.sdk}/>}/>
+                        <Route path={FeatureId.DocumentScanner} element={<DocumentScannerPage sdk={this.state.sdk}/>}/>
+                        <Route path={FeatureId.ImageResults} element={<ImageResultsPage sdk={this.state.sdk}/>}/>
+                        <Route path={FeatureId.ImageDetails} element={<ImageDetailPage sdk={this.state.sdk}/>}/>
                     </Routes>
                 </HashRouter>
                 </div>
-                <BottomBar style={{height: this.toolbarHeight()}}/>
+                <BottomBar hidden={this.isAtRoot()} style={{height: this.toolbarHeight()}}/>
             </div>
         );
     }
@@ -125,6 +125,8 @@ export default class App extends React.Component<any, any> {
             const color = (info?.status === "Trial") ? "success" : "error";
             this.setState({alert: {color: color, text: JSON.stringify(info)}});
         } else if (feature.id === FeatureId.ImagePicker) {
+
+        } else {
 
         }
 
