@@ -1,9 +1,9 @@
 
 import React from "react";
 import {DetectionResult} from "scanbot-web-sdk/@types/model/response/detection-result";
-import {CroppingViewConfiguration} from "scanbot-web-sdk/@types/model/configuration/cropping-view-configuration";
 import {DocumentScannerConfiguration} from "scanbot-web-sdk/@types/model/configuration/document-scanner-configuration";
 import {IDocumentScannerHandle} from "scanbot-web-sdk/@types/interfaces/i-document-scanner-handle";
+import Pages from "../model/Pages";
 
 export default class DocumentScannerPage extends React.Component<any, any>{
 
@@ -23,15 +23,7 @@ export default class DocumentScannerPage extends React.Component<any, any>{
     }
 
     async onDocumentDetected(result: DetectionResult) {
-        console.log("Detected document: ", result);
-        const image = result.cropped ?? result.original;
-        this.documentScanner?.dispose();
-        // const config: CroppingViewConfiguration = {
-        //     image: image,
-        //     polygon: result.polygon,
-        //     containerId: this.SCANNER_CONTAINER
-        // };
-        // this.croppingView = await props.sdk?.openCroppingView(config);
+        Pages.instance.add(result);
     }
 
     render() {
