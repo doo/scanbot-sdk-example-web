@@ -104,7 +104,7 @@ export class ScanbotSdkService {
     async generatePDF(pages: any[]) {
         const generator = await this.sdk!.beginPdf({standardPaperSize: "A4", landscape: true, dpi: 100});
         for (const page of pages) {
-            await generator.addPage(page.cropped ?? page.original);
+            await generator.addPage(page.filtered ?? page.cropped ?? page.original);
         }
         return await generator.complete();
     }
