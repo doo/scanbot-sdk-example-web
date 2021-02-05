@@ -4,8 +4,7 @@ import {AppBar} from "@material-ui/core";
 import FeatureList from "./subviews/FeatureList";
 import DocumentScannerPage from "./pages/document-scanner-page";
 import ImageResultsPage from "./pages/image-results-page";
-import {FeatureId} from "./model/Features";
-import {createBrowserHistory} from "history";
+import {RoutePath, RoutingService} from "./service/RoutingService";
 import ImageDetailPage from "./pages/image-detail-page";
 import {BottomBar} from "./subviews/BottomBar";
 import Pages from "./model/Pages";
@@ -17,8 +16,6 @@ import {NavigationUtils} from "./utils/navigation-utils";
 import {ScanbotSdkService} from "./service/scanbot-sdk-service";
 import Swal from "sweetalert2";
 import {ImageFilter} from "scanbot-web-sdk/@types/model/filter-types";
-
-const history = createBrowserHistory();
 
 export default class App extends React.Component<any, any> {
 
@@ -35,13 +32,13 @@ export default class App extends React.Component<any, any> {
         const sdk = await ScanbotSdkService.instance.initialize();
         this.setState({sdk: sdk});
 
-        history.listen(update => {
+        RoutingService.instance.observeChanges(() => {
             this.forceUpdate();
-        });
+        })
     }
 
     onBackPress() {
-        history.back();
+        RoutingService.instance.back();
     }
 
     navigation?: any;
@@ -79,29 +76,29 @@ export default class App extends React.Component<any, any> {
         if (NavigationUtils.isAtRoot()) {
             return <FeatureList onItemClick={this.onFeatureClick.bind(this)}/>
         }
-        if (route == FeatureId.DocumentScanner) {
+        if (route == RoutePath.DocumentScanner) {
             return <DocumentScannerPage sdk={this.state.sdk} onDocumentDetected={this.onDocumentDetected.bind(this)}/>;
         }
-        if (route === FeatureId.CroppingView) {
+        if (route === RoutePath.CroppingView) {
             return <CroppingPage sdk={this.state.sdk}/>;
         }
-        if (route === FeatureId.ImageDetails) {
+        if (route === RoutePath.ImageDetails) {
             return <ImageDetailPage image={this.state.activeImage}/>
         }
-        if (route === FeatureId.ImageResults) {
+        if (route === RoutePath.ImageResults) {
             return <ImageResultsPage
                 sdk={this.state.sdk}
                 onDetailButtonClick={async (index: number) => {
                     Pages.instance.setActiveItem(index);
                     this.setState({activeImage: await ScanbotSdkService.instance.documentImageAsBase64(index)});
-                    history.push("#/image-details?index=" + index);
+                    RoutingService.instance.route(RoutePath.ImageDetails, {index: index})
                 }}/>
         }
     }
 
     private decideButtons() {
         const route = NavigationUtils.findRoute();
-        if (route === FeatureId.DocumentScanner) {
+        if (route === RoutePath.DocumentScanner) {
             return [
                 {text: Pages.instance.count() + " PAGES", action: undefined},
                 {
@@ -111,7 +108,7 @@ export default class App extends React.Component<any, any> {
                 }
             ];
         }
-        if (route === FeatureId.ImageResults) {
+        if (route === RoutePath.ImageResults) {
             return [
                 {
                     text: "SAVE PDF", action: () => {
@@ -123,17 +120,11 @@ export default class App extends React.Component<any, any> {
                 }
             ];
         }
-        if (route === FeatureId.ImageDetails) {
+        if (route === RoutePath.ImageDetails) {
             return [
                 {
                     text: "CROP", action: async () => {
-                        const index = parseInt(window.location.href.split("?")[1].split("=")[1]);
-                        const bytes = Pages.instance.imageAtIndex(index);
-                        if (bytes) {
-                            this.setState({detailImage: await this.props.sdk.toDataUrl(bytes)});
-                        }
-                        const path = "#/" + FeatureId.CroppingView + "?index=" + Pages.instance.getActiveIndex();
-                        history.push(path);
+                        RoutingService.instance.route(RoutePath.CroppingView, {index: Pages.instance.getActiveIndex()});
                     }
                 },
                 {
@@ -167,7 +158,7 @@ export default class App extends React.Component<any, any> {
             ];
         }
 
-        if (route == FeatureId.CroppingView) {
+        if (route == RoutePath.CroppingView) {
             return [
                 {
                     text: "DETECT", action: async () => {
@@ -183,7 +174,10 @@ export default class App extends React.Component<any, any> {
                     text: "APPLY", action: async () => {
                         const result = await ScanbotSdkService.instance.croppingView?.apply();
                         Pages.instance.updateActiveItem(result);
+                        await ScanbotSdkService.instance.reapplyFilter();
                         this.onBackPress();
+                        const index = Pages.instance.getActiveIndex();
+                        this.setState({activeImage: await ScanbotSdkService.instance.documentImageAsBase64(index)});
                     }, right: true
                 }
             ]
@@ -197,15 +191,16 @@ export default class App extends React.Component<any, any> {
 
     async onFeatureClick(feature: any) {
         if (feature.route) {
-            history.push("#/" + feature.route);
+            // history.push("#/" + feature.route);
+            RoutingService.instance.route(feature.route);
             return;
         }
 
-        if (feature.id === FeatureId.LicenseInfo) {
+        if (feature.id === RoutePath.LicenseInfo) {
             const info = await this.state.sdk?.getLicenseInfo();
             const color = (info?.status === "Trial") ? "success" : "error";
             this.setState({alert: {color: color, text: JSON.stringify(info)}});
-        } else if (feature.id === FeatureId.ImagePicker) {
+        } else if (feature.id === RoutePath.ImagePicker) {
             const result = await ImageUtils.pick();
             Pages.instance.add(result)
         }

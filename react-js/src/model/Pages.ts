@@ -42,8 +42,9 @@ export default class Pages {
     }
 
     updateActiveItem(result: any) {
-        this.list[this.getActiveIndex()].cropped = result.image;
-        this.list[this.getActiveIndex()].polygon = result.polygon;
+        const existing = this.list[this.getActiveIndex()];
+        existing.cropped = result.image;
+        existing.polygon = result.polygon;
     }
 
     getActiveItem() {

@@ -93,4 +93,11 @@ export class ScanbotSdkService {
         }
     }
 
+    async reapplyFilter() {
+        const existing = Pages.instance.getActiveItem();
+        if (!existing.filter) {
+            return;
+        }
+        existing.filtered = await this.applyFilter(existing.cropped, existing.filter);
+    }
 }
