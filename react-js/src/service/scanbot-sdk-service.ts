@@ -6,7 +6,7 @@ import ScanbotSDK from "scanbot-web-sdk/webpack";
 import {ICroppingViewHandle} from "scanbot-web-sdk/@types/interfaces/i-cropping-view-handle";
 import {DocumentScannerConfiguration} from "scanbot-web-sdk/@types/model/configuration/document-scanner-configuration";
 import {IDocumentScannerHandle} from "scanbot-web-sdk/@types/interfaces/i-document-scanner-handle";
-import {FilterType} from "scanbot-web-sdk/@types/model/filter-types";
+import {BinarizationFilter, ColorFilter, ImageFilter} from "scanbot-web-sdk/@types/model/filter-types";
 import Pages from "../model/Pages";
 
 export class ScanbotSdkService {
@@ -52,7 +52,7 @@ export class ScanbotSdkService {
         this.croppingView?.dispose();
     }
 
-    public binarizationFilters() {
+    public binarizationFilters(): BinarizationFilter[] {
         return [
             'binarized',
             'otsuBinarization',
@@ -63,7 +63,7 @@ export class ScanbotSdkService {
         ];
     }
 
-    public colorFilters() {
+    public colorFilters(): ColorFilter[] {
         return [
             'color',
             'gray',
@@ -75,14 +75,14 @@ export class ScanbotSdkService {
         ];
     }
 
-    public availableFilters() {
-        return this.binarizationFilters().concat(this.colorFilters());
+    public availableFilters(): string[] {
+        return ["none"].concat(this.binarizationFilters()).concat(this.colorFilters());
     }
     filterByIndex(value: string) {
         return this.availableFilters()[parseInt(value)];
     }
 
-    public async applyFilter(image: ArrayBuffer, filter: FilterType) {
+    public async applyFilter(image: ArrayBuffer, filter: ImageFilter) {
         return await this.sdk!.applyFilter(image, filter);
     }
 

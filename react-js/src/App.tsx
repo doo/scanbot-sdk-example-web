@@ -16,7 +16,7 @@ import {NavigationContent} from "./subviews/navigation-content";
 import {NavigationUtils} from "./utils/navigation-utils";
 import {ScanbotSdkService} from "./service/scanbot-sdk-service";
 import Swal from "sweetalert2";
-import {FilterType} from "scanbot-web-sdk/@types/model/filter-types";
+import {ImageFilter} from "scanbot-web-sdk/@types/model/filter-types";
 
 const history = createBrowserHistory();
 
@@ -149,12 +149,15 @@ export default class App extends React.Component<any, any> {
 
                         const filter = ScanbotSdkService.instance.filterByIndex(result.value);
 
+                        // "None" is not an actual filter, only used in this example app
                         if (filter === "none") {
                             page.filter = undefined;
                             page.filtered = undefined;
                         } else {
                             page.filter = filter;
-                            page.filtered = await ScanbotSdkService.instance.applyFilter(page.cropped ?? page.original, filter as FilterType);
+                            page.filtered = await ScanbotSdkService.instance.applyFilter(
+                                page.cropped ?? page.original,
+                                filter as ImageFilter);
                         }
 
                         const index = Pages.instance.getActiveIndex();
