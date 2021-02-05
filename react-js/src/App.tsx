@@ -111,92 +111,84 @@ export default class App extends React.Component<any, any> {
         if (route === RoutePath.DocumentScanner) {
             return [
                 {text: Pages.instance.count() + " PAGES", action: undefined},
-                {
-                    text: "DONE", action: () => {
-                        this.onBackPress()
-                    }, right: true
-                }
+                {text: "DONE", action: this.onBackPress.bind(this), right: true}
             ];
         }
         if (route === RoutePath.ImageResults) {
             return [
-                {
-                    text: "SAVE PDF", action: async () => {
-                        const bytes = await ScanbotSdkService.instance.generatePDF(Pages.instance.get());
-                        ImageUtils.saveBytes(bytes, MiscUtils.generateUUID() + ".pdf");
-                    }
-                }
-
-            ];
+                {text: "SAVE PDF", action: this.savePDF.bind(this)}
+                ];
         }
         if (route === RoutePath.ImageDetails) {
             return [
-                {
-                    text: "CROP", action: async () => {
-                        RoutingService.instance.route(RoutePath.CroppingView, {index: Pages.instance.getActiveIndex()});
-                    }
-                },
-                {
-                    text: "FILTER", action: async () => {
-
-                        const page = Pages.instance.getActiveItem();
-                        const result = await Swal.fire({
-                            title: 'Select filter',
-                            input: 'select',
-                            inputOptions: ScanbotSdkService.instance.availableFilters(),
-                            inputPlaceholder: page.filter ?? "none"
-                        });
-
-                        const filter = ScanbotSdkService.instance.filterByIndex(result.value);
-
-                        // "None" is not an actual filter, only used in this example app
-                        if (filter === "none") {
-                            page.filter = undefined;
-                            page.filtered = undefined;
-                        } else {
-                            page.filter = filter;
-                            page.filtered = await ScanbotSdkService.instance.applyFilter(
-                                page.cropped ?? page.original,
-                                filter as ImageFilter);
-                        }
-
-                        const index = Pages.instance.getActiveIndex();
-                        this.setState({activeImage: await ScanbotSdkService.instance.documentImageAsBase64(index)});
-                    }
-                },
-                {
-                    text: "DELETE", action: () => {
-                        Pages.instance.removeActiveItem();
-                        RoutingService.instance.route(RoutePath.ImageResults);
-                    }, right: true
-                }
+                {text: "CROP", action: this.openCroppingUI.bind(this)},
+                {text: "FILTER", action: this.applyFilter.bind(this)},
+                {text: "DELETE", action: this.deletePage.bind(this), right: true}
             ];
         }
 
         if (route == RoutePath.CroppingView) {
             return [
-                {
-                    text: "DETECT", action: async () => {
-                        await ScanbotSdkService.instance.croppingView?.detect()
-                    }
-                },
-                {
-                    text: "ROTATE", action: async () => {
-                        await ScanbotSdkService.instance.croppingView?.rotate(1)
-                    }
-                },
-                {
-                    text: "APPLY", action: async () => {
-                        const result = await ScanbotSdkService.instance.croppingView?.apply();
-                        Pages.instance.updateActiveItem(result);
-                        await ScanbotSdkService.instance.reapplyFilter();
-                        this.onBackPress();
-                        const index = Pages.instance.getActiveIndex();
-                        this.setState({activeImage: await ScanbotSdkService.instance.documentImageAsBase64(index)});
-                    }, right: true
-                }
+                {text: "DETECT", action: this.detect.bind(this)},
+                {text: "ROTATE", action: this.rotate.bind(this)},
+                {text: "APPLY", action: this.applyCrop.bind(this), right: true}
             ]
         }
+    }
+
+    async detect() {
+        await ScanbotSdkService.instance.croppingView?.detect();
+    }
+
+    async rotate() {
+        await ScanbotSdkService.instance.croppingView?.rotate(1);
+    }
+
+    async applyCrop() {
+        const result = await ScanbotSdkService.instance.croppingView?.apply();
+        Pages.instance.updateActiveItem(result);
+        await ScanbotSdkService.instance.reapplyFilter();
+        this.onBackPress();
+        const index = Pages.instance.getActiveIndex();
+        this.setState({activeImage: await ScanbotSdkService.instance.documentImageAsBase64(index)});
+    }
+
+    async savePDF() {
+        const bytes = await ScanbotSdkService.instance.generatePDF(Pages.instance.get());
+        ImageUtils.saveBytes(bytes, MiscUtils.generateUUID() + ".pdf");
+    }
+
+    openCroppingUI() {
+        RoutingService.instance.route(RoutePath.CroppingView, {index: Pages.instance.getActiveIndex()});
+    }
+    async applyFilter() {
+        const page = Pages.instance.getActiveItem();
+        const result = await Swal.fire({
+            title: 'Select filter',
+            input: 'select',
+            inputOptions: ScanbotSdkService.instance.availableFilters(),
+            inputPlaceholder: page.filter ?? "none"
+        });
+
+        const filter = ScanbotSdkService.instance.filterByIndex(result.value);
+
+        // "None" is not an actual filter, only used in this example app
+        if (filter === "none") {
+            page.filter = undefined;
+            page.filtered = undefined;
+        } else {
+            page.filter = filter;
+            page.filtered = await ScanbotSdkService.instance.applyFilter(
+                page.cropped ?? page.original,
+                filter as ImageFilter);
+        }
+
+        const index = Pages.instance.getActiveIndex();
+        this.setState({activeImage: await ScanbotSdkService.instance.documentImageAsBase64(index)});
+    }
+    deletePage() {
+        Pages.instance.removeActiveItem();
+        RoutingService.instance.route(RoutePath.ImageResults);
     }
 
     async onDocumentDetected(result: any) {
