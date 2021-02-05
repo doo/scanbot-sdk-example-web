@@ -50,4 +50,8 @@ export default class Pages {
     getActiveItem() {
         return this.objectAtIndex(this.activeIndex);
     }
+
+    hasActiveItem() {
+        return this.getActiveIndex() !== -1;
+    }
 }

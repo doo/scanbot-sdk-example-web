@@ -80,9 +80,18 @@ export default class App extends React.Component<any, any> {
             return <DocumentScannerPage sdk={this.state.sdk} onDocumentDetected={this.onDocumentDetected.bind(this)}/>;
         }
         if (route === RoutePath.CroppingView) {
+            if (!Pages.instance.hasActiveItem()) {
+                RoutingService.instance.reset();
+                return null;
+            }
             return <CroppingPage sdk={this.state.sdk}/>;
         }
+
         if (route === RoutePath.ImageDetails) {
+            if (!Pages.instance.hasActiveItem()) {
+                RoutingService.instance.reset();
+                return null;
+            }
             return <ImageDetailPage image={this.state.activeImage}/>
         }
         if (route === RoutePath.ImageResults) {

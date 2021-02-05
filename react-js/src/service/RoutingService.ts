@@ -29,11 +29,15 @@ export class RoutingService {
 
     }
 
+    public reset() {
+        history.replace("#/");
+    }
+
     public observeChanges(action: any) {
         history.listen(update => {action();});
     }
 
-    back() {
+    public back() {
         history.back();
     }
 }
