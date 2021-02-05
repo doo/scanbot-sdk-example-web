@@ -54,4 +54,9 @@ export default class Pages {
     hasActiveItem() {
         return this.getActiveIndex() !== -1;
     }
+
+    removeActiveItem() {
+        this.list.splice(this.getActiveIndex(), 1);
+        this.activeIndex = -1;
+    }
 }

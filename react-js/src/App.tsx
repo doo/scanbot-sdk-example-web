@@ -16,6 +16,7 @@ import {NavigationUtils} from "./utils/navigation-utils";
 import {ScanbotSdkService} from "./service/scanbot-sdk-service";
 import Swal from "sweetalert2";
 import {ImageFilter} from "scanbot-web-sdk/@types/model/filter-types";
+import {MiscUtils} from "./utils/misc-utils";
 
 export default class App extends React.Component<any, any> {
 
@@ -120,13 +121,12 @@ export default class App extends React.Component<any, any> {
         if (route === RoutePath.ImageResults) {
             return [
                 {
-                    text: "SAVE PDF", action: () => {
+                    text: "SAVE PDF", action: async () => {
+                        const bytes = await ScanbotSdkService.instance.generatePDF(Pages.instance.get());
+                        ImageUtils.saveBytes(bytes, MiscUtils.generateUUID() + ".pdf");
                     }
-                },
-                {
-                    text: "DELETE", action: () => {
-                    }, right: true
                 }
+
             ];
         }
         if (route === RoutePath.ImageDetails) {
@@ -163,6 +163,12 @@ export default class App extends React.Component<any, any> {
                         const index = Pages.instance.getActiveIndex();
                         this.setState({activeImage: await ScanbotSdkService.instance.documentImageAsBase64(index)});
                     }
+                },
+                {
+                    text: "DELETE", action: () => {
+                        Pages.instance.removeActiveItem();
+                        RoutingService.instance.route(RoutePath.ImageResults);
+                    }, right: true
                 }
             ];
         }
