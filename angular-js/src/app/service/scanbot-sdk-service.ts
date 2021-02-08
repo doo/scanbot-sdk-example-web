@@ -39,6 +39,13 @@ export class ScanbotSdkService {
     this.scanner = await this.instance.createDocumentScanner(configuration);
   }
 
+  delayAutoCapture() {
+    this.scanner.disableAutoCapture();
+    setTimeout(() => {
+      this.scanner.enableAutoCapture();
+    }, 3000);
+  }
+
   disposeScanner() {
     this.scanner.dispose();
   }
@@ -69,7 +76,6 @@ export class ScanbotSdkService {
 
   async generatePDF(pages: any[]) {
     const generator = await this.instance.beginPdf({standardPaperSize: "A4", landscape: true, dpi: 100});
-    // await this.addAllPagesTo(generator, pages);
     for (const page of pages) {
       await generator.addPage(page.cropped ?? page.original);
     }
@@ -77,40 +83,42 @@ export class ScanbotSdkService {
   }
 
   async generateTIFF(pages: any[]) {
-    const generator = await this.instance.beginTiff({binarizationFilter: BinarizationFilter.DeepBinarization, dpi: 123});
+    const generator = await this.instance.beginTiff({binarizationFilter: "deepBinarization", dpi: 123});
     for (const page of pages) {
       await generator.addPage(page.cropped ?? page.original);
     }
     return await generator.complete();
   }
 
-  private async addAllPagesTo(generator: any, pages: any[]) {
-    for (const page of pages) {
-      await generator.addPage(page.cropped ?? page.original);
-    }
-  }
-
   public async applyFilter(image: ArrayBuffer, filter: ImageFilter) {
     return await this.instance.applyFilter(image, filter);
   }
 
-  public availableFilters() {
+  public binarizationFilters(): BinarizationFilter[] {
     return [
-      "none",
-      BinarizationFilter.LowLightBinarization,
-      BinarizationFilter.LowLightBinarization2,
-      BinarizationFilter.DeepBinarization,
-      BinarizationFilter.Binarized,
-      BinarizationFilter.OtsuBinarization,
-      BinarizationFilter.PureBinarized,
-      ColorFilter.BlackAndWhite,
-      ColorFilter.Color,
-      ColorFilter.ColorDocument,
-      ColorFilter.Gray,
-      ColorFilter.EdgeHighlight,
-      ColorFilter.LightMapNormalization,
-      ColorFilter.Trinarization
+      'binarized',
+      'otsuBinarization',
+      'pureBinarized',
+      'lowLightBinarization',
+      'lowLightBinarization2',
+      'deepBinarization'
     ];
+  }
+
+  public colorFilters(): ColorFilter[] {
+    return [
+      'color',
+      'gray',
+      'colorDocument',
+      'blackAndWhite',
+      'edgeHighlight',
+      'trinarization',
+      'lightMapNormalization'
+    ];
+  }
+
+  public availableFilters(): string[] {
+    return ["none"].concat(this.binarizationFilters()).concat(this.colorFilters());
   }
 
   filterByIndex(value: string) {
