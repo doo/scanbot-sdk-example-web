@@ -47,13 +47,34 @@ export class DocumentScannerComponent implements OnInit {
   }
 
   async onDocumentDetected(result: DetectionResult) {
+    this.flash();
     this.documents.add(result);
     const counter = NavigationUtils.getElementByClassName("scanner-page-counter");
     counter.innerText = this.documents.count() + " PAGES";
+    this.sdk.delayAutoCapture();
   }
 
   async onScanningDone() {
     this.sdk.disposeScanner();
     await this.router.navigateByUrl("/");
+  }
+
+  flash() {
+    const flash = document.getElementsByClassName("flash")[0] as HTMLDivElement;
+    flash.style.display = "block";
+
+    this.animateFlashOpacity("0.5", () => {
+      this.animateFlashOpacity("0.0", () => {
+        flash.style.opacity = "1.0";
+        flash.style.display = "none";
+      })
+    });
+  }
+  animateFlashOpacity(opacity, complete) {
+    const flash = document.getElementsByClassName("flash")[0] as HTMLDivElement;
+    setTimeout(() => {
+      flash.style.opacity = opacity;
+      complete();
+    }, 150);
   }
 }
