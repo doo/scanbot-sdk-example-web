@@ -1,6 +1,6 @@
 import React from "react";
 import {Styles} from "../model/Styles";
-import {AppBar, Toolbar} from "@material-ui/core";
+import {Toolbar} from "@material-ui/core";
 
 export class NavigationContent extends React.Component<any, any> {
 

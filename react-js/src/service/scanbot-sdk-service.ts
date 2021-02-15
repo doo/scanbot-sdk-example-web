@@ -3,10 +3,15 @@
 import ScanbotSDK from "scanbot-web-sdk/webpack";
 
 // Other typings should be imported from @types
-import {ICroppingViewHandle} from "scanbot-web-sdk/@types/interfaces/i-cropping-view-handle";
-import {DocumentScannerConfiguration} from "scanbot-web-sdk/@types/model/configuration/document-scanner-configuration";
-import {IDocumentScannerHandle} from "scanbot-web-sdk/@types/interfaces/i-document-scanner-handle";
-import {BinarizationFilter, ColorFilter, ImageFilter} from "scanbot-web-sdk/@types/model/filter-types";
+import {
+    ICroppingViewHandle,
+    IDocumentScannerHandle,
+    DocumentScannerConfiguration,
+    BinarizationFilter,
+    ColorFilter,
+    ImageFilter
+} from "scanbot-web-sdk/@types";
+
 import Pages from "../model/Pages";
 
 export class ScanbotSdkService {

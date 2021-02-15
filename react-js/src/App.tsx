@@ -15,7 +15,7 @@ import {NavigationContent} from "./subviews/navigation-content";
 import {NavigationUtils} from "./utils/navigation-utils";
 import {ScanbotSdkService} from "./service/scanbot-sdk-service";
 import Swal from "sweetalert2";
-import {ImageFilter} from "scanbot-web-sdk/@types/model/filter-types";
+import {ImageFilter} from "scanbot-web-sdk/@types";
 import {MiscUtils} from "./utils/misc-utils";
 
 export default class App extends React.Component<any, any> {
@@ -77,7 +77,7 @@ export default class App extends React.Component<any, any> {
         if (NavigationUtils.isAtRoot()) {
             return <FeatureList onItemClick={this.onFeatureClick.bind(this)}/>
         }
-        if (route == RoutePath.DocumentScanner) {
+        if (route === RoutePath.DocumentScanner) {
             return <DocumentScannerPage sdk={this.state.sdk} onDocumentDetected={this.onDocumentDetected.bind(this)}/>;
         }
         if (route === RoutePath.CroppingView) {
@@ -127,7 +127,7 @@ export default class App extends React.Component<any, any> {
             ];
         }
 
-        if (route == RoutePath.CroppingView) {
+        if (route === RoutePath.CroppingView) {
             return [
                 {text: "DETECT", action: this.detect.bind(this)},
                 {text: "ROTATE", action: this.rotate.bind(this)},

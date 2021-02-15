@@ -1,7 +1,6 @@
 import React from 'react';
 import FeatureListItem from "./FeatureListItem";
 import {Features} from "../model/Features";
-import {Link} from "react-router-dom";
 
 export default class FeatureList extends React.Component<any, any> {
 

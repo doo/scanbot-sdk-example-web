@@ -5,10 +5,6 @@ import {Styles} from "../model/Styles";
 
 export default class ImageDetailPage extends React.Component<any, any>{
 
-    constructor(props: any) {
-        super(props);
-    }
-
     render() {
         return (
             <div style={{width: "100%", height: "100%"}}>

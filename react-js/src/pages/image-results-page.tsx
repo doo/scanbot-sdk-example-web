@@ -1,8 +1,7 @@
 
-import React, {CSSProperties} from "react";
+import React from "react";
 import Pages from "../model/Pages";
 import {GridList, GridListTile} from "@material-ui/core";
-import {Link} from "react-router-dom";
 import {Styles} from "../model/Styles";
 
 export default class ImageResultsPage extends React.Component<any, any>{
@@ -35,7 +34,7 @@ export default class ImageResultsPage extends React.Component<any, any>{
                             <GridListTile key={image.index} cols={1} onClick={(e) => {
                                 this.props.onDetailButtonClick(image.index)}
                             }>
-                                    <img style={Styles.documentImage} src={image.base64} alt={"image"}/>
+                                    <img style={Styles.documentImage} src={image.base64} alt={"."}/>
 
                             </GridListTile>
                         )
