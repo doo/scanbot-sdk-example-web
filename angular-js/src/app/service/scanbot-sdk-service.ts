@@ -1,6 +1,8 @@
 import {Injectable} from "@angular/core";
+
 // Import SDK from webpack directory to ensure web assembly binary and worker and bundled with webpack
 import ScanbotSDK from "scanbot-web-sdk/webpack";
+
 // Other typings should be imported from @types
 import {
   IDocumentScannerHandle,
@@ -9,12 +11,15 @@ import {
   CroppingViewConfiguration,
   BinarizationFilter,
   ColorFilter,
-  ImageFilter
+  ImageFilter,
+  PdfGenerationOptions,
+  PdfGenerator,
+  TiffGenerationOptions,
+  TiffGenerator
 } from "scanbot-web-sdk/@types";
 
 @Injectable()
 export class ScanbotSdkService {
-
 
   static CONTAINER_ID = "scanbot-camera-container";
 
@@ -79,15 +84,16 @@ export class ScanbotSdkService {
   }
 
   async generatePDF(pages: any[]) {
-    const generator = await this.instance.beginPdf({standardPaperSize: "A4", landscape: true, dpi: 100});
+    const options: PdfGenerationOptions = {standardPaperSize: "A4", landscape: true, dpi: 100};
+    const generator: PdfGenerator = await this.instance!.beginPdf(options);
     for (const page of pages) {
-      await generator.addPage(page.cropped ?? page.original);
+      await generator.addPage(page.filtered ?? page.cropped ?? page.original);
     }
     return await generator.complete();
   }
-
   async generateTIFF(pages: any[]) {
-    const generator = await this.instance.beginTiff({binarizationFilter: "deepBinarization", dpi: 123});
+    const options: TiffGenerationOptions = {binarizationFilter: "deepBinarization", dpi: 123};
+    const generator: TiffGenerator = await this.instance.beginTiff(options);
     for (const page of pages) {
       await generator.addPage(page.cropped ?? page.original);
     }
