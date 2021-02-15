@@ -1,22 +1,26 @@
+
 import React from 'react';
 import {AppBar} from "@material-ui/core";
 
+import Swal from "sweetalert2";
+import {ImageFilter} from "scanbot-web-sdk/@types";
+
+import {NavigationContent} from "./subviews/navigation-content";
+import {Toast} from "./subviews/toast";
 import FeatureList from "./subviews/FeatureList";
+import {BottomBar} from "./subviews/BottomBar";
+
 import DocumentScannerPage from "./pages/document-scanner-page";
 import ImageResultsPage from "./pages/image-results-page";
 import {RoutePath, RoutingService} from "./service/RoutingService";
 import ImageDetailPage from "./pages/image-detail-page";
-import {BottomBar} from "./subviews/BottomBar";
-import Pages from "./model/Pages";
 import CroppingPage from "./pages/cropping-page";
+
 import {ImageUtils} from "./utils/image-utils";
-import {Toast} from "./subviews/toast";
-import {NavigationContent} from "./subviews/navigation-content";
 import {NavigationUtils} from "./utils/navigation-utils";
-import {ScanbotSdkService} from "./service/scanbot-sdk-service";
-import Swal from "sweetalert2";
-import {ImageFilter} from "scanbot-web-sdk/@types";
 import {MiscUtils} from "./utils/misc-utils";
+import {ScanbotSdkService} from "./service/scanbot-sdk-service";
+import Pages from "./model/Pages";
 
 export default class App extends React.Component<any, any> {
 
