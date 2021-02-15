@@ -2,11 +2,15 @@ import {Injectable} from "@angular/core";
 // Import SDK from webpack directory to ensure web assembly binary and worker and bundled with webpack
 import ScanbotSDK from "scanbot-web-sdk/webpack";
 // Other typings should be imported from @types
-import {DocumentScannerConfiguration} from "scanbot-web-sdk/@types/model/configuration/document-scanner-configuration";
-import {IDocumentScannerHandle} from "scanbot-web-sdk/@types/interfaces/i-document-scanner-handle";
-import {ICroppingViewHandle} from "scanbot-web-sdk/@types/interfaces/i-cropping-view-handle";
-import {CroppingViewConfiguration} from "scanbot-web-sdk/@types/model/configuration/cropping-view-configuration";
-import {BinarizationFilter, ColorFilter, ImageFilter} from "scanbot-web-sdk/@types/model/filter-types";
+import {
+  IDocumentScannerHandle,
+  ICroppingViewHandle,
+  DocumentScannerConfiguration,
+  CroppingViewConfiguration,
+  BinarizationFilter,
+  ColorFilter,
+  ImageFilter
+} from "scanbot-web-sdk/@types";
 
 @Injectable()
 export class ScanbotSdkService {

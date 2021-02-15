@@ -1,5 +1,5 @@
 import {Injectable} from "@angular/core";
-import {Polygon} from "scanbot-web-sdk/@types/model/response/detection-result";
+import {Polygon} from "scanbot-web-sdk/@types";
 
 @Injectable()
 export class DocumentRepository {

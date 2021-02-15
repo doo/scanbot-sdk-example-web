@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {DetectionResult} from "scanbot-web-sdk/@types/model/response/detection-result";
-import {CroppingViewConfiguration} from "scanbot-web-sdk/@types/model/configuration/cropping-view-configuration";
-import {IDocumentScannerHandle} from "scanbot-web-sdk/@types/interfaces/i-document-scanner-handle";
+import {
+  DetectionResult,
+  DocumentScannerConfiguration
+} from "scanbot-web-sdk/@types";
 import {ScanbotSdkService} from "../service/scanbot-sdk-service";
-import {DocumentScannerConfiguration} from "scanbot-web-sdk/@types/model/configuration/document-scanner-configuration";
 import {Router} from "@angular/router";
 import {NavigationUtils} from "../service/navigation-utils";
 import {DocumentRepository} from "../service/document-repository";
