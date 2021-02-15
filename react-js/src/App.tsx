@@ -120,8 +120,9 @@ export default class App extends React.Component<any, any> {
         }
         if (route === RoutePath.ImageResults) {
             return [
-                {text: "SAVE PDF", action: this.savePDF.bind(this)}
-                ];
+                {text: "SAVE PDF", action: this.savePDF.bind(this)},
+                {text: "SAVE TIFF", action: this.saveTIFF.bind(this)}
+            ];
         }
         if (route === RoutePath.ImageDetails) {
             return [
@@ -160,6 +161,10 @@ export default class App extends React.Component<any, any> {
     async savePDF() {
         const bytes = await ScanbotSdkService.instance.generatePDF(Pages.instance.get());
         ImageUtils.saveBytes(bytes, MiscUtils.generateUUID() + ".pdf");
+    }
+    async saveTIFF() {
+        const bytes = await ScanbotSdkService.instance.generateTIFF(Pages.instance.get());
+        ImageUtils.saveBytes(bytes, MiscUtils.generateUUID() + ".tiff");
     }
 
     openCroppingUI() {
