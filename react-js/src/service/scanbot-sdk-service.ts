@@ -56,7 +56,8 @@ export class ScanbotSdkService {
         const configuration: CroppingViewConfiguration = {
             containerId: ScanbotSdkService.CROPPING_VIEW_CONTAINER,
             image: page.original,
-            polygon: page.polygon
+            polygon: page.polygon,
+            rotations: page.rotations ?? 0
         };
 
         this.croppingView = await this.sdk!.openCroppingView(configuration);

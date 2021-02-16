@@ -45,6 +45,7 @@ export class CroppingComponent implements OnInit {
       image: this.repository.getActiveItem().original,
       polygon: this.repository.getActiveItem().polygon,
       disableScroll: true,
+      rotations: this.repository.getActiveItem().rotations ?? 0,
       style: {
         padding: 20,
         polygon: {
@@ -75,7 +76,7 @@ export class CroppingComponent implements OnInit {
 
   async onApplyClick() {
     const result = await this.sdk.applyCrop();
-    this.repository.updateActiveItem(result.image, result.polygon);
+    this.repository.updateActiveItem(result.image, result.polygon, result.rotations);
     await this.router.navigateByUrl(RoutePaths.ImageDetails);
   }
 }

@@ -44,6 +44,7 @@ window.onload = async () => {
             containerId: Config.croppingViewContainerId(),
             image: results[index].original,
             polygon: results[index].polygon,
+            rotations: results[index].rotations ?? 0,
             disableScroll: true,
             style: {
                 padding: 20,
@@ -110,6 +111,7 @@ window.onload = async () => {
         results[index].filtered = undefined;
         results[index].cropped = result.image;
         results[index].polygon = result.polygon;
+        results[index].rotations = result.rotations;
 
         if (results[index].filter) {
             results[index].filtered = await scanbotSDK.applyFilter(results[index].cropped, results[index].filter);
