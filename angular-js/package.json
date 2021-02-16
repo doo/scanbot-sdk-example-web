@@ -22,7 +22,7 @@
     "@angular/material": "11.1.0",
     "@angular/cdk": "11.1.1",
     "rxjs": "6.5.5",
-    "scanbot-web-sdk": "2.0.1",
+    "scanbot-web-sdk": "2.0.2",
     "sweetalert2": "10.14.0",
     "tslib": "1.14.1",
     "zone.js": "0.10.3"

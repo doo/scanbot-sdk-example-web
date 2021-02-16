@@ -45,6 +45,7 @@ export default class Pages {
         const existing = this.list[this.getActiveIndex()];
         existing.cropped = result.image;
         existing.polygon = result.polygon;
+        existing.rotations = result.rotations;
     }
 
     getActiveItem() {

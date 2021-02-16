@@ -4,7 +4,7 @@ import {ScanbotSdkService} from "../service/scanbot-sdk-service";
 import {DocumentRepository} from "../service/document-repository";
 import {NavigationUtils} from "../service/navigation-utils";
 import Swal from "sweetalert2";
-import {ImageFilter} from "scanbot-web-sdk/@types/model/filter-types";
+import {ImageFilter} from "scanbot-web-sdk/@types";
 import {RoutePaths} from "../model/RoutePaths";
 
 @Component({

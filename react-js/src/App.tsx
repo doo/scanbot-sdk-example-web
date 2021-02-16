@@ -1,22 +1,26 @@
+
 import React from 'react';
 import {AppBar} from "@material-ui/core";
 
+import Swal from "sweetalert2";
+import {ImageFilter} from "scanbot-web-sdk/@types";
+
+import {NavigationContent} from "./subviews/navigation-content";
+import {Toast} from "./subviews/toast";
 import FeatureList from "./subviews/FeatureList";
+import {BottomBar} from "./subviews/BottomBar";
+
 import DocumentScannerPage from "./pages/document-scanner-page";
 import ImageResultsPage from "./pages/image-results-page";
 import {RoutePath, RoutingService} from "./service/RoutingService";
 import ImageDetailPage from "./pages/image-detail-page";
-import {BottomBar} from "./subviews/BottomBar";
-import Pages from "./model/Pages";
 import CroppingPage from "./pages/cropping-page";
+
 import {ImageUtils} from "./utils/image-utils";
-import {Toast} from "./subviews/toast";
-import {NavigationContent} from "./subviews/navigation-content";
 import {NavigationUtils} from "./utils/navigation-utils";
-import {ScanbotSdkService} from "./service/scanbot-sdk-service";
-import Swal from "sweetalert2";
-import {ImageFilter} from "scanbot-web-sdk/@types/model/filter-types";
 import {MiscUtils} from "./utils/misc-utils";
+import {ScanbotSdkService} from "./service/scanbot-sdk-service";
+import Pages from "./model/Pages";
 
 export default class App extends React.Component<any, any> {
 
@@ -77,7 +81,7 @@ export default class App extends React.Component<any, any> {
         if (NavigationUtils.isAtRoot()) {
             return <FeatureList onItemClick={this.onFeatureClick.bind(this)}/>
         }
-        if (route == RoutePath.DocumentScanner) {
+        if (route === RoutePath.DocumentScanner) {
             return <DocumentScannerPage sdk={this.state.sdk} onDocumentDetected={this.onDocumentDetected.bind(this)}/>;
         }
         if (route === RoutePath.CroppingView) {
@@ -116,8 +120,9 @@ export default class App extends React.Component<any, any> {
         }
         if (route === RoutePath.ImageResults) {
             return [
-                {text: "SAVE PDF", action: this.savePDF.bind(this)}
-                ];
+                {text: "SAVE PDF", action: this.savePDF.bind(this)},
+                {text: "SAVE TIFF", action: this.saveTIFF.bind(this)}
+            ];
         }
         if (route === RoutePath.ImageDetails) {
             return [
@@ -127,7 +132,7 @@ export default class App extends React.Component<any, any> {
             ];
         }
 
-        if (route == RoutePath.CroppingView) {
+        if (route === RoutePath.CroppingView) {
             return [
                 {text: "DETECT", action: this.detect.bind(this)},
                 {text: "ROTATE", action: this.rotate.bind(this)},
@@ -156,6 +161,10 @@ export default class App extends React.Component<any, any> {
     async savePDF() {
         const bytes = await ScanbotSdkService.instance.generatePDF(Pages.instance.get());
         ImageUtils.saveBytes(bytes, MiscUtils.generateUUID() + ".pdf");
+    }
+    async saveTIFF() {
+        const bytes = await ScanbotSdkService.instance.generateTIFF(Pages.instance.get());
+        ImageUtils.saveBytes(bytes, MiscUtils.generateUUID() + ".tiff");
     }
 
     openCroppingUI() {

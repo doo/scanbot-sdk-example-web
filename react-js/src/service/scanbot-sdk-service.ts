@@ -3,11 +3,21 @@
 import ScanbotSDK from "scanbot-web-sdk/webpack";
 
 // Other typings should be imported from @types
-import {ICroppingViewHandle} from "scanbot-web-sdk/@types/interfaces/i-cropping-view-handle";
-import {DocumentScannerConfiguration} from "scanbot-web-sdk/@types/model/configuration/document-scanner-configuration";
-import {IDocumentScannerHandle} from "scanbot-web-sdk/@types/interfaces/i-document-scanner-handle";
-import {BinarizationFilter, ColorFilter, ImageFilter} from "scanbot-web-sdk/@types/model/filter-types";
+import {
+    ICroppingViewHandle,
+    IDocumentScannerHandle,
+    DocumentScannerConfiguration,
+    CroppingViewConfiguration,
+    BinarizationFilter,
+    ColorFilter,
+    ImageFilter,
+    TiffGenerationOptions,
+    PdfGenerationOptions
+} from "scanbot-web-sdk/@types";
+
 import Pages from "../model/Pages";
+import TiffGenerator from "scanbot-web-sdk/@types/service/tiff-generator";
+import PdfGenerator from "scanbot-web-sdk/@types/service/pdf-generator";
 
 export class ScanbotSdkService {
 
@@ -43,7 +53,12 @@ export class ScanbotSdkService {
     }
 
     public async openCroppingView(page: any) {
-        const configuration = {containerId: ScanbotSdkService.CROPPING_VIEW_CONTAINER, image: page.original, polygon:page.polygon};
+        const configuration: CroppingViewConfiguration = {
+            containerId: ScanbotSdkService.CROPPING_VIEW_CONTAINER,
+            image: page.original,
+            polygon: page.polygon,
+            rotations: page.rotations ?? 0
+        };
 
         this.croppingView = await this.sdk!.openCroppingView(configuration);
     }
@@ -102,9 +117,18 @@ export class ScanbotSdkService {
     }
 
     async generatePDF(pages: any[]) {
-        const generator = await this.sdk!.beginPdf({standardPaperSize: "A4", landscape: true, dpi: 100});
+        const options: PdfGenerationOptions = {standardPaperSize: "A4", landscape: true, dpi: 100};
+        const generator: PdfGenerator = await this.sdk!.beginPdf(options);
         for (const page of pages) {
             await generator.addPage(page.filtered ?? page.cropped ?? page.original);
+        }
+        return await generator.complete();
+    }
+    async generateTIFF(pages: any[]) {
+        const options: TiffGenerationOptions = {binarizationFilter: "deepBinarization", dpi: 123};
+        const generator: TiffGenerator = await this.sdk!.beginTiff(options);
+        for (const page of pages) {
+            await generator.addPage(page.cropped ?? page.original);
         }
         return await generator.complete();
     }

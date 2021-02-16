@@ -1,5 +1,5 @@
 import {Injectable} from "@angular/core";
-import {Polygon} from "scanbot-web-sdk/@types/model/response/detection-result";
+import {Polygon} from "scanbot-web-sdk/@types";
 
 @Injectable()
 export class DocumentRepository {
@@ -23,9 +23,10 @@ export class DocumentRepository {
     return this.pages;
   }
 
-  updateActiveItem(image: Uint8Array, polygon: Polygon) {
+  updateActiveItem(image: Uint8Array, polygon: Polygon, rotations: number) {
     this.pages[this.activeIndex].cropped = image;
     this.pages[this.activeIndex].polygon = polygon;
+    this.pages[this.activeIndex].rotations = rotations;
   }
 
   hasActiveItem() {
