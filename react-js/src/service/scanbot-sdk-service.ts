@@ -4,22 +4,23 @@ import ScanbotSDK from "scanbot-web-sdk/webpack";
 
 // Other typings should be imported from @types
 import {
-    ICroppingViewHandle,
-    IDocumentScannerHandle,
     DocumentScannerConfiguration,
+    IDocumentScannerHandle,
     CroppingViewConfiguration,
+    ICroppingViewHandle,
+    BarcodeScannerConfiguration,
+    IBarcodeScannerHandle,
     BinarizationFilter,
     ColorFilter,
     ImageFilter,
     TiffGenerationOptions,
-    PdfGenerationOptions
+    PdfGenerationOptions,
+    TiffGenerator,
+    PdfGenerator,
 } from "scanbot-web-sdk/@types";
 
 import Pages from "../model/Pages";
-import TiffGenerator from "scanbot-web-sdk/@types/service/tiff-generator";
-import PdfGenerator from "scanbot-web-sdk/@types/service/pdf-generator";
-import {BarcodeScannerConfiguration} from "scanbot-web-sdk/@types/model/configuration/BarcodeScannerConfiguration";
-import {IBarcodeScannerHandle} from "scanbot-web-sdk/@types/interfaces/i-barcode-scanner-handle";
+
 
 export class ScanbotSdkService {
 

@@ -3,9 +3,11 @@ import React from 'react';
 import {AppBar} from "@material-ui/core";
 import Swal from "sweetalert2";
 
-import {ImageFilter} from "scanbot-web-sdk/@types";
-import {BarcodeResult} from "scanbot-web-sdk/@types/model/barcode/barcode-result";
-import {Barcode} from "scanbot-web-sdk/@types/model/barcode/barcode";
+import {
+    ImageFilter,
+    BarcodeResult,
+    Barcode
+} from "scanbot-web-sdk/@types";
 
 import {NavigationContent} from "./subviews/navigation-content";
 import {Toast} from "./subviews/toast";
@@ -217,6 +219,10 @@ export default class App extends React.Component<any, any> {
 
     async onBarcodesDetected(result: BarcodeResult) {
         console.log("detected", result);
+
+        // If you have any additional processing to do, consider pausing
+        // the scanner here, else you might (will) receive multiple results:
+        // ScanbotSdkService.instance.barcodeScanner?.pauseDetection();
         this.setState({alert: {color: "success", text: this.formatBarcodes(result.barcodes)}});
     }
 
