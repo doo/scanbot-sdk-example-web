@@ -15,7 +15,7 @@
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-scripts": "3.4.3",
-    "scanbot-web-sdk": "2.0.2",
+    "scanbot-web-sdk": "../../scanbot-sdk-web/scanbot-web-sdk-2.1.0-beta1.tgz",
     "typescript": "3.7.5",
     "history": "5.0.0",
     "react-router-dom": "6.0.0-beta.0",
