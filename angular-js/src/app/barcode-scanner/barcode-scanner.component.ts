@@ -8,6 +8,7 @@ import {
   BarcodeScannerConfiguration,
 } from "scanbot-web-sdk/@types";
 import ViewUtils from "../service/view-utils";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-barcode-scanner',
@@ -20,7 +21,7 @@ export class BarcodeScannerComponent implements OnInit {
   sdk: ScanbotSdkService;
   documents: DocumentRepository;
 
-  constructor(_router: Router, _sdk: ScanbotSdkService, _documents: DocumentRepository) {
+  constructor(_router: Router, _sdk: ScanbotSdkService, _documents: DocumentRepository, private toastr: ToastrService) {
     this.router = _router;
     this.sdk = _sdk;
     this.documents = _documents;
@@ -47,8 +48,8 @@ export class BarcodeScannerComponent implements OnInit {
   }
 
   async onBarcodesDetected(result: BarcodeResult) {
-    ViewUtils.flash();
     this.documents.addBarcodes(result.barcodes);
+    this.toastr.success(JSON.stringify(result.barcodes), 'Detected Barcodes!');
     const counter = NavigationUtils.getElementByClassName("barcode-counter");
     counter.innerText = this.documents.barcodes().length + " CODES";
   }

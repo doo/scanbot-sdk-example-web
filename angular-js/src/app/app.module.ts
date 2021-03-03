@@ -10,6 +10,9 @@ import {MatGridListModule} from "@angular/material/grid-list";
 import { ImageDetailsComponent } from './image-details/image-details.component';
 import { CroppingComponent } from './cropping/cropping.component';
 import { BarcodeScannerComponent } from './barcode-scanner/barcode-scanner.component';
+import { ToastrModule } from 'ngx-toastr';
+import {CommonModule} from "@angular/common";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
 @NgModule({
   declarations: [
@@ -24,7 +27,10 @@ import { BarcodeScannerComponent } from './barcode-scanner/barcode-scanner.compo
   imports: [
     BrowserModule,
     AppRoutingModule,
-    MatGridListModule
+    MatGridListModule,
+    CommonModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot(),
   ],
   providers: [],
   bootstrap: [AppComponent]
