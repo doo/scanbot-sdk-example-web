@@ -27,6 +27,10 @@ export class AppComponent {
       this.SDK.disposeScanner();
     }
 
+    if (NavigationUtils.isAtPath(RoutePaths.BarcodeScanner)) {
+      this.SDK.disposeBarcodeScanner();
+    }
+
     if (NavigationUtils.isAtPath(RoutePaths.ImageDetails)) {
       destination = RoutePaths.ImageResults;
     }

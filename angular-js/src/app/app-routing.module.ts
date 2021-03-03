@@ -8,15 +8,17 @@ import {ImageResultsComponent} from "./image-results/image-results.component";
 import {ImageDetailsComponent} from "./image-details/image-details.component";
 import {CroppingComponent} from "./cropping/cropping.component";
 import {RoutePaths} from "./model/RoutePaths";
+import {BarcodeScannerComponent} from "./barcode-scanner/barcode-scanner.component";
 
 const routes: Routes = [
   { path: '', redirectTo: RoutePaths.Home, pathMatch: 'full' },
 
-  { path: RoutePaths.Home,            component: HomeComponent },
-  { path: RoutePaths.DocumentScanner, component: DocumentScannerComponent },
-  { path: RoutePaths.ImageResults,    component: ImageResultsComponent },
-  { path: RoutePaths.ImageDetails,    component: ImageDetailsComponent },
-  { path: RoutePaths.Cropping,        component: CroppingComponent },
+  { path: RoutePaths.Home,              component: HomeComponent },
+  { path: RoutePaths.DocumentScanner,   component: DocumentScannerComponent },
+  { path: RoutePaths.ImageResults,      component: ImageResultsComponent },
+  { path: RoutePaths.ImageDetails,      component: ImageDetailsComponent },
+  { path: RoutePaths.BarcodeScanner,    component: BarcodeScannerComponent },
+  { path: RoutePaths.Cropping,          component: CroppingComponent },
 ];
 
 @NgModule({

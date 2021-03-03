@@ -15,19 +15,21 @@ import {
   PdfGenerationOptions,
   PdfGenerator,
   TiffGenerationOptions,
-  TiffGenerator
+  TiffGenerator, BarcodeScannerConfiguration, IBarcodeScannerHandle
 } from "scanbot-web-sdk/@types";
 
 @Injectable()
 export class ScanbotSdkService {
 
   static CONTAINER_ID = "scanbot-camera-container";
+  static BARCODE_SCANNER_CONTAINER_ID = "barcode-scanner-container";
 
   private instance: ScanbotSDK;
 
   onReady: any;
 
   private scanner: IDocumentScannerHandle;
+  private barcodeScanner: IBarcodeScannerHandle;
   private cropper: ICroppingViewHandle;
 
   isReady(): boolean {
@@ -48,6 +50,10 @@ export class ScanbotSdkService {
     this.scanner = await this.instance.createDocumentScanner(configuration);
   }
 
+  async scanBarcodes(configuration: BarcodeScannerConfiguration) {
+    this.barcodeScanner = await this.instance.createBarcodeScanner(configuration);
+  }
+
   delayAutoCapture() {
     this.scanner.disableAutoCapture();
     setTimeout(() => {
@@ -57,6 +63,9 @@ export class ScanbotSdkService {
 
   disposeScanner() {
     this.scanner.dispose();
+  }
+  disposeBarcodeScanner() {
+    this.barcodeScanner.dispose();
   }
 
   async crop(configuration: CroppingViewConfiguration) {

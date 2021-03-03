@@ -1,5 +1,5 @@
 import {Injectable} from "@angular/core";
-import {Polygon} from "scanbot-web-sdk/@types";
+import {Barcode, Polygon} from "scanbot-web-sdk/@types";
 
 @Injectable()
 export class DocumentRepository {
@@ -38,5 +38,17 @@ export class DocumentRepository {
 
   setActiveItem(index: number) {
     this.activeIndex = index;
+  }
+
+  private readonly _barcodes: Barcode[] = [];
+
+  public addBarcodes(barcodes: Barcode[]) {
+    barcodes.forEach((barcode: Barcode) => {
+      this._barcodes.push(barcode);
+    });
+  }
+
+  public barcodes() {
+    return this._barcodes;
   }
 }

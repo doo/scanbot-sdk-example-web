@@ -9,6 +9,7 @@ import { ImageResultsComponent } from './image-results/image-results.component';
 import {MatGridListModule} from "@angular/material/grid-list";
 import { ImageDetailsComponent } from './image-details/image-details.component';
 import { CroppingComponent } from './cropping/cropping.component';
+import { BarcodeScannerComponent } from './barcode-scanner/barcode-scanner.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { CroppingComponent } from './cropping/cropping.component';
     DocumentScannerComponent,
     ImageResultsComponent,
     ImageDetailsComponent,
-    CroppingComponent
+    CroppingComponent,
+    BarcodeScannerComponent
   ],
   imports: [
     BrowserModule,
