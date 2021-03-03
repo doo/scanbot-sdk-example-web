@@ -30,6 +30,12 @@ export default class DocumentScannerComponent extends React.Component<any, any> 
         return (window.innerHeight - 2 * this.toolbarHeight()) ?? 0;
     }
 
+    barStyle() {
+        return {
+            display: "flex", height: this.toolbarHeight() + "px", width: "100%", backgroundColor: "red"
+        }
+    }
+
     render() {
         console.log("size", window.innerWidth, window.innerHeight, this.toolbarHeight());
         const animate = keyframes`
@@ -38,14 +44,14 @@ export default class DocumentScannerComponent extends React.Component<any, any> 
         `;
         const Push = styled.div`animation: ${animate} 1s;`;
         return (
-            <Push id={"lol"} style={{height: "100%", position: "fixed", top: "0", left: "0", zIndex: 5000}}>
-                <div style={{display: "flex"}} ref={ref => this.navigation = ref as HTMLDivElement}>
+            <Push id={"lol"} style={{height: "100%", width: "100%", position: "fixed", top: "0", left: "0", zIndex: 5000}}>
+                <div style={this.barStyle()} ref={ref => this.navigation = ref as HTMLDivElement}>
                     {"Document Scanner"}
                 </div>
                 <div style={{height: this.containerHeight()}}>
                     <div id={ScanbotSdkService.DOCUMENT_SCANNER_CONTAINER} style={{width: "100%", height: "100%"}}/>
                 </div>
-                <div/>
+                <div style={this.barStyle()} />
             </Push>
         );
     }
