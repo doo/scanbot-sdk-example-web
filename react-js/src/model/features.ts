@@ -1,4 +1,4 @@
-import {RoutePath} from "../service/RoutingService";
+import {RoutePath} from "../service/routing-service";
 
 export class Features {
 

@@ -1,6 +1,6 @@
 
 import React from "react";
-import Pages from "../model/Pages";
+import Pages from "../model/pages";
 import {ScanbotSdkService} from "../service/scanbot-sdk-service";
 
 export default class CroppingPage extends React.Component<any, any>{

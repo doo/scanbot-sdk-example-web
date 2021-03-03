@@ -1,7 +1,7 @@
 
 
 import React from "react";
-import {Styles} from "../model/Styles";
+import {Styles} from "../model/styles";
 
 export default class ImageDetailPage extends React.Component<any, any>{
 

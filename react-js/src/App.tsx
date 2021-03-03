@@ -11,8 +11,8 @@ import {
 
 import {NavigationContent} from "./subviews/navigation-content";
 import {Toast} from "./subviews/toast";
-import FeatureList from "./subviews/FeatureList";
-import {BottomBar} from "./subviews/BottomBar";
+import FeatureList from "./subviews/feature-list";
+import {BottomBar} from "./subviews/bottom-bar";
 
 import DocumentScannerPage from "./pages/document-scanner-page";
 import ImageResultsPage from "./pages/image-results-page";
@@ -20,9 +20,9 @@ import ImageDetailPage from "./pages/image-detail-page";
 import CroppingPage from "./pages/cropping-page";
 import BarcodeScannerPage from "./pages/barcode-scanner-page";
 
-import Pages from "./model/Pages";
+import Pages from "./model/pages";
 import {ScanbotSdkService} from "./service/scanbot-sdk-service";
-import {RoutePath, RoutingService} from "./service/RoutingService";
+import {RoutePath, RoutingService} from "./service/routing-service";
 
 import {ImageUtils} from "./utils/image-utils";
 import {NavigationUtils} from "./utils/navigation-utils";

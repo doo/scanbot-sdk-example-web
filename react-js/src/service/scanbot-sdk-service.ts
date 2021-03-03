@@ -19,7 +19,7 @@ import {
     PdfGenerator,
 } from "scanbot-web-sdk/@types";
 
-import Pages from "../model/Pages";
+import Pages from "../model/pages";
 
 
 export class ScanbotSdkService {
