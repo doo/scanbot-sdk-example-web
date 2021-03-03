@@ -9,6 +9,7 @@
           crossorigin="anonymous">
 
     <link rel='stylesheet' type='text/css' href='main.css'>
+    <link rel='stylesheet' type='text/css' href='js/lib/toastify.css'>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 
@@ -28,9 +29,10 @@
 
 <div class="content-container">
     <div class="main-list-item document-scanner-button"> Document Scanner </div>
-    <div class="main-list-item pick-image-button"> Pick Image </div>
-    <div class="main-list-item scanner-results-button"> Image Results </div>
-    <div class="main-list-item license-info-button"> License Info </div>
+    <div class="main-list-item barcode-scanner-button">  Barcode Scanner  </div>
+    <div class="main-list-item pick-image-button">       Pick Image       </div>
+    <div class="main-list-item scanner-results-button">  Image Results    </div>
+    <div class="main-list-item license-info-button">     License Info     </div>
 </div>
 
 <div class="controller scanbot-camera-controller">
@@ -46,6 +48,20 @@
         <div class="align-right-button">
             <button class="action-bar-button detection-done-button">DONE</button>
         </div>
+    </div>
+</div>
+
+<div class="controller barcode-scanner-controller">
+    <nav class="navbar navbar-dark">
+        <div class="navbar-brand mb-0 h3">
+            <span class="back-button">&#8249;</span>Barcode Scanner
+        </div>
+    </nav>
+    <div id="barcode-scanner-container" class="view-controller-container">
+        <div class="web-sdk-progress-bar"></div>
+    </div>
+    <div class="action-bar">
+        <div class="barcode-result-container"></div>
     </div>
 </div>
 
@@ -105,8 +121,9 @@
         crossorigin="anonymous"></script>
 
 <!-- Add ScanbotSDK framework -->
-<script src="https://cdn.jsdelivr.net/npm/scanbot-web-sdk@2.0.2/bundle/ScanbotSDK.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/scanbot-web-sdk@2.1.0-beta1/bundle/ScanbotSDK.min.js"></script>
 <!-- After, initialize the Scanbot SDK in your own script -->
+<script src="js/lib/toastify.js"></script>
 <script src="js/config.js"></script>
 <script src="js/utils.js"></script>
 <script src="js/view-utils.js"></script>
