@@ -24,9 +24,10 @@ export class HomeComponent implements OnInit {
 
   features: any = [
     {route: RoutePaths.DocumentScanner, name: "Scan Documents"},
-    {id: FeatureId.Picker, name: "Pick image"},
-    {route: RoutePaths.ImageResults, name: "Image Results"},
-    {id: FeatureId.License, name: "Check License"}
+    {route: RoutePaths.BarcodeScanner,  name: "Scan Barcodes"},
+    {id:    FeatureId.Picker,           name: "Pick image"},
+    {route: RoutePaths.ImageResults,    name: "Image Results"},
+    {id:    FeatureId.License,          name: "Check License"}
   ];
 
   constructor(_router: Router, _sdk: ScanbotSdkService, _repository: DocumentRepository) {

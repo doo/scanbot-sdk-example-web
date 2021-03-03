@@ -1,6 +1,6 @@
 
 const results = [];
-let scanbotSDK, documentScanner, croppingView;
+let scanbotSDK, documentScanner, barcodeScanner, croppingView;
 
 window.onresize = () => {
     this.resizeContent();
@@ -65,7 +65,26 @@ window.onload = async () => {
         };
         croppingView = await scanbotSDK.openCroppingView(options);
     };
+    Utils.getElementByClassName("barcode-scanner-button").onclick = async (e) => {
+        Utils.getElementByClassName("barcode-scanner-controller").style.display = "block";
 
+        const config = {
+            containerId: Config.barcodeScannerContainerId(),
+            // style: {
+            //     window: {
+            //         borderColor: "blue"
+            //     },
+            //     text: {
+            //         color: "red",
+            //         weight: 500
+            //     }
+            // },
+            onBarcodesDetected: onBarcodesDetected,
+            onError: onScannerError
+        };
+
+        barcodeScanner = await scanbotSDK.createBarcodeScanner(config);
+    };
     Utils.getElementByClassName("scanner-results-button").onclick = async (e) => {
         Utils.getElementByClassName("detection-results-controller").style.display = "block";
         await reloadDetectionResults();
@@ -178,6 +197,8 @@ window.onload = async () => {
 
             if (controller.includes("scanbot-camera-controller")) {
                 documentScanner.dispose();
+            } else if (controller.includes("barcode-scanner-controller")) {
+                barcodeScanner.dispose();
             } else if (controller.includes("detection-results-controller")) {
 
             } else if (controller.includes("detection-result-controller")) {
@@ -193,6 +214,15 @@ window.onload = async () => {
     scanbotSDK = await ScanbotSDK.initialize({ licenseKey: Config.license() });
     ViewUtils.hideLoading();
 };
+
+async function onBarcodesDetected(e) {
+    let text = "";
+    e.barcodes.forEach(barcode => {
+        text += " " + barcode.text + " (" + barcode.format + "),";
+    });
+
+    Toastify({text: text.slice(0, -1), duration: 3000}).showToast();
+}
 
 async function onDocumentDetected(e) {
     results.push(e);

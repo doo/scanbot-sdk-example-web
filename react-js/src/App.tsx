@@ -1,26 +1,32 @@
 
 import React from 'react';
 import {AppBar} from "@material-ui/core";
-
 import Swal from "sweetalert2";
-import {ImageFilter} from "scanbot-web-sdk/@types";
+
+import {
+    ImageFilter,
+    BarcodeResult,
+    Barcode
+} from "scanbot-web-sdk/@types";
 
 import {NavigationContent} from "./subviews/navigation-content";
 import {Toast} from "./subviews/toast";
-import FeatureList from "./subviews/FeatureList";
-import {BottomBar} from "./subviews/BottomBar";
+import FeatureList from "./subviews/feature-list";
+import {BottomBar} from "./subviews/bottom-bar";
 
 import DocumentScannerPage from "./pages/document-scanner-page";
 import ImageResultsPage from "./pages/image-results-page";
-import {RoutePath, RoutingService} from "./service/RoutingService";
 import ImageDetailPage from "./pages/image-detail-page";
 import CroppingPage from "./pages/cropping-page";
+import BarcodeScannerPage from "./pages/barcode-scanner-page";
+
+import Pages from "./model/pages";
+import {ScanbotSdkService} from "./service/scanbot-sdk-service";
+import {RoutePath, RoutingService} from "./service/routing-service";
 
 import {ImageUtils} from "./utils/image-utils";
 import {NavigationUtils} from "./utils/navigation-utils";
 import {MiscUtils} from "./utils/misc-utils";
-import {ScanbotSdkService} from "./service/scanbot-sdk-service";
-import Pages from "./model/Pages";
 
 export default class App extends React.Component<any, any> {
 
@@ -81,8 +87,12 @@ export default class App extends React.Component<any, any> {
         if (NavigationUtils.isAtRoot()) {
             return <FeatureList onItemClick={this.onFeatureClick.bind(this)}/>
         }
+
         if (route === RoutePath.DocumentScanner) {
             return <DocumentScannerPage sdk={this.state.sdk} onDocumentDetected={this.onDocumentDetected.bind(this)}/>;
+        }
+        if (route === RoutePath.BarcodeScanner) {
+            return <BarcodeScannerPage sdk={this.state.sdk} onBarcodesDetected={this.onBarcodesDetected.bind(this)}/>;
         }
         if (route === RoutePath.CroppingView) {
             if (!Pages.instance.hasActiveItem()) {
@@ -170,6 +180,7 @@ export default class App extends React.Component<any, any> {
     openCroppingUI() {
         RoutingService.instance.route(RoutePath.CroppingView, {index: Pages.instance.getActiveIndex()});
     }
+
     async applyFilter() {
         const page = Pages.instance.getActiveItem();
         const result = await Swal.fire({
@@ -195,6 +206,7 @@ export default class App extends React.Component<any, any> {
         const index = Pages.instance.getActiveIndex();
         this.setState({activeImage: await ScanbotSdkService.instance.documentImageAsBase64(index)});
     }
+
     deletePage() {
         Pages.instance.removeActiveItem();
         RoutingService.instance.route(RoutePath.ImageResults);
@@ -203,6 +215,19 @@ export default class App extends React.Component<any, any> {
     async onDocumentDetected(result: any) {
         Pages.instance.add(result);
         this.forceUpdate();
+    }
+
+    async onBarcodesDetected(result: BarcodeResult) {
+        console.log("detected", result);
+
+        // If you have any additional processing to do, consider pausing
+        // the scanner here, else you might (will) receive multiple results:
+        // ScanbotSdkService.instance.barcodeScanner?.pauseDetection();
+        this.setState({alert: {color: "success", text: this.formatBarcodes(result.barcodes)}});
+    }
+
+    formatBarcodes(codes: Barcode[]): string {
+        return JSON.stringify(codes.map((code: Barcode) => code.text + " (" + code.format + ") "));
     }
 
     async onFeatureClick(feature: any) {

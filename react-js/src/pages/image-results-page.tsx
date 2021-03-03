@@ -1,8 +1,8 @@
 
 import React from "react";
-import Pages from "../model/Pages";
+import Pages from "../model/pages";
 import {GridList, GridListTile} from "@material-ui/core";
-import {Styles} from "../model/Styles";
+import {Styles} from "../model/styles";
 
 export default class ImageResultsPage extends React.Component<any, any>{
 

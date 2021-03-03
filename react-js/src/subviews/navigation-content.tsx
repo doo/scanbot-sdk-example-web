@@ -1,5 +1,5 @@
 import React from "react";
-import {Styles} from "../model/Styles";
+import {Styles} from "../model/styles";
 import {Toolbar} from "@material-ui/core";
 
 export class NavigationContent extends React.Component<any, any> {

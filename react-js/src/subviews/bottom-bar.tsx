@@ -1,5 +1,5 @@
 import React from "react";
-import {Styles} from "../model/Styles";
+import {Styles} from "../model/styles";
 
 export class BottomBar extends React.Component<any, any> {
 

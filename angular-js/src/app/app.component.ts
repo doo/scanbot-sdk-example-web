@@ -24,7 +24,11 @@ export class AppComponent {
 
     let destination = "/";
     if (NavigationUtils.isAtPath(RoutePaths.DocumentScanner)) {
-      this.SDK.disposeScanner();
+      this.SDK.disposeDocumentScanner();
+    }
+
+    if (NavigationUtils.isAtPath(RoutePaths.BarcodeScanner)) {
+      this.SDK.disposeBarcodeScanner();
     }
 
     if (NavigationUtils.isAtPath(RoutePaths.ImageDetails)) {

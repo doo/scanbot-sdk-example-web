@@ -4,32 +4,38 @@ import ScanbotSDK from "scanbot-web-sdk/webpack";
 
 // Other typings should be imported from @types
 import {
-    ICroppingViewHandle,
-    IDocumentScannerHandle,
     DocumentScannerConfiguration,
+    IDocumentScannerHandle,
     CroppingViewConfiguration,
+    ICroppingViewHandle,
+    BarcodeScannerConfiguration,
+    IBarcodeScannerHandle,
     BinarizationFilter,
     ColorFilter,
     ImageFilter,
     TiffGenerationOptions,
-    PdfGenerationOptions
+    PdfGenerationOptions,
+    TiffGenerator,
+    PdfGenerator,
 } from "scanbot-web-sdk/@types";
 
-import Pages from "../model/Pages";
-import TiffGenerator from "scanbot-web-sdk/@types/service/tiff-generator";
-import PdfGenerator from "scanbot-web-sdk/@types/service/pdf-generator";
+import Pages from "../model/pages";
+
 
 export class ScanbotSdkService {
 
     static DOCUMENT_SCANNER_CONTAINER = "document-scanner-view";
     static CROPPING_VIEW_CONTAINER = "cropping-view";
+    static BARCODE_SCANNER_CONTAINER = "barcode-scanner-view";
 
     public static instance = new ScanbotSdkService();
 
     license = "";
 
     sdk?: ScanbotSDK;
+
     documentScanner?: IDocumentScannerHandle;
+    barcodeScanner?: IBarcodeScannerHandle;
     croppingView?: ICroppingViewHandle;
 
     public async initialize() {
@@ -50,6 +56,21 @@ export class ScanbotSdkService {
 
     public disposeDocumentScanner() {
         this.documentScanner?.dispose();
+    }
+
+    public async createBarcodeScanner(callback: any) {
+        const config: BarcodeScannerConfiguration = {
+            containerId: ScanbotSdkService.BARCODE_SCANNER_CONTAINER,
+            captureDelay: 1000,
+            onBarcodesDetected: callback
+        };
+        if (this.sdk) {
+            this.barcodeScanner = await this.sdk!.createBarcodeScanner(config);
+        }
+    }
+
+    public disposeBarcodeScanner() {
+        this.barcodeScanner?.dispose();
     }
 
     public async openCroppingView(page: any) {
