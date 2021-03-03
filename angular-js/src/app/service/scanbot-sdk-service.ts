@@ -28,7 +28,7 @@ export class ScanbotSdkService {
 
   onReady: any;
 
-  private scanner: IDocumentScannerHandle;
+  private documentScanner: IDocumentScannerHandle;
   private barcodeScanner: IBarcodeScannerHandle;
   private cropper: ICroppingViewHandle;
 
@@ -46,8 +46,8 @@ export class ScanbotSdkService {
     });
   }
 
-  async scan(configuration: DocumentScannerConfiguration) {
-    this.scanner = await this.instance.createDocumentScanner(configuration);
+  async scanDocuments(configuration: DocumentScannerConfiguration) {
+    this.documentScanner = await this.instance.createDocumentScanner(configuration);
   }
 
   async scanBarcodes(configuration: BarcodeScannerConfiguration) {
@@ -55,14 +55,14 @@ export class ScanbotSdkService {
   }
 
   delayAutoCapture() {
-    this.scanner.disableAutoCapture();
+    this.documentScanner.disableAutoCapture();
     setTimeout(() => {
-      this.scanner.enableAutoCapture();
+      this.documentScanner.enableAutoCapture();
     }, 3000);
   }
 
-  disposeScanner() {
-    this.scanner.dispose();
+  disposeDocumentScanner() {
+    this.documentScanner.dispose();
   }
   disposeBarcodeScanner() {
     this.barcodeScanner.dispose();

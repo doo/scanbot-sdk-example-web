@@ -4,6 +4,7 @@ import {ScanbotSdkService} from "../service/scanbot-sdk-service";
 import {DocumentRepository} from "../service/document-repository";
 import {NavigationUtils} from "../service/navigation-utils";
 import {
+  Barcode,
   BarcodeResult,
   BarcodeScannerConfiguration,
 } from "scanbot-web-sdk/@types";
@@ -49,7 +50,7 @@ export class BarcodeScannerComponent implements OnInit {
 
   async onBarcodesDetected(result: BarcodeResult) {
     this.documents.addBarcodes(result.barcodes);
-    this.toastr.success(JSON.stringify(result.barcodes), 'Detected Barcodes!');
+    this.toastr.success(this.formatBarcodes(result.barcodes), 'Detected Barcodes!');
     const counter = NavigationUtils.getElementByClassName("barcode-counter");
     counter.innerText = this.documents.barcodes().length + " CODES";
   }
@@ -59,4 +60,7 @@ export class BarcodeScannerComponent implements OnInit {
     await this.router.navigateByUrl("/");
   }
 
+  formatBarcodes(codes: Barcode[]): string {
+    return JSON.stringify(codes.map((code: Barcode) => code.text + " (" + code.format + ") "));
+  }
 }

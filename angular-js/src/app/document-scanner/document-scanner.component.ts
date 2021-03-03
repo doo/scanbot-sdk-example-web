@@ -43,7 +43,7 @@ export class DocumentScannerComponent implements OnInit {
       containerId: ScanbotSdkService.CONTAINER_ID
     };
 
-    await this.sdk.scan(configuration);
+    await this.sdk.scanDocuments(configuration);
   }
 
   async onDocumentDetected(result: DocumentDetectionResult) {
@@ -55,7 +55,7 @@ export class DocumentScannerComponent implements OnInit {
   }
 
   async onScanningDone() {
-    this.sdk.disposeScanner();
+    this.sdk.disposeDocumentScanner();
     await this.router.navigateByUrl("/");
   }
 
