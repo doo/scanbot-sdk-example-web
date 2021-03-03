@@ -27,6 +27,7 @@ import {RoutePath, RoutingService} from "./service/routing-service";
 import {ImageUtils} from "./utils/image-utils";
 import {NavigationUtils} from "./utils/navigation-utils";
 import {MiscUtils} from "./utils/misc-utils";
+import DocumentScannerComponent from "./rtu-ui/document-scanner-component";
 
 export default class App extends React.Component<any, any> {
 
@@ -67,6 +68,7 @@ export default class App extends React.Component<any, any> {
     render() {
         return (
             <div>
+                {this.documentScanner()}
                 <input className="file-picker" type="file" accept="image/jpeg" width="48"
                        height="48" style={{display: "none"}}/>
                 <Toast alert={this.state.alert} onClose={() => this.setState({alert: undefined})}/>
@@ -82,15 +84,25 @@ export default class App extends React.Component<any, any> {
         );
     }
 
+    documentScanner() {
+        const route = NavigationUtils.findRoute();
+        if (route === RoutePath.DocumentScanner) {
+            return <DocumentScannerComponent sdk={this.state.sdk} onDocumentDetected={this.onDocumentDetected.bind(this)}/>;
+        }
+        return null;
+    }
     decideContent() {
         const route = NavigationUtils.findRoute();
         if (NavigationUtils.isAtRoot()) {
             return <FeatureList onItemClick={this.onFeatureClick.bind(this)}/>
+        } else {
+            return null;
         }
 
         if (route === RoutePath.DocumentScanner) {
             return <DocumentScannerPage sdk={this.state.sdk} onDocumentDetected={this.onDocumentDetected.bind(this)}/>;
         }
+
         if (route === RoutePath.BarcodeScanner) {
             return <BarcodeScannerPage sdk={this.state.sdk} onBarcodesDetected={this.onBarcodesDetected.bind(this)}/>;
         }
