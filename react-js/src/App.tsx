@@ -58,6 +58,7 @@ export default class App extends React.Component<any, any> {
     toolbarHeight() {
         return (this.navigation as HTMLHeadingElement)?.clientHeight ?? 0;
     }
+
     containerHeight() {
         if (!this.navigation) {
             return "100%";
@@ -74,7 +75,8 @@ export default class App extends React.Component<any, any> {
                 <Toast alert={this.state.alert} onClose={() => this.setState({alert: undefined})}/>
 
                 <AppBar position="fixed" ref={ref => this.navigation = ref}>
-                    <NavigationContent backVisible={!NavigationUtils.isAtRoot()} onBackClick={() => this.onBackPress()}/>
+                    <NavigationContent backVisible={!NavigationUtils.isAtRoot()}
+                                       onBackClick={() => this.onBackPress()}/>
                 </AppBar>
                 <div style={{height: this.containerHeight(), marginTop: this.toolbarHeight()}}>
                     {this.decideContent()}
@@ -88,15 +90,14 @@ export default class App extends React.Component<any, any> {
         );
     }
 
+    _documentScanner?: DocumentScannerComponent | null;
+
     documentScanner() {
-        const route = NavigationUtils.findRoute();
-        if (route === RoutePath.Test) {
-            return <DocumentScannerComponent
-                sdk={this.state.sdk}
-                onDocumentDetected={this.onDocumentDetected.bind(this)}
-            />;
-        }
-        return null;
+        return <DocumentScannerComponent
+            ref={ref => this._documentScanner = ref}
+            sdk={this.state.sdk}
+            onDocumentDetected={this.onDocumentDetected.bind(this)}
+        />;
     }
 
     decideContent() {
@@ -250,6 +251,13 @@ export default class App extends React.Component<any, any> {
     }
 
     async onFeatureClick(feature: any) {
+
+        if (feature.id == RoutePath.Test) {
+            console.log("this._documentScanner", this._documentScanner);
+            this._documentScanner?.push();
+            return;
+        }
+
         if (feature.route) {
             // history.push("#/" + feature.route);
             RoutingService.instance.route(feature.route);

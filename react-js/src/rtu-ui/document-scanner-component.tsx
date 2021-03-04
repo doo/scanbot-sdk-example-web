@@ -16,11 +16,7 @@ export default class DocumentScannerComponent extends React.Component<any, any> 
 
         this.state = {
             animation: {
-                type: AnimationType.Push
-            },
-            position: {
-                from: undefined,
-                to: undefined
+                type: AnimationType.None
             }
         }
     }
@@ -37,6 +33,17 @@ export default class DocumentScannerComponent extends React.Component<any, any> 
         //     return "100%";
         // }
         return (window.innerHeight - 2 * this.toolbarHeight()) ?? 0;
+    }
+
+    containerStyle(): CSSProperties {
+        return {
+            height: "100%",
+            width: "100%",
+            position: "fixed",
+            top: "0",
+            left: "0",
+            zIndex: 5000
+        };
     }
 
     barStyle() {
@@ -60,67 +67,59 @@ export default class DocumentScannerComponent extends React.Component<any, any> 
         }
     }
 
-    async componentDidMount(): Promise<void> {
-        await ScanbotSdkService.instance.createDocumentScanner(this.props.onDocumentDetected);
-
-        const element = document.getElementById('lol') as HTMLElement;
-        console.log(element);
-        element.addEventListener('animationend', () => {
-            console.log("finito!");
-            // Do anything here like remove the node when animation completes or something else!
-        });
-
-        element.addEventListener('animate', () => {
-            console.log("progress!");
-            // Do anything here like remove the node when animation completes or something else!
-        });
-    }
-
-    componentWillUnmount(): void {
-        ScanbotSdkService.instance.disposeDocumentScanner()
-    }
-
     render() {
-
+        if (this.state.animation.type === AnimationType.None) {
+            return null;
+        }
         const Animation = this.animation(this.state.animation.type);
         return (
-            <Animation id={"lol"} style={{height: "100%", width: "100%", position: "fixed", top: "0", left: "0", zIndex: 5000}}>
+            <Animation
+                id={"lol"}
+                style={{...this.containerStyle(), transform: `translateX(${this.to(this.state.animation.type)})`}}
+                onAnimationStart={() => {
+
+                }} onAnimationEnd={() => {
+
+            }}>
                 <div style={this.barStyle()} ref={ref => this.navigation = ref as HTMLDivElement}>
                     <button
                         style={Styles.backButton}
-                        onClick={() => {
-                            console.log("backpresserino");
-                            this.setState({animation: {type: AnimationType.Pop}}, () => {
-                                console.log("done!");
-                                // this.setState({animation: {type: AnimationType.None}});
-                            });
-                        }}
+                        onClick={() => this.pop()}
                         dangerouslySetInnerHTML={{__html: "&#8249"}}
                     />
-                    <div style={this.barText()}>
-                        {"Document Scanner"}
-                    </div>
+                    <div style={this.barText()}>{"Document Scanner"}</div>
 
                 </div>
                 <div style={{height: this.containerHeight(), backgroundColor: "black"}}>
                     <div id={ScanbotSdkService.DOCUMENT_SCANNER_CONTAINER} style={{width: "100%", height: "100%"}}/>
                 </div>
-                <div style={this.barStyle()} />
+                <div style={this.barStyle()}/>
             </Animation>
         );
     }
 
+    async push() {
+        this.updateAnimationType(AnimationType.Push, async () => {
+            await ScanbotSdkService.instance.createDocumentScanner(this.props.onDocumentDetected);
+        });
+
+    }
+
+    pop() {
+        this.updateAnimationType(AnimationType.Pop, () => {
+            ScanbotSdkService.instance.disposeDocumentScanner()
+        });
+    }
+
+    updateAnimationType(type: AnimationType, callback?: any) {
+        this.setState({animation: {type: type}}, callback);
+    }
+
     animation(type: AnimationType) {
-
-        console.log(type);
-        const from = (type == AnimationType.Push) ? "100%" : "0%";
-        const to = (type == AnimationType.Push) ? "0%" : "100%";
-
         const animate = keyframes`
             from {transform: translateX(${this.from(type)}); } 
             to   {transform: translateX(${this.to(type)}); }
         `;
-        // this.setState({position: {from: to, to: to}});
         return styled.div`animation: ${animate} 1s;`;
     }
 
@@ -131,8 +130,6 @@ export default class DocumentScannerComponent extends React.Component<any, any> 
         if (type === AnimationType.Pop) {
             return "0%";
         }
-
-        return this.state.animation.type;
     }
 
     to(type: AnimationType) {
@@ -142,7 +139,5 @@ export default class DocumentScannerComponent extends React.Component<any, any> 
         if (type === AnimationType.Pop) {
             return "100%";
         }
-
-        return this.state.animation.type;
     }
 }
