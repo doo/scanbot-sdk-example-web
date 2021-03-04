@@ -253,7 +253,6 @@ export default class App extends React.Component<any, any> {
     async onFeatureClick(feature: any) {
 
         if (feature.id == RoutePath.Test) {
-            console.log("this._documentScanner", this._documentScanner);
             this._documentScanner?.push();
             return;
         }

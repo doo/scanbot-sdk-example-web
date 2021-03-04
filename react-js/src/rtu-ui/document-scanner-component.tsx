@@ -2,6 +2,7 @@ import React, {CSSProperties} from "react";
 import styled, {keyframes} from "styled-components";
 import {ScanbotSdkService} from "../service/scanbot-sdk-service";
 import {Styles} from "../model/styles";
+import {DocumentDetectionResult} from "scanbot-web-sdk/@types";
 
 export enum AnimationType {
     None,
@@ -98,9 +99,13 @@ export default class DocumentScannerComponent extends React.Component<any, any> 
         );
     }
 
+    onDocumentDetected(result: DocumentDetectionResult) {
+        console.log("Detected", result);
+    }
+
     async push() {
         this.updateAnimationType(AnimationType.Push, async () => {
-            await ScanbotSdkService.instance.createDocumentScanner(this.props.onDocumentDetected);
+            await ScanbotSdkService.instance.createDocumentScanner(this.onDocumentDetected);
         });
 
     }
@@ -120,7 +125,7 @@ export default class DocumentScannerComponent extends React.Component<any, any> 
             from {transform: translateX(${this.from(type)}); } 
             to   {transform: translateX(${this.to(type)}); }
         `;
-        return styled.div`animation: ${animate} 1s;`;
+        return styled.div`animation: ${animate} 0.5s;`;
     }
 
     from(type: AnimationType) {
