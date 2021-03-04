@@ -4,6 +4,7 @@ import {NavigationContent} from "../subviews/navigation-content";
 import {NavigationUtils} from "../utils/navigation-utils";
 import {ScanbotSdkService} from "../service/scanbot-sdk-service";
 import {BottomBar} from "../subviews/bottom-bar";
+import {Styles} from "../model/styles";
 
 export default class DocumentScannerComponent extends React.Component<any, any> {
 
@@ -32,7 +33,13 @@ export default class DocumentScannerComponent extends React.Component<any, any> 
 
     barStyle() {
         return {
-            display: "flex", height: this.toolbarHeight() + "px", width: "100%", backgroundColor: "red"
+            display: "flex",
+            width: "100%",
+            height: this.toolbarHeight() + "px",
+            backgroundColor: Styles.colors.scanbot,
+            lineHeight: this.toolbarHeight() + "px",
+            color: "white",
+            justifyContent: "center"
         }
     }
 

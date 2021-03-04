@@ -8,7 +8,7 @@ export class BottomBar extends React.Component<any, any> {
             return null;
         }
         return <div
-            style={{width: "100%", height: this.props.height, backgroundColor: "#c8193c", display: "flex"}}>
+            style={{width: "100%", height: this.props.height, backgroundColor: Styles.colors.scanbot, display: "flex"}}>
             {this.props.buttons && this.createButtons()}
         </div>
     }

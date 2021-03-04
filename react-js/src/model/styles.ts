@@ -2,6 +2,10 @@ import {CSSProperties} from "react";
 
 export class Styles {
 
+    static colors: any = {
+        scanbot: "#c8193c"
+    };
+
     static backButton: CSSProperties = {
         backgroundColor: "transparent",
         border: "none",
