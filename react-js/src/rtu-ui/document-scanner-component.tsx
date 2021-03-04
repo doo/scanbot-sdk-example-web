@@ -1,9 +1,6 @@
 import React from "react";
 import styled, {keyframes} from "styled-components";
-import {NavigationContent} from "../subviews/navigation-content";
-import {NavigationUtils} from "../utils/navigation-utils";
 import {ScanbotSdkService} from "../service/scanbot-sdk-service";
-import {BottomBar} from "../subviews/bottom-bar";
 import {Styles} from "../model/styles";
 
 export default class DocumentScannerComponent extends React.Component<any, any> {
@@ -21,7 +18,7 @@ export default class DocumentScannerComponent extends React.Component<any, any> 
 
     toolbarHeight() {
         return 52;
-        return this.navigation?.clientHeight ?? 0;
+        // return this.navigation?.clientHeight ?? 0;
     }
     containerHeight() {
         // return "104px";
@@ -44,7 +41,6 @@ export default class DocumentScannerComponent extends React.Component<any, any> 
     }
 
     render() {
-        console.log("size", window.innerWidth, window.innerHeight, this.toolbarHeight());
         const animate = keyframes`
             from {transform: translateX(100%); } 
             to   {transform: translateX(0%); }
