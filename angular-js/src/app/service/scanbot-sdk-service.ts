@@ -15,19 +15,21 @@ import {
   PdfGenerationOptions,
   PdfGenerator,
   TiffGenerationOptions,
-  TiffGenerator
+  TiffGenerator, BarcodeScannerConfiguration, IBarcodeScannerHandle
 } from "scanbot-web-sdk/@types";
 
 @Injectable()
 export class ScanbotSdkService {
 
   static CONTAINER_ID = "scanbot-camera-container";
+  static BARCODE_SCANNER_CONTAINER_ID = "barcode-scanner-container";
 
   private instance: ScanbotSDK;
 
   onReady: any;
 
-  private scanner: IDocumentScannerHandle;
+  private documentScanner: IDocumentScannerHandle;
+  private barcodeScanner: IBarcodeScannerHandle;
   private cropper: ICroppingViewHandle;
 
   isReady(): boolean {
@@ -44,19 +46,26 @@ export class ScanbotSdkService {
     });
   }
 
-  async scan(configuration: DocumentScannerConfiguration) {
-    this.scanner = await this.instance.createDocumentScanner(configuration);
+  async scanDocuments(configuration: DocumentScannerConfiguration) {
+    this.documentScanner = await this.instance.createDocumentScanner(configuration);
+  }
+
+  async scanBarcodes(configuration: BarcodeScannerConfiguration) {
+    this.barcodeScanner = await this.instance.createBarcodeScanner(configuration);
   }
 
   delayAutoCapture() {
-    this.scanner.disableAutoCapture();
+    this.documentScanner.disableAutoCapture();
     setTimeout(() => {
-      this.scanner.enableAutoCapture();
+      this.documentScanner.enableAutoCapture();
     }, 3000);
   }
 
-  disposeScanner() {
-    this.scanner.dispose();
+  disposeDocumentScanner() {
+    this.documentScanner.dispose();
+  }
+  disposeBarcodeScanner() {
+    this.barcodeScanner.dispose();
   }
 
   async crop(configuration: CroppingViewConfiguration) {

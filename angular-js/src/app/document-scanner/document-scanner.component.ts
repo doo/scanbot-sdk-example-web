@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import {
-  DetectionResult,
+  DocumentDetectionResult,
   DocumentScannerConfiguration
 } from "scanbot-web-sdk/@types";
 import {ScanbotSdkService} from "../service/scanbot-sdk-service";
 import {Router} from "@angular/router";
 import {NavigationUtils} from "../service/navigation-utils";
 import {DocumentRepository} from "../service/document-repository";
+import ViewUtils from "../service/view-utils";
 
 @Component({
   selector: 'app-document-scanner',
@@ -34,7 +35,6 @@ export class DocumentScannerComponent implements OnInit {
     } else {
       this.startScanner();
     }
-
   }
 
   async startScanner() {
@@ -43,11 +43,11 @@ export class DocumentScannerComponent implements OnInit {
       containerId: ScanbotSdkService.CONTAINER_ID
     };
 
-    await this.sdk.scan(configuration);
+    await this.sdk.scanDocuments(configuration);
   }
 
-  async onDocumentDetected(result: DetectionResult) {
-    this.flash();
+  async onDocumentDetected(result: DocumentDetectionResult) {
+    ViewUtils.flash();
     this.documents.add(result);
     const counter = NavigationUtils.getElementByClassName("scanner-page-counter");
     counter.innerText = this.documents.count() + " PAGES";
@@ -55,26 +55,8 @@ export class DocumentScannerComponent implements OnInit {
   }
 
   async onScanningDone() {
-    this.sdk.disposeScanner();
+    this.sdk.disposeDocumentScanner();
     await this.router.navigateByUrl("/");
   }
 
-  flash() {
-    const flash = document.getElementsByClassName("flash")[0] as HTMLDivElement;
-    flash.style.display = "block";
-
-    this.animateFlashOpacity("0.5", () => {
-      this.animateFlashOpacity("0.0", () => {
-        flash.style.opacity = "1.0";
-        flash.style.display = "none";
-      })
-    });
-  }
-  animateFlashOpacity(opacity, complete) {
-    const flash = document.getElementsByClassName("flash")[0] as HTMLDivElement;
-    setTimeout(() => {
-      flash.style.opacity = opacity;
-      complete();
-    }, 150);
-  }
 }
