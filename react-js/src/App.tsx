@@ -86,17 +86,23 @@ export default class App extends React.Component<any, any> {
 
     documentScanner() {
         const route = NavigationUtils.findRoute();
-        if (route === RoutePath.DocumentScanner) {
-            return <DocumentScannerComponent sdk={this.state.sdk} onDocumentDetected={this.onDocumentDetected.bind(this)}/>;
+        if (route === RoutePath.Test) {
+            return <DocumentScannerComponent
+                sdk={this.state.sdk}
+                onDocumentDetected={this.onDocumentDetected.bind(this)}
+            />;
         }
         return null;
     }
+
     decideContent() {
         const route = NavigationUtils.findRoute();
+
+        if (route === RoutePath.Test) {
+            return <FeatureList onItemClick={this.onFeatureClick.bind(this)}/>
+        }
         if (NavigationUtils.isAtRoot()) {
             return <FeatureList onItemClick={this.onFeatureClick.bind(this)}/>
-        } else {
-            return null;
         }
 
         if (route === RoutePath.DocumentScanner) {

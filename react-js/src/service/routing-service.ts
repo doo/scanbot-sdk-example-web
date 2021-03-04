@@ -10,6 +10,7 @@ export enum RoutePath {
     LicenseInfo = "license-info",
     CroppingView = "cropping-view",
     BarcodeScanner = "barcode-scanner",
+    Test = "test"
 }
 
 export class RoutingService {
