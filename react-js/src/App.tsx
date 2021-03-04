@@ -79,7 +79,11 @@ export default class App extends React.Component<any, any> {
                 <div style={{height: this.containerHeight(), marginTop: this.toolbarHeight()}}>
                     {this.decideContent()}
                 </div>
-                <BottomBar hidden={NavigationUtils.isAtRoot()} height={this.toolbarHeight()} buttons={this.decideButtons()}/>
+                <BottomBar
+                    hidden={NavigationUtils.isAtRoot() || NavigationUtils.findRoute() === RoutePath.Test}
+                    height={this.toolbarHeight()}
+                    buttons={this.decideButtons()}
+                />
             </div>
         );
     }
@@ -98,10 +102,7 @@ export default class App extends React.Component<any, any> {
     decideContent() {
         const route = NavigationUtils.findRoute();
 
-        if (route === RoutePath.Test) {
-            return <FeatureList onItemClick={this.onFeatureClick.bind(this)}/>
-        }
-        if (NavigationUtils.isAtRoot()) {
+        if (NavigationUtils.isAtRoot() || route === RoutePath.Test) {
             return <FeatureList onItemClick={this.onFeatureClick.bind(this)}/>
         }
 

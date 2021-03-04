@@ -48,7 +48,7 @@ export default class DocumentScannerComponent extends React.Component<any, any> 
                 <div style={this.barStyle()} ref={ref => this.navigation = ref as HTMLDivElement}>
                     {"Document Scanner"}
                 </div>
-                <div style={{height: this.containerHeight()}}>
+                <div style={{height: this.containerHeight(), backgroundColor: "black"}}>
                     <div id={ScanbotSdkService.DOCUMENT_SCANNER_CONTAINER} style={{width: "100%", height: "100%"}}/>
                 </div>
                 <div style={this.barStyle()} />
