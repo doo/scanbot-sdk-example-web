@@ -55,9 +55,22 @@ export default class BaseScannerComponent extends React.Component<any, any> {
         }
     }
 
+    buttonStyle(): CSSProperties {
+        return {
+            lineHeight: "52px",
+            height: "100%",
+            backgroundColor: "transparent",
+            color: "white",
+            border: "none",
+            fontSize: "1em",
+            fontWeight: 500,
+            paddingLeft: "10px",
+            paddingRight: "10px"
+        }
+    }
     previousDestination?: string;
 
-    controller(scannerId: string, title: string) {
+    controller(scannerId: string, title: string, labelText: string) {
         if (this.state.animation.type === AnimationType.None) {
             return null;
         }
@@ -67,7 +80,6 @@ export default class BaseScannerComponent extends React.Component<any, any> {
 
         return (
             <Animation
-                id={"lol"}
                 style={this.containerStyle(`${destination}`)}
                 onAnimationStart={this.onAnimationStart.bind(this)}
                 onAnimationEnd={this.onAnimationEnd.bind(this)}
@@ -83,7 +95,12 @@ export default class BaseScannerComponent extends React.Component<any, any> {
                 <div style={{height: this.containerHeight(), backgroundColor: "black"}}>
                     <div id={scannerId} style={{width: "100%", height: "100%"}}/>
                 </div>
-                <div style={this.barStyle()}/>
+                <div style={{...this.barStyle(), display: "flex", flexDirection: "row"}}>
+                    <div id={"count-label"} style={this.buttonStyle()}>{labelText}</div>
+                    <div style={{right: 0, position: "absolute"}}>
+                        <button style={this.buttonStyle()}>{"Done"}</button>
+                    </div>
+                </div>
             </Animation>
         );
     }

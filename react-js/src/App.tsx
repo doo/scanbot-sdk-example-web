@@ -23,6 +23,7 @@ import {MiscUtils} from "./utils/misc-utils";
 import DocumentScannerComponent from "./rtu-ui/document-scanner-component";
 import {AnimationType} from "./rtu-ui/enum/animation-type";
 import BarcodeScannerComponent from "./rtu-ui/barcode-scanner-component";
+import Barcodes from "./model/barcodes";
 
 export default class App extends React.Component<any, any> {
 
@@ -243,8 +244,7 @@ export default class App extends React.Component<any, any> {
     }
 
     async onBarcodesDetected(result: BarcodeResult) {
-        console.log("detected", result);
-
+        Barcodes.instance.addAll(result.barcodes);
         // If you have any additional processing to do, consider pausing
         // the scanner here, else you might (will) receive multiple results:
         // ScanbotSdkService.instance.barcodeScanner?.pauseDetection();
