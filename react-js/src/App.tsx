@@ -9,11 +9,9 @@ import {Toast} from "./subviews/toast";
 import FeatureList from "./subviews/feature-list";
 import {BottomBar} from "./subviews/bottom-bar";
 
-import DocumentScannerPage from "./pages/document-scanner-page";
 import ImageResultsPage from "./pages/image-results-page";
 import ImageDetailPage from "./pages/image-detail-page";
 import CroppingPage from "./pages/cropping-page";
-import BarcodeScannerPage from "./pages/barcode-scanner-page";
 
 import Pages from "./model/pages";
 import {ScanbotSdkService} from "./service/scanbot-sdk-service";
@@ -80,7 +78,7 @@ export default class App extends React.Component<any, any> {
                     {this.decideContent()}
                 </div>
                 <BottomBar
-                    hidden={NavigationUtils.isAtRoot() || NavigationUtils.findRoute() === RoutePath.Test}
+                    hidden={NavigationUtils.isAtRoot()}
                     height={this.toolbarHeight()}
                     buttons={this.decideButtons()}
                 />
@@ -109,17 +107,10 @@ export default class App extends React.Component<any, any> {
     decideContent() {
         const route = NavigationUtils.findRoute();
 
-        if (NavigationUtils.isAtRoot() || route === RoutePath.Test) {
+        if (NavigationUtils.isAtRoot() || route === RoutePath.DocumentScanner || route === RoutePath.BarcodeScanner) {
             return <FeatureList onItemClick={this.onFeatureClick.bind(this)}/>
         }
 
-        if (route === RoutePath.DocumentScanner) {
-            return <DocumentScannerPage sdk={this.state.sdk} onDocumentDetected={this.onDocumentDetected.bind(this)}/>;
-        }
-
-        if (route === RoutePath.BarcodeScanner) {
-            return <BarcodeScannerPage sdk={this.state.sdk} onBarcodesDetected={this.onBarcodesDetected.bind(this)}/>;
-        }
         if (route === RoutePath.CroppingView) {
             if (!Pages.instance.hasActiveItem()) {
                 RoutingService.instance.reset();
@@ -240,7 +231,6 @@ export default class App extends React.Component<any, any> {
 
     async onDocumentDetected(result: any) {
         Pages.instance.add(result);
-        this.forceUpdate();
     }
 
     async onBarcodesDetected(result: BarcodeResult) {
@@ -258,16 +248,15 @@ export default class App extends React.Component<any, any> {
 
     async onFeatureClick(feature: any) {
 
-        if (feature.id === RoutePath.Test) {
+        if (feature.id === RoutePath.DocumentScanner) {
             this._documentScanner?.push(AnimationType.PushRight);
             return;
         }
-        if (feature.id === RoutePath.Test2) {
+        if (feature.id === RoutePath.BarcodeScanner) {
             this._barcodeScanner?.push(AnimationType.PushBottom);
             return;
         }
         if (feature.route) {
-            // history.push("#/" + feature.route);
             RoutingService.instance.route(feature.route);
             return;
         }
@@ -280,7 +269,6 @@ export default class App extends React.Component<any, any> {
             const result = await ImageUtils.pick();
             Pages.instance.add(result)
         }
-
     }
 }
 
