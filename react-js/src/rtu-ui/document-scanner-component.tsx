@@ -6,7 +6,8 @@ import {DocumentDetectionResult} from "scanbot-web-sdk/@types";
 
 export enum AnimationType {
     None,
-    Push,
+    PushRight,
+    PushBottom,
     Pop
 }
 export default class DocumentScannerComponent extends React.Component<any, any> {
@@ -76,7 +77,7 @@ export default class DocumentScannerComponent extends React.Component<any, any> 
         return (
             <Animation
                 id={"lol"}
-                style={{...this.containerStyle(), transform: `translateX(${this.to(this.state.animation.type)})`}}
+                style={{...this.containerStyle(), transform: `${this.to(this.state.animation.type)}`}}
                 onAnimationStart={() => {
 
                 }} onAnimationEnd={() => {
@@ -103,11 +104,12 @@ export default class DocumentScannerComponent extends React.Component<any, any> 
         console.log("Detected", result);
     }
 
-    async push() {
-        this.updateAnimationType(AnimationType.Push, async () => {
+    pushType?: AnimationType;
+    async push(type: AnimationType) {
+        this.pushType = type;
+        this.updateAnimationType(type, async () => {
             await ScanbotSdkService.instance.createDocumentScanner(this.onDocumentDetected);
         });
-
     }
 
     pop() {
@@ -122,27 +124,42 @@ export default class DocumentScannerComponent extends React.Component<any, any> 
 
     animation(type: AnimationType) {
         const animate = keyframes`
-            from {transform: translateX(${this.from(type)}); } 
-            to   {transform: translateX(${this.to(type)}); }
+            from {transform: ${this.from(type)}; } 
+            to   {transform: ${this.to(type)}; }
         `;
         return styled.div`animation: ${animate} 0.5s;`;
     }
 
     from(type: AnimationType) {
-        if (type === AnimationType.Push) {
-            return "100%";
+        if (type === AnimationType.PushRight) {
+            return "translateX(100%)";
         }
+        if (type === AnimationType.PushBottom) {
+            return "translateY(100%)";
+        }
+
         if (type === AnimationType.Pop) {
-            return "0%";
+            if (this.pushType === AnimationType.PushRight) {
+                return "translateX(0%)";
+            } else {
+                return "translateY(0%)";
+            }
         }
     }
 
     to(type: AnimationType) {
-        if (type === AnimationType.Push) {
-            return "0%";
+        if (type === AnimationType.PushRight) {
+            return "translateX(0%)";
+        }
+        if (type === AnimationType.PushBottom) {
+            return "translateY(0%)";
         }
         if (type === AnimationType.Pop) {
-            return "100%";
+            if (this.pushType === AnimationType.PushRight) {
+                return "translateX(100%)";
+            } else {
+                return "translateY(100%)";
+            }
         }
     }
 }

@@ -1,13 +1,8 @@
-
 import React from 'react';
 import {AppBar} from "@material-ui/core";
 import Swal from "sweetalert2";
 
-import {
-    ImageFilter,
-    BarcodeResult,
-    Barcode
-} from "scanbot-web-sdk/@types";
+import {Barcode, BarcodeResult, ImageFilter} from "scanbot-web-sdk/@types";
 
 import {NavigationContent} from "./subviews/navigation-content";
 import {Toast} from "./subviews/toast";
@@ -27,7 +22,7 @@ import {RoutePath, RoutingService} from "./service/routing-service";
 import {ImageUtils} from "./utils/image-utils";
 import {NavigationUtils} from "./utils/navigation-utils";
 import {MiscUtils} from "./utils/misc-utils";
-import DocumentScannerComponent from "./rtu-ui/document-scanner-component";
+import DocumentScannerComponent, {AnimationType} from "./rtu-ui/document-scanner-component";
 
 export default class App extends React.Component<any, any> {
 
@@ -252,11 +247,14 @@ export default class App extends React.Component<any, any> {
 
     async onFeatureClick(feature: any) {
 
-        if (feature.id == RoutePath.Test) {
-            this._documentScanner?.push();
+        if (feature.id === RoutePath.Test) {
+            this._documentScanner?.push(AnimationType.PushRight);
             return;
         }
-
+        if (feature.id === RoutePath.Test2) {
+            this._documentScanner?.push(AnimationType.PushBottom);
+            return;
+        }
         if (feature.route) {
             // history.push("#/" + feature.route);
             RoutingService.instance.route(feature.route);
