@@ -8,6 +8,7 @@ export class Features {
         { id: RoutePath.ImagePicker,     name: "Pick Image"},
         { id: RoutePath.ImageResults,    name: "Image Results", route: RoutePath.ImageResults},
         { id: RoutePath.LicenseInfo,     name: "License Info"},
-        { id: RoutePath.Test,            name: "WIP: RTUI Document Scanner", route: RoutePath.Test},
+        { id: RoutePath.Test,            name: "WIP: Anim Scanner Right", route: RoutePath.Test},
+        { id: RoutePath.Test2,            name: "WIP: Anim Scanner Bottom", route: RoutePath.Test2},
     ];
 }
