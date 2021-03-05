@@ -10,6 +10,7 @@ export enum AnimationType {
     PushBottom,
     Pop
 }
+
 export default class DocumentScannerComponent extends React.Component<any, any> {
 
 
@@ -27,24 +28,20 @@ export default class DocumentScannerComponent extends React.Component<any, any> 
 
     toolbarHeight() {
         return 52;
-        // return this.navigation?.clientHeight ?? 0;
     }
     containerHeight() {
-        // return "104px";
-        // if (!this.navigation) {
-        //     return "100%";
-        // }
         return (window.innerHeight - 2 * this.toolbarHeight()) ?? 0;
     }
 
-    containerStyle(): CSSProperties {
+    containerStyle(transform: string): CSSProperties {
         return {
             height: "100%",
             width: "100%",
             position: "fixed",
             top: "0",
             left: "0",
-            zIndex: 5000
+            zIndex: 5000,
+            transform: transform
         };
     }
 
@@ -69,33 +66,26 @@ export default class DocumentScannerComponent extends React.Component<any, any> 
         }
     }
 
-    _isAnimating: boolean = false;
-    _isVisible: boolean = false;
+    onAnimationStart() {
+
+    }
+    onAnimationEnd() {
+        if (this.state.animation.type === AnimationType.Pop) {
+            this.updateAnimationType(AnimationType.None);
+        }
+    }
 
     render() {
         if (this.state.animation.type === AnimationType.None) {
             return null;
         }
-        // if (!this._isVisible) {
-        //     return null;
-        // }
         const Animation = this.animation(this.state.animation.type);
         return (
             <Animation
                 id={"lol"}
-                style={{...this.containerStyle(), transform: `${this.to(this.state.animation.type)}`}}
-                onAnimationStart={() => {
-                    this._isAnimating = true;
-                }}
-                onAnimationEnd={() => {
-                    console.log("endino");
-                    this._isAnimating = false;
-                    this._isVisible = false;
-                    if (this.state.animation.type === AnimationType.Pop) {
-                        this.updateAnimationType(AnimationType.None);
-                    }
-
-                }}
+                style={this.containerStyle(`${this.to(this.state.animation.type)}`)}
+                onAnimationStart={this.onAnimationStart.bind(this)}
+                onAnimationEnd={this.onAnimationEnd.bind(this)}
             >
                 <div style={this.barStyle()} ref={ref => this.navigation = ref as HTMLDivElement}>
                     <button
@@ -121,7 +111,6 @@ export default class DocumentScannerComponent extends React.Component<any, any> 
     pushType?: AnimationType;
     async push(type: AnimationType) {
         this.pushType = type;
-        this._isVisible = true;
         this.updateAnimationType(type, async () => {
             await ScanbotSdkService.instance.createDocumentScanner(this.onDocumentDetected);
         });
@@ -138,43 +127,38 @@ export default class DocumentScannerComponent extends React.Component<any, any> 
     }
 
     animation(type: AnimationType) {
-        const animate = keyframes`
-            from {transform: ${this.from(type)}; } 
-            to   {transform: ${this.to(type)}; }
-        `;
+        const animate = keyframes`from {transform: ${this.from(type)};} to {transform: ${this.to(type)};}`;
         return styled.div`animation: ${animate} 0.5s;`;
     }
 
     from(type: AnimationType) {
         if (type === AnimationType.PushRight) {
-            return "translateX(100%)";
+            return this.translate("X", 100);
         }
         if (type === AnimationType.PushBottom) {
-            return "translateY(100%)";
+            return this.translate("Y", 100);
         }
 
         if (type === AnimationType.Pop) {
-            if (this.pushType === AnimationType.PushRight) {
-                return "translateX(0%)";
-            } else {
-                return "translateY(0%)";
-            }
+            const axis = (this.pushType === AnimationType.PushRight) ? "X" : "Y";
+            return this.translate(axis, 0);
         }
     }
 
     to(type: AnimationType) {
         if (type === AnimationType.PushRight) {
-            return "translateX(0%)";
+            return this.translate("X", 0);
         }
         if (type === AnimationType.PushBottom) {
-            return "translateY(0%)";
+            return this.translate("Y", 0);
         }
         if (type === AnimationType.Pop) {
-            if (this.pushType === AnimationType.PushRight) {
-                return "translateX(100%)";
-            } else {
-                return "translateY(100%)";
-            }
+            const axis = (this.pushType === AnimationType.PushRight) ? "X" : "Y";
+            return this.translate(axis, 100);
         }
+    }
+
+    translate(axis: "X" | "Y", percentage: number) {
+        return "translate" + axis + "(" + percentage + "%)";
     }
 }
