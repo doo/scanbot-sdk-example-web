@@ -69,20 +69,34 @@ export default class DocumentScannerComponent extends React.Component<any, any> 
         }
     }
 
+    _isAnimating: boolean = false;
+    _isVisible: boolean = false;
+
     render() {
         if (this.state.animation.type === AnimationType.None) {
             return null;
         }
+        // if (!this._isVisible) {
+        //     return null;
+        // }
         const Animation = this.animation(this.state.animation.type);
         return (
             <Animation
                 id={"lol"}
                 style={{...this.containerStyle(), transform: `${this.to(this.state.animation.type)}`}}
                 onAnimationStart={() => {
+                    this._isAnimating = true;
+                }}
+                onAnimationEnd={() => {
+                    console.log("endino");
+                    this._isAnimating = false;
+                    this._isVisible = false;
+                    if (this.state.animation.type === AnimationType.Pop) {
+                        this.updateAnimationType(AnimationType.None);
+                    }
 
-                }} onAnimationEnd={() => {
-
-            }}>
+                }}
+            >
                 <div style={this.barStyle()} ref={ref => this.navigation = ref as HTMLDivElement}>
                     <button
                         style={Styles.backButton}
@@ -107,6 +121,7 @@ export default class DocumentScannerComponent extends React.Component<any, any> 
     pushType?: AnimationType;
     async push(type: AnimationType) {
         this.pushType = type;
+        this._isVisible = true;
         this.updateAnimationType(type, async () => {
             await ScanbotSdkService.instance.createDocumentScanner(this.onDocumentDetected);
         });
@@ -114,7 +129,7 @@ export default class DocumentScannerComponent extends React.Component<any, any> 
 
     pop() {
         this.updateAnimationType(AnimationType.Pop, () => {
-            ScanbotSdkService.instance.disposeDocumentScanner()
+            ScanbotSdkService.instance.disposeDocumentScanner();
         });
     }
 

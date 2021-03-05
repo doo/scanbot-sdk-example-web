@@ -15,16 +15,10 @@ export default class DocumentScannerPage extends React.Component<any, any>{
     }
 
     render() {
-        console.log("size", window.innerWidth, window.innerHeight);
-        const animate = keyframes`
-            from {transform: translateX(100%); } 
-            to   {transform: translateX(0%); }
-        `;
-        const Push = styled.div`animation: ${animate} 1s;`;
         return (
-            <Push style={{height: "100%"}}>
+            <div style={{height: "100%"}}>
                     <div id={ScanbotSdkService.DOCUMENT_SCANNER_CONTAINER} style={{width: "100%", height: "100%"}}/>
-            </Push>
+            </div>
         );
     }
 }
