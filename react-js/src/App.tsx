@@ -70,7 +70,7 @@ export default class App extends React.Component<any, any> {
                        height="48" style={{display: "none"}}/>
                 <Toast alert={this.state.alert} onClose={() => this.setState({alert: undefined})}/>
 
-                <AppBar position="fixed" ref={ref => this.navigation = ref}>
+                <AppBar position="fixed" ref={ref => this.navigation = ref} style={{zIndex: 19}}>
                     <NavigationContent backVisible={!NavigationUtils.isAtRoot()}
                                        onBackClick={() => this.onBackPress()}/>
                 </AppBar>
@@ -86,22 +86,31 @@ export default class App extends React.Component<any, any> {
         );
     }
 
+    _documentScannerHtmlComponent: any;
     _documentScanner?: DocumentScannerComponent | null;
     documentScanner() {
-        return <DocumentScannerComponent
-            ref={ref => this._documentScanner = ref}
-            sdk={this.state.sdk}
-            onDocumentDetected={this.onDocumentDetected.bind(this)}
-        />;
+        if (!this._documentScannerHtmlComponent) {
+            this._documentScannerHtmlComponent = <DocumentScannerComponent
+                ref={ref => this._documentScanner = ref}
+                sdk={this.state.sdk}
+                onDocumentDetected={this.onDocumentDetected.bind(this)}
+            />;
+        }
+        return this._documentScannerHtmlComponent;
+
     }
 
+    _barcodeScannerHtmlComponent: any;
     _barcodeScanner?: BarcodeScannerComponent | null;
     barcodeScanner() {
-        return <BarcodeScannerComponent
-            ref={ref => this._barcodeScanner = ref}
-            sdk={this.state.sdk}
-            onBarcodesDetected={this.onBarcodesDetected.bind(this)}
-        />;
+        if (!this._barcodeScannerHtmlComponent) {
+            this._barcodeScannerHtmlComponent = <BarcodeScannerComponent
+                ref={ref => this._barcodeScanner = ref}
+                sdk={this.state.sdk}
+                onBarcodesDetected={this.onBarcodesDetected.bind(this)}
+            />;
+        }
+        return this._barcodeScannerHtmlComponent
     }
 
     decideContent() {

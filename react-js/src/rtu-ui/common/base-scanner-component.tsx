@@ -30,7 +30,7 @@ export default class BaseScannerComponent extends React.Component<any, any> {
             position: "fixed",
             top: "0",
             left: "0",
-            zIndex: 5000,
+            zIndex: 20,
             transform: transform
         };
     }
