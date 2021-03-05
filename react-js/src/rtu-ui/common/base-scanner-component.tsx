@@ -1,8 +1,8 @@
 import React, {CSSProperties} from "react";
 import styled, {keyframes} from "styled-components";
-import {ScanbotSdkService} from "../service/scanbot-sdk-service";
-import {Styles} from "../model/styles";
-import {AnimationType} from "./enum/animation-type";
+import {ScanbotSdkService} from "../../service/scanbot-sdk-service";
+import {Styles} from "../../model/styles";
+import {AnimationType} from "../enum/animation-type";
 
 export default class BaseScannerComponent extends React.Component<any, any> {
 
@@ -53,6 +53,42 @@ export default class BaseScannerComponent extends React.Component<any, any> {
             width: "100%",
             height: "100%"
         }
+    }
+
+    controller(scannerId: string, title: string) {
+        if (this.state.animation.type === AnimationType.None) {
+            return null;
+        }
+        const Animation = this.animation(this.state.animation.type);
+        return (
+            <Animation
+                id={"lol"}
+                style={this.containerStyle(`${this.to(this.state.animation.type)}`)}
+                onAnimationStart={this.onAnimationStart.bind(this)}
+                onAnimationEnd={this.onAnimationEnd.bind(this)}
+            >
+                <div style={this.barStyle()}>
+                    <button
+                        style={Styles.backButton}
+                        onClick={() => this.pop()}
+                        dangerouslySetInnerHTML={{__html: "&#8249"}}
+                    />
+                    <div style={this.barText()}>{title}</div>
+                </div>
+                <div style={{height: this.containerHeight(), backgroundColor: "black"}}>
+                    <div id={scannerId} style={{width: "100%", height: "100%"}}/>
+                </div>
+                <div style={this.barStyle()}/>
+            </Animation>
+        );
+    }
+
+    push(type: AnimationType) {
+
+    }
+
+    pop() {
+
     }
 
     onAnimationStart() {

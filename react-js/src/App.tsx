@@ -24,6 +24,7 @@ import {NavigationUtils} from "./utils/navigation-utils";
 import {MiscUtils} from "./utils/misc-utils";
 import DocumentScannerComponent from "./rtu-ui/document-scanner-component";
 import {AnimationType} from "./rtu-ui/enum/animation-type";
+import BarcodeScannerComponent from "./rtu-ui/barcode-scanner-component";
 
 export default class App extends React.Component<any, any> {
 
@@ -66,6 +67,7 @@ export default class App extends React.Component<any, any> {
         return (
             <div>
                 {this.documentScanner()}
+                {this.barcodeScanner()}
                 <input className="file-picker" type="file" accept="image/jpeg" width="48"
                        height="48" style={{display: "none"}}/>
                 <Toast alert={this.state.alert} onClose={() => this.setState({alert: undefined})}/>
@@ -87,12 +89,20 @@ export default class App extends React.Component<any, any> {
     }
 
     _documentScanner?: DocumentScannerComponent | null;
-
     documentScanner() {
         return <DocumentScannerComponent
             ref={ref => this._documentScanner = ref}
             sdk={this.state.sdk}
             onDocumentDetected={this.onDocumentDetected.bind(this)}
+        />;
+    }
+
+    _barcodeScanner?: BarcodeScannerComponent | null;
+    barcodeScanner() {
+        return <BarcodeScannerComponent
+            ref={ref => this._barcodeScanner = ref}
+            sdk={this.state.sdk}
+            onBarcodesDetected={this.onBarcodesDetected.bind(this)}
         />;
     }
 
@@ -253,7 +263,7 @@ export default class App extends React.Component<any, any> {
             return;
         }
         if (feature.id === RoutePath.Test2) {
-            this._documentScanner?.push(AnimationType.PushBottom);
+            this._barcodeScanner?.push(AnimationType.PushBottom);
             return;
         }
         if (feature.route) {
