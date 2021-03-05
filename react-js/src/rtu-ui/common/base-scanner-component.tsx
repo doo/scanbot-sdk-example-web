@@ -97,11 +97,15 @@ export default class BaseScannerComponent extends React.Component<any, any> {
                 <div style={{...this.barStyle(), display: "flex", flexDirection: "row"}}>
                     <div id={"count-label"} style={this.buttonStyle()}>{labelText}</div>
                     <div style={{right: 0, position: "absolute"}}>
-                        <button style={this.buttonStyle()}>{"Done"}</button>
+                        <button onClick={this.onDonePress.bind(this)} style={this.buttonStyle()}>{"Done"}</button>
                     </div>
                 </div>
             </Animation>
         );
+    }
+
+    onDonePress() {
+        this.pop();
     }
 
     push(type: AnimationType) {
