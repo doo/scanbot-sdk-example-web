@@ -240,6 +240,7 @@ export default class App extends React.Component<any, any> {
     }
 
     async onDocumentDetected(result: any) {
+        ScanbotSdkService.instance.sdk?.utils.flash();
         Pages.instance.add(result);
     }
 
