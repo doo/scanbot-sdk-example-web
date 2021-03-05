@@ -22,7 +22,8 @@ import {RoutePath, RoutingService} from "./service/routing-service";
 import {ImageUtils} from "./utils/image-utils";
 import {NavigationUtils} from "./utils/navigation-utils";
 import {MiscUtils} from "./utils/misc-utils";
-import DocumentScannerComponent, {AnimationType} from "./rtu-ui/document-scanner-component";
+import DocumentScannerComponent from "./rtu-ui/document-scanner-component";
+import {AnimationType} from "./rtu-ui/enum/animation-type";
 
 export default class App extends React.Component<any, any> {
 
