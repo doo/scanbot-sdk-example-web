@@ -1,6 +1,5 @@
 import React, {CSSProperties} from "react";
 import styled, {keyframes} from "styled-components";
-import {ScanbotSdkService} from "../../service/scanbot-sdk-service";
 import {Styles} from "../../model/styles";
 import {AnimationType} from "../enum/animation-type";
 

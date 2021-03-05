@@ -1,4 +1,3 @@
-import {Barcode} from "scanbot-web-sdk/@types";
 
 export default class Pages {
 

@@ -1,10 +1,9 @@
-import React from "react";
+
 import {ScanbotSdkService} from "../service/scanbot-sdk-service";
 import {DocumentDetectionResult} from "scanbot-web-sdk/@types";
 import BaseScannerComponent from "./common/base-scanner-component";
 import {AnimationType} from "./enum/animation-type";
 import Pages from "../model/pages";
-import Barcodes from "../model/barcodes";
 
 export default class DocumentScannerComponent extends BaseScannerComponent {
 
