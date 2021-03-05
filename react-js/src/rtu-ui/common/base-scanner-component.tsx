@@ -55,15 +55,20 @@ export default class BaseScannerComponent extends React.Component<any, any> {
         }
     }
 
+    previousDestination?: string;
+
     controller(scannerId: string, title: string) {
         if (this.state.animation.type === AnimationType.None) {
             return null;
         }
         const Animation = this.animation(this.state.animation.type);
+        const destination = this.to(this.state.animation.type);
+        this.previousDestination = destination;
+
         return (
             <Animation
                 id={"lol"}
-                style={this.containerStyle(`${this.to(this.state.animation.type)}`)}
+                style={this.containerStyle(`${destination}`)}
                 onAnimationStart={this.onAnimationStart.bind(this)}
                 onAnimationEnd={this.onAnimationEnd.bind(this)}
             >
@@ -108,7 +113,15 @@ export default class BaseScannerComponent extends React.Component<any, any> {
     }
 
     animation(type: AnimationType) {
-        const animate = keyframes`from {transform: ${this.from(type)};} to {transform: ${this.to(type)};}`;
+        let from = this.from(type);
+        let to = this.to(type);
+
+        // Failsafe to prevent issues with re-render. If implemented correctly, should never enter this case
+        if (this.previousDestination === to) {
+            from = this.previousDestination;
+            to = this.previousDestination;
+        }
+        const animate = keyframes`from {transform: ${from};} to {transform: ${to};}`;
         return styled.div`animation: ${animate} 0.5s;`;
     }
 

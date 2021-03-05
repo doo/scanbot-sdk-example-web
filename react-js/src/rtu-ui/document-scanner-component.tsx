@@ -11,13 +11,13 @@ export default class DocumentScannerComponent extends BaseScannerComponent {
     }
 
     onDocumentDetected(result: DocumentDetectionResult) {
-        console.log("Detected", result);
+        this.props.onDocumentDetected(result);
     }
 
     async push(type: AnimationType) {
         this.pushType = type;
         this.updateAnimationType(type, async () => {
-            await ScanbotSdkService.instance.createDocumentScanner(this.onDocumentDetected);
+            await ScanbotSdkService.instance.createDocumentScanner(this.onDocumentDetected.bind(this));
         });
     }
 
