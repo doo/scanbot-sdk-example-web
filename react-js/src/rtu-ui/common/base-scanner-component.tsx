@@ -1,14 +1,14 @@
 import React, {CSSProperties} from "react";
 import styled, {keyframes} from "styled-components";
-import {Styles} from "../../model/styles";
 import {AnimationType} from "../enum/animation-type";
-import {ArrowBack, MoreVert} from "@material-ui/icons";
+import ActionBarBottom from "./action-bar-bottom";
+import ActionBarTop from "./action-bar-top";
+import {Constants} from "../model/constants";
 
 export default class BaseScannerComponent extends React.Component<any, any> {
 
     constructor(props: any) {
         super(props);
-
         this.state = {
             animation: {
                 type: AnimationType.None
@@ -16,11 +16,8 @@ export default class BaseScannerComponent extends React.Component<any, any> {
         }
     }
 
-    toolbarHeight() {
-        return 52;
-    }
     containerHeight() {
-        return (window.innerHeight - 2 * this.toolbarHeight()) ?? 0;
+        return (window.innerHeight - 2 * Constants.ACTION_BAR_HEIGHT) ?? 0;
     }
 
     containerStyle(transform: string): CSSProperties {
@@ -35,39 +32,6 @@ export default class BaseScannerComponent extends React.Component<any, any> {
         };
     }
 
-    barStyle() {
-        return {
-            display: "flex",
-            width: "100%",
-            height: this.toolbarHeight() + "px",
-            backgroundColor: Styles.colors.scanbot,
-        }
-    }
-
-    barText(): CSSProperties {
-        return {
-            lineHeight: this.toolbarHeight() + "px",
-            color: "white",
-            // position: "absolute",
-            textAlign: "center",
-            width: "100%",
-            height: "100%"
-        }
-    }
-
-    buttonStyle(): CSSProperties {
-        return {
-            lineHeight: "52px",
-            height: "100%",
-            backgroundColor: "transparent",
-            color: "white",
-            border: "none",
-            fontSize: "1em",
-            fontWeight: 500,
-            paddingLeft: "10px",
-            paddingRight: "10px"
-        }
-    }
     previousDestination?: string;
 
     controller(scannerId: string, title: string, labelText: string) {
@@ -84,28 +48,11 @@ export default class BaseScannerComponent extends React.Component<any, any> {
                 onAnimationStart={this.onAnimationStart.bind(this)}
                 onAnimationEnd={this.onAnimationEnd.bind(this)}
             >
-                <div style={this.barStyle()}>
-
-                    <ArrowBack
-                        style={{color: "white", height: "52px", paddingLeft: "10px", zIndex: 100}}
-                        onClick={() => {this.pop()}}
-                    />
-
-                    <div style={this.barText()}>{title}</div>
-                    <MoreVert
-                        style={{color: "white", height: "52px", paddingRight: "10px", zIndex: 100}}
-                        onClick={() => { console.log("wuuut"); }}
-                    />
-                </div>
+                <ActionBarTop title={title} onBack={() => {this.pop()}}/>
                 <div style={{height: this.containerHeight(), backgroundColor: "black"}}>
                     <div id={scannerId} style={{width: "100%", height: "100%"}}/>
                 </div>
-                <div style={{...this.barStyle(), display: "flex", flexDirection: "row"}}>
-                    <div id={"count-label"} style={this.buttonStyle()}>{labelText}</div>
-                    <div style={{right: 0, position: "absolute"}}>
-                        <button onClick={this.onDonePress.bind(this)} style={this.buttonStyle()}>{"Done"}</button>
-                    </div>
-                </div>
+                <ActionBarBottom label={labelText} onDone={this.onDonePress.bind(this)}/>
             </Animation>
         );
     }
