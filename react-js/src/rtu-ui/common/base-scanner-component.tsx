@@ -2,6 +2,7 @@ import React, {CSSProperties} from "react";
 import styled, {keyframes} from "styled-components";
 import {Styles} from "../../model/styles";
 import {AnimationType} from "../enum/animation-type";
+import {ArrowBack, MoreVert} from "@material-ui/icons";
 
 export default class BaseScannerComponent extends React.Component<any, any> {
 
@@ -47,7 +48,7 @@ export default class BaseScannerComponent extends React.Component<any, any> {
         return {
             lineHeight: this.toolbarHeight() + "px",
             color: "white",
-            position: "absolute",
+            // position: "absolute",
             textAlign: "center",
             width: "100%",
             height: "100%"
@@ -84,12 +85,17 @@ export default class BaseScannerComponent extends React.Component<any, any> {
                 onAnimationEnd={this.onAnimationEnd.bind(this)}
             >
                 <div style={this.barStyle()}>
-                    <button
-                        style={Styles.backButton}
-                        onClick={() => this.pop()}
-                        dangerouslySetInnerHTML={{__html: "&#8249"}}
+
+                    <ArrowBack
+                        style={{color: "white", height: "52px", paddingLeft: "10px", zIndex: 100}}
+                        onClick={() => {this.pop()}}
                     />
+
                     <div style={this.barText()}>{title}</div>
+                    <MoreVert
+                        style={{color: "white", height: "52px", paddingRight: "10px", zIndex: 100}}
+                        onClick={() => { console.log("wuuut"); }}
+                    />
                 </div>
                 <div style={{height: this.containerHeight(), backgroundColor: "black"}}>
                     <div id={scannerId} style={{width: "100%", height: "100%"}}/>
