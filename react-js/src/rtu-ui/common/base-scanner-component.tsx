@@ -61,12 +61,16 @@ export default class BaseScannerComponent extends React.Component<any, any> {
         this.pop();
     }
 
+    private _isVisible: boolean = false;
+    isVisible() {
+        return this._isVisible;
+    }
     push(type: AnimationType) {
-
+        this._isVisible = true;
     }
 
     pop() {
-
+        this._isVisible = false;
     }
 
     onAnimationStart() {

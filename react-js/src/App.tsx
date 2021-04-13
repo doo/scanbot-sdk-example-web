@@ -24,6 +24,8 @@ import DocumentScannerComponent from "./rtu-ui/document-scanner-component";
 import {AnimationType} from "./rtu-ui/enum/animation-type";
 import BarcodeScannerComponent from "./rtu-ui/barcode-scanner-component";
 import Barcodes from "./model/barcodes";
+import ErrorLabel from "./subviews/error-label";
+import {createDeflateRaw} from "zlib";
 
 export default class App extends React.Component<any, any> {
 
@@ -32,7 +34,10 @@ export default class App extends React.Component<any, any> {
         this.state = {
             alert: undefined,
             activeImage: undefined,
-            sdk: undefined
+            sdk: undefined,
+            error: {
+                message: undefined
+            }
         };
     }
 
@@ -42,7 +47,20 @@ export default class App extends React.Component<any, any> {
 
         RoutingService.instance.observeChanges(() => {
             this.forceUpdate();
-        })
+        });
+
+        await ScanbotSdkService.instance.setLicenseFailureHandler((error: any) => {
+            RoutingService.instance.reset();
+            this.setState({error: {message: error}});
+            if (this._documentScanner?.isVisible()) {
+                this._documentScanner?.pop();
+            }
+            if (this._barcodeScanner?.isVisible()) {
+                this._barcodeScanner?.pop();
+            }
+
+        });
+        console.log("finished componentDidMount");
     }
 
     onBackPress() {
@@ -118,7 +136,10 @@ export default class App extends React.Component<any, any> {
         const route = NavigationUtils.findRoute();
 
         if (NavigationUtils.isAtRoot() || route === RoutePath.DocumentScanner || route === RoutePath.BarcodeScanner) {
-            return <FeatureList onItemClick={this.onFeatureClick.bind(this)}/>
+            return <div>
+                <ErrorLabel message={this.state.error.message}/>
+                <FeatureList onItemClick={this.onFeatureClick.bind(this)}/>
+            </div>
         }
 
         if (route === RoutePath.CroppingView) {
@@ -257,6 +278,12 @@ export default class App extends React.Component<any, any> {
     }
 
     async onFeatureClick(feature: any) {
+
+        const valid = await ScanbotSdkService.instance.isLicenseValid();
+        if (!valid) {
+            console.error("License invalid or expired. ScanbotSDK features not available");
+            return;
+        }
 
         if (feature.id === RoutePath.DocumentScanner) {
             this._documentScanner?.push(AnimationType.PushRight);

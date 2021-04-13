@@ -21,6 +21,7 @@ export default class DocumentScannerComponent extends BaseScannerComponent {
     }
 
     async push(type: AnimationType) {
+        super.push(type);
         this.pushType = type;
         this.updateAnimationType(type, async () => {
             await ScanbotSdkService.instance.createDocumentScanner(this.onDocumentDetected.bind(this));
@@ -28,6 +29,7 @@ export default class DocumentScannerComponent extends BaseScannerComponent {
     }
 
     pop() {
+        super.pop();
         this.updateAnimationType(AnimationType.Pop, () => {
             ScanbotSdkService.instance.disposeDocumentScanner();
         });

@@ -43,6 +43,31 @@ export class ScanbotSdkService {
         return this.sdk;
     }
 
+    async setLicenseFailureHandler(callback: any) {
+        await this.setLicenceTimeout(callback);
+    }
+
+    private async setLicenceTimeout(callback: any) {
+        // Scanbot WebSDK does not offer real-time license failure handler. Simply loop to check it manually
+        const info = await this.sdk?.getLicenseInfo();
+        if (info && info.status !== "Trial" && info.status !== "Okay") {
+            callback(info.description);
+        } else {
+            setTimeout(() => {
+                this.setLicenceTimeout(callback);
+            },2000);
+        }
+
+    }
+    public async isLicenseValid(): Promise<boolean> {
+        const info = await this.sdk?.getLicenseInfo();
+        console.log("info", info);
+        if (!info) {
+            return false;
+        }
+        return info.status === "Trial" || info.status === "Okay";
+    }
+
     public async createDocumentScanner(detectionCallback: any) {
         const config: DocumentScannerConfiguration = {
             onDocumentDetected: detectionCallback,
