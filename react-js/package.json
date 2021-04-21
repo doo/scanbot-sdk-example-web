@@ -23,7 +23,7 @@
     "@types/styled-components": "5.1.5",
     "styled-components": "5.2.1",
     "@material-ui/icons": "4.11.2",
-    "scanbot-web-sdk": "file://../../scanbot-sdk-web/scanbot-web-sdk-2.2.0-rc2.tgz"
+    "scanbot-web-sdk": "2.2.0-rc2"
   },
   "scripts": {
     "start": "react-scripts start",
