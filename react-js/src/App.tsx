@@ -25,7 +25,6 @@ import {AnimationType} from "./rtu-ui/enum/animation-type";
 import BarcodeScannerComponent from "./rtu-ui/barcode-scanner-component";
 import Barcodes from "./model/barcodes";
 import ErrorLabel from "./subviews/error-label";
-import {createDeflateRaw} from "zlib";
 
 export default class App extends React.Component<any, any> {
 
@@ -60,7 +59,6 @@ export default class App extends React.Component<any, any> {
             }
 
         });
-        console.log("finished componentDidMount");
     }
 
     onBackPress() {
