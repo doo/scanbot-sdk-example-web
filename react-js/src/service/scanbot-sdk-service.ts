@@ -61,7 +61,6 @@ export class ScanbotSdkService {
     }
     public async isLicenseValid(): Promise<boolean> {
         const info = await this.sdk?.getLicenseInfo();
-        console.log("info", info);
         if (!info) {
             return false;
         }
