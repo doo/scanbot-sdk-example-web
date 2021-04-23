@@ -20,6 +20,7 @@ import {
 } from "scanbot-web-sdk/@types";
 
 import Pages from "../model/pages";
+import {ImageUtils} from "../utils/image-utils";
 
 
 export class ScanbotSdkService {
@@ -162,13 +163,17 @@ export class ScanbotSdkService {
     }
 
     async generatePDF(pages: any[]) {
-        const options: PdfGenerationOptions = {standardPaperSize: "A4", landscape: true, dpi: 100};
+        // When scaling down an image, also lower the dots-per-inch parameter. Else it won't fill the page
+        const options: PdfGenerationOptions = {standardPaperSize: "A4", landscape: true, dpi: 1};
         const generator: PdfGenerator = await this.sdk!.beginPdf(options);
         for (const page of pages) {
-            await generator.addPage(page.filtered ?? page.cropped ?? page.original);
+            let image = page.filtered ?? page.cropped ?? page.original;
+            image = await ImageUtils.downscale(this.sdk!, image);
+            await generator.addPage(image);
         }
         return await generator.complete();
     }
+
     async generateTIFF(pages: any[]) {
         const options: TiffGenerationOptions = {binarizationFilter: "deepBinarization", dpi: 123};
         const generator: TiffGenerator = await this.sdk!.beginTiff(options);
