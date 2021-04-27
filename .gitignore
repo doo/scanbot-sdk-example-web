@@ -23,3 +23,6 @@ chrome-user-data
 .vscode
 *.swp
 *.swo
+
+# Publish script
+react-js/publish.sh

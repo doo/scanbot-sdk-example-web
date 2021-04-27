@@ -20,6 +20,7 @@ import {
 } from "scanbot-web-sdk/@types";
 
 import Pages from "../model/pages";
+import {ImageUtils} from "../utils/image-utils";
 
 
 export class ScanbotSdkService {
@@ -41,6 +42,30 @@ export class ScanbotSdkService {
     public async initialize() {
         this.sdk = await ScanbotSDK.initialize({licenseKey: this.license, engine: "/"});
         return this.sdk;
+    }
+
+    async setLicenseFailureHandler(callback: any) {
+        await this.setLicenceTimeout(callback);
+    }
+
+    private async setLicenceTimeout(callback: any) {
+        // Scanbot WebSDK does not offer real-time license failure handler. Simply loop to check it manually
+        const info = await this.sdk?.getLicenseInfo();
+        if (info && info.status !== "Trial" && info.status !== "Okay") {
+            callback(info.description);
+        } else {
+            setTimeout(() => {
+                this.setLicenceTimeout(callback);
+            },2000);
+        }
+
+    }
+    public async isLicenseValid(): Promise<boolean> {
+        const info = await this.sdk?.getLicenseInfo();
+        if (!info) {
+            return false;
+        }
+        return info.status === "Trial" || info.status === "Okay";
     }
 
     public async createDocumentScanner(detectionCallback: any) {
@@ -138,13 +163,17 @@ export class ScanbotSdkService {
     }
 
     async generatePDF(pages: any[]) {
-        const options: PdfGenerationOptions = {standardPaperSize: "A4", landscape: true, dpi: 100};
+        // When scaling down an image, also lower the dots-per-inch parameter. Else it won't fill the page
+        const options: PdfGenerationOptions = {standardPaperSize: "A4", landscape: true, dpi: 1};
         const generator: PdfGenerator = await this.sdk!.beginPdf(options);
         for (const page of pages) {
-            await generator.addPage(page.filtered ?? page.cropped ?? page.original);
+            let image = page.filtered ?? page.cropped ?? page.original;
+            image = await ImageUtils.downscale(this.sdk!, image);
+            await generator.addPage(image);
         }
         return await generator.complete();
     }
+
     async generateTIFF(pages: any[]) {
         const options: TiffGenerationOptions = {binarizationFilter: "deepBinarization", dpi: 123};
         const generator: TiffGenerator = await this.sdk!.beginTiff(options);

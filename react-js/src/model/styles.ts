@@ -2,13 +2,18 @@ import {CSSProperties} from "react";
 
 export class Styles {
 
+    static colors: any = {
+        scanbot: "#c8193c"
+    };
+
     static backButton: CSSProperties = {
         backgroundColor: "transparent",
         border: "none",
         color: "white",
         width: "50px",
         fontSize: "30px",
-        textAlign: "center"
+        textAlign: "center",
+        zIndex: 5000
     };
 
     static documentImage: CSSProperties = {
