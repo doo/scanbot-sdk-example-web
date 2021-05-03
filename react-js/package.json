@@ -21,7 +21,7 @@
     "@material-ui/lab": "latest",
     "sweetalert2": "latest",
     "@types/styled-components": "5.1.5",
-    "styled-components": "5.2.1",
+    "styled-components": "5.2.3",
     "@material-ui/icons": "4.11.2",
     "resize-image-buffer": "1.0.0",
     "scanbot-web-sdk": "2.2.0"
