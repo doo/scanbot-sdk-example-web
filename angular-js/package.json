@@ -17,7 +17,7 @@
     "@angular/compiler": "9.0.7",
     "@angular/core": "9.0.7",
     "@angular/forms": "9.0.7",
-    "@angular/material": "11.1.0",
+    "@angular/material": "11.2.11",
     "@angular/platform-browser": "9.0.7",
     "@angular/platform-browser-dynamic": "9.0.7",
     "@angular/router": "9.0.7",
