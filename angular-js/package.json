@@ -22,7 +22,7 @@
     "@angular/platform-browser-dynamic": "9.0.7",
     "@angular/router": "9.0.7",
     "ngx-toastr": "13.2.0",
-    "rxjs": "6.5.5",
+    "rxjs": "6.6.7",
     "sweetalert2": "10.14.0",
     "tslib": "1.14.1",
     "zone.js": "0.10.3",
