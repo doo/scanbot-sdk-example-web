@@ -20,7 +20,7 @@
     "react-router-dom": "6.0.0-beta.0",
     "@material-ui/lab": "latest",
     "sweetalert2": "latest",
-    "@types/styled-components": "5.1.5",
+    "@types/styled-components": "5.1.9",
     "styled-components": "5.2.1",
     "@material-ui/icons": "4.11.2",
     "resize-image-buffer": "1.0.0",
