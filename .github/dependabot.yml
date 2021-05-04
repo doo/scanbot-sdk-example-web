@@ -8,17 +8,19 @@ updates:
   - package-ecosystem: "npm" # See documentation for possible values
     directory: "/angular-js" # Location of package manifests
     schedule:
-      interval: "daily"
+      interval: "weekly"
     open-pull-requests-limit: 10
     reviewers:
       - "Nikituh"
       - "marcosaia1812"
+    target-branch: "dependency-update"
 
   - package-ecosystem: "npm" # See documentation for possible values
     directory: "/react-js" # Location of package manifests
     schedule:
-      interval: "daily"
+      interval: "weekly"
     open-pull-requests-limit: 10
     reviewers:
       - "Nikituh"
       - "marcosaia1812"
+    target-branch: "dependency-update"
