@@ -24,7 +24,7 @@
     "styled-components": "5.2.1",
     "@material-ui/icons": "4.11.2",
     "resize-image-buffer": "1.0.0",
-    "scanbot-web-sdk": "2.2.0"
+    "scanbot-web-sdk": "2.2.1-rc3"
   },
   "scripts": {
     "start": "react-scripts start",
