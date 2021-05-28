@@ -79,30 +79,34 @@ export default class App extends React.Component<any, any> {
         return (window.innerHeight - 2 * this.toolbarHeight()) ?? 0;
     }
 
-    render() {
+    shouldShowOnboarding = true;
+    mainPage() {
         return (
-            <Onboarding/>
-            // <div>
-            //     {this.documentScanner()}
-            //     {this.barcodeScanner()}
-            //     <input className="file-picker" type="file" accept="image/jpeg" width="48"
-            //            height="48" style={{display: "none"}}/>
-            //     <Toast alert={this.state.alert} onClose={() => this.setState({alert: undefined})}/>
-            //
-            //     <AppBar position="fixed" ref={ref => this.navigation = ref} style={{zIndex: 19}}>
-            //         <NavigationContent backVisible={!NavigationUtils.isAtRoot()}
-            //                            onBackClick={() => this.onBackPress()}/>
-            //     </AppBar>
-            //     <div style={{height: this.containerHeight(), marginTop: this.toolbarHeight()}}>
-            //         {this.decideContent()}
-            //     </div>
-            //     <BottomBar
-            //         hidden={NavigationUtils.isAtRoot()}
-            //         height={this.toolbarHeight()}
-            //         buttons={this.decideButtons()}
-            //     />
-            // </div>
-        );
+            <div>
+                {this.documentScanner()}
+                {this.barcodeScanner()}
+                <input className="file-picker" type="file" accept="image/jpeg" width="48"
+                       height="48" style={{display: "none"}}/>
+                <Toast alert={this.state.alert} onClose={() => this.setState({alert: undefined})}/>
+
+                <AppBar position="fixed" ref={ref => this.navigation = ref} style={{zIndex: 19}}>
+                    <NavigationContent backVisible={!NavigationUtils.isAtRoot()}
+                                       onBackClick={() => this.onBackPress()}/>
+                </AppBar>
+                <div style={{height: this.containerHeight(), marginTop: this.toolbarHeight()}}>
+                    {this.decideContent()}
+                </div>
+                <BottomBar
+                    hidden={NavigationUtils.isAtRoot()}
+                    height={this.toolbarHeight()}
+                    buttons={this.decideButtons()}
+                />
+            </div>
+        )
+    };
+
+    render() {
+        return this.shouldShowOnboarding ? <Onboarding/> : this.mainPage();
     }
 
     _documentScannerHtmlComponent: any;
