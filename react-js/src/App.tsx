@@ -25,6 +25,7 @@ import {AnimationType} from "./rtu-ui/enum/animation-type";
 import BarcodeScannerComponent from "./rtu-ui/barcode-scanner-component";
 import Barcodes from "./model/barcodes";
 import ErrorLabel from "./subviews/error-label";
+import Onboarding from "./pages/onboarding/onboarding-carousel";
 
 export default class App extends React.Component<any, any> {
 
@@ -80,26 +81,27 @@ export default class App extends React.Component<any, any> {
 
     render() {
         return (
-            <div>
-                {this.documentScanner()}
-                {this.barcodeScanner()}
-                <input className="file-picker" type="file" accept="image/jpeg" width="48"
-                       height="48" style={{display: "none"}}/>
-                <Toast alert={this.state.alert} onClose={() => this.setState({alert: undefined})}/>
-
-                <AppBar position="fixed" ref={ref => this.navigation = ref} style={{zIndex: 19}}>
-                    <NavigationContent backVisible={!NavigationUtils.isAtRoot()}
-                                       onBackClick={() => this.onBackPress()}/>
-                </AppBar>
-                <div style={{height: this.containerHeight(), marginTop: this.toolbarHeight()}}>
-                    {this.decideContent()}
-                </div>
-                <BottomBar
-                    hidden={NavigationUtils.isAtRoot()}
-                    height={this.toolbarHeight()}
-                    buttons={this.decideButtons()}
-                />
-            </div>
+            <Onboarding/>
+            // <div>
+            //     {this.documentScanner()}
+            //     {this.barcodeScanner()}
+            //     <input className="file-picker" type="file" accept="image/jpeg" width="48"
+            //            height="48" style={{display: "none"}}/>
+            //     <Toast alert={this.state.alert} onClose={() => this.setState({alert: undefined})}/>
+            //
+            //     <AppBar position="fixed" ref={ref => this.navigation = ref} style={{zIndex: 19}}>
+            //         <NavigationContent backVisible={!NavigationUtils.isAtRoot()}
+            //                            onBackClick={() => this.onBackPress()}/>
+            //     </AppBar>
+            //     <div style={{height: this.containerHeight(), marginTop: this.toolbarHeight()}}>
+            //         {this.decideContent()}
+            //     </div>
+            //     <BottomBar
+            //         hidden={NavigationUtils.isAtRoot()}
+            //         height={this.toolbarHeight()}
+            //         buttons={this.decideButtons()}
+            //     />
+            // </div>
         );
     }
 
