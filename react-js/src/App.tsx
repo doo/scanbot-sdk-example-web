@@ -302,17 +302,24 @@ export default class App extends React.Component<any, any> {
             const info = await this.state.sdk?.getLicenseInfo();
             const color = (info?.status === "Trial") ? "success" : "error";
             this.setState({alert: {color: color, text: JSON.stringify(info)}});
-        } else if (feature.id === RoutePath.ImagePicker) {
+        } else if (feature.id === RoutePath.DocumentOnJpeg) {
             const result = await ImageUtils.pick("image-picker");
             Pages.instance.add(result)
-        } else if (feature. id === RoutePath.PDFImport) {
-            const pdf = await ImageUtils.pick("pdf-picker", true);
-            console.log("pdf", pdf);
-            const images = await ImageUtils.pdfToBase64(pdf.data);
-            console.log(images);
-            const result = await ScanbotSdkService.instance.sdk?.detectBarcodes(images[0]);
+        } else if (feature. id === RoutePath.BarcodeOnJpeg) {
+            const result = await ImageUtils.pick("image-picker", true);
             console.log("result", result);
-
+            const detection = await ScanbotSdkService.instance.sdk?.detectBarcodes(result.data);
+            if (detection != undefined) {
+                this.setState({alert: {color: "success", text: this.formatBarcodes(detection.barcodes)}});
+            }
+        } else if (feature. id === RoutePath.BarcodeOnPdf) {
+            const pdf = await ImageUtils.pick("pdf-picker", true);
+            const images = await ImageUtils.pdfToBase64(pdf.data);
+            console.log("result", images[0]);
+            const detection = await ScanbotSdkService.instance.sdk?.detectBarcodes(images[0]);
+            if (detection != undefined) {
+                this.setState({alert: {color: "success", text: this.formatBarcodes(detection.barcodes)}});
+            }
         }
     }
 }
