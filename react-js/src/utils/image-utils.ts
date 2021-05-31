@@ -1,26 +1,46 @@
 import ScanbotSDK from "scanbot-web-sdk/webpack";
+// @ts-ignore
+// import { PDFJS } from 'pdfjs-dist/webpack'
+// @ts-ignore
+// import { PDFJS } from 'pdfjs-dist'
+import * as pdfjsLib from 'pdfjs-dist/webpack';
 
 const resizeImg = require('resize-image-buffer');
+// const pdfConvert = require("pdfjs-dist/webpack");
+
+
+
+
 
 export class ImageUtils {
 
-    public static pick(): Promise<any> {
+    public static pick(className: string, asDataUrl?: boolean): Promise<any> {
         return new Promise<any>(resolve => {
-            const picker = document.getElementsByClassName("file-picker")[0] as HTMLElement;
+            const picker = document.getElementsByClassName(className)[0] as HTMLElement;
             picker.click();
 
             picker.onchange = (e) => {
-                console.log("change");
                 e.preventDefault();
                 let reader = new FileReader();
                 // @ts-ignore
                 let file = e.target.files[0];
-                reader.readAsArrayBuffer(file);
+                if (asDataUrl) {
+                    reader.readAsDataURL(file)
+                } else {
+                    reader.readAsArrayBuffer(file);
+                }
 
                 reader.onload = async (e) => {
-                    // @ts-ignore
-                    resolve({original: new Uint8Array(reader.result)});
+
+                    const result = reader.result;
+                    if (asDataUrl) {
+                        resolve({data: result});
+                    } else {
+                        // @ts-ignore
+                        resolve({original: new Uint8Array(result)});
+                    }
                 };
+
             };
         });
     }
@@ -63,6 +83,24 @@ export class ImageUtils {
             // way to get the actual width and height is to load it into an image object
             image.src = await sdk.toDataUrl(data);
         });
+    }
+
+    public static async pdfToBase64(data: any) {
+        // const converter = require("pdfjs-dist/webpack");
+        const images: any[] = [];
+        const pdf = await pdfjsLib.getDocument(data).promise;
+        const canvas = document.createElement("canvas");
+        for (let i = 0; i < pdf.numPages; i++) {
+            const page = await pdf.getPage(i + 1);
+            const viewport = page.getViewport({ scale: 1 });
+            const context = canvas.getContext("2d");
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+            await page.render({ canvasContext: context, viewport: viewport }).promise;
+            images.push(canvas.toDataURL());
+        }
+        canvas.remove();
+        return images;
     }
 
 }

@@ -5,6 +5,7 @@ const history = createBrowserHistory();
 export enum RoutePath {
     DocumentScanner = "document-scanner",
     ImagePicker = "image-picker",
+    PDFImport = "import-pdf",
     ImageResults = "image-results",
     ImageDetails = "image-details",
     LicenseInfo = "license-info",
