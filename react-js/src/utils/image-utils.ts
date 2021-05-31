@@ -11,9 +11,15 @@ pdfjs.GlobalWorkerOptions.workerSrc = pdfWorkerUrl;
 
 export class ImageUtils {
 
-    public static pick(className: string, asDataUrl?: boolean): Promise<any> {
+    public static readonly MIME_TYPE_JPEG = "image/jpeg";
+    public static readonly MIME_TYPE_PDF = "application/pdf";
+
+    public static pick(mime: string, asDataUrl?: boolean): Promise<any> {
         return new Promise<any>(resolve => {
-            const picker = document.getElementsByClassName(className)[0] as HTMLElement;
+
+            const picker = document.createElement("input") as HTMLInputElement;
+            picker.type = "file";
+            picker.accept = mime;
             picker.click();
 
             picker.onchange = (e) => {
@@ -28,7 +34,6 @@ export class ImageUtils {
                 }
 
                 reader.onload = async (e) => {
-
                     const result = reader.result;
                     if (asDataUrl) {
                         resolve({data: result});
@@ -36,6 +41,7 @@ export class ImageUtils {
                         // @ts-ignore
                         resolve({original: new Uint8Array(result)});
                     }
+                    picker.remove();
                 };
 
             };
