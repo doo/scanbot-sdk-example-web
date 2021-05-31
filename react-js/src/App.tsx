@@ -308,12 +308,13 @@ export default class App extends React.Component<any, any> {
         } else if (feature.id === RoutePath.BarcodeOnJpeg) {
             const result = await ImageUtils.pick("image-picker", true);
             const detection = await ScanbotSdkService.instance.sdk?.detectBarcodes(result.data);
+            console.log(result, detection);
             if (detection !== undefined) {
                 this.setState({alert: {color: "success", text: this.formatBarcodes(detection.barcodes)}});
             }
         } else if (feature.id === RoutePath.BarcodeOnPdf) {
             const pdf = await ImageUtils.pick("pdf-picker", true);
-            const images = await ImageUtils.pdfToBase64(pdf.data);
+            const images = await ImageUtils.pdfToImage(pdf.data);
             const detection = await ScanbotSdkService.instance.sdk?.detectBarcodes(images[0]);
             if (detection !== undefined) {
                 this.setState({alert: {color: "success", text: this.formatBarcodes(detection.barcodes)}});

@@ -82,7 +82,7 @@ export class ImageUtils {
         });
     }
 
-    public static async pdfToBase64(data: any) {
+    public static async pdfToImage(data: any) {
         const images: any[] = [];
         const pdf = await pdfjs.getDocument(data).promise;
         const canvas = document.createElement("canvas");
