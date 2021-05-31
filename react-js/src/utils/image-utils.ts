@@ -3,12 +3,19 @@ import ScanbotSDK from "scanbot-web-sdk/webpack";
 // import { PDFJS } from 'pdfjs-dist/webpack'
 // @ts-ignore
 // import { PDFJS } from 'pdfjs-dist'
-import * as pdfjsLib from 'pdfjs-dist/webpack';
+// import * as pdfjsLib from 'pdfjs-dist/webpack';
 
-const resizeImg = require('resize-image-buffer');
 // const pdfConvert = require("pdfjs-dist/webpack");
 
+import { Document, Page, pdfjs } from "react-pdf";
+// @ts-ignore
+import pdfjsWorker from "pdfjs-dist/build/pdf.worker.entry";
 
+const resizeImg = require('resize-image-buffer');
+
+const pdfVersion = "2.6.347";
+const pdfWorkerUrl = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfVersion}/pdf.worker.js`;
+pdfjs.GlobalWorkerOptions.workerSrc = pdfWorkerUrl;
 
 
 
@@ -88,7 +95,7 @@ export class ImageUtils {
     public static async pdfToBase64(data: any) {
         // const converter = require("pdfjs-dist/webpack");
         const images: any[] = [];
-        const pdf = await pdfjsLib.getDocument(data).promise;
+        const pdf = await pdfjs.getDocument(data).promise;
         const canvas = document.createElement("canvas");
         for (let i = 0; i < pdf.numPages; i++) {
             const page = await pdf.getPage(i + 1);

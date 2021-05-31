@@ -306,9 +306,13 @@ export default class App extends React.Component<any, any> {
             const result = await ImageUtils.pick("image-picker");
             Pages.instance.add(result)
         } else if (feature. id === RoutePath.PDFImport) {
-            const result = await ImageUtils.pick("pdf-picker", true);
-            const images = await ImageUtils.pdfToBase64(result);
+            const pdf = await ImageUtils.pick("pdf-picker", true);
+            console.log("pdf", pdf);
+            const images = await ImageUtils.pdfToBase64(pdf.data);
             console.log(images);
+            const result = await ScanbotSdkService.instance.sdk?.detectBarcodes(images[0]);
+            console.log("result", result);
+
         }
     }
 }
