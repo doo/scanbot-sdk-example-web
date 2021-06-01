@@ -11,9 +11,6 @@ const useStyles = makeStyles((theme) => ({
 	root: (id) => ({
 		backgroundColor: isEven(id) ? '#C8193C' : 'white',
 		color: 'white',
-		[theme.breakpoints.down('xs')]: {},
-		[theme.breakpoints.up('sm')]: {},
-		[theme.breakpoints.up('lg')]: {},
 	}),
 	innerContainer: {
 		textAlign: 'center',
