@@ -83,8 +83,7 @@ export default class App extends React.Component<any, any> {
             <div>
                 {this.documentScanner()}
                 {this.barcodeScanner()}
-                <input className="file-picker" type="file" accept="image/jpeg" width="48"
-                       height="48" style={{display: "none"}}/>
+
                 <Toast alert={this.state.alert} onClose={() => this.setState({alert: undefined})}/>
 
                 <AppBar position="fixed" ref={ref => this.navigation = ref} style={{zIndex: 19}}>
@@ -300,9 +299,22 @@ export default class App extends React.Component<any, any> {
             const info = await this.state.sdk?.getLicenseInfo();
             const color = (info?.status === "Trial") ? "success" : "error";
             this.setState({alert: {color: color, text: JSON.stringify(info)}});
-        } else if (feature.id === RoutePath.ImagePicker) {
-            const result = await ImageUtils.pick();
+        } else if (feature.id === RoutePath.DocumentOnJpeg) {
+            const result = await ImageUtils.pick(ImageUtils.MIME_TYPE_JPEG);
             Pages.instance.add(result)
+        } else if (feature.id === RoutePath.BarcodeOnJpeg) {
+            const result = await ImageUtils.pick(ImageUtils.MIME_TYPE_JPEG, true);
+            const detection = await ScanbotSdkService.instance.sdk?.detectBarcodes(result.data);
+            if (detection !== undefined) {
+                this.setState({alert: {color: "success", text: this.formatBarcodes(detection.barcodes)}});
+            }
+        } else if (feature.id === RoutePath.BarcodeOnPdf) {
+            const pdf = await ImageUtils.pick(ImageUtils.MIME_TYPE_PDF, true);
+            const images = await ImageUtils.pdfToImage(pdf.data);
+            const detection = await ScanbotSdkService.instance.sdk?.detectBarcodes(images[0]);
+            if (detection !== undefined) {
+                this.setState({alert: {color: "success", text: this.formatBarcodes(detection.barcodes)}});
+            }
         }
     }
 }
