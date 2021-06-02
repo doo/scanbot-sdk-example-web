@@ -82,11 +82,11 @@ export default class App extends React.Component<any, any> {
 
     render() {
 
-    	if (this.state.shouldShowOnboarding) {
-			return <Onboarding skip={() => {
-				this.setState({shouldShowOnboarding: false});
-			}} />;
-		}
+    	// if (this.state.shouldShowOnboarding) {
+		// 	return <Onboarding skip={() => {
+		// 		this.setState({shouldShowOnboarding: false});
+		// 	}} />;
+		// }
 
         return (
             <div>
