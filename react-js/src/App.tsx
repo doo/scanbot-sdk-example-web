@@ -28,346 +28,301 @@ import ErrorLabel from './subviews/error-label';
 import Onboarding from './pages/onboarding/onboarding-carousel';
 
 export default class App extends React.Component<any, any> {
-	constructor(props: any) {
-		super(props);
-		this.state = {
-			alert: undefined,
-			activeImage: undefined,
-			sdk: undefined,
-			error: {
-				message: undefined,
-			},
+
+    constructor(props: any) {
+        super(props);
+        this.state = {
+            alert: undefined,
+            activeImage: undefined,
+            sdk: undefined,
+            error: {
+                message: undefined
+            },
 			shouldShowOnboarding: localStorage.getItem('firstTime') ? true : false,
-		};
-	}
+        };
+    }
 
-	async componentDidMount() {
-		const sdk = await ScanbotSdkService.instance.initialize();
-		this.setState({ sdk: sdk });
+    async componentDidMount() {
+        const sdk = await ScanbotSdkService.instance.initialize();
+        this.setState({sdk: sdk});
 
-		RoutingService.instance.observeChanges(() => {
-			this.forceUpdate();
-		});
+        RoutingService.instance.observeChanges(() => {
+            this.forceUpdate();
+        });
 
-		await ScanbotSdkService.instance.setLicenseFailureHandler((error: any) => {
-			RoutingService.instance.reset();
-			this.setState({ error: { message: error } });
-			if (this._documentScanner?.isVisible()) {
-				this._documentScanner?.pop();
-			}
-			if (this._barcodeScanner?.isVisible()) {
-				this._barcodeScanner?.pop();
-			}
-		});
-	}
+        await ScanbotSdkService.instance.setLicenseFailureHandler((error: any) => {
+            RoutingService.instance.reset();
+            this.setState({error: {message: error}});
+            if (this._documentScanner?.isVisible()) {
+                this._documentScanner?.pop();
+            }
+            if (this._barcodeScanner?.isVisible()) {
+                this._barcodeScanner?.pop();
+            }
 
-	onBackPress() {
-		RoutingService.instance.back();
-	}
+        });
+    }
 
-	navigation?: any;
+    onBackPress() {
+        RoutingService.instance.back();
+    }
 
-	toolbarHeight() {
-		return (this.navigation as HTMLHeadingElement)?.clientHeight ?? 0;
-	}
+    navigation?: any;
 
-	containerHeight() {
-		if (!this.navigation) {
-			return '100%';
-		}
-		return window.innerHeight - 2 * this.toolbarHeight() ?? 0;
-	}
+    toolbarHeight() {
+        return (this.navigation as HTMLHeadingElement)?.clientHeight ?? 0;
+    }
 
-	mainPage() {
-		return (
-			<div>
-				{this.documentScanner()}
-				{this.barcodeScanner()}
-				<input
-					className='file-picker'
-					type='file'
-					accept='image/jpeg'
-					width='48'
-					height='48'
-					style={{ display: 'none' }}
-				/>
-				<Toast
-					alert={this.state.alert}
-					onClose={() => this.setState({ alert: undefined })}
-				/>
+    containerHeight() {
+        if (!this.navigation) {
+            return "100%";
+        }
+        return (window.innerHeight - 2 * this.toolbarHeight()) ?? 0;
+    }
 
-				<AppBar
-					position='fixed'
-					ref={(ref) => (this.navigation = ref)}
-					style={{ zIndex: 19 }}
-				>
-					<NavigationContent
-						backVisible={!NavigationUtils.isAtRoot()}
-						onBackClick={() => this.onBackPress()}
-					/>
-				</AppBar>
-				<div
-					style={{
-						height: this.containerHeight(),
-						marginTop: this.toolbarHeight(),
-					}}
-				>
-					{this.decideContent()}
-				</div>
-				<BottomBar
-					hidden={NavigationUtils.isAtRoot()}
-					height={this.toolbarHeight()}
-					buttons={this.decideButtons()}
-				/>
-			</div>
-		);
-	}
+    render() {
 
-	render() {
-		return this.state.shouldShowOnboarding ? (
-			<Onboarding skip={() => this.setState({ shouldShowOnboarding: false })} />
-		) : (
-			this.mainPage()
-		);
-	}
-
-	_documentScannerHtmlComponent: any;
-	_documentScanner?: DocumentScannerComponent | null;
-	documentScanner() {
-		if (!this._documentScannerHtmlComponent) {
-			this._documentScannerHtmlComponent = (
-				<DocumentScannerComponent
-					ref={(ref) => (this._documentScanner = ref)}
-					sdk={this.state.sdk}
-					onDocumentDetected={this.onDocumentDetected.bind(this)}
-				/>
-			);
-		}
-		return this._documentScannerHtmlComponent;
-	}
-
-	_barcodeScannerHtmlComponent: any;
-	_barcodeScanner?: BarcodeScannerComponent | null;
-	barcodeScanner() {
-		if (!this._barcodeScannerHtmlComponent) {
-			this._barcodeScannerHtmlComponent = (
-				<BarcodeScannerComponent
-					ref={(ref) => (this._barcodeScanner = ref)}
-					sdk={this.state.sdk}
-					onBarcodesDetected={this.onBarcodesDetected.bind(this)}
-				/>
-			);
-		}
-		return this._barcodeScannerHtmlComponent;
-	}
-
-	decideContent() {
-		const route = NavigationUtils.findRoute();
-
-		if (
-			NavigationUtils.isAtRoot() ||
-			route === RoutePath.DocumentScanner ||
-			route === RoutePath.BarcodeScanner
-		) {
-			return (
-				<div>
-					<ErrorLabel message={this.state.error.message} />
-					<FeatureList onItemClick={this.onFeatureClick.bind(this)} />
-				</div>
-			);
+    	if (this.state.shouldShowOnboarding) {
+			return <Onboarding skip={() => {
+				this.setState({shouldShowOnboarding: false});
+			}} />;
 		}
 
-		if (route === RoutePath.CroppingView) {
-			if (!Pages.instance.hasActiveItem()) {
-				RoutingService.instance.reset();
-				return null;
-			}
-			return <CroppingPage sdk={this.state.sdk} />;
-		}
+        return (
+            <div>
+                {this.documentScanner()}
+                {this.barcodeScanner()}
 
-		if (route === RoutePath.ImageDetails) {
-			if (!Pages.instance.hasActiveItem()) {
-				RoutingService.instance.reset();
-				return null;
-			}
-			return <ImageDetailPage image={this.state.activeImage} />;
-		}
-		if (route === RoutePath.ImageResults) {
-			return (
-				<ImageResultsPage
-					sdk={this.state.sdk}
-					onDetailButtonClick={async (index: number) => {
-						Pages.instance.setActiveItem(index);
-						this.setState({
-							activeImage:
-								await ScanbotSdkService.instance.documentImageAsBase64(index),
-						});
-						RoutingService.instance.route(RoutePath.ImageDetails, {
-							index: index,
-						});
-					}}
-				/>
-			);
-		}
-	}
+                <Toast alert={this.state.alert} onClose={() => this.setState({alert: undefined})}/>
 
-	private decideButtons() {
-		const route = NavigationUtils.findRoute();
-		if (route === RoutePath.DocumentScanner) {
-			return [
-				{ text: Pages.instance.count() + ' PAGES', action: undefined },
-				{ text: 'DONE', action: this.onBackPress.bind(this), right: true },
-			];
-		}
-		if (route === RoutePath.ImageResults) {
-			return [
-				{ text: 'SAVE PDF', action: this.savePDF.bind(this) },
-				{ text: 'SAVE TIFF', action: this.saveTIFF.bind(this) },
-			];
-		}
-		if (route === RoutePath.ImageDetails) {
-			return [
-				{ text: 'CROP', action: this.openCroppingUI.bind(this) },
-				{ text: 'FILTER', action: this.applyFilter.bind(this) },
-				{ text: 'DELETE', action: this.deletePage.bind(this), right: true },
-			];
-		}
+                <AppBar position="fixed" ref={ref => this.navigation = ref} style={{zIndex: 19}}>
+                    <NavigationContent backVisible={!NavigationUtils.isAtRoot()}
+                                       onBackClick={() => this.onBackPress()}/>
+                </AppBar>
+                <div style={{height: this.containerHeight(), marginTop: this.toolbarHeight()}}>
+                    {this.decideContent()}
+                </div>
+                <BottomBar
+                    hidden={NavigationUtils.isAtRoot()}
+                    height={this.toolbarHeight()}
+                    buttons={this.decideButtons()}
+                />
+            </div>
+        );
+    }
 
-		if (route === RoutePath.CroppingView) {
-			return [
-				{ text: 'DETECT', action: this.detect.bind(this) },
-				{ text: 'ROTATE', action: this.rotate.bind(this) },
-				{ text: 'APPLY', action: this.applyCrop.bind(this), right: true },
-			];
-		}
-	}
+    _documentScannerHtmlComponent: any;
+    _documentScanner?: DocumentScannerComponent | null;
+    documentScanner() {
+        if (!this._documentScannerHtmlComponent) {
+            this._documentScannerHtmlComponent = <DocumentScannerComponent
+                ref={ref => this._documentScanner = ref}
+                sdk={this.state.sdk}
+                onDocumentDetected={this.onDocumentDetected.bind(this)}
+            />;
+        }
+        return this._documentScannerHtmlComponent;
+    }
 
-	async detect() {
-		await ScanbotSdkService.instance.croppingView?.detect();
-	}
+    _barcodeScannerHtmlComponent: any;
+    _barcodeScanner?: BarcodeScannerComponent | null;
+    barcodeScanner() {
+        if (!this._barcodeScannerHtmlComponent) {
+            this._barcodeScannerHtmlComponent = <BarcodeScannerComponent
+                ref={ref => this._barcodeScanner = ref}
+                sdk={this.state.sdk}
+                onBarcodesDetected={this.onBarcodesDetected.bind(this)}
+            />;
+        }
+        return this._barcodeScannerHtmlComponent
+    }
 
-	async rotate() {
-		await ScanbotSdkService.instance.croppingView?.rotate(1);
-	}
+    decideContent() {
+        const route = NavigationUtils.findRoute();
 
-	async applyCrop() {
-		const result = await ScanbotSdkService.instance.croppingView?.apply();
-		Pages.instance.updateActiveItem(result);
-		await ScanbotSdkService.instance.reapplyFilter();
-		this.onBackPress();
-		const index = Pages.instance.getActiveIndex();
-		this.setState({
-			activeImage: await ScanbotSdkService.instance.documentImageAsBase64(
-				index
-			),
-		});
-	}
+        if (NavigationUtils.isAtRoot() || route === RoutePath.DocumentScanner || route === RoutePath.BarcodeScanner) {
+            return <div>
+                <ErrorLabel message={this.state.error.message}/>
+                <FeatureList onItemClick={this.onFeatureClick.bind(this)}/>
+            </div>
+        }
 
-	async savePDF() {
-		const bytes = await ScanbotSdkService.instance.generatePDF(
-			Pages.instance.get()
-		);
-		ImageUtils.saveBytes(bytes, MiscUtils.generateUUID() + '.pdf');
-	}
-	async saveTIFF() {
-		const bytes = await ScanbotSdkService.instance.generateTIFF(
-			Pages.instance.get()
-		);
-		ImageUtils.saveBytes(bytes, MiscUtils.generateUUID() + '.tiff');
-	}
+        if (route === RoutePath.CroppingView) {
+            if (!Pages.instance.hasActiveItem()) {
+                RoutingService.instance.reset();
+                return null;
+            }
+            return <CroppingPage sdk={this.state.sdk}/>;
+        }
 
-	openCroppingUI() {
-		RoutingService.instance.route(RoutePath.CroppingView, {
-			index: Pages.instance.getActiveIndex(),
-		});
-	}
+        if (route === RoutePath.ImageDetails) {
+            if (!Pages.instance.hasActiveItem()) {
+                RoutingService.instance.reset();
+                return null;
+            }
+            return <ImageDetailPage image={this.state.activeImage}/>
+        }
+        if (route === RoutePath.ImageResults) {
+            return <ImageResultsPage
+                sdk={this.state.sdk}
+                onDetailButtonClick={async (index: number) => {
+                    Pages.instance.setActiveItem(index);
+                    this.setState({activeImage: await ScanbotSdkService.instance.documentImageAsBase64(index)});
+                    RoutingService.instance.route(RoutePath.ImageDetails, {index: index})
+                }}/>
+        }
+    }
 
-	async applyFilter() {
-		const page = Pages.instance.getActiveItem();
-		const result = await Swal.fire({
-			title: 'Select filter',
-			input: 'select',
-			inputOptions: ScanbotSdkService.instance.availableFilters(),
-			inputPlaceholder: page.filter ?? 'none',
-		});
+    private decideButtons() {
+        const route = NavigationUtils.findRoute();
+        if (route === RoutePath.DocumentScanner) {
+            return [
+                {text: Pages.instance.count() + " PAGES", action: undefined},
+                {text: "DONE", action: this.onBackPress.bind(this), right: true}
+            ];
+        }
+        if (route === RoutePath.ImageResults) {
+            return [
+                {text: "SAVE PDF", action: this.savePDF.bind(this)},
+                {text: "SAVE TIFF", action: this.saveTIFF.bind(this)}
+            ];
+        }
+        if (route === RoutePath.ImageDetails) {
+            return [
+                {text: "CROP", action: this.openCroppingUI.bind(this)},
+                {text: "FILTER", action: this.applyFilter.bind(this)},
+                {text: "DELETE", action: this.deletePage.bind(this), right: true}
+            ];
+        }
 
-		const filter = ScanbotSdkService.instance.filterByIndex(result.value);
+        if (route === RoutePath.CroppingView) {
+            return [
+                {text: "DETECT", action: this.detect.bind(this)},
+                {text: "ROTATE", action: this.rotate.bind(this)},
+                {text: "APPLY", action: this.applyCrop.bind(this), right: true}
+            ]
+        }
+    }
 
-		// "None" is not an actual filter, only used in this example app
-		if (filter === 'none') {
-			page.filter = undefined;
-			page.filtered = undefined;
-		} else {
-			page.filter = filter;
-			page.filtered = await ScanbotSdkService.instance.applyFilter(
-				page.cropped ?? page.original,
-				filter as ImageFilter
-			);
-		}
+    async detect() {
+        await ScanbotSdkService.instance.croppingView?.detect();
+    }
 
-		const index = Pages.instance.getActiveIndex();
-		this.setState({
-			activeImage: await ScanbotSdkService.instance.documentImageAsBase64(
-				index
-			),
-		});
-	}
+    async rotate() {
+        await ScanbotSdkService.instance.croppingView?.rotate(1);
+    }
 
-	deletePage() {
-		Pages.instance.removeActiveItem();
-		RoutingService.instance.route(RoutePath.ImageResults);
-	}
+    async applyCrop() {
+        const result = await ScanbotSdkService.instance.croppingView?.apply();
+        Pages.instance.updateActiveItem(result);
+        await ScanbotSdkService.instance.reapplyFilter();
+        this.onBackPress();
+        const index = Pages.instance.getActiveIndex();
+        this.setState({activeImage: await ScanbotSdkService.instance.documentImageAsBase64(index)});
+    }
 
-	async onDocumentDetected(result: any) {
-		ScanbotSdkService.instance.sdk?.utils.flash();
-		Pages.instance.add(result);
-	}
+    async savePDF() {
+        const bytes = await ScanbotSdkService.instance.generatePDF(Pages.instance.get());
+        ImageUtils.saveBytes(bytes, MiscUtils.generateUUID() + ".pdf");
+    }
+    async saveTIFF() {
+        const bytes = await ScanbotSdkService.instance.generateTIFF(Pages.instance.get());
+        ImageUtils.saveBytes(bytes, MiscUtils.generateUUID() + ".tiff");
+    }
 
-	async onBarcodesDetected(result: BarcodeResult) {
-		Barcodes.instance.addAll(result.barcodes);
-		// If you have any additional processing to do, consider pausing
-		// the scanner here, else you might (will) receive multiple results:
-		// ScanbotSdkService.instance.barcodeScanner?.pauseDetection();
-		this.setState({
-			alert: { color: 'success', text: this.formatBarcodes(result.barcodes) },
-		});
-	}
+    openCroppingUI() {
+        RoutingService.instance.route(RoutePath.CroppingView, {index: Pages.instance.getActiveIndex()});
+    }
 
-	formatBarcodes(codes: Barcode[]): string {
-		return JSON.stringify(
-			codes.map((code: Barcode) => code.text + ' (' + code.format + ') ')
-		);
-	}
+    async applyFilter() {
+        const page = Pages.instance.getActiveItem();
+        const result = await Swal.fire({
+            title: 'Select filter',
+            input: 'select',
+            inputOptions: ScanbotSdkService.instance.availableFilters(),
+            inputPlaceholder: page.filter ?? "none"
+        });
 
-	async onFeatureClick(feature: any) {
-		const valid = await ScanbotSdkService.instance.isLicenseValid();
-		if (!valid) {
-			console.error(
-				'License invalid or expired. ScanbotSDK features not available'
-			);
-			return;
-		}
+        const filter = ScanbotSdkService.instance.filterByIndex(result.value);
 
-		if (feature.id === RoutePath.DocumentScanner) {
-			this._documentScanner?.push(AnimationType.PushRight);
-			return;
-		}
-		if (feature.id === RoutePath.BarcodeScanner) {
-			this._barcodeScanner?.push(AnimationType.PushBottom);
-			return;
-		}
-		if (feature.route) {
-			RoutingService.instance.route(feature.route);
-			return;
-		}
+        // "None" is not an actual filter, only used in this example app
+        if (filter === "none") {
+            page.filter = undefined;
+            page.filtered = undefined;
+        } else {
+            page.filter = filter;
+            page.filtered = await ScanbotSdkService.instance.applyFilter(
+                page.cropped ?? page.original,
+                filter as ImageFilter);
+        }
 
-		if (feature.id === RoutePath.LicenseInfo) {
-			const info = await this.state.sdk?.getLicenseInfo();
-			const color = info?.status === 'Trial' ? 'success' : 'error';
-			this.setState({ alert: { color: color, text: JSON.stringify(info) } });
-		} else if (feature.id === RoutePath.ImagePicker) {
-			const result = await ImageUtils.pick();
-			Pages.instance.add(result);
-		}
-	}
+        const index = Pages.instance.getActiveIndex();
+        this.setState({activeImage: await ScanbotSdkService.instance.documentImageAsBase64(index)});
+    }
+
+    deletePage() {
+        Pages.instance.removeActiveItem();
+        RoutingService.instance.route(RoutePath.ImageResults);
+    }
+
+    async onDocumentDetected(result: any) {
+        ScanbotSdkService.instance.sdk?.utils.flash();
+        Pages.instance.add(result);
+    }
+
+    async onBarcodesDetected(result: BarcodeResult) {
+        Barcodes.instance.addAll(result.barcodes);
+        // If you have any additional processing to do, consider pausing
+        // the scanner here, else you might (will) receive multiple results:
+        // ScanbotSdkService.instance.barcodeScanner?.pauseDetection();
+        this.setState({alert: {color: "success", text: this.formatBarcodes(result.barcodes)}});
+    }
+
+    formatBarcodes(codes: Barcode[]): string {
+        return JSON.stringify(codes.map((code: Barcode) => code.text + " (" + code.format + ") "));
+    }
+
+    async onFeatureClick(feature: any) {
+
+        const valid = await ScanbotSdkService.instance.isLicenseValid();
+        if (!valid) {
+            console.error("License invalid or expired. ScanbotSDK features not available");
+            return;
+        }
+
+        if (feature.id === RoutePath.DocumentScanner) {
+            this._documentScanner?.push(AnimationType.PushRight);
+            return;
+        }
+        if (feature.id === RoutePath.BarcodeScanner) {
+            this._barcodeScanner?.push(AnimationType.PushBottom);
+            return;
+        }
+        if (feature.route) {
+            RoutingService.instance.route(feature.route);
+            return;
+        }
+
+        if (feature.id === RoutePath.LicenseInfo) {
+            const info = await this.state.sdk?.getLicenseInfo();
+            const color = (info?.status === "Trial") ? "success" : "error";
+            this.setState({alert: {color: color, text: JSON.stringify(info)}});
+        } else if (feature.id === RoutePath.DocumentOnJpeg) {
+            const result = await ImageUtils.pick(ImageUtils.MIME_TYPE_JPEG);
+            Pages.instance.add(result)
+        } else if (feature.id === RoutePath.BarcodeOnJpeg) {
+            const result = await ImageUtils.pick(ImageUtils.MIME_TYPE_JPEG, true);
+            const detection = await ScanbotSdkService.instance.sdk?.detectBarcodes(result.data);
+            if (detection !== undefined) {
+                this.setState({alert: {color: "success", text: this.formatBarcodes(detection.barcodes)}});
+            }
+        } else if (feature.id === RoutePath.BarcodeOnPdf) {
+            const pdf = await ImageUtils.pick(ImageUtils.MIME_TYPE_PDF, true);
+            const images = await ImageUtils.pdfToImage(pdf.data);
+            const detection = await ScanbotSdkService.instance.sdk?.detectBarcodes(images[0]);
+            if (detection !== undefined) {
+                this.setState({alert: {color: "success", text: this.formatBarcodes(detection.barcodes)}});
+            }
+        }
+    }
 }

@@ -1,26 +1,49 @@
 import ScanbotSDK from "scanbot-web-sdk/webpack";
 
+// @ts-ignore
+import {pdfjs} from "react-pdf";
+
 const resizeImg = require('resize-image-buffer');
+
+const pdfVersion = "2.6.347";
+const pdfWorkerUrl = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfVersion}/pdf.worker.js`;
+pdfjs.GlobalWorkerOptions.workerSrc = pdfWorkerUrl;
 
 export class ImageUtils {
 
-    public static pick(): Promise<any> {
+    public static readonly MIME_TYPE_JPEG = "image/jpeg";
+    public static readonly MIME_TYPE_PDF = "application/pdf";
+
+    public static pick(mime: string, asDataUrl?: boolean): Promise<any> {
         return new Promise<any>(resolve => {
-            const picker = document.getElementsByClassName("file-picker")[0] as HTMLElement;
+
+            const picker = document.createElement("input") as HTMLInputElement;
+            picker.type = "file";
+            picker.accept = mime;
             picker.click();
 
             picker.onchange = (e) => {
-                console.log("change");
                 e.preventDefault();
                 let reader = new FileReader();
                 // @ts-ignore
                 let file = e.target.files[0];
-                reader.readAsArrayBuffer(file);
+                if (asDataUrl) {
+                    reader.readAsDataURL(file)
+                } else {
+                    reader.readAsArrayBuffer(file);
+                }
 
                 reader.onload = async (e) => {
-                    // @ts-ignore
-                    resolve({original: new Uint8Array(reader.result)});
+                    const result = reader.result;
+                    if (asDataUrl) {
+                        resolve({data: result});
+                    } else {
+                        // @ts-ignore
+                        resolve({original: new Uint8Array(result)});
+                    }
+                    picker.remove();
                 };
+
             };
         });
     }
@@ -63,6 +86,23 @@ export class ImageUtils {
             // way to get the actual width and height is to load it into an image object
             image.src = await sdk.toDataUrl(data);
         });
+    }
+
+    public static async pdfToImage(data: any) {
+        const images: any[] = [];
+        const pdf = await pdfjs.getDocument(data).promise;
+        const canvas = document.createElement("canvas");
+        for (let i = 0; i < pdf.numPages; i++) {
+            const page = await pdf.getPage(i + 1);
+            const viewport = page.getViewport({ scale: 1 });
+            const context = canvas.getContext("2d");
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+            await page.render({ canvasContext: context, viewport: viewport }).promise;
+            images.push(canvas.toDataURL());
+        }
+        canvas.remove();
+        return images;
     }
 
 }
