@@ -35,46 +35,20 @@ const Content = ({ id, lang, handleSlide, setSlide, skip }) => {
 				</div>
 				<div className={classes.listContainer}>
 					<ul className={classes.list}>
-						<li style={{ padding: '0 5px' }}>
-							<button
-								className={
-									id === 0
-										? `${classes.listCurrent} ${classes.listItem}`
-										: classes.listItem
-								}
-								onClick={() => setSlide(0)}
-							/>
-						</li>
-						<li style={{ padding: '0 5px' }}>
-							<button
-								className={
-									id === 1
-										? `${classes.listCurrent} ${classes.listItem}`
-										: classes.listItem
-								}
-								onClick={() => setSlide(1)}
-							/>
-						</li>
-						<li style={{ padding: '0 5px' }}>
-							<button
-								className={
-									id === 2
-										? `${classes.listCurrent} ${classes.listItem}`
-										: classes.listItem
-								}
-								onClick={() => setSlide(2)}
-							/>
-						</li>
-						<li style={{ padding: '0 5px' }}>
-							<button
-								className={
-									id === 3
-										? `${classes.listCurrent} ${classes.listItem}`
-										: classes.listItem
-								}
-								onClick={() => setSlide(3)}
-							/>
-						</li>
+						{[0, 1, 2, 3].map(number => {
+							return (
+								<li style={{ padding: '0 5px' }}>
+									<button
+										className={
+											id === number
+												? `${classes.listCurrent} ${classes.listItem}`
+												: classes.listItem
+										}
+										onClick={() => setSlide(number)}
+									/>
+								</li>
+							);
+						})}
 					</ul>
 					{id < 3 ? (
 						<a href='#' className={classes.link} onClick={skip}>
