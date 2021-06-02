@@ -29,7 +29,6 @@ class Onboarding extends React.Component<any, any> {
 	}
 
 	render() {
-		// localStorage.setItem('firstTime', 'true');
 		return (
 			<Carousel
 				slideIndex={this.state.slideIndex}

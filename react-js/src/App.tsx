@@ -38,7 +38,7 @@ export default class App extends React.Component<any, any> {
             error: {
                 message: undefined
             },
-			shouldShowOnboarding: localStorage.getItem('firstTime') ? true : false,
+			shouldShowOnboarding: !localStorage.getItem('showOnboarding'),
         };
     }
 
