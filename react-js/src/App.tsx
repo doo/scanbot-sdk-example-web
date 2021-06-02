@@ -1,5 +1,5 @@
 import React from 'react';
-import { AppBar } from '@material-ui/core';
+import {AppBar} from '@material-ui/core';
 import Swal from 'sweetalert2';
 
 import { Barcode, BarcodeResult, ImageFilter } from 'scanbot-web-sdk/@types';
@@ -26,6 +26,7 @@ import BarcodeScannerComponent from './rtu-ui/barcode-scanner-component';
 import Barcodes from './model/barcodes';
 import ErrorLabel from './subviews/error-label';
 import Onboarding from './pages/onboarding/onboarding-carousel';
+import LoadingScreen from "./subviews/loading-screen";
 
 export default class App extends React.Component<any, any> {
 
@@ -38,13 +39,14 @@ export default class App extends React.Component<any, any> {
             error: {
                 message: undefined
             },
+            loading: true,
 			shouldShowOnboarding: !localStorage.getItem('showOnboarding'),
         };
     }
 
     async componentDidMount() {
         const sdk = await ScanbotSdkService.instance.initialize();
-        this.setState({sdk: sdk});
+        this.setState({sdk: sdk, loading: false});
 
         RoutingService.instance.observeChanges(() => {
             this.forceUpdate();
@@ -99,6 +101,7 @@ export default class App extends React.Component<any, any> {
                     <NavigationContent backVisible={!NavigationUtils.isAtRoot()}
                                        onBackClick={() => this.onBackPress()}/>
                 </AppBar>
+
                 <div style={{height: this.containerHeight(), marginTop: this.toolbarHeight()}}>
                     {this.decideContent()}
                 </div>
@@ -107,6 +110,7 @@ export default class App extends React.Component<any, any> {
                     height={this.toolbarHeight()}
                     buttons={this.decideButtons()}
                 />
+                <LoadingScreen isVisible={this.state.loading}/>
             </div>
         );
     }
