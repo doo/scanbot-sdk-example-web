@@ -149,7 +149,8 @@ export default class App extends React.Component<any, any> {
         if (NavigationUtils.isAtRoot() || route === RoutePath.DocumentScanner || route === RoutePath.BarcodeScanner) {
             return <div>
                 <ErrorLabel message={this.state.error.message}/>
-                <FeatureList onItemClick={this.onFeatureClick.bind(this)} onPick={this.onFilePicked.bind(this)}/>
+                <FeatureList onItemClick={this.onFeatureClick.bind(this)} onPick={this.onFilePicked.bind(this)}
+                             onError={this.onError.bind(this)}/>
             </div>
         }
 
@@ -286,6 +287,10 @@ export default class App extends React.Component<any, any> {
 
     formatBarcodes(codes: Barcode[]): string {
         return JSON.stringify(codes.map((code: Barcode) => code.text + " (" + code.format + ") "));
+    }
+
+    async onError(message: string) {
+        this.setState({alert: {color: "error", text: message}});
     }
 
     async onFilePicked(feature: any, data: any) {

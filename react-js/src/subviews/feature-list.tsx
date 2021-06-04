@@ -22,6 +22,7 @@ export default class FeatureList extends React.Component<any, any> {
                             }}
                             onError={(message: string) => {
                                 console.log("error", message);
+                                this.props.onError(message);
                             }}
                         >
                             <FeatureListItem data={feature}/>
@@ -44,8 +45,9 @@ export default class FeatureList extends React.Component<any, any> {
                                 reader.onload = () => this.props.onPick(feature, reader.result);
                                 reader.onerror = message => console.log("error", message);
                             }}
-                            onError={(message: string) => {
-                                console.log("error", message);
+                            onError={(error: any) => {
+                                console.log("error what", error);
+                                this.props.onError(error);
                             }}
                         >
                             <FeatureListItem data={feature}/>
