@@ -82,6 +82,8 @@ export default class App extends React.Component<any, any> {
         return (window.innerHeight - 2 * this.toolbarHeight()) ?? 0;
     }
 
+    fileInput?: HTMLInputElement | null;
+
     render() {
 
     	// if (this.state.shouldShowOnboarding) {
@@ -94,7 +96,7 @@ export default class App extends React.Component<any, any> {
             <div>
                 {this.documentScanner()}
                 {this.barcodeScanner()}
-
+                <input ref={ref => this.fileInput = ref} id="file-input" className="file-picker" type="file" accept="image/jpeg"/>
                 <Toast alert={this.state.alert} onClose={() => this.setState({alert: undefined})}/>
 
                 <AppBar position="fixed" ref={ref => this.navigation = ref} style={{zIndex: 19}}>
@@ -147,7 +149,7 @@ export default class App extends React.Component<any, any> {
         if (NavigationUtils.isAtRoot() || route === RoutePath.DocumentScanner || route === RoutePath.BarcodeScanner) {
             return <div>
                 <ErrorLabel message={this.state.error.message}/>
-                <FeatureList onItemClick={this.onFeatureClick.bind(this)}/>
+                <FeatureList onItemClick={this.onFeatureClick.bind(this)} onPick={this.onFilePicked.bind(this)}/>
             </div>
         }
 
@@ -286,6 +288,30 @@ export default class App extends React.Component<any, any> {
         return JSON.stringify(codes.map((code: Barcode) => code.text + " (" + code.format + ") "));
     }
 
+    async onFilePicked(feature: any, data: any) {
+
+        if (feature.id === RoutePath.DocumentOnJpeg) {
+            console.log("data", data);
+            const result = {original: new Uint8Array(data)};
+            Pages.instance.add(result)
+        }
+
+        if (feature.id === RoutePath.BarcodeOnJpeg) {
+            const detection = await ScanbotSdkService.instance.sdk?.detectBarcodes(data);
+            if (detection !== undefined) {
+                this.setState({alert: {color: "success", text: this.formatBarcodes(detection.barcodes)}});
+            }
+        }
+
+        if (feature.id === RoutePath.BarcodeOnPdf) {
+            const images = await ImageUtils.pdfToImage(data);
+            const detection = await ScanbotSdkService.instance.sdk?.detectBarcodes(images[0]);
+            if (detection !== undefined) {
+                this.setState({alert: {color: "success", text: this.formatBarcodes(detection.barcodes)}});
+            }
+        }
+    }
+
     async onFeatureClick(feature: any) {
 
         const valid = await ScanbotSdkService.instance.isLicenseValid();
@@ -314,19 +340,6 @@ export default class App extends React.Component<any, any> {
         } else if (feature.id === RoutePath.DocumentOnJpeg) {
             const result = await ImageUtils.pick(ImageUtils.MIME_TYPE_JPEG);
             Pages.instance.add(result)
-        } else if (feature.id === RoutePath.BarcodeOnJpeg) {
-            const result = await ImageUtils.pick(ImageUtils.MIME_TYPE_JPEG, true);
-            const detection = await ScanbotSdkService.instance.sdk?.detectBarcodes(result.data);
-            if (detection !== undefined) {
-                this.setState({alert: {color: "success", text: this.formatBarcodes(detection.barcodes)}});
-            }
-        } else if (feature.id === RoutePath.BarcodeOnPdf) {
-            const pdf = await ImageUtils.pick(ImageUtils.MIME_TYPE_PDF, true);
-            const images = await ImageUtils.pdfToImage(pdf.data);
-            const detection = await ScanbotSdkService.instance.sdk?.detectBarcodes(images[0]);
-            if (detection !== undefined) {
-                this.setState({alert: {color: "success", text: this.formatBarcodes(detection.barcodes)}});
-            }
         }
     }
 }

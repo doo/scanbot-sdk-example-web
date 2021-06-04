@@ -20,7 +20,18 @@ export class ImageUtils {
             const picker = document.createElement("input") as HTMLInputElement;
             picker.type = "file";
             picker.accept = mime;
-            picker.click();
+            // @ts-ignore
+            picker.style = "height: 50px; width: 50px; display: block;";
+            document.body.appendChild(picker);
+
+
+            // // @ts-ignore
+            // // picker.show();
+            // picker.focus();
+            // picker.click();
+            const evt = document.createEvent("MouseEvents");
+            evt.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+            picker.dispatchEvent(evt);
 
             picker.onchange = (e) => {
                 e.preventDefault();
