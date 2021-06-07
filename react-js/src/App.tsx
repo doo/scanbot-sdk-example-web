@@ -1,30 +1,32 @@
 import React from 'react';
-import {AppBar} from "@material-ui/core";
-import Swal from "sweetalert2";
+import {AppBar} from '@material-ui/core';
+import Swal from 'sweetalert2';
 
-import {Barcode, BarcodeResult, ImageFilter} from "scanbot-web-sdk/@types";
+import { Barcode, BarcodeResult, ImageFilter } from 'scanbot-web-sdk/@types';
 
-import {NavigationContent} from "./subviews/navigation-content";
-import {Toast} from "./subviews/toast";
-import FeatureList from "./subviews/feature-list";
-import {BottomBar} from "./subviews/bottom-bar";
+import { NavigationContent } from './subviews/navigation-content';
+import { Toast } from './subviews/toast';
+import FeatureList from './subviews/feature-list';
+import { BottomBar } from './subviews/bottom-bar';
 
-import ImageResultsPage from "./pages/image-results-page";
-import ImageDetailPage from "./pages/image-detail-page";
-import CroppingPage from "./pages/cropping-page";
+import ImageResultsPage from './pages/image-results-page';
+import ImageDetailPage from './pages/image-detail-page';
+import CroppingPage from './pages/cropping-page';
 
-import Pages from "./model/pages";
-import {ScanbotSdkService} from "./service/scanbot-sdk-service";
-import {RoutePath, RoutingService} from "./service/routing-service";
+import Pages from './model/pages';
+import { ScanbotSdkService } from './service/scanbot-sdk-service';
+import { RoutePath, RoutingService } from './service/routing-service';
 
-import {ImageUtils} from "./utils/image-utils";
-import {NavigationUtils} from "./utils/navigation-utils";
-import {MiscUtils} from "./utils/misc-utils";
-import DocumentScannerComponent from "./rtu-ui/document-scanner-component";
-import {AnimationType} from "./rtu-ui/enum/animation-type";
-import BarcodeScannerComponent from "./rtu-ui/barcode-scanner-component";
-import Barcodes from "./model/barcodes";
-import ErrorLabel from "./subviews/error-label";
+import { ImageUtils } from './utils/image-utils';
+import { NavigationUtils } from './utils/navigation-utils';
+import { MiscUtils } from './utils/misc-utils';
+import DocumentScannerComponent from './rtu-ui/document-scanner-component';
+import { AnimationType } from './rtu-ui/enum/animation-type';
+import BarcodeScannerComponent from './rtu-ui/barcode-scanner-component';
+import Barcodes from './model/barcodes';
+import ErrorLabel from './subviews/error-label';
+import Onboarding from './pages/onboarding/onboarding-carousel';
+import LoadingScreen from "./subviews/loading-screen";
 
 export default class App extends React.Component<any, any> {
 
@@ -36,13 +38,15 @@ export default class App extends React.Component<any, any> {
             sdk: undefined,
             error: {
                 message: undefined
-            }
+            },
+            loading: true,
+			shouldShowOnboarding: !localStorage.getItem('showOnboarding'),
         };
     }
 
     async componentDidMount() {
         const sdk = await ScanbotSdkService.instance.initialize();
-        this.setState({sdk: sdk});
+        this.setState({sdk: sdk, loading: false});
 
         RoutingService.instance.observeChanges(() => {
             this.forceUpdate();
@@ -79,6 +83,13 @@ export default class App extends React.Component<any, any> {
     }
 
     render() {
+
+    	// if (this.state.shouldShowOnboarding) {
+		// 	return <Onboarding skip={() => {
+		// 		this.setState({shouldShowOnboarding: false});
+		// 	}} />;
+		// }
+
         return (
             <div>
                 {this.documentScanner()}
@@ -90,6 +101,7 @@ export default class App extends React.Component<any, any> {
                     <NavigationContent backVisible={!NavigationUtils.isAtRoot()}
                                        onBackClick={() => this.onBackPress()}/>
                 </AppBar>
+
                 <div style={{height: this.containerHeight(), marginTop: this.toolbarHeight()}}>
                     {this.decideContent()}
                 </div>
@@ -98,6 +110,7 @@ export default class App extends React.Component<any, any> {
                     height={this.toolbarHeight()}
                     buttons={this.decideButtons()}
                 />
+                <LoadingScreen isVisible={this.state.loading}/>
             </div>
         );
     }
@@ -113,7 +126,6 @@ export default class App extends React.Component<any, any> {
             />;
         }
         return this._documentScannerHtmlComponent;
-
     }
 
     _barcodeScannerHtmlComponent: any;
@@ -135,7 +147,8 @@ export default class App extends React.Component<any, any> {
         if (NavigationUtils.isAtRoot() || route === RoutePath.DocumentScanner || route === RoutePath.BarcodeScanner) {
             return <div>
                 <ErrorLabel message={this.state.error.message}/>
-                <FeatureList onItemClick={this.onFeatureClick.bind(this)}/>
+                <FeatureList onItemClick={this.onFeatureClick.bind(this)} onPick={this.onFilePicked.bind(this)}
+                             onError={this.onError.bind(this)}/>
             </div>
         }
 
@@ -274,6 +287,34 @@ export default class App extends React.Component<any, any> {
         return JSON.stringify(codes.map((code: Barcode) => code.text + " (" + code.format + ") "));
     }
 
+    async onError(message: string) {
+        this.setState({alert: {color: "error", text: message}});
+    }
+
+    async onFilePicked(feature: any, data: any) {
+
+        if (feature.id === RoutePath.DocumentOnJpeg) {
+            console.log("data", data);
+            const result = {original: new Uint8Array(data)};
+            Pages.instance.add(result)
+        }
+
+        if (feature.id === RoutePath.BarcodeOnJpeg) {
+            const detection = await ScanbotSdkService.instance.sdk?.detectBarcodes(data);
+            if (detection !== undefined) {
+                this.setState({alert: {color: "success", text: this.formatBarcodes(detection.barcodes)}});
+            }
+        }
+
+        if (feature.id === RoutePath.BarcodeOnPdf) {
+            const images = await ImageUtils.pdfToImage(data);
+            const detection = await ScanbotSdkService.instance.sdk?.detectBarcodes(images[0]);
+            if (detection !== undefined) {
+                this.setState({alert: {color: "success", text: this.formatBarcodes(detection.barcodes)}});
+            }
+        }
+    }
+
     async onFeatureClick(feature: any) {
 
         const valid = await ScanbotSdkService.instance.isLicenseValid();
@@ -302,20 +343,6 @@ export default class App extends React.Component<any, any> {
         } else if (feature.id === RoutePath.DocumentOnJpeg) {
             const result = await ImageUtils.pick(ImageUtils.MIME_TYPE_JPEG);
             Pages.instance.add(result)
-        } else if (feature.id === RoutePath.BarcodeOnJpeg) {
-            const result = await ImageUtils.pick(ImageUtils.MIME_TYPE_JPEG, true);
-            const detection = await ScanbotSdkService.instance.sdk?.detectBarcodes(result.data);
-            if (detection !== undefined) {
-                this.setState({alert: {color: "success", text: this.formatBarcodes(detection.barcodes)}});
-            }
-        } else if (feature.id === RoutePath.BarcodeOnPdf) {
-            const pdf = await ImageUtils.pick(ImageUtils.MIME_TYPE_PDF, true);
-            const images = await ImageUtils.pdfToImage(pdf.data);
-            const detection = await ScanbotSdkService.instance.sdk?.detectBarcodes(images[0]);
-            if (detection !== undefined) {
-                this.setState({alert: {color: "success", text: this.formatBarcodes(detection.barcodes)}});
-            }
         }
     }
 }
-
