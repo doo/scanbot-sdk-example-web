@@ -82,8 +82,6 @@ export default class App extends React.Component<any, any> {
         return (window.innerHeight - 2 * this.toolbarHeight()) ?? 0;
     }
 
-    fileInput?: HTMLInputElement | null;
-
     render() {
 
     	// if (this.state.shouldShowOnboarding) {
@@ -96,7 +94,7 @@ export default class App extends React.Component<any, any> {
             <div>
                 {this.documentScanner()}
                 {this.barcodeScanner()}
-                <input ref={ref => this.fileInput = ref} id="file-input" className="file-picker" type="file" accept="image/jpeg"/>
+
                 <Toast alert={this.state.alert} onClose={() => this.setState({alert: undefined})}/>
 
                 <AppBar position="fixed" ref={ref => this.navigation = ref} style={{zIndex: 19}}>
