@@ -7,6 +7,25 @@ function isEven(n) {
 	return n % 2 === 0;
 }
 
+const screens = [
+	require(`../../assets/newscreen${0}.svg`),
+	require(`../../assets/newscreen${1}.svg`),
+	require(`../../assets/newscreen${2}.svg`),
+	require(`../../assets/newscreen${3}.svg`)
+];
+
+const background = {
+	white: require('../../assets/ScanbotSDKwhite.svg'),
+	red: require('../../assets/ScanbotSDKred.svg')
+};
+
+const button = {
+	next: {
+		red: require('../../assets/nextButtonRed.png'),
+		white: require('../../assets/nextButtonWhite.png')
+	}
+};
+
 const Content = ({ id, lang, handleSlide, setSlide, skip }) => {
 	const classes = OnboardingModel.STYLE(id);
 
@@ -16,16 +35,12 @@ const Content = ({ id, lang, handleSlide, setSlide, skip }) => {
 				<div>
 					<img
 						className={classes.logo}
-						src={
-							isEven(id)
-								? require('../../assets/ScanbotSDKwhite.svg')
-								: require('../../assets/ScanbotSDKred.svg')
-						}
+						src={isEven(id) ? background.white : background.red}
 						alt='Scanbot logo'
 					/>
 					<img
 						className={classes.illustration}
-						src={require(`../../assets/newscreen${id}.svg`)}
+						src={screens[id]}
 						alt='Illustration'
 					/>
 				</div>
@@ -68,14 +83,14 @@ const Content = ({ id, lang, handleSlide, setSlide, skip }) => {
 					<img
 						className={classes.nextButton}
 						onClick={() => handleSlide()}
-						src={require('../../assets/nextButtonRed.png')}
+						src={button.next.red}
 						alt='next button'
 					/>
 				) : (
 					<img
 						className={classes.nextButton}
 						onClick={() => handleSlide()}
-						src={require('../../assets/nextButtonWhite.png')}
+						src={button.next.white}
 						alt='next button'
 					/>
 				)}
