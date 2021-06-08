@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg"  fill="none" viewBox="0 0 65 640" preserveAspectRatio="xMidYMid meet">
+<svg xmlns="http://www.w3.org/2000/svg"  fill="#fff" viewBox="0 0 65 640" preserveAspectRatio="xMidYMid meet">
     <g filter="url(#filter0_dii)">
-        <path fill="#fff" d="M65.478 0H4.024s30.583 26.543 40.584 87.488c10.001 60.945 10.633 224.63 10.633 224.63 0 15.764-52.53 22.463-51.217 60.296 1.314 37.832 51.217 41.299 51.217 62.266 0 13.399 0 77.635-2.98 147.397C50.223 629.754 45.157 640 45.157 640h20.321V0z"/>
+        <path  d="M65.478 0H4.024s30.583 26.543 40.584 87.488c10.001 60.945 10.633 224.63 10.633 224.63 0 15.764-52.53 22.463-51.217 60.296 1.314 37.832 51.217 41.299 51.217 62.266 0 13.399 0 77.635-2.98 147.397C50.223 629.754 45.157 640 45.157 640h20.321V0z"/>
     </g>
     <defs>
         <filter id="filter0_dii" width="71.725" height="647.882" x="-2.305" y="-2.365" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">

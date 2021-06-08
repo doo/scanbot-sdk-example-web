@@ -2,6 +2,7 @@ import React from 'react';
 
 import { ReactComponent as Swiper } from '../../assets/swiper.svg';
 import OnboardingModel from "./onboarding-model";
+import './onboarding-styles.css'
 
 function isEven(n) {
 	return n % 2 === 0;
@@ -27,28 +28,26 @@ const button = {
 };
 
 const Content = ({ id, lang, handleSlide, setSlide, skip }) => {
-	const classes = OnboardingModel.STYLE(id);
-
 	return (
-		<div className={classes.root}>
-			<div className={classes.innerContainer}>
+		<div className='root' style={{backgroundColor: isEven(id) ? '#C8193C' : 'white'}}>
+			<div className='innerContainer'>
 				<div>
 					<img
-						className={classes.logo}
+						className='logo'
 						src={isEven(id) ? background.white : background.red}
 						alt='Scanbot logo'
 					/>
 					<img
-						className={classes.illustration}
+						className='illustration'
 						src={screens[id]}
 						alt='Illustration'
 					/>
 				</div>
 				<div>
-					<h2 className={classes.title}>{OnboardingModel.TEXT[lang].title[id]}</h2>
-					<p className={classes.description}>{OnboardingModel.TEXT[lang].description[id]}</p>
+					<h2 className='title' style={{color: isEven(id) ? 'white' : '#C8193C'}}>{OnboardingModel.TEXT[lang].title[id]}</h2>
+					<p className='description' style={{color: isEven(id) ? 'white' : '#6e7375',}}>{OnboardingModel.TEXT[lang].description[id]}</p>
 				</div>
-				<div className={classes.listContainer}>
+				{/* <div className={classes.listContainer}>
 					<ul className={classes.list}>
 						{[0, 1, 2, 3].map(number => {
 							return (
@@ -74,21 +73,23 @@ const Content = ({ id, lang, handleSlide, setSlide, skip }) => {
 							{OnboardingModel.TEXT[lang].buttonText[1]}
 						</a>
 					)}
-				</div>
+				</div> */}
 			</div>
 
-			<div className={classes.swiperContainer}>
-				<Swiper className={classes.swiper} />
+			<div className='swiperContainer'>
+				<Swiper className='swiper' style={{
+                fill: isEven(id) ? 'white' : '#C8193C'
+            }} />
 				{isEven(id) ? (
 					<img
-						className={classes.nextButton}
+						className='nextButton'
 						onClick={() => handleSlide()}
 						src={button.next.red}
 						alt='next button'
 					/>
 				) : (
 					<img
-						className={classes.nextButton}
+						className='nextButton'
 						onClick={() => handleSlide()}
 						src={button.next.white}
 						alt='next button'

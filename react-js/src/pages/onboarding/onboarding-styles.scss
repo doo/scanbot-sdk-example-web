@@ -1,0 +1,134 @@
+@mixin breakpoint-up ($breakpoint) {
+    @if $breakpoint==sm {
+        @media only screen and (min-width: 600px) {
+            @content;
+        }
+    }
+    @if $breakpoint==md {
+        @media only screen and (min-width: 960px) {
+            @content;
+        }
+    }
+}
+
+.root {
+    color: white;
+
+    .innerContainer {
+        text-align: center;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 40px 16px 20px 16px;
+        max-width: 690px;
+        justify-content: space-between;
+
+        @include breakpoint-up(sm) {
+            padding: 80px 0;
+        }
+
+        @media only screen and (min-height:720px) and (max-width: 640px) {
+            padding: 80px 16px 40px 16px;
+        }
+    }
+
+    .logo {
+        margin-bottom: 24px;
+
+        @include breakpoint-up(sm) {
+            margin-bottom: 40px;
+            width: 250px;
+        }
+    }
+
+    .illustration {
+        width: 90%;
+        margin-bottom: 24px;
+
+        @include breakpoint-up(md) {
+            max-width: 550px;
+            height: 550px;
+            object-fit: contain;
+            margin-top: 32px;
+            margin-bottom: -80px;
+        }
+
+        @media only screen and (min-height:550px) and (max-width: 350px) {
+            max-height: 225px;
+            margin-bottom: 16px;
+        }
+    }
+
+    .title {
+        font-size: 24px;
+        line-height: 24px;
+        letter-spacing: .18px;
+        margin-bottom: 14px;
+
+        @include breakpoint-up(sm) {
+            font-size: 38px;
+            line-height: 38px;
+        }
+    }
+
+    .description {
+        font-size: 14px;
+        line-height: 20px;
+        letter-spacing: .25px;
+        opacity: .7px;
+    }
+
+    .link {
+        position: absolute;
+        right: 0;
+        text-decoration: none;
+        padding-right: 10px;
+    }
+
+    .swiperContainer {
+        height: 100%;
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+
+    .swiper {
+        right: 0;
+        top: 0;
+        height: 100%;
+    }
+
+    .nextButton {
+        top: 55%;
+        right: 15%;
+        position: absolute;
+        width: 60%;
+    }
+    
+    .listContainer {
+        position: relative;
+        display: flex;
+        width: 100%;
+        justify-content: center;
+    }
+
+    .listItem {
+        border: .5px solid;
+        border-radius: 50%;
+        background-color: transparent;
+        padding: 6px;
+        vertical-align: middle;
+        cursor: pointer;
+    }
+
+    .listCurrent {
+        cursor: pointer;
+    }
+
+    .list {
+        list-style-type: none;
+        display: flex;
+        padding: 0;
+    }
+}
