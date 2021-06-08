@@ -84,11 +84,11 @@ export default class App extends React.Component<any, any> {
 
     render() {
 
-    	if (this.state.shouldShowOnboarding) {
-			return <Onboarding skip={() => {
-				this.setState({shouldShowOnboarding: false});
-			}} />;
-		}
+    	// if (this.state.shouldShowOnboarding) {
+		// 	return <Onboarding skip={() => {
+		// 		this.setState({shouldShowOnboarding: false});
+		// 	}} />;
+		// }
 
         return (
             <div>
@@ -280,7 +280,7 @@ export default class App extends React.Component<any, any> {
         // If you have any additional processing to do, consider pausing
         // the scanner here, else you might (will) receive multiple results:
         // ScanbotSdkService.instance.barcodeScanner?.pauseDetection();
-        this.setState({alert: {color: "success", text: this.formatBarcodes(result.barcodes)}});
+        this.setState({alert: {color: "success", text: this.formatBarcodes(result.barcodes), autoClose: true}});
     }
 
     formatBarcodes(codes: Barcode[]): string {
@@ -288,7 +288,7 @@ export default class App extends React.Component<any, any> {
     }
 
     async onError(message: string) {
-        this.setState({alert: {color: "error", text: message}});
+        this.setState({alert: {color: "error", text: message, autoClose: true}});
     }
 
     async onFilePicked(feature: any, data: any) {
@@ -302,7 +302,13 @@ export default class App extends React.Component<any, any> {
         if (feature.id === RoutePath.BarcodeOnJpeg) {
             const detection = await ScanbotSdkService.instance.sdk?.detectBarcodes(data);
             if (detection !== undefined) {
-                this.setState({alert: {color: "success", text: this.formatBarcodes(detection.barcodes)}});
+                this.setState({
+                    alert: {
+                        color: "success",
+                        text: this.formatBarcodes(detection.barcodes),
+                        autoClose: false
+                    }
+                });
             }
         }
 
@@ -310,8 +316,15 @@ export default class App extends React.Component<any, any> {
             const images = await ImageUtils.pdfToImage(data);
             const detection = await ScanbotSdkService.instance.sdk?.detectBarcodes(images[0]);
             if (detection !== undefined) {
-                this.setState({alert: {color: "success", text: this.formatBarcodes(detection.barcodes)}});
+                this.setState({
+                    alert: {
+                        color: "success",
+                        text: this.formatBarcodes(detection.barcodes),
+                        autoClose: false
+                    }
+                });
             }
+
         }
     }
 
