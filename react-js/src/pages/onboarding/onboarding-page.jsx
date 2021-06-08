@@ -44,8 +44,13 @@ const Content = ({ id, lang, handleSlide, setSlide, skip }) => {
 					/>
 				</div>
 				<div>
-					<h2 className='title' style={{color: isEven(id) ? 'white' : '#C8193C'}}>{OnboardingModel.TEXT[lang].title[id]}</h2>
-					<p className='description' style={{color: isEven(id) ? 'white' : '#6e7375',}}>{OnboardingModel.TEXT[lang].description[id]}</p>
+					<h2 className='title' style={{color: isEven(id) ? 'white' : '#C8193C'}}>
+						{OnboardingModel.TEXT[lang].title[id]}
+					</h2>
+					<p className='description'
+					   style={{color: isEven(id) ? 'white' : '#6e7375',}}>
+						{OnboardingModel.TEXT[lang].description[id]}
+					</p>
 				</div>
 				{/* <div className={classes.listContainer}>
 					<ul className={classes.list}>
@@ -78,8 +83,8 @@ const Content = ({ id, lang, handleSlide, setSlide, skip }) => {
 
 			<div className='swiperContainer'>
 				<Swiper className='swiper' style={{
-                fill: isEven(id) ? 'white' : '#C8193C'
-            }} />
+					fill: isEven(id) ? 'white' : '#C8193C'
+				}}/>
 				{isEven(id) ? (
 					<img
 						className='nextButton'

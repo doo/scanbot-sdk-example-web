@@ -23,11 +23,11 @@ class Onboarding extends React.Component<any, any> {
 	}
 
 	handleSlide() {
-		this.setState({ slideIndex: this.state.slideIndex + 1 });
+		this.setState({slideIndex: this.state.slideIndex + 1});
 	}
 
 	setSlide(id: number) {
-		this.setState({ slideIndex: id });
+		this.setState({slideIndex: id});
 	}
 
 	isEven(n: number) {
@@ -40,6 +40,9 @@ class Onboarding extends React.Component<any, any> {
 				<Carousel
 					slideIndex={this.state.slideIndex}
 					afterSlide={(slideIndex) => this.setSlide(slideIndex)}
+					beforeSlide={(before: number, after: number) => {
+						this.setSlide(after);
+					}}
 					enableKeyboardControls={false}
 					withoutControls={true}
 					disableAnimation={true}
@@ -77,13 +80,16 @@ class Onboarding extends React.Component<any, any> {
 					<ul className='list'>
 						{[0, 1, 2, 3].map(number => {
 							return (
-								<li style={{ padding: '0 5px' }}>
+								<li style={{padding: '0 5px'}}>
 									<button
 										className='listItem'
 										style={
 											this.state.slideIndex === number
-												? {backgroundColor: this.isEven(this.state.slideIndex) ? 'white' : '#C8193C', color: this.isEven(this.state.slideIndex) ? 'white' : '#C8193C'}
-												: {borderColor: this.isEven(this.state.slideIndex) ? 'white' : '#C8193C', }
+												? {
+													backgroundColor: this.isEven(this.state.slideIndex) ? 'white' : '#C8193C',
+													color: this.isEven(this.state.slideIndex) ? 'white' : '#C8193C'
+												}
+												: {borderColor: this.isEven(this.state.slideIndex) ? 'white' : '#C8193C',}
 										}
 										onClick={() => this.setSlide(number)}
 									/>
@@ -92,17 +98,22 @@ class Onboarding extends React.Component<any, any> {
 						})}
 					</ul>
 					{this.state.slideIndex < 3 ? (
-						<a href='#' className='link' style={{color: this.isEven(this.state.slideIndex) ? 'white' : '#C8193C'}} onClick={this.props.skip}>
+						<a href='#' className='link'
+						   style={{color: this.isEven(this.state.slideIndex) ? 'white' : '#C8193C'}}
+						   onClick={this.props.skip}>
 							{OnboardingModel.TEXT[this.state.language].buttonText[0]}
 						</a>
 					) : (
-						<a href='#' className='link' style={{color: this.isEven(this.state.slideIndex) ? 'white' : '#C8193C'}} onClick={this.props.skip}>
+						<a href='#' className='link'
+						   style={{color: this.isEven(this.state.slideIndex) ? 'white' : '#C8193C'}}
+						   onClick={this.props.skip}>
 							{OnboardingModel.TEXT[this.state.language].buttonText[1]}
 						</a>
 					)}
 				</div>
-		</React.Fragment>
+			</React.Fragment>
 		);
 	}
 }
+
 export default Onboarding
