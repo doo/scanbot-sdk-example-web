@@ -1,11 +1,14 @@
+
 import React from 'react';
 
-import Content from './onboarding-page';
 import Carousel from 'nuka-carousel';
+
+import OnboardingPage from './onboarding-page';
 import OnboardingModel from "./onboarding-model";
 import './onboarding-styles.css'
 
 class Onboarding extends React.Component<any, any> {
+
 	constructor(props: any) {
 		super(props);
 		this.state = {
@@ -48,28 +51,28 @@ class Onboarding extends React.Component<any, any> {
 					disableAnimation={true}
 					disableEdgeSwiping={true}
 				>
-					<Content
+					<OnboardingPage
 						handleSlide={this.handleSlide.bind(this)}
 						setSlide={this.setSlide.bind(this)}
 						id={0}
 						lang={this.state.language}
 						skip={this.props.skip}
 					/>
-					<Content
+					<OnboardingPage
 						handleSlide={this.handleSlide.bind(this)}
 						setSlide={this.setSlide.bind(this)}
 						id={1}
 						lang={this.state.language}
 						skip={this.props.skip}
 					/>
-					<Content
+					<OnboardingPage
 						handleSlide={this.handleSlide.bind(this)}
 						setSlide={this.setSlide.bind(this)}
 						id={2}
 						lang={this.state.language}
 						skip={this.props.skip}
 					/>
-					<Content
+					<OnboardingPage
 						handleSlide={this.handleSlide.bind(this)}
 						setSlide={this.setSlide.bind(this)}
 						id={3}
