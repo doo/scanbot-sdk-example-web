@@ -2,7 +2,7 @@ import React from 'react';
 
 import { ReactComponent as Swiper } from '../../assets/swiper.svg';
 import OnboardingModel from "./onboarding-model";
-import './onboarding-styles.css'
+import './onboarding-styles.scss'
 
 function isEven(n: number) {
 	return n % 2 === 0;
