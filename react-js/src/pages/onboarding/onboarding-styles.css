@@ -7,7 +7,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 40px 16px 20% 16px;
+    padding: 40px 20px 25% 20px;
     max-width: 690px;
     justify-content: space-between;
     margin: 0 auto;
@@ -15,6 +15,11 @@
 @media only screen and (min-width: 600px) {
     .root .innerContainer {
         padding: 80px 0 30% 0;
+    }
+}
+@media only screen and (min-width: 960px) {
+    .root .innerContainer {
+        padding: 80px 0 300px 0;
     }
 }
 @media only screen and (min-height: 720px) and (max-width: 640px) {
@@ -105,7 +110,6 @@
     padding: 6px;
     vertical-align: middle;
     cursor: pointer;
-    box-shadow: 0 0 0 .5px grey;
 }
 .list {
     list-style-type: none;

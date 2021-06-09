@@ -46,6 +46,7 @@ class Onboarding extends React.Component<any, any> {
 					enableKeyboardControls={false}
 					withoutControls={true}
 					disableAnimation={true}
+					disableEdgeSwiping={true}
 				>
 					<Content
 						handleSlide={this.handleSlide.bind(this)}
