@@ -17,6 +17,7 @@ export default class FeatureList extends React.Component<any, any> {
                             extensions={["jpg", "jpeg", "png"]}
                             accept={"image/*"}
                             dims={{minWidth: 0, minHeight: 0}}
+                            maxSize={10}
                             onChange={async (base64: string) => {
                                 this.props.onPick(feature, base64);
                             }}
@@ -34,6 +35,7 @@ export default class FeatureList extends React.Component<any, any> {
                             key={feature.id}
                             // extensions={['pdf']}
                             accept={"application/*"}
+                            maxSize={10}
                             onChange={(file: any) => {
                                 const reader = new FileReader();
                                 if (feature.id === RoutePath.DocumentOnJpeg) {
