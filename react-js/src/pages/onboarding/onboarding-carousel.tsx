@@ -5,7 +5,7 @@ import Carousel from 'nuka-carousel';
 
 import OnboardingPage from './onboarding-page';
 import OnboardingModel from "./onboarding-model";
-import './onboarding-styles.css'
+import './onboarding-styles.scss'
 
 class Onboarding extends React.Component<any, any> {
 
