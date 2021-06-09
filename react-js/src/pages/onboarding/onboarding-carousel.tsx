@@ -51,34 +51,15 @@ class Onboarding extends React.Component<any, any> {
 					disableAnimation={true}
 					disableEdgeSwiping={true}
 				>
-					<OnboardingPage
-						handleSlide={this.handleSlide.bind(this)}
-						setSlide={this.setSlide.bind(this)}
-						id={0}
-						lang={this.state.language}
-						skip={this.props.skip}
-					/>
-					<OnboardingPage
-						handleSlide={this.handleSlide.bind(this)}
-						setSlide={this.setSlide.bind(this)}
-						id={1}
-						lang={this.state.language}
-						skip={this.props.skip}
-					/>
-					<OnboardingPage
-						handleSlide={this.handleSlide.bind(this)}
-						setSlide={this.setSlide.bind(this)}
-						id={2}
-						lang={this.state.language}
-						skip={this.props.skip}
-					/>
-					<OnboardingPage
-						handleSlide={this.handleSlide.bind(this)}
-						setSlide={this.setSlide.bind(this)}
-						id={3}
-						lang={this.state.language}
-						skip={this.props.skip}
-					/>
+					{[0, 1, 2, 3].map((id: number) => {
+						return <OnboardingPage
+							handleSlide={this.handleSlide.bind(this)}
+							setSlide={this.setSlide.bind(this)}
+							id={id}
+							lang={this.state.language}
+							skip={this.props.skip}
+						/>
+					})}
 				</Carousel>
 				<div className='listContainer'>
 					<ul className='list'>
