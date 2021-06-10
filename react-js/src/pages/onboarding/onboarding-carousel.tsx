@@ -39,16 +39,7 @@ class Onboarding extends React.Component<any, any> {
 		super(props);
 		this.state = {
 			slideIndex: 0,
-			language: this.languageOrDefault(),
 		};
-	}
-
-	languageOrDefault(): string {
-		const split = window.location.href.split('?lang=');
-		if (split.length > 1) {
-			return split[1];
-		}
-		return 'en';
 	}
 
 	handleSlide() {
@@ -78,7 +69,7 @@ class Onboarding extends React.Component<any, any> {
 							handleSlide={this.handleSlide.bind(this)}
 							setSlide={this.setSlide.bind(this)}
 							id={id}
-							lang={this.state.language}
+							lang={this.props.language}
 							skip={this.props.skip}
 						/>
 					})}
@@ -93,7 +84,7 @@ class Onboarding extends React.Component<any, any> {
 							/>;
 						})}
 					</ul>
-					<SkipButton index={this.state.slideIndex} language={this.state.language} skip={this.props.skip}/>
+					<SkipButton index={this.state.slideIndex} language={this.props.language} skip={this.props.skip}/>
 				</div>
 			</div>
 		);

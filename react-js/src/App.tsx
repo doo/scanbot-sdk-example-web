@@ -40,6 +40,7 @@ export default class App extends React.Component<any, any> {
                 message: undefined
             },
             loading: true,
+            language: this.languageOrDefault(),
 			shouldShowOnboarding: !localStorage.getItem('showOnboarding'),
         };
     }
@@ -65,6 +66,14 @@ export default class App extends React.Component<any, any> {
         });
     }
 
+    languageOrDefault(): string {
+		const split = window.location.href.split('?lang=');
+		if (split.length > 1) {
+			return split[1];
+		}
+		return 'en';
+	}
+
     onBackPress() {
         RoutingService.instance.back();
     }
@@ -85,9 +94,10 @@ export default class App extends React.Component<any, any> {
     render() {
 
     	if (this.state.shouldShowOnboarding) {
-			return <Onboarding skip={() => {
-				this.setState({shouldShowOnboarding: false});
-			}} />;
+			return <Onboarding 
+                skip={() => { this.setState({shouldShowOnboarding: false});}} 
+                language={this.state.language}    
+            />;
 		}
 
         return (
@@ -97,7 +107,7 @@ export default class App extends React.Component<any, any> {
 
                 <Toast alert={this.state.alert} onClose={() => this.setState({alert: undefined})}/>
 
-                <AppBar position="fixed" ref={ref => this.navigation = ref} style={{zIndex: 19}}>
+                <AppBar ref={ref => this.navigation = ref} style={{zIndex: 19}}>
                     <NavigationContent backVisible={!NavigationUtils.isAtRoot()}
                                        onBackClick={() => this.onBackPress()}/>
                 </AppBar>
