@@ -7,6 +7,32 @@ import OnboardingPage from './onboarding-page';
 import OnboardingModel from "./onboarding-model";
 import './onboarding-styles.scss'
 
+function isEven(n: number) {
+	return n % 2 === 0;
+}
+
+class SkipButton extends React.Component<any, any> {
+	render() {
+		const color = isEven(this.props.index) ? 'white' : '#C8193C';
+		const text = OnboardingModel.TEXT[this.props.language].buttonText[this.props.index < 3 ? 0 : 1];
+		return <a href='#' className='link' style={{color: color}} onClick={this.props.skip}>{text}</a>;
+	}
+}
+
+class ProgressDot extends React.Component<any, any> {
+	render() {
+		const color = isEven(this.props.index) ? 'white' : '#C8193C';
+		const activeStyle = {backgroundColor: color, color: color};
+		const inactiveStyle = {borderColor: color};
+		const style = this.props.index === this.props.number ? activeStyle : inactiveStyle;
+		return (
+			<li style={{padding: '0 5px'}}>
+				<button className='listItem' style={style} onClick={() => this.props.onClick(this.props.number)}/>
+			</li>
+		);
+	}
+}
+
 class Onboarding extends React.Component<any, any> {
 
 	constructor(props: any) {
@@ -31,10 +57,6 @@ class Onboarding extends React.Component<any, any> {
 
 	setSlide(id: number) {
 		this.setState({slideIndex: id});
-	}
-
-	isEven(n: number) {
-		return n % 2 === 0;
 	}
 
 	render() {
@@ -64,37 +86,14 @@ class Onboarding extends React.Component<any, any> {
 				<div className='listContainer'>
 					<ul className='list'>
 						{[0, 1, 2, 3].map(number => {
-							return (
-								<li style={{padding: '0 5px'}}>
-									<button
-										className='listItem'
-										style={
-											this.state.slideIndex === number
-												? {
-													backgroundColor: this.isEven(this.state.slideIndex) ? 'white' : '#C8193C',
-													color: this.isEven(this.state.slideIndex) ? 'white' : '#C8193C'
-												}
-												: {borderColor: this.isEven(this.state.slideIndex) ? 'white' : '#C8193C',}
-										}
-										onClick={() => this.setSlide(number)}
-									/>
-								</li>
-							);
+							return <ProgressDot
+								index={this.state.slideIndex}
+								number={number}
+								onClick={() => this.setSlide(number)}
+							/>;
 						})}
 					</ul>
-					{this.state.slideIndex < 3 ? (
-						<a href='#' className='link'
-						   style={{color: this.isEven(this.state.slideIndex) ? 'white' : '#C8193C'}}
-						   onClick={this.props.skip}>
-							{OnboardingModel.TEXT[this.state.language].buttonText[0]}
-						</a>
-					) : (
-						<a href='#' className='link'
-						   style={{color: this.isEven(this.state.slideIndex) ? 'white' : '#C8193C'}}
-						   onClick={this.props.skip}>
-							{OnboardingModel.TEXT[this.state.language].buttonText[1]}
-						</a>
-					)}
+					<SkipButton index={this.state.slideIndex} language={this.state.language} skip={this.props.skip}/>
 				</div>
 			</div>
 		);
