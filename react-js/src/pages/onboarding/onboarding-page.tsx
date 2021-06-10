@@ -29,9 +29,9 @@ const button = {
 
 export default class OnboardingPage extends React.Component<any, any> {
 
-	constructor(props: any) {
-		super(props);
-	}
+	// constructor(props: any) {
+	// 	super(props);
+	// }
 
 	render() {
 

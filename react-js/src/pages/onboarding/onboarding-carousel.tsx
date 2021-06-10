@@ -39,7 +39,7 @@ class Onboarding extends React.Component<any, any> {
 
 	render() {
 		return (
-			<React.Fragment>
+			<div className='carouselContainer'>
 				<Carousel
 					slideIndex={this.state.slideIndex}
 					afterSlide={(slideIndex) => this.setSlide(slideIndex)}
@@ -96,7 +96,7 @@ class Onboarding extends React.Component<any, any> {
 						</a>
 					)}
 				</div>
-			</React.Fragment>
+			</div>
 		);
 	}
 }

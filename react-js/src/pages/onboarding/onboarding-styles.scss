@@ -11,30 +11,48 @@
     }
 }
 
+html,
+body,
+#root,
+.carouselContainer,
+.slider,
+.slider-frame,
+.slider-list,
+.slider-slide,
+.root,
+.swiperContainer,
+.innerContainer {
+    height: 100% !important;
+}
+
 .root {
     color: white;
 
     .innerContainer {
         text-align: center;
-        height: 100vh;
         display: flex;
         flex-direction: column;
         align-items: center;
-        padding: 40px 16px 20px 16px;
+        padding: 20px 20px 25% 20px;
         max-width: 690px;
         justify-content: space-between;
+        margin: 0 auto;
 
         @include breakpoint-up(sm) {
-            padding: 80px 0;
+            padding: 80px 0 30% 0;
+        }
+
+        @include breakpoint-up(md) {
+            padding: 80px 0 300px 0;
         }
 
         @media only screen and (min-height:720px) and (max-width: 640px) {
-            padding: 80px 16px 40px 16px;
+            padding: 40px 20px 25% 20px;
         }
     }
 
     .logo {
-        margin-bottom: 24px;
+        margin-bottom: 40px;
 
         @include breakpoint-up(sm) {
             margin-bottom: 40px;
@@ -45,9 +63,12 @@
     .illustration {
         width: 90%;
         margin-bottom: 24px;
+        object-fit: contain;
+        max-height: 300px;
 
         @include breakpoint-up(md) {
             max-width: 550px;
+            max-height: 550px;
             height: 550px;
             object-fit: contain;
             margin-top: 32px;
@@ -76,14 +97,13 @@
         font-size: 14px;
         line-height: 20px;
         letter-spacing: .25px;
-        opacity: .7px;
-    }
+        opacity: .7;
+        padding: 0 5px;
 
-    .link {
-        position: absolute;
-        right: 0;
-        text-decoration: none;
-        padding-right: 10px;
+        @include breakpoint-up(sm) {
+            font-size: 16px;
+            line-height: 24px;
+        }
     }
 
     .swiperContainer {
@@ -105,30 +125,34 @@
         position: absolute;
         width: 60%;
     }
+}
 
-    .listContainer {
-        position: relative;
-        display: flex;
-        width: 100%;
-        justify-content: center;
-    }
-
-    .listItem {
-        border: .5px solid;
-        border-radius: 50%;
-        background-color: transparent;
-        padding: 6px;
-        vertical-align: middle;
-        cursor: pointer;
-    }
-
-    .listCurrent {
-        cursor: pointer;
-    }
+.listContainer {
+    position: absolute;
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    bottom: 4%;
 
     .list {
         list-style-type: none;
         display: flex;
         padding: 0;
+
+        .listItem {
+            border: 0.5px solid;
+            border-radius: 50%;
+            background-color: transparent;
+            padding: 6px;
+            vertical-align: middle;
+            cursor: pointer;
+        }
+    }
+
+    .link {
+        position: absolute;
+        right: 10%;
+        text-decoration: none;
+        padding-right: 10px;
     }
 }
