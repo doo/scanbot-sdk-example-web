@@ -29,12 +29,7 @@ const button = {
 
 export default class OnboardingPage extends React.Component<any, any> {
 
-	// constructor(props: any) {
-	// 	super(props);
-	// }
-
 	render() {
-
 		const {id, lang, handleSlide} = this.props;
 		const headerText = isEven(id) ? background.white : background.red;
 
