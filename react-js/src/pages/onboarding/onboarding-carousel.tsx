@@ -58,7 +58,7 @@ class Onboarding extends React.Component<any, any> {
 		if (next - 1 == this.indices[this.indices.length - 1]) {
 			next = 0;
 		}
-		
+
 		this.setState({slideIndex: next});
 	}
 
