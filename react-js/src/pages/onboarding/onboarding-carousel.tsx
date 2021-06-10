@@ -35,6 +35,8 @@ class ProgressDot extends React.Component<any, any> {
 
 class Onboarding extends React.Component<any, any> {
 
+	indices = [0, 1, 2, 3];
+
 	constructor(props: any) {
 		super(props);
 		this.state = {
@@ -52,7 +54,12 @@ class Onboarding extends React.Component<any, any> {
 	}
 
 	handleSlide() {
-		this.setState({slideIndex: this.state.slideIndex + 1});
+		let next = this.state.slideIndex + 1;
+		if (next - 1 == this.indices[this.indices.length - 1]) {
+			next = 0;
+		}
+		
+		this.setState({slideIndex: next});
 	}
 
 	setSlide(id: number) {
@@ -73,7 +80,7 @@ class Onboarding extends React.Component<any, any> {
 					disableAnimation={true}
 					disableEdgeSwiping={true}
 				>
-					{[0, 1, 2, 3].map((id: number) => {
+					{this.indices.map((id: number) => {
 						return <OnboardingPage
 							handleSlide={this.handleSlide.bind(this)}
 							setSlide={this.setSlide.bind(this)}
@@ -85,7 +92,7 @@ class Onboarding extends React.Component<any, any> {
 				</Carousel>
 				<div className='listContainer'>
 					<ul className='list'>
-						{[0, 1, 2, 3].map(number => {
+						{this.indices.map(number => {
 							return <ProgressDot
 								index={this.state.slideIndex}
 								number={number}
