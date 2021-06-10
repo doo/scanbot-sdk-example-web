@@ -27,6 +27,7 @@ import Barcodes from './model/barcodes';
 import ErrorLabel from './subviews/error-label';
 import Onboarding from './pages/onboarding/onboarding-carousel';
 import LoadingScreen from "./subviews/loading-screen";
+import {StorageService} from "./service/storage-service";
 
 export default class App extends React.Component<any, any> {
 
@@ -41,7 +42,7 @@ export default class App extends React.Component<any, any> {
             },
             loading: true,
             language: this.languageOrDefault(),
-			shouldShowOnboarding: !localStorage.getItem('showOnboarding'),
+            showOnboarding: !StorageService.instance.getHasVisited()
         };
     }
 
@@ -93,9 +94,10 @@ export default class App extends React.Component<any, any> {
 
     render() {
 
-    	if (this.state.shouldShowOnboarding) {
-			return <Onboarding 
-                skip={() => { this.setState({shouldShowOnboarding: false});}} 
+    	if (this.state.showOnboarding) {
+			return <Onboarding skip={() => {
+			    StorageService.instance.setHasVisited();
+				this.setState({showOnboarding: false}); }} 
                 language={this.state.language}    
             />;
 		}
