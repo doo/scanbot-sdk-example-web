@@ -1,8 +1,9 @@
 
-function loadImage(filename) {
+function loadImage(filename: string) {
     return require('../../assets/menu/' + filename)
 }
-export const sectionContent = lang => {
+
+export const sectionContent = (lang: string) => {
     return {
         documentScanner: {
             icon: loadImage('icon-documentScanner.svg'),
@@ -21,9 +22,9 @@ export const sectionContent = lang => {
             title: lang === 'de' ? 'RECHTLICHE HINWEISE' : 'LEGAL INFORMATION'
         }
     }
-}
+};
 
-export const cardContent = lang => {
+export const cardContent = (lang: string) => {
     return {
         scanDocuments: {
             image: loadImage('img-scanDocument.png'),
@@ -47,9 +48,9 @@ export const cardContent = lang => {
                 : 'Scan and extract various 1D- and 2D-barcodes',
         },
     }
-}
+};
 
-export const linkContent = lang => {
+export const linkContent = (lang: string) => {
     return {
         learnMore: {
             text: lang === 'de' ? 'Erfahren Sie mehr über das SDK' : 'Learn more about the SDK',
@@ -72,4 +73,4 @@ export const linkContent = lang => {
             onclick: 'https://www.google.com'
         },
     }
-}
+};

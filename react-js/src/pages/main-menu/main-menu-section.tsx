@@ -1,7 +1,7 @@
 import React from 'react';
 import './main-menu-section-styles.scss'
 
-export default class Section extends React.Component {
+export default class Section extends React.Component<any, any> {
 
     render() {
         const {icon, title, cards, links} = this.props;
@@ -12,7 +12,7 @@ export default class Section extends React.Component {
                     <h2 className='title'>{title}</h2>
                 </div>
                 {cards && <div className='cardsContainer'>
-                    {cards.map((card, index) => {
+                    {cards.map((card: any, index: number) => {
                         const {image, title, description, onclick} = card;
                         return (
                             <div key={index} className='card' onClick={onclick}>
@@ -26,7 +26,7 @@ export default class Section extends React.Component {
                     })}
                 </div>}
                 {links && <div className='linksContainer'>
-                    {links.map((link, index) => {
+                    {links.map((link: any, index: number) => {
                         const {text, onclick} = link;
                         return (
                             <a key={index} href={onclick} className='link'>{text}</a>

@@ -5,8 +5,8 @@ import Section from './main-menu-section'
 import {sectionContent, cardContent, linkContent} from './main-menu-model'
 
 
-export default class MainMenu extends React.Component {
-    
+export default class MainMenu extends React.Component<any, any> {
+
     render() {
         const {language, callDocument, callBarcode, viewDocuments} = this.props;
         return (
