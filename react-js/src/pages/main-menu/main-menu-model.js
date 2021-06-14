@@ -1,19 +1,23 @@
+
+function loadImage(filename) {
+    return require('../../assets/menu/' + filename)
+}
 export const sectionContent = lang => {
     return {
         documentScanner: {
-            icon: require('../../assets/menu/icon-documentScanner.svg'),
+            icon: loadImage('icon-documentScanner.svg'),
             title: lang === 'de' ? 'DOKUMENTENSCANNER' : 'DOCUMENT SCANNERS'
         },
         dataDetectors: {
-            icon: require('../../assets/menu/icon-dataDetectors.svg'),
+            icon: loadImage('icon-dataDetectors.svg'),
             title: lang === 'de' ? 'DATENERKENNUNG' : 'DATA DETECTORS'
         },
         about: {
-            icon: require('../../assets/menu/icon-warning.svg'),
+            icon: loadImage('icon-warning.svg'),
             title: lang === 'de' ? 'ÜBER UNS' : 'ABOUT'
         },
         legal: {
-            icon: require('../../assets/menu/icon-warning.svg'),
+            icon: loadImage('icon-warning.svg'),
             title: lang === 'de' ? 'RECHTLICHE HINWEISE' : 'LEGAL INFORMATION'
         }
     }
@@ -22,21 +26,21 @@ export const sectionContent = lang => {
 export const cardContent = lang => {
     return {
         scanDocuments: {
-            image: require('../../assets/menu/img-scanDocument.png'),
+            image: loadImage('img-scanDocument.png'),
             title: lang === 'de' ? 'Dokument scannen' : 'Scan documents',
             description: lang === 'de'
                 ? 'Erfassen Sie rechteckige Dokumente, inklusive qualitätsverbessernder Funktionen'
                 : 'Capture any rectangular document type, adjust with quality enhancing features',
         },
         viewDocuments: {
-            image: require('../../assets/menu/img-viewDocuments.jpg'),
+            image: loadImage('img-viewDocuments.jpg'),
             title: lang === 'de' ? 'Dokumente ansehen' : 'View documents',
             description: lang === 'de'
                 ? 'Überprüfung der gescannten Dokumente'
                 : 'Review the scanned documents here',
         },
         barcode: {
-            image: require('../../assets/menu/img-barcode.png'),
+            image: loadImage('img-barcode.png'),
             title: lang === 'de' ? 'QR- / Barcodes scannen ' : 'Scan QR- / barcodes',
             description: lang === 'de'
                 ? 'Scannen und extrahieren Sie QR-/ Barcodes '
