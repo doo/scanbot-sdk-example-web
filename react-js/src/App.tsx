@@ -29,6 +29,8 @@ import Onboarding from './pages/onboarding/onboarding-carousel';
 import LoadingScreen from "./subviews/loading-screen";
 import {StorageService} from "./service/storage-service";
 
+import MainMenu from './pages/main-menu/main-menu'
+
 export default class App extends React.Component<any, any> {
 
     constructor(props: any) {
@@ -42,7 +44,8 @@ export default class App extends React.Component<any, any> {
             },
             loading: true,
             language: this.languageOrDefault(),
-            showOnboarding: !StorageService.instance.getHasVisited()
+            showOnboarding: !StorageService.instance.getHasVisited(),
+            pageCount: Pages.instance.count(),
         };
     }
 
@@ -102,9 +105,20 @@ export default class App extends React.Component<any, any> {
             />;
 		}
 
+        const mainMenuProps = {
+            language: this.state.language,
+            pageCount: this.state.pageCount,
+            callDocument: () => this._documentScanner?.push(AnimationType.PushRight),
+            callBarcode: () => this._barcodeScanner?.push(AnimationType.PushBottom),
+            viewDocuments: null,
+        }
+
         return (
-            <div>
+            <>
+                <MainMenu {...mainMenuProps}/>
                 {this.documentScanner()}
+                {this.barcodeScanner()}
+                {/* {this.documentScanner()}
                 {this.barcodeScanner()}
 
                 <Toast alert={this.state.alert} onClose={() => this.setState({alert: undefined})}/>
@@ -122,10 +136,16 @@ export default class App extends React.Component<any, any> {
                     height={this.toolbarHeight()}
                     buttons={this.decideButtons()}
                 />
-                <LoadingScreen isVisible={this.state.loading}/>
-            </div>
+                <LoadingScreen isVisible={this.state.loading}/> */}
+            </>
         );
     }
+
+    // testing
+
+    
+
+    // --------------
 
     _documentScannerHtmlComponent: any;
     _documentScanner?: DocumentScannerComponent | null;

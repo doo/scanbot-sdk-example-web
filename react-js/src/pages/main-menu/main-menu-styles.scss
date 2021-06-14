@@ -1,0 +1,24 @@
+.logoContainer {
+    background-color: #C8193C;
+    width: 100%;
+    padding: 32px 0;
+    display: flex;
+    justify-content: center;
+
+    .logo {
+        max-width: 185px;
+    }
+}
+
+.contentContainer {
+    background-color: #f7f9fa;
+    padding: 20px;
+
+    .footer {
+        font-size: 12px;
+        line-height: 1.33;
+        letter-spacing: 0.4px;
+        text-align: center;
+        color: #6e7375;
+    }
+}
