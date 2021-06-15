@@ -2,13 +2,12 @@ import React from 'react';
 import './main-menu-styles.scss'
 
 import Section from './main-menu-section'
-import {sectionContent, cardContent, linkContent} from './main-menu-model'
+import {sectionContent} from './main-menu-model'
 
 
 export default class MainMenu extends React.Component<any, any> {
 
     render() {
-        const {language, callDocument, callBarcode, viewDocuments} = this.props;
         return (
             <>
                 <div className='logoContainer'>
@@ -19,30 +18,10 @@ export default class MainMenu extends React.Component<any, any> {
                     />
                 </div>
                 <div className='contentContainer'>
-                    <Section {...sectionContent(language).documentScanner}
-                             cards={[
-                                 {...cardContent(language).scanDocuments, onclick: callDocument},
-                                 {...cardContent(language).viewDocuments, onclick: viewDocuments},
-                             ]}
-                    />
-                    <Section {...sectionContent(language).dataDetectors}
-                             cards={[
-                                 {...cardContent(language).barcode, onclick: callBarcode},
-                             ]}
-                    />
-                    <Section {...sectionContent(language).about}
-                             links={[
-                                 {...linkContent(language).learnMore}
-                             ]}
-                    />
-                    <Section {...sectionContent(language).legal}
-                             links={[
-                                 {...linkContent(language).terms},
-                                 {...linkContent(language).privacy},
-                                 {...linkContent(language).imprint},
-                                 {...linkContent(language).acknowledgements}
-                             ]}
-                    />
+                    <Section {...sectionContent({...this.props}).documentScanner} />
+                    <Section {...sectionContent({...this.props}).dataDetectors} />
+                    <Section {...sectionContent({...this.props}).about} />
+                    <Section {...sectionContent({...this.props}).legal} />
                     <div className='footer'>
                         <p dangerouslySetInnerHTML={{__html:
                                 `App version 1.4.0.60<br />

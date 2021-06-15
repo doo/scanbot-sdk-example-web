@@ -3,74 +3,66 @@ function loadImage(filename: string) {
     return require('../../assets/menu/' + filename)
 }
 
-export const sectionContent = (lang: string) => {
+export const sectionContent = ({...args}: any) => {
+    const {language, callDocument, callBarcode, viewDocuments} = args
     return {
         documentScanner: {
             icon: loadImage('icon-documentScanner.svg'),
-            title: lang === 'de' ? 'DOKUMENTENSCANNER' : 'DOCUMENT SCANNERS'
+            title: language === 'de' ? 'DOKUMENTENSCANNER' : 'DOCUMENT SCANNERS',
+            cards: [
+                {
+                image: loadImage('img-scanDocument.png'),
+                title: language === 'de' ? 'Dokument scannen' : 'Scan documents',
+                description: language === 'de'
+                    ? 'Erfassen Sie rechteckige Dokumente, inklusive qualitätsverbessernder Funktionen'
+                    : 'Capture any rectangular document type, adjust with quality enhancing features',
+                onclick: callDocument,
+                },{
+                image: loadImage('img-viewDocuments.jpg'),
+                title: language === 'de' ? 'Dokumente ansehen' : 'View documents',
+                description: language === 'de'
+                    ? 'Überprüfung der gescannten Dokumente'
+                    : 'Review the scanned documents here',
+                    onclick: viewDocuments,
+                },
+            ],
         },
         dataDetectors: {
             icon: loadImage('icon-dataDetectors.svg'),
-            title: lang === 'de' ? 'DATENERKENNUNG' : 'DATA DETECTORS'
+            title: language === 'de' ? 'DATENERKENNUNG' : 'DATA DETECTORS',
+            cards:[{
+                image: loadImage('img-barcode.png'),
+                title: language === 'de' ? 'QR- / Barcodes scannen ' : 'Scan QR- / barcodes',
+                description: language === 'de'
+                    ? 'Scannen und extrahieren Sie QR-/ Barcodes '
+                    : 'Scan and extract various 1D- and 2D-barcodes',
+                onclick: callBarcode,
+            }]
         },
         about: {
             icon: loadImage('icon-warning.svg'),
-            title: lang === 'de' ? 'ÜBER UNS' : 'ABOUT'
+            title: language === 'de' ? 'ÜBER UNS' : 'ABOUT',
+            links: [{
+                text: language === 'de' ? 'Erfahren Sie mehr über das SDK' : 'Learn more about the SDK',
+                onclick: 'https://www.google.com'
+            }]
         },
         legal: {
             icon: loadImage('icon-warning.svg'),
-            title: lang === 'de' ? 'RECHTLICHE HINWEISE' : 'LEGAL INFORMATION'
+            title: language === 'de' ? 'RECHTLICHE HINWEISE' : 'LEGAL INFORMATION',
+            links: [{
+                text: language === 'de' ? 'Nutzungsbedingungen' : 'Terms of use',
+                onclick: 'https://www.google.com'
+            },{
+                text: language === 'de' ? 'Datenschutzbedingungen ' : 'Privacy policy',
+                onclick: 'https://www.google.com'
+            },{
+                text: language === 'de' ? 'Impressum ' : 'Imprint',
+                onclick: 'https://www.google.com'
+            },{
+                text: language === 'de' ? 'Danksagungen' : 'Acknowledgements',
+                onclick: 'https://www.google.com'
+            }]
         }
-    }
-};
-
-export const cardContent = (lang: string) => {
-    return {
-        scanDocuments: {
-            image: loadImage('img-scanDocument.png'),
-            title: lang === 'de' ? 'Dokument scannen' : 'Scan documents',
-            description: lang === 'de'
-                ? 'Erfassen Sie rechteckige Dokumente, inklusive qualitätsverbessernder Funktionen'
-                : 'Capture any rectangular document type, adjust with quality enhancing features',
-        },
-        viewDocuments: {
-            image: loadImage('img-viewDocuments.jpg'),
-            title: lang === 'de' ? 'Dokumente ansehen' : 'View documents',
-            description: lang === 'de'
-                ? 'Überprüfung der gescannten Dokumente'
-                : 'Review the scanned documents here',
-        },
-        barcode: {
-            image: loadImage('img-barcode.png'),
-            title: lang === 'de' ? 'QR- / Barcodes scannen ' : 'Scan QR- / barcodes',
-            description: lang === 'de'
-                ? 'Scannen und extrahieren Sie QR-/ Barcodes '
-                : 'Scan and extract various 1D- and 2D-barcodes',
-        },
-    }
-};
-
-export const linkContent = (lang: string) => {
-    return {
-        learnMore: {
-            text: lang === 'de' ? 'Erfahren Sie mehr über das SDK' : 'Learn more about the SDK',
-            onclick: 'https://www.google.com'
-        },
-        terms: {
-            text: lang === 'de' ? 'Nutzungsbedingungen' : 'Terms of use',
-            onclick: 'https://www.google.com'
-        },
-        privacy: {
-            text: lang === 'de' ? 'Datenschutzbedingungen ' : 'Privacy policy',
-            onclick: 'https://www.google.com'
-        },
-        imprint: {
-            text: lang === 'de' ? 'Impressum ' : 'Imprint',
-            onclick: 'https://www.google.com'
-        },
-        acknowledgements: {
-            text: lang === 'de' ? 'Danksagungen' : 'Acknowledgements',
-            onclick: 'https://www.google.com'
-        },
     }
 };
