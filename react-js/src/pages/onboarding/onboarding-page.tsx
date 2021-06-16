@@ -32,7 +32,6 @@ export default class OnboardingPage extends React.Component<any, any> {
 	render() {
 		const {id, lang, handleSlide} = this.props;
 		const headerText = isEven(id) ? background.white : background.red;
-		console.log(this.props)
 
 		return (
 			<div className='root' style={{backgroundColor: isEven(id) ? '#C8193C' : 'white'}}>
