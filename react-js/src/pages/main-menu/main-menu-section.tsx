@@ -13,11 +13,15 @@ export default class Section extends React.Component<any, any> {
                 </div>
                 {cards && <div className='cardsContainer'>
                     {cards.map((card: any, index: number) => {
-                        const {image, title, description, onclick} = card;
+                        const {image, title, description, onclick, tooltip} = card;
                         return (
                             <div key={index} className='card' onClick={onclick}>
-                                <div><img src={image} alt="card illustration" className='image'/></div>
-                                <div>
+                                <div className='imageContainer'>
+                                    {tooltip > 0 && <div className='tooltip'>{tooltip}</div>}
+                                    <img src={image} alt="card illustration" className='image'/>
+                                    
+                                </div>
+                                <div className='textContainer'>
                                     <h3 className='title'>{title}</h3>
                                     <p className='description'>{description}</p>
                                 </div>

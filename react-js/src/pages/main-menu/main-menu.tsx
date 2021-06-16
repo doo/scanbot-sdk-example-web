@@ -41,13 +41,15 @@ class Alert extends React.Component<any, any> {
         console.log('here')
         const {language} = this.props
 		return (
-            <div className='alert'>
-                <p>{language === 'de'
+            <div className='alertContainer'>
+                <p className='alert'>{language === 'de'
                     ? 'Dürfen wir anonyme Absturzberichte erstellen, um die Benutzererfahrung zu verbessern?'
                     : 'Can we create anonymous crash reports, helping us improve your user experience?'
                 }</p>
-                <button>{language === 'de' ? 'ABLEHNEN' : 'DENY'}</button>
-                <button>{language === 'de' ? 'ERLAUBEN' : 'ALLOW'}</button>
+                <div className='alertButtonContainer'>
+                    <button className='alertButton'>{language === 'de' ? 'ABLEHNEN' : 'DENY'}</button>
+                    <button className='alertButton'>{language === 'de' ? 'ERLAUBEN' : 'ALLOW'}</button>
+                </div>
             </div>
         )
 	}
@@ -62,15 +64,16 @@ export default class MainMenu extends React.Component<any, any> {
 
     render() {
         const {language} = this.props
+        const content = sectionContent({...this.props})
         return (
             <>
                 <Header />
                 {this.state.showAlert && <Alert language={language}/>}
                 <div className='contentContainer'>
-                    <Section {...sectionContent({...this.props}).documentScanner} />
-                    <Section {...sectionContent({...this.props}).dataDetectors} />
-                    <Section {...sectionContent({...this.props}).about} />
-                    <Section {...sectionContent({...this.props}).legal} />
+                    <Section {...content.documentScanner} />
+                    <Section {...content.dataDetectors} />
+                    <Section {...content.about} />
+                    <Section {...content.legal} />
                     <Footer language={language} />
                 </div>
             </>
