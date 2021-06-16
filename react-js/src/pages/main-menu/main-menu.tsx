@@ -37,40 +37,50 @@ class Footer extends React.Component<any, any> {
 }
 
 class Alert extends React.Component<any, any> {
+    constructor(props: any) {
+        super(props);
+        this.state = {
+            showAlert: !StorageService.instance.getShowAlert()
+        };
+    }
+
+    onclick() {
+        StorageService.instance.setShowAlert(true)
+        this.setState({showAlert: false})
+    }
+
 	render() {
-        console.log('here')
         const {language} = this.props
 		return (
-            <div className='alert'>
-                <p>{language === 'de'
-                    ? 'Dürfen wir anonyme Absturzberichte erstellen, um die Benutzererfahrung zu verbessern?'
-                    : 'Can we create anonymous crash reports, helping us improve your user experience?'
-                }</p>
-                <button>{language === 'de' ? 'ABLEHNEN' : 'DENY'}</button>
-                <button>{language === 'de' ? 'ERLAUBEN' : 'ALLOW'}</button>
-            </div>
+            <>
+                { this.state.showAlert && <div className='alertContainer'>
+                    <p className='alert'>{language === 'de'
+                        ? 'Dürfen wir anonyme Absturzberichte erstellen, um die Benutzererfahrung zu verbessern?'
+                        : 'Can we create anonymous crash reports, helping us improve your user experience?'
+                    }</p>
+                    <div className='alertButtonContainer'>
+                        <button className='alertButton' onClick={this.onclick.bind(this)}>{language === 'de' ? 'ABLEHNEN' : 'DENY'}</button>
+                        <button className='alertButton' onClick={this.onclick.bind(this)}>{language === 'de' ? 'ERLAUBEN' : 'ALLOW'}</button>
+                    </div>
+                </div>}
+            </>
         )
 	}
 }
 export default class MainMenu extends React.Component<any, any> {
-    constructor(props: any) {
-        super(props);
-        this.state = {
-            showAlert: StorageService.instance.getShowAlert()
-        };
-    }
 
     render() {
         const {language} = this.props
+        const content = sectionContent({...this.props})
         return (
             <>
                 <Header />
-                {this.state.showAlert && <Alert language={language}/>}
+                <Alert language={language}/>
                 <div className='contentContainer'>
-                    <Section {...sectionContent({...this.props}).documentScanner} />
-                    <Section {...sectionContent({...this.props}).dataDetectors} />
-                    <Section {...sectionContent({...this.props}).about} />
-                    <Section {...sectionContent({...this.props}).legal} />
+                    <Section {...content.documentScanner} />
+                    <Section {...content.dataDetectors} />
+                    <Section {...content.about} />
+                    <Section {...content.legal} />
                     <Footer language={language} />
                 </div>
             </>

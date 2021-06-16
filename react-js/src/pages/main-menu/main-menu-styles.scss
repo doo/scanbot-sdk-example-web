@@ -10,6 +10,36 @@
     }
 }
 
+.alertContainer {
+    padding: 20px;
+
+    .alert {
+        font-size: 14px;
+        font-weight: normal;
+        line-height: 1.43;
+        letter-spacing: 0.25px;
+        color: #6e7375;
+    }
+
+    .alertButtonContainer {
+        display: flex;
+        justify-content: flex-end;
+        padding-top: 16px;
+        
+        .alertButton {
+            float: right;
+            color: #c8193c;
+            border: none;
+            background-color: transparent;
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 1.14;
+            letter-spacing: 1.25px;
+            font-family: 'Roboto', sans-serif !important;
+        }
+    }
+}
+
 .contentContainer {
     background-color: #f7f9fa;
     padding: 20px;

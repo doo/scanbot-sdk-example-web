@@ -1,10 +1,11 @@
 
 function loadImage(filename: string) {
-    return require('../../assets/menu/' + filename)
+    return require('../../assets/menu/' + filename);
 }
 
 export const sectionContent = ({...args}: any) => {
-    const {language, callDocument, callBarcode, viewDocuments} = args;
+
+    const {language, callDocument, callBarcode, viewDocuments, pageCount} = args;
     return {
         documentScanner: {
             icon: loadImage('icon-documentScanner.svg'),
@@ -19,11 +20,13 @@ export const sectionContent = ({...args}: any) => {
                 onclick: callDocument,
                 },{
                 image: loadImage('img-viewDocuments.png'),
+
                 title: language === 'de' ? 'Dokumente ansehen' : 'View documents',
                 description: language === 'de'
                     ? 'Überprüfung der gescannten Dokumente'
                     : 'Review the scanned documents here',
-                    onclick: viewDocuments,
+                tooltip: 1,
+                onclick: viewDocuments,
                 },
             ],
         },

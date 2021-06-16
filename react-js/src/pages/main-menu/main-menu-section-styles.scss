@@ -38,27 +38,50 @@
             display: flex;
             padding: 16px 0;
 
-            .image {
-                max-width: 50px;
-                max-height: 50px;
-                object-fit: contain;
-                margin-right: 20px;
+            .imageContainer {
+                position: relative;
+
+                .image {
+                    max-width: 50px;
+                    max-height: 50px;
+                    object-fit: contain;
+                }
+
+                .tooltip {
+                    position: absolute;
+                    right: -5px;
+                    top: -5px;
+                    font-size: 10px;
+                    font-weight: 500;
+                    line-height: 1.6;
+                    letter-spacing: 1.5px;
+                    background-color: #c8193c;
+                    border-radius: 50%;
+                    width: 15px;
+                    height: 15px;
+                    text-align: center;
+                    color: white;
+                }
             }
 
-            .title {
-                font-size: 16px;
-                line-height: 1.5;
-                font-weight: normal;
-                letter-spacing: 0.5px;
-                color: rgba(0, 0, 0, 0.87)
-            }
+            .textContainer {
+                margin-left: 20px;
 
-            .description {
-                font-size: 14px;
-                line-height: 1.43;
-                letter-spacing: 0.25px;
-                text-align: left;
-                color: rgba(0, 0, 0, 0.6)
+                .title {
+                    font-size: 16px;
+                    line-height: 1.5;
+                    font-weight: normal;
+                    letter-spacing: 0.5px;
+                    color: rgba(0, 0, 0, 0.87)
+                }
+    
+                .description {
+                    font-size: 14px;
+                    line-height: 1.43;
+                    letter-spacing: 0.25px;
+                    text-align: left;
+                    color: rgba(0, 0, 0, 0.6)
+                }
             }
         }
     }
