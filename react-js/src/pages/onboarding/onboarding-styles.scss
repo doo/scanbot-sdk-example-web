@@ -1,15 +1,4 @@
-@mixin breakpoint-up ($breakpoint) {
-    @if $breakpoint==sm {
-        @media only screen and (min-width: 600px) {
-            @content;
-        }
-    }
-    @if $breakpoint==md {
-        @media only screen and (min-width: 960px) {
-            @content;
-        }
-    }
-}
+@import '../../library';
 
 html,
 body,

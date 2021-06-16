@@ -1,54 +1,65 @@
-.logoContainer {
-    background-color: #C8193C;
-    width: 100%;
-    padding: 32px 0;
-    display: flex;
-    justify-content: center;
+@import '../../library';
 
-    .logo {
-        max-width: 185px;
-    }
-}
+.component-mainMenu {
+    background-color: $color-background-lightGrey;
+    height: 100%;
 
-.alertContainer {
-    padding: 20px;
-
-    .alert {
-        font-size: 14px;
-        font-weight: normal;
-        line-height: 1.43;
-        letter-spacing: 0.25px;
-        color: #6e7375;
-    }
-
-    .alertButtonContainer {
+    .logoContainer {
+        background-color: $color-brand;
+        width: 100%;
+        padding: 32px 0;
         display: flex;
-        justify-content: flex-end;
-        padding-top: 16px;
-        
-        .alertButton {
-            float: right;
-            color: #c8193c;
-            border: none;
-            background-color: transparent;
-            font-size: 14px;
-            font-weight: 500;
-            line-height: 1.14;
-            letter-spacing: 1.25px;
-            font-family: 'Roboto', sans-serif !important;
+        justify-content: center;
+    
+        .logo {
+            max-width: 185px;
         }
     }
-}
-
-.contentContainer {
-    background-color: #f7f9fa;
-    padding: 20px;
-
-    .footer {
-        font-size: 12px;
-        line-height: 1.33;
-        letter-spacing: 0.4px;
-        text-align: center;
-        color: #6e7375;
+    
+    .alertContainer {
+        padding: 20px;
+        background-color: white;
+    
+        .alert {
+            font-size: 14px;
+            font-weight: normal;
+            line-height: 1.43;
+            letter-spacing: 0.25px;
+            color: $color-text-grey;
+            max-width: 1140px;
+            margin: 0 auto;
+        }
+    
+        .alertButtonContainer {
+            display: flex;
+            justify-content: flex-end;
+            padding-top: 16px;
+            max-width: 1140px;
+            margin: 0 auto;
+            
+            .alertButton {
+                float: right;
+                color: $color-brand;
+                border: none;
+                background-color: transparent;
+                font-size: 14px;
+                font-weight: 500;
+                line-height: 1.14;
+                letter-spacing: 1.25px;
+                font-family: 'Roboto', sans-serif !important;
+            }
+        }
+    }
+    
+    .contentContainer {
+        padding: 20px;
+    
+        .footer {
+            font-size: 12px;
+            line-height: 1.33;
+            letter-spacing: 0.4px;
+            text-align: center;
+            color: #6e7375;
+        }
     }
 }
