@@ -3,7 +3,7 @@
 html,
 body,
 #root,
-.carouselContainer,
+.component-carousel,
 .slider,
 .slider-frame,
 .slider-list,
@@ -14,7 +14,7 @@ body,
     height: 100% !important;
 }
 
-.root {
+.component-carousel {
     color: white;
 
     .innerContainer {

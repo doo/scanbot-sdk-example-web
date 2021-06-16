@@ -59,7 +59,7 @@ class Onboarding extends React.Component<any, any> {
 
 	render() {
 		return (
-			<div className='carouselContainer'>
+			<div className='component-carousel'>
 				<Carousel
 					slideIndex={this.state.slideIndex}
 					afterSlide={(slideIndex) => this.setSlide(slideIndex)}
