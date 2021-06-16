@@ -1,10 +1,11 @@
 
 function loadImage(filename: string) {
-    return require('../../assets/menu/' + filename)
+    return require('../../assets/menu/' + filename);
 }
 
 export const sectionContent = ({...args}: any) => {
-    const {language, callDocument, callBarcode, viewDocuments, pageCount} = args
+
+    const {language, callDocument, callBarcode, viewDocuments, pageCount} = args;
     return {
         documentScanner: {
             icon: loadImage('icon-documentScanner.svg'),
