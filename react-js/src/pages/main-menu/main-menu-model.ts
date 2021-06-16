@@ -20,7 +20,6 @@ export const sectionContent = ({...args}: any) => {
                 onclick: callDocument,
                 },{
                 image: loadImage('img-viewDocuments.png'),
-
                 title: language === 'de' ? 'Dokumente ansehen' : 'View documents',
                 description: language === 'de'
                     ? 'Überprüfung der gescannten Dokumente'

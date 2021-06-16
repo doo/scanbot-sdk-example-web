@@ -14,7 +14,7 @@ export default class MainMenu extends React.Component<any, any> {
         const {language} = this.props;
         const content = sectionContent({...this.props});
         return (
-            <>
+            <div className ='component-mainMenu'>
                 <Header />
                 <CrashReportingAlert language={language}/>
                 <div className='contentContainer'>
@@ -24,7 +24,7 @@ export default class MainMenu extends React.Component<any, any> {
                     <Section {...content.legal} />
                     <Footer language={language} />
                 </div>
-            </>
+            </div>
         )
     }
 }
