@@ -4,6 +4,11 @@ import Pages from "../model/pages";
 import {GridList, GridListTile} from "@material-ui/core";
 import {Styles} from "../model/styles";
 
+import Header from "./main-menu/header";
+import { BottomBar } from "../subviews/bottom-bar";
+
+import {savePDF, saveTIFF} from "../auxiliary";
+
 export default class ImageResultsPage extends React.Component<any, any>{
 
     constructor(props: any) {
@@ -27,7 +32,8 @@ export default class ImageResultsPage extends React.Component<any, any>{
     render() {
 
         return (
-            <div style={{width: "100%", height: "100%"}}>
+            <div className='component-imageResults' style={{width: "100%", height: "100%"}}>
+                <Header back={true}/>
                 <GridList style={{height: "100%", margin: 0}} cellHeight={160} cols={3}>
                     {this.state.images.map((image: any) => {
                         return (
@@ -40,6 +46,13 @@ export default class ImageResultsPage extends React.Component<any, any>{
                         )
                     })}
                 </GridList>
+                <BottomBar
+                    height={90}
+                    buttons={[
+                        {text: "SAVE PDF", action: () => savePDF()},
+                        {text: "SAVE TIFF", action: () => saveTIFF()}
+                    ]}
+                />
             </div>
         );
     }

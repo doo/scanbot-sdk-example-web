@@ -4,7 +4,7 @@ import Swal from 'sweetalert2';
 
 import { Barcode, BarcodeResult, ImageFilter } from 'scanbot-web-sdk/@types';
 
-import { NavigationContent } from './subviews/navigation-content';
+import NavigationContent from './subviews/navigation-content';
 import { Toast } from './subviews/toast';
 import FeatureList from './subviews/feature-list';
 import { BottomBar } from './subviews/bottom-bar';
@@ -30,7 +30,9 @@ import LoadingScreen from "./subviews/loading-screen";
 import {StorageService} from "./service/storage-service";
 
 import MainMenu from './pages/main-menu/main-menu';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import { Switch, Route, Redirect, Link } from 'react-router-dom';
+import DocumentScannerPage from './pages/document-scanner-page';
+import BaseScannerComponent from './rtu-ui/common/base-scanner-component';
 
 export default class App extends React.Component<any, any> {
 
@@ -108,25 +110,39 @@ export default class App extends React.Component<any, any> {
 
         return (
             <>
+                                {this.documentScanner()}
+                {this.barcodeScanner()}
+                <Link to='/doc-scanner'>Teste</Link>
+                <Link to='/view-doc'>View</Link>
                 <Switch>
                     <Route path='/welcome'>
-                        {this.state.showOnboarding && <Onboarding skip={() => {
+                        <Onboarding skip={() => {
                             StorageService.instance.setHasVisited();
                             this.setState({showOnboarding: false}); 
                             }} 
                             language={this.state.language}    
-                        />}
+                        />
                     </Route>
                     <Route exact path="/">
                         {this.state.showOnboarding 
-                            ? <Redirect to="/welcome" /> 
+                            ? <Redirect to='/welcome'/> 
                             : <MainMenu {...mainMenuProps}/>
                         }
                     </Route>
+                    <Route path="/doc-scanner">
+                        <DocumentScannerPage />
+                    </Route>
+                    <Route path="/view-doc">
+                        <ImageResultsPage
+                            sdk={this.state.sdk}
+                            onDetailButtonClick={async (index: number) => {
+                                Pages.instance.setActiveItem(index);
+                                this.setState({activeImage: await ScanbotSdkService.instance.documentImageAsBase64(index)});
+                                RoutingService.instance.route(RoutePath.ImageDetails, {index: index})
+                        }}/>
+                    </Route>
                 </Switch>
-                {/* <MainMenu {...mainMenuProps}/>
-                {this.documentScanner()}
-                {this.barcodeScanner()} */}
+
                 {/* {this.documentScanner()}
                 {this.barcodeScanner()}
 

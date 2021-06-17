@@ -1,10 +1,23 @@
 @import '../../library';
 
+.header {
+    background-color: $color-brand;
+    width: 100%;
+    padding: 32px 0;
+    display: flex;
+    justify-content: center;
+
+    .logo {
+        max-width: 185px;
+    }
+}
+
+
 .component-mainMenu {
     background-color: $color-background-lightGrey;
     height: 100%;
 
-    .logoContainer {
+    .header {
         background-color: $color-brand;
         width: 100%;
         padding: 32px 0;
