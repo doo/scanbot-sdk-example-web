@@ -19,7 +19,7 @@ export const sectionContent = ({...args}: any) => {
                     : 'Capture any rectangular document type, adjust with quality enhancing features',
                 onclick: callDocument,
                 },{
-                image: loadImage('img-viewDocuments@3x.png'),
+                image: loadImage('img-viewDocuments.png'),
                 title: language === 'de' ? 'Dokumente ansehen' : 'View documents',
                 description: language === 'de'
                     ? 'Überprüfung der gescannten Dokumente'

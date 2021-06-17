@@ -29,7 +29,8 @@ import Onboarding from './pages/onboarding/onboarding-carousel';
 import LoadingScreen from "./subviews/loading-screen";
 import {StorageService} from "./service/storage-service";
 
-import MainMenu from './pages/main-menu/main-menu'
+import MainMenu from './pages/main-menu/main-menu';
+import { Switch, Route, Redirect } from 'react-router-dom';
 
 export default class App extends React.Component<any, any> {
 
@@ -97,14 +98,6 @@ export default class App extends React.Component<any, any> {
 
     render() {
 
-    	if (this.state.showOnboarding) {
-			return <Onboarding skip={() => {
-			    StorageService.instance.setHasVisited();
-				this.setState({showOnboarding: false}); }} 
-                language={this.state.language}    
-            />;
-		}
-
         const mainMenuProps = {
             language: this.state.language,
             pageCount: this.state.pageCount,
@@ -115,9 +108,25 @@ export default class App extends React.Component<any, any> {
 
         return (
             <>
-                <MainMenu {...mainMenuProps}/>
+                <Switch>
+                    <Route path='/welcome'>
+                        {this.state.showOnboarding && <Onboarding skip={() => {
+                            StorageService.instance.setHasVisited();
+                            this.setState({showOnboarding: false}); 
+                            }} 
+                            language={this.state.language}    
+                        />}
+                    </Route>
+                    <Route exact path="/">
+                        {this.state.showOnboarding 
+                            ? <Redirect to="/welcome" /> 
+                            : <MainMenu {...mainMenuProps}/>
+                        }
+                    </Route>
+                </Switch>
+                {/* <MainMenu {...mainMenuProps}/>
                 {this.documentScanner()}
-                {this.barcodeScanner()}
+                {this.barcodeScanner()} */}
                 {/* {this.documentScanner()}
                 {this.barcodeScanner()}
 
