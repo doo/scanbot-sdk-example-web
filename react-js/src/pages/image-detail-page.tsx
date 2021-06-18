@@ -6,7 +6,7 @@ import Swal from 'sweetalert2';
 import { ImageFilter } from 'scanbot-web-sdk/@types';
 import { ScanbotSdkService } from '../service/scanbot-sdk-service';
 import Pages from '../model/pages';
-import { RoutingService } from '../service/routing-service';
+import { RoutePath, RoutingService } from '../service/routing-service';
 
 export default class ImageDetailPage extends React.Component<any, any>{
 
@@ -18,10 +18,14 @@ export default class ImageDetailPage extends React.Component<any, any>{
         }
     }
 
+    async componentDidMount() {
+        const index = Pages.instance.getActiveIndex();
+        this.setState({updatedImage: await ScanbotSdkService.instance.documentImageAsBase64(index)})
+    }
+
     openCroppingUI() {
         const index = Pages.instance.getActiveIndex();
         RoutingService.instance.manualGoTo(`${index}/cropping-view`, {index: index})
-        // RoutingService.instance.crop(index, {index: index})
     }
 
     async applyFilter() {
@@ -52,7 +56,7 @@ export default class ImageDetailPage extends React.Component<any, any>{
 
     deletePage() {
         Pages.instance.removeActiveItem();
-        RoutingService.instance.back()
+        RoutingService.instance.goTo(RoutePath.ViewDocuments)
     }
 
     render() {

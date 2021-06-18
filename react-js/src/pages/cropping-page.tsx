@@ -5,7 +5,7 @@ import {ScanbotSdkService} from "../service/scanbot-sdk-service";
 import Header from "./main-menu/header";
 import { BottomBar } from "../subviews/bottom-bar";
 import { withRouter } from "react-router-dom";
-import { RoutingService } from '../service/routing-service';
+import { RoutingService, RoutePath } from '../service/routing-service';
 
 export default class CroppingPage extends React.Component<any, any>{
 
@@ -51,9 +51,11 @@ export default class CroppingPage extends React.Component<any, any>{
         const result = await ScanbotSdkService.instance.croppingView?.apply();
         Pages.instance.updateActiveItem(result);
         await ScanbotSdkService.instance.reapplyFilter();
-        RoutingService.instance.back();
         const index = Pages.instance.getActiveIndex();
-        this.setState({activeImage: await ScanbotSdkService.instance.documentImageAsBase64(index)});
+        RoutingService.instance.manualGoTo(`${RoutePath.ViewDocuments}/${index}`, {updatedImage: await ScanbotSdkService.instance.documentImageAsBase64(index)} )
+        // RoutingService.instance.back();
+        // const index = Pages.instance.getActiveIndex();
+        // this.setState({activeImage: await ScanbotSdkService.instance.documentImageAsBase64(index)});
     }
 
     render() {
