@@ -20,4 +20,8 @@ export default class Barcodes {
         })
     }
 
+    public static format(codes: Barcode[]): string {
+        return JSON.stringify(codes.map((code: Barcode) => code.text + " (" + code.format + ") "));
+    }
+
 }
