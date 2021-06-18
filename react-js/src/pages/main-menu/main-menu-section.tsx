@@ -14,6 +14,7 @@ export default class Section extends React.Component<any, any> {
                 {cards && <div className='cardsContainer'>
                     {cards.map((card: any, index: number) => {
                         const {image, title, description, onclick, tooltip} = card;
+                        console.log(tooltip)
                         return (
                             <div key={index} className='card' onClick={onclick}>
                                 <div className='imageContainer'>

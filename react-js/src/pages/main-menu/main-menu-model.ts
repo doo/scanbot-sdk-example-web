@@ -24,7 +24,7 @@ export const sectionContent = ({...args}: any) => {
                 description: language === 'de'
                     ? 'Überprüfung der gescannten Dokumente'
                     : 'Review the scanned documents here',
-                tooltip: 1,
+                tooltip: pageCount,
                 onclick: viewDocuments,
                 },
             ],
