@@ -7,7 +7,7 @@ import Aux, {applyFilter} from "../auxiliary";
 export default class ImageDetailPage extends React.Component<any, any>{
 
     render() {
-        const aux = new Aux()
+        // const aux = new Aux()
         return (
             <div style={{width: "100%", height: "100%"}}>
                 <Header back={true}/>
@@ -17,7 +17,7 @@ export default class ImageDetailPage extends React.Component<any, any>{
                     buttons={[
                         // {text: "CROP", action: this.openCroppingUI.bind(this)},
                         {text: "FILTER", action: () => applyFilter(this.props.image)},
-                        {text: "DELETE", action: () => aux.deletePage(), right: true}
+                        {text: "DELETE", action: () => {/*aux.deletePage()*/}, right: true}
                     ]}
                 />
             </div>

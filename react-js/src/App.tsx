@@ -30,11 +30,11 @@ import LoadingScreen from "./subviews/loading-screen";
 import {StorageService} from "./service/storage-service";
 
 import MainMenu from './pages/main-menu/main-menu';
-import { Switch, Route, Redirect, Link } from 'react-router-dom';
+import {Switch, Route, Redirect, Link, withRouter} from 'react-router-dom';
 import DocumentScannerPage from './pages/document-scanner-page';
 import BaseScannerComponent from './rtu-ui/common/base-scanner-component';
 
-export default class App extends React.Component<any, any> {
+class App extends React.Component<any, any> {
 
     constructor(props: any) {
         super(props);
@@ -53,6 +53,8 @@ export default class App extends React.Component<any, any> {
 
     async componentDidMount() {
         const sdk = await ScanbotSdkService.instance.initialize();
+        RoutingService.initialize(this.props.history);
+
         this.setState({sdk: sdk, loading: false});
 
         RoutingService.instance.observeChanges(() => {
@@ -70,6 +72,8 @@ export default class App extends React.Component<any, any> {
             }
 
         });
+
+
     }
 
     languageOrDefault(): string {
@@ -106,7 +110,7 @@ export default class App extends React.Component<any, any> {
             callBarcode: () => this._barcodeScanner?.push(AnimationType.PushBottom),
             viewDocuments: null,
         }
-
+        
         return (
             <>
                                 {this.documentScanner()}
@@ -117,14 +121,14 @@ export default class App extends React.Component<any, any> {
                     <Route path='/welcome'>
                         <Onboarding skip={() => {
                             StorageService.instance.setHasVisited();
-                            this.setState({showOnboarding: false}); 
-                            }} 
-                            language={this.state.language}    
+                            this.setState({showOnboarding: false});
+                            }}
+                            language={this.state.language}
                         />
                     </Route>
                     <Route exact path="/">
-                        {this.state.showOnboarding 
-                            ? <Redirect to='/welcome'/> 
+                        {this.state.showOnboarding
+                            ? <Redirect to='/welcome'/>
                             : <MainMenu {...mainMenuProps}/>
                         }
                     </Route>
@@ -170,7 +174,7 @@ export default class App extends React.Component<any, any> {
 
     // testing
 
-    
+
 
     // --------------
 
@@ -418,3 +422,5 @@ export default class App extends React.Component<any, any> {
         }
     }
 }
+
+export default withRouter(App);

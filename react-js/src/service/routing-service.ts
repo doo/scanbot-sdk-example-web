@@ -1,6 +1,3 @@
-import {createBrowserHistory} from "history";
-
-const history = createBrowserHistory();
 
 export enum RoutePath {
     DocumentScanner = "document-scanner",
@@ -16,7 +13,15 @@ export enum RoutePath {
 
 export class RoutingService {
 
-    public static instance = new RoutingService();
+    public static instance: RoutingService;
+
+    private history: any;
+
+    public static initialize(history: any) {
+        console.log("Initializing routing service with history: ", history);
+        this.instance = new RoutingService();
+        this.instance.history = history;
+    }
 
     public route(path: RoutePath, args?: any) {
         let query = "";
@@ -28,19 +33,19 @@ export class RoutingService {
             })
         }
 
-        history.push("#/" + path + query);
+        this.history.push("#/" + path + query);
 
     }
 
     public reset() {
-        history.replace("#/");
+        this.history.replace("#/");
     }
 
     public observeChanges(action: any) {
-        history.listen(update => {action();});
+        this.history.listen((update: any) => {action();});
     }
 
     public back() {
-        history.back();
+       this.history.back();
     }
 }
