@@ -48,4 +48,11 @@ export class RoutingService {
     public back() {
        this.history.back();
     }
+
+    public deletePage() {
+        console.log('deletiiiing');
+        // Pages.instance.removeActiveItem();
+        // RoutingService.instance.route(RoutePath.ImageResults);
+        this.history.push('./view-doc')
+    }
 }

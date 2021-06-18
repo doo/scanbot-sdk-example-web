@@ -2,8 +2,11 @@
 import React from "react";
 import Pages from "../model/pages";
 import {ScanbotSdkService} from "../service/scanbot-sdk-service";
+import Header from "./main-menu/header";
+import { BottomBar } from "../subviews/bottom-bar";
+import { withRouter } from "react-router-dom";
 
-export default class CroppingPage extends React.Component<any, any>{
+class CroppingPage extends React.Component<any, any>{
 
     constructor(props: any) {
         super(props);
@@ -14,12 +17,13 @@ export default class CroppingPage extends React.Component<any, any>{
     }
 
     async componentDidMount(): Promise<void> {
-        const href = window.location.href.split("?");
-        if (href.length === 1) {
-            console.log("No query parameters");
-            return;
-        }
-        const index = parseInt(window.location.href.split("?")[1].split("=")[1]);
+        // const href = window.location.href.split("?");
+        // if (href.length === 1) {
+        //     console.log("No query parameters");
+        //     return;
+        // }
+        // const index = parseInt(window.location.href.split("?")[1].split("=")[1]);
+        const index = parseInt(window.location.href.split("view-doc/")[1].split("/")[0]);
         const page = Pages.instance.objectAtIndex(index);
 
         if (!page) {
@@ -34,13 +38,40 @@ export default class CroppingPage extends React.Component<any, any>{
         ScanbotSdkService.instance.disposeCroppingView();
     }
 
+    async detect() {
+        await ScanbotSdkService.instance.croppingView?.detect();
+    }
+
+    async rotate() {
+        await ScanbotSdkService.instance.croppingView?.rotate(1);
+    }
+
+    async applyCrop() {
+        const result = await ScanbotSdkService.instance.croppingView?.apply();
+        Pages.instance.updateActiveItem(result);
+        await ScanbotSdkService.instance.reapplyFilter();
+        this.props.history.goBack();
+        const index = Pages.instance.getActiveIndex();
+        this.setState({activeImage: await ScanbotSdkService.instance.documentImageAsBase64(index)});
+    }
+
     render() {
 
         return (
             <div style={{height: "100%"}}>
+                <Header back={true}/>
                 <div id={ScanbotSdkService.CROPPING_VIEW_CONTAINER} style={{width: "100%", height: "100%"}}/>
+                <BottomBar
+                    height={90}
+                    buttons={[
+                        {text: "DETECT", action: this.detect},
+                        {text: "ROTATE", action: this.rotate},
+                        {text: "APPLY", action: this.applyCrop, right: true}
+                    ]}
+                />
             </div>
         );
     }
-
 }
+
+export default withRouter(CroppingPage)

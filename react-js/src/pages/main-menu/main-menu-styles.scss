@@ -15,7 +15,10 @@
 
 .component-mainMenu {
     background-color: $color-background-lightGrey;
-    height: 100%;
+
+    // @include breakpoint-up(sm) {
+    //     height: 100%;
+    // }
 
     .header {
         background-color: $color-brand;

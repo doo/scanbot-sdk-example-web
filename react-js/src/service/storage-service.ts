@@ -18,4 +18,13 @@ export class StorageService {
     private get(key: string): any {
         return localStorage.getItem(key);
     }
+
+
+
+    public deletePage(props: any) {
+        console.log('deletiiiing');
+        // Pages.instance.removeActiveItem();
+        // RoutingService.instance.route(RoutePath.ImageResults);
+        props.history.push('./view-doc')
+    }
 }
