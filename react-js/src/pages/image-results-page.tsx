@@ -36,7 +36,7 @@ export default class ImageResultsPage extends React.Component<any, any>{
     render() {
         return (
             <div className='component-imageResults' style={{width: "100%", height: "100%"}}>
-                <Header back={true}/>
+                <Header back={true} path={RoutePath.Home}/>
                 <GridList style={{height: "100%", margin: 0}} cellHeight={160} cols={3}>
                     {this.state.images.map((image: any) => {
                         return (

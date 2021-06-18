@@ -62,7 +62,7 @@ export default class ImageDetailPage extends React.Component<any, any>{
     render() {
         return (
             <div style={{width: "100%", height: "100%"}}>
-                <Header back={true}/>
+                <Header back={true} path={RoutePath.ViewDocuments}/>
                 <img style={Styles.documentImage} src={this.state.updatedImage ?? this.props.image} alt={"."}/>
                 <BottomBar
                     height={90}

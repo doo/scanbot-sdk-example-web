@@ -51,11 +51,11 @@ export default class CroppingPage extends React.Component<any, any>{
         const result = await ScanbotSdkService.instance.croppingView?.apply();
         Pages.instance.updateActiveItem(result);
         await ScanbotSdkService.instance.reapplyFilter();
-        const index = Pages.instance.getActiveIndex();
-        RoutingService.instance.manualGoTo(`${RoutePath.ViewDocuments}/${index}`, {updatedImage: await ScanbotSdkService.instance.documentImageAsBase64(index)} )
-        // RoutingService.instance.back();
         // const index = Pages.instance.getActiveIndex();
-        // this.setState({activeImage: await ScanbotSdkService.instance.documentImageAsBase64(index)});
+        // RoutingService.instance.manualGoTo(`${RoutePath.ViewDocuments}/${index}`, {updatedImage: await ScanbotSdkService.instance.documentImageAsBase64(index)} )
+        RoutingService.instance.back();
+        const index = Pages.instance.getActiveIndex();
+        this.setState({activeImage: await ScanbotSdkService.instance.documentImageAsBase64(index)});
     }
 
     render() {
