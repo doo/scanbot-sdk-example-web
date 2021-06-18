@@ -10,6 +10,14 @@ import { RoutingService } from '../service/routing-service';
 
 export default class ImageDetailPage extends React.Component<any, any>{
 
+    constructor(props: any) {
+        super(props);
+
+        this.state = {
+            updatedImage: undefined
+        }
+    }
+
     openCroppingUI() {
         const index = Pages.instance.getActiveIndex();
         RoutingService.instance.manualGoTo(`${index}/cropping-view`, {index: index})
@@ -39,7 +47,7 @@ export default class ImageDetailPage extends React.Component<any, any>{
         }
 
         const index = Pages.instance.getActiveIndex();
-        this.setState({activeImage: await ScanbotSdkService.instance.documentImageAsBase64(index)});
+        this.setState({updatedImage: await ScanbotSdkService.instance.documentImageAsBase64(index)});
     }
 
     deletePage() {
@@ -51,7 +59,7 @@ export default class ImageDetailPage extends React.Component<any, any>{
         return (
             <div style={{width: "100%", height: "100%"}}>
                 <Header back={true}/>
-                <img style={Styles.documentImage} src={this.props.image} alt={"."}/>
+                <img style={Styles.documentImage} src={this.state.updatedImage ?? this.props.image} alt={"."}/>
                 <BottomBar
                     height={90}
                     buttons={[
