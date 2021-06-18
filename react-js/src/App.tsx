@@ -108,15 +108,15 @@ class App extends React.Component<any, any> {
             pageCount: Pages.instance.count(),
             callDocument: () => this._documentScanner?.push(AnimationType.PushRight),
             callBarcode: () => this._barcodeScanner?.push(AnimationType.PushBottom),
-            viewDocuments: () => this.props.history.push('/view-doc'),
+            viewDocuments: () => RoutingService.instance.goTo(RoutePath.ViewDocuments),
         }
         
         return (
             <>
                                 {this.documentScanner()}
                 {this.barcodeScanner()}
-                {/* <Link to='/doc-scanner'>Teste</Link>
-                <Link to='/view-doc'>View</Link> */}
+                <Link to='/doc-scanner'>Teste</Link>
+                <button onClick={() => RoutingService.instance.home()}>HOME</button>
                 <Switch>
                     <Route path='/welcome'>
                         <Onboarding skip={() => {
@@ -132,22 +132,21 @@ class App extends React.Component<any, any> {
                             : <MainMenu {...mainMenuProps}/>
                         }
                     </Route>
-                    <Route path="/doc-scanner">
+                    <Route path="/document-scanner">
                         <DocumentScannerPage />
                     </Route>
-                    <Route exact path="/view-doc">
+                    <Route exact path="/view-documents">
                         <ImageResultsPage
                             sdk={this.state.sdk}
                             onDetailButtonClick={async (index: number) => {
                                 Pages.instance.setActiveItem(index);
                                 this.setState({activeImage: await ScanbotSdkService.instance.documentImageAsBase64(index)});
-                                // RoutingService.instance.route(RoutePath.ImageDetails, {index: index});
                         }}/>
                     </Route>
-                    <Route exact path="/view-doc/:id">
+                    <Route exact path="/view-documents/:id">
                         <ImageDetailPage image={this.state.activeImage}/>
                     </Route>
-                    <Route path="/view-doc/:id/cropping-view">
+                    <Route path="/view-documents/:id/cropping-view">
                         <CroppingPage sdk={this.state.sdk}/>
                     </Route>
                 </Switch>

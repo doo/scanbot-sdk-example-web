@@ -5,8 +5,9 @@ import {ScanbotSdkService} from "../service/scanbot-sdk-service";
 import Header from "./main-menu/header";
 import { BottomBar } from "../subviews/bottom-bar";
 import { withRouter } from "react-router-dom";
+import { RoutingService } from '../service/routing-service';
 
-class CroppingPage extends React.Component<any, any>{
+export default class CroppingPage extends React.Component<any, any>{
 
     constructor(props: any) {
         super(props);
@@ -23,7 +24,7 @@ class CroppingPage extends React.Component<any, any>{
         //     return;
         // }
         // const index = parseInt(window.location.href.split("?")[1].split("=")[1]);
-        const index = parseInt(window.location.href.split("view-doc/")[1].split("/")[0]);
+        const index = parseInt(window.location.href.split("view-documents/")[1].split("/")[0]);
         const page = Pages.instance.objectAtIndex(index);
 
         if (!page) {
@@ -50,7 +51,7 @@ class CroppingPage extends React.Component<any, any>{
         const result = await ScanbotSdkService.instance.croppingView?.apply();
         Pages.instance.updateActiveItem(result);
         await ScanbotSdkService.instance.reapplyFilter();
-        this.props.history.goBack();
+        RoutingService.instance.back();
         const index = Pages.instance.getActiveIndex();
         this.setState({activeImage: await ScanbotSdkService.instance.documentImageAsBase64(index)});
     }
@@ -64,14 +65,12 @@ class CroppingPage extends React.Component<any, any>{
                 <BottomBar
                     height={90}
                     buttons={[
-                        {text: "DETECT", action: this.detect},
-                        {text: "ROTATE", action: this.rotate},
-                        {text: "APPLY", action: this.applyCrop, right: true}
+                        {text: "DETECT", action: this.detect.bind(this)},
+                        {text: "ROTATE", action: this.rotate.bind(this)},
+                        {text: "APPLY", action: this.applyCrop.bind(this), right: true}
                     ]}
                 />
             </div>
         );
     }
 }
-
-export default withRouter(CroppingPage)

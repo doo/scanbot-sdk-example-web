@@ -7,20 +7,17 @@ import Swal from 'sweetalert2';
 import { ImageFilter } from 'scanbot-web-sdk/@types';
 import { ScanbotSdkService } from '../service/scanbot-sdk-service';
 import Pages from '../model/pages';
+import { RoutePath, RoutingService } from '../service/routing-service';
 
-class ImageDetailPage extends React.Component<any, any>{
+export default class ImageDetailPage extends React.Component<any, any>{
 
     openCroppingUI() {
-        // RoutingService.instance.route(RoutePath.CroppingView, {index: Pages.instance.getActiveIndex()});
-        // this.props.history.push(`${this.props.match.url}/cropping-view`)
-        this.props.history.push({
-            pathname: `${this.props.match.url}/cropping-view`,
-            // search: '?query=abc',
-            state: {index: Pages.instance.getActiveIndex()}
-        })
+        const index = Pages.instance.getActiveIndex();
+        RoutingService.instance.manualGoTo(`${index}/cropping-view`, {index: index})
+        // RoutingService.instance.crop(index, {index: index})
     }
     
-    async applyFilter(image: any) {
+    async applyFilter() {
         const page = Pages.instance.getActiveItem();
         const result = await Swal.fire({
             title: 'Select filter',
@@ -43,16 +40,15 @@ class ImageDetailPage extends React.Component<any, any>{
         }
     
         const index = Pages.instance.getActiveIndex();
-        image = await ScanbotSdkService.instance.documentImageAsBase64(index);
+        this.setState({activeImage: await ScanbotSdkService.instance.documentImageAsBase64(index)});
     }
     
     deletePage() {
         Pages.instance.removeActiveItem();
-        this.props.history.goBack()
+        RoutingService.instance.back()
     }
 
     render() {
-        // const aux = new Aux()
         return (
             <div style={{width: "100%", height: "100%"}}>
                 <Header back={true}/>
@@ -61,13 +57,11 @@ class ImageDetailPage extends React.Component<any, any>{
                     height={90}
                     buttons={[
                         {text: "CROP", action: this.openCroppingUI.bind(this)},
-                        {text: "FILTER", action: () => this.applyFilter(this.props.image)},
-                        {text: "DELETE", action: () => this.deletePage(), right: true}
+                        {text: "FILTER", action: this.applyFilter.bind(this)},
+                        {text: "DELETE", action: this.deletePage.bind(this), right: true}
                     ]}
                 />
             </div>
         );
     }
 }
-
-export default withRouter(ImageDetailPage)

@@ -11,9 +11,9 @@ import { BottomBar } from "../subviews/bottom-bar";
 import { ScanbotSdkService } from '../service/scanbot-sdk-service';
 import { ImageUtils } from '../utils/image-utils';
 import { MiscUtils } from '../utils/misc-utils';
-import ImageDetailPage from "./image-detail-page";
+import { RoutePath, RoutingService } from '../service/routing-service';
 
-class ImageResultsPage extends React.Component<any, any>{
+export default class ImageResultsPage extends React.Component<any, any>{
 
     constructor(props: any) {
         super(props);
@@ -34,7 +34,6 @@ class ImageResultsPage extends React.Component<any, any>{
     }
 
     render() {
-        const {history, match} = this.props
         return (
             <div className='component-imageResults' style={{width: "100%", height: "100%"}}>
                 <Header back={true}/>
@@ -43,7 +42,7 @@ class ImageResultsPage extends React.Component<any, any>{
                         return (
                             <GridListTile key={image.index} cols={1} onClick={(e) => {
                                 this.props.onDetailButtonClick(image.index)
-                                history.push(`${match.url}/${image.index}`);
+                                RoutingService.instance.viewDetails(image.index)
                                 }
                             }>
                                 <img style={Styles.documentImage} src={image.base64} alt={"."}/>
@@ -55,8 +54,8 @@ class ImageResultsPage extends React.Component<any, any>{
                 <BottomBar
                     height={90}
                     buttons={[
-                        {text: "SAVE PDF", action: () => this.savePDF()},
-                        {text: "SAVE TIFF", action: () => this.saveTIFF()}
+                        {text: "SAVE PDF", action: this.savePDF.bind(this)},
+                        {text: "SAVE TIFF", action: this.saveTIFF.bind(this)}
                     ]}
                 />
             </div>
@@ -78,5 +77,3 @@ class ImageResultsPage extends React.Component<any, any>{
     }
 
 }
-
-export default withRouter(ImageResultsPage)

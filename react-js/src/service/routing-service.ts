@@ -1,6 +1,11 @@
 
 export enum RoutePath {
+    Home = '/',
+    Onboarding = '/welcome',
     DocumentScanner = "document-scanner",
+    BarcodeScanner = "barcode-scanner",
+    ViewDocuments = '/view-documents',
+
     DocumentOnJpeg = "document-on-jpeg",
     BarcodeOnJpeg = "barcode-on-jpeg",
     BarcodeOnPdf = "barcode-on-pdf",
@@ -8,7 +13,7 @@ export enum RoutePath {
     ImageDetails = "image-details",
     LicenseInfo = "license-info",
     CroppingView = "cropping-view",
-    BarcodeScanner = "barcode-scanner"
+
 }
 
 export class RoutingService {
@@ -19,6 +24,7 @@ export class RoutingService {
 
     public static initialize(history: any) {
         console.log("Initializing routing service with history: ", history);
+        console.log(RoutingService)
         this.instance = new RoutingService();
         this.instance.history = history;
     }
@@ -46,13 +52,34 @@ export class RoutingService {
     }
 
     public back() {
-       this.history.back();
+        this.history.goBack();
     }
 
-    public deletePage() {
-        console.log('deletiiiing');
-        // Pages.instance.removeActiveItem();
-        // RoutingService.instance.route(RoutePath.ImageResults);
-        this.history.push('./view-doc')
+    public home() {
+        this.history.push('/');
     }
+
+    public goTo(path: RoutePath) {
+        this.history.push(path);
+    }
+
+    public manualGoTo(path: string, state: any) {
+        this.history.push({
+            pathname: path,
+            // search: '?query=abc',
+            state: state
+        })
+    }
+
+    public viewDetails(index: number) {
+        this.history.push(`${RoutePath.ViewDocuments}/${index}`);
+    }
+
+    // public crop(index: number, state = {}) {
+    //     this.history.push({
+    //             pathname: `${RoutePath.ViewDocuments}/${index}/cropping-view`,
+    //             // search: '?query=abc',
+    //             state: state
+    //     })
+    // }
 }
