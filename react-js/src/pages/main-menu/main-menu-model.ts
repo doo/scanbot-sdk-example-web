@@ -46,7 +46,7 @@ export const sectionContent = ({...args}: any) => {
             title: language === 'de' ? 'ÜBER UNS' : 'ABOUT',
             links: [{
                 text: language === 'de' ? 'Erfahren Sie mehr über das SDK' : 'Learn more about the SDK',
-                onclick: 'https://www.google.com'
+                onclick: language === 'de' ? 'https://scanbot.io/de/sdk' : 'https://scanbot.io'
             }]
         },
         legal: {
@@ -57,10 +57,10 @@ export const sectionContent = ({...args}: any) => {
                 onclick: 'https://www.google.com'
             },{
                 text: language === 'de' ? 'Datenschutzbedingungen ' : 'Privacy policy',
-                onclick: 'https://www.google.com'
+                onclick: language === 'de' ? 'https://scanbot.io/de/datenschutz' : 'https://scanbot.io/en/privacy'
             },{
                 text: language === 'de' ? 'Impressum ' : 'Imprint',
-                onclick: 'https://www.google.com'
+                onclick: language === 'de' ? 'https://scanbot.io/de/impressum' : 'https://scanbot.io/en/imprint'
             },{
                 text: language === 'de' ? 'Danksagungen' : 'Acknowledgements',
                 onclick: 'https://www.google.com'

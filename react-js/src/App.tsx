@@ -1,7 +1,6 @@
 import React from 'react';
-import Swal from 'sweetalert2';
 
-import { Barcode, BarcodeResult, ImageFilter } from 'scanbot-web-sdk/@types';
+import { BarcodeResult } from 'scanbot-web-sdk/@types';
 
 import ImageResultsPage from './pages/image-results-page';
 import ImageDetailPage from './pages/image-detail-page';
@@ -11,8 +10,6 @@ import Pages from './model/pages';
 import { ScanbotSdkService } from './service/scanbot-sdk-service';
 import { RoutePath, RoutingService } from './service/routing-service';
 
-import { ImageUtils } from './utils/image-utils';
-import { MiscUtils } from './utils/misc-utils';
 import DocumentScannerComponent from './rtu-ui/document-scanner-component';
 import { AnimationType } from './rtu-ui/enum/animation-type';
 import BarcodeScannerComponent from './rtu-ui/barcode-scanner-component';
@@ -21,8 +18,7 @@ import Onboarding from './pages/onboarding/onboarding-carousel';
 import {StorageService} from "./service/storage-service";
 
 import MainMenu from './pages/main-menu/main-menu';
-import {Switch, Route, Redirect, Link, withRouter} from 'react-router-dom';
-import DocumentScannerPage from './pages/document-scanner-page';
+import {Switch, Route, Redirect, withRouter} from 'react-router-dom';
 
 class App extends React.Component<any, any> {
 
@@ -38,6 +34,7 @@ class App extends React.Component<any, any> {
             loading: true,
             language: this.languageOrDefault(),
             showOnboarding: !StorageService.instance.getHasVisited(),
+            pageCount: Pages.instance.count(),
         };
     }
 
@@ -74,27 +71,18 @@ class App extends React.Component<any, any> {
 		return 'en';
 	}
 
-    onBackPress() {
-        RoutingService.instance.back();
-    }
+    // navigation?: any;
 
-    navigation?: any;
+    // toolbarHeight() {
+    //     return (this.navigation as HTMLHeadingElement)?.clientHeight ?? 0;
+    // }
 
-    toolbarHeight() {
-        return (this.navigation as HTMLHeadingElement)?.clientHeight ?? 0;
-    }
-
-    containerHeight() {
-        if (!this.navigation) {
-            return "100%";
-        }
-        return (window.innerHeight - 2 * this.toolbarHeight()) ?? 0;
-    }
-
-    async onDetailButtonClick (index: number) {
-        Pages.instance.setActiveItem(index);
-        this.setState({activeImage: await ScanbotSdkService.instance.documentImageAsBase64(index)});
-    }
+    // containerHeight() {
+    //     if (!this.navigation) {
+    //         return "100%";
+    //     }
+    //     return (window.innerHeight - 2 * this.toolbarHeight()) ?? 0;
+    // }
 
     onOnboardingSkip() {
         StorageService.instance.setHasVisited();
@@ -105,7 +93,7 @@ class App extends React.Component<any, any> {
 
         const mainMenuProps = {
             language: this.state.language,
-            pageCount: Pages.instance.count(),
+            pageCount: this.state.pageCount,
             callDocument: () => this._documentScanner?.push(AnimationType.PushRight),
             callBarcode: () => this._barcodeScanner?.push(AnimationType.PushBottom),
             viewDocuments: () => RoutingService.instance.goTo(RoutePath.ViewDocuments),
@@ -115,8 +103,6 @@ class App extends React.Component<any, any> {
             <>
                 {this.documentScanner()}
                 {this.barcodeScanner()}
-                <Link to='/doc-scanner'>Teste</Link>
-                <button onClick={() => RoutingService.instance.home()}>HOME</button>
                 <Switch>
                     <Route path='/welcome'>
                         <Onboarding skip={this.onOnboardingSkip.bind(this)} language={this.state.language}/>
@@ -124,12 +110,8 @@ class App extends React.Component<any, any> {
                     <Route exact path="/">
                         {this.state.showOnboarding ? <Redirect to='/welcome'/> : <MainMenu {...mainMenuProps}/>}
                     </Route>
-                    <Route path="/document-scanner">
-                        <DocumentScannerPage/>
-                    </Route>
                     <Route exact path="/view-documents">
-                        <ImageResultsPage sdk={this.state.sdk}
-                                          onDetailButtonClick={this.onDetailButtonClick.bind(this)}/>
+                        <ImageResultsPage sdk={this.state.sdk} />
                     </Route>
                     <Route exact path="/view-documents/:id">
                         <ImageDetailPage image={this.state.activeImage}/>
@@ -141,12 +123,6 @@ class App extends React.Component<any, any> {
             </>
         );
     }
-
-    // testing
-
-
-
-    // --------------
 
     _documentScannerHtmlComponent: any;
     _documentScanner?: DocumentScannerComponent | null;
@@ -174,40 +150,6 @@ class App extends React.Component<any, any> {
         return this._barcodeScannerHtmlComponent
     }
 
-    async detect() {
-        await ScanbotSdkService.instance.croppingView?.detect();
-    }
-
-    async rotate() {
-        await ScanbotSdkService.instance.croppingView?.rotate(1);
-    }
-
-    async applyCrop() {
-        const result = await ScanbotSdkService.instance.croppingView?.apply();
-        Pages.instance.updateActiveItem(result);
-        await ScanbotSdkService.instance.reapplyFilter();
-        this.onBackPress();
-        const index = Pages.instance.getActiveIndex();
-        this.setState({activeImage: await ScanbotSdkService.instance.documentImageAsBase64(index)});
-    }
-
-    async savePDF() {
-        const bytes = await ScanbotSdkService.instance.generatePDF(Pages.instance.get());
-        ImageUtils.saveBytes(bytes, MiscUtils.generateUUID() + ".pdf");
-    }
-    async saveTIFF() {
-        const bytes = await ScanbotSdkService.instance.generateTIFF(Pages.instance.get());
-        ImageUtils.saveBytes(bytes, MiscUtils.generateUUID() + ".tiff");
-    }
-
-    openCroppingUI() {
-        RoutingService.instance.route(RoutePath.CroppingView, {index: Pages.instance.getActiveIndex()});
-    }
-
-    deletePage() {
-        Pages.instance.removeActiveItem();
-        RoutingService.instance.route(RoutePath.ImageResults);
-    }
 
     async onDocumentDetected(result: any) {
         ScanbotSdkService.instance.sdk?.utils.flash();
@@ -226,34 +168,34 @@ class App extends React.Component<any, any> {
         this.setState({alert: {color: "error", text: message, autoClose: true}});
     }
 
-    async onFilePicked(feature: any, data: any) {
+    // async onFilePicked(feature: any, data: any) {
 
-        if (feature.id === RoutePath.DocumentOnJpeg) {
-            console.log("data", data);
-            const result = {original: new Uint8Array(data)};
-            Pages.instance.add(result)
-        }
+    //     if (feature.id === RoutePath.DocumentOnJpeg) {
+    //         console.log("data", data);
+    //         const result = {original: new Uint8Array(data)};
+    //         Pages.instance.add(result)
+    //     }
 
-        if (feature.id === RoutePath.BarcodeOnJpeg) {
-            const detection = await ScanbotSdkService.instance.sdk?.detectBarcodes(data);
-            if (detection !== undefined) {
-                this.setState({
-                    alert: {color: "success", text: Barcodes.format(detection.barcodes), autoClose: false}
-                });
-            }
-        }
+    //     if (feature.id === RoutePath.BarcodeOnJpeg) {
+    //         const detection = await ScanbotSdkService.instance.sdk?.detectBarcodes(data);
+    //         if (detection !== undefined) {
+    //             this.setState({
+    //                 alert: {color: "success", text: Barcodes.format(detection.barcodes), autoClose: false}
+    //             });
+    //         }
+    //     }
 
-        if (feature.id === RoutePath.BarcodeOnPdf) {
-            const images = await ImageUtils.pdfToImage(data);
-            const detection = await ScanbotSdkService.instance.sdk?.detectBarcodes(images[0]);
-            if (detection !== undefined) {
-                this.setState({
-                    alert: {color: "success", text: Barcodes.format(detection.barcodes), autoClose: false}
-                });
-            }
+    //     if (feature.id === RoutePath.BarcodeOnPdf) {
+    //         const images = await ImageUtils.pdfToImage(data);
+    //         const detection = await ScanbotSdkService.instance.sdk?.detectBarcodes(images[0]);
+    //         if (detection !== undefined) {
+    //             this.setState({
+    //                 alert: {color: "success", text: Barcodes.format(detection.barcodes), autoClose: false}
+    //             });
+    //         }
 
-        }
-    }
+    //     }
+    // }
 
 }
 

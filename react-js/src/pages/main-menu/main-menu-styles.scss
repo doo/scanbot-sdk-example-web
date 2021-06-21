@@ -6,9 +6,21 @@
     padding: 32px 0;
     display: flex;
     justify-content: center;
+    position: relative;
+
+    .backButton {
+        background-color: transparent;
+        border: none;
+        color: white;
+        font-size: 20px;
+        cursor: pointer;
+        position: absolute;
+        left: 5%;
+    }
 
     .logo {
         max-width: 185px;
+        cursor: pointer;
     }
 }
 
@@ -16,9 +28,9 @@
 .component-mainMenu {
     background-color: $color-background-lightGrey;
 
-    // @include breakpoint-up(sm) {
-    //     height: 100%;
-    // }
+    @include breakpoint-up(sm) {
+        height: 100%;
+    }
 
     .header {
         background-color: $color-brand;

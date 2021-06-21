@@ -46,6 +46,7 @@
             .card {
                 display: flex;
                 padding: 16px 0;
+                cursor: pointer;
 
                 @include breakpoint-up(md) {
                     flex-direction: column;

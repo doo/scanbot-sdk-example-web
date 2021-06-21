@@ -41,7 +41,7 @@ export default class ImageResultsPage extends React.Component<any, any>{
                     {this.state.images.map((image: any) => {
                         return (
                             <GridListTile key={image.index} cols={1} onClick={(e) => {
-                                this.props.onDetailButtonClick(image.index)
+                                this.onDetailButtonClick(image.index)
                                 RoutingService.instance.viewDetails(image.index)
                                 }
                             }>
@@ -74,6 +74,11 @@ export default class ImageResultsPage extends React.Component<any, any>{
     async saveTIFF() {
         const bytes = await ScanbotSdkService.instance.generateTIFF(Pages.instance.get());
         ImageUtils.saveBytes(bytes, MiscUtils.generateUUID() + ".tiff");
+    }
+
+    async onDetailButtonClick (index: number) {
+        Pages.instance.setActiveItem(index);
+        this.setState({activeImage: await ScanbotSdkService.instance.documentImageAsBase64(index)});
     }
 
 }
