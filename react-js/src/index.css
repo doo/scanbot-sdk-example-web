@@ -7,8 +7,13 @@
 
 body {
 	margin: 0;
-	font-family: 'Roboto', sans-serif;
-	font-size: 16px;
+	font: 400 16px 'Roboto', sans-serif;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
+}
+
+button {
+	font: 500 14px 'Roboto', sans-serif;
+	letter-spacing: 1.15px;
+	cursor: pointer;
 }

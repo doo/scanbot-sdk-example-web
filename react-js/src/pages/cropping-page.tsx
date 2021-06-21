@@ -1,11 +1,9 @@
-
 import React from "react";
 import Pages from "../model/pages";
 import {ScanbotSdkService} from "../service/scanbot-sdk-service";
 import Header from "./main-menu/header";
 import { BottomBar } from "../subviews/bottom-bar";
-import { withRouter } from "react-router-dom";
-import { RoutingService, RoutePath } from '../service/routing-service';
+import { RoutingService } from '../service/routing-service';
 
 export default class CroppingPage extends React.Component<any, any>{
 
@@ -51,8 +49,6 @@ export default class CroppingPage extends React.Component<any, any>{
         const result = await ScanbotSdkService.instance.croppingView?.apply();
         Pages.instance.updateActiveItem(result);
         await ScanbotSdkService.instance.reapplyFilter();
-        // const index = Pages.instance.getActiveIndex();
-        // RoutingService.instance.manualGoTo(`${RoutePath.ViewDocuments}/${index}`, {updatedImage: await ScanbotSdkService.instance.documentImageAsBase64(index)} )
         RoutingService.instance.back();
         const index = Pages.instance.getActiveIndex();
         this.setState({activeImage: await ScanbotSdkService.instance.documentImageAsBase64(index)});
@@ -61,11 +57,10 @@ export default class CroppingPage extends React.Component<any, any>{
     render() {
 
         return (
-            <div style={{height: "100%"}}>
+            <div className='component-cropping'>
                 <Header back={true}/>
-                <div id={ScanbotSdkService.CROPPING_VIEW_CONTAINER} style={{width: "100%", height: "100%"}}/>
+                <div className='cropping' id={ScanbotSdkService.CROPPING_VIEW_CONTAINER} />
                 <BottomBar
-                    height={90}
                     buttons={[
                         {text: "DETECT", action: this.detect.bind(this)},
                         {text: "ROTATE", action: this.rotate.bind(this)},

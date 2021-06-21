@@ -1,5 +1,4 @@
 import React from "react";
-import {Styles} from "../model/styles";
 import Header from "./main-menu/header";
 import { BottomBar } from "../subviews/bottom-bar";
 import Swal from 'sweetalert2';
@@ -61,11 +60,12 @@ export default class ImageDetailPage extends React.Component<any, any>{
 
     render() {
         return (
-            <div style={{width: "100%", height: "100%"}}>
+            <div className='component-imageDetail'>
                 <Header back={true} path={RoutePath.ViewDocuments}/>
-                <img style={Styles.documentImage} src={this.state.updatedImage ?? this.props.image} alt={"."}/>
+                <div className='imageDetailContainer'>
+                    <img className='imageDetail' src={this.state.updatedImage ?? this.props.image} alt={"."}/>
+                </div>
                 <BottomBar
-                    height={90}
                     buttons={[
                         {text: "CROP", action: this.openCroppingUI.bind(this)},
                         {text: "FILTER", action: this.applyFilter.bind(this)},
