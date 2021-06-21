@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, {CSSProperties} from "react";
 
 import Header from "./main-menu/header";
 
@@ -11,9 +11,10 @@ export default class TextPage extends React.Component<any, any> {
         super(props);
     }
 
-    blockStyle() {
+    blockStyle(): CSSProperties {
         return {
-            margin: "5px"
+            margin: "5px",
+            whiteSpace: "break-spaces"
         }
     }
     render() {
