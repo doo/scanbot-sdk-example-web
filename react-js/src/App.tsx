@@ -34,7 +34,6 @@ class App extends React.Component<any, any> {
             loading: true,
             language: this.languageOrDefault(),
             showOnboarding: !StorageService.instance.getHasVisited(),
-            pageCount: Pages.instance.count(),
         };
     }
 
@@ -93,7 +92,7 @@ class App extends React.Component<any, any> {
 
         const mainMenuProps = {
             language: this.state.language,
-            pageCount: this.state.pageCount,
+            pageCount: Pages.instance.count(),
             callDocument: () => this._documentScanner?.push(AnimationType.PushRight),
             callBarcode: () => this._barcodeScanner?.push(AnimationType.PushBottom),
             viewDocuments: () => RoutingService.instance.goTo(RoutePath.ViewDocuments),
