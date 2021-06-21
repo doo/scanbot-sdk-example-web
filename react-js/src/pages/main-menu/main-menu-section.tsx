@@ -14,13 +14,12 @@ export default class Section extends React.Component<any, any> {
                 {cards && <div className='cardsContainer'>
                     {cards.map((card: any, index: number) => {
                         const {image, title, description, onclick, tooltip} = card;
-                        console.log(tooltip)
                         return (
                             <div key={index} className='card' onClick={onclick}>
                                 <div className='imageContainer'>
                                     {tooltip > 0 && <div className='tooltip'>{tooltip}</div>}
                                     <img src={image} alt="card illustration" className='image'/>
-                                    
+
                                 </div>
                                 <div className='textContainer'>
                                     <h3 className='title'>{title}</h3>
@@ -33,8 +32,9 @@ export default class Section extends React.Component<any, any> {
                 {links && <div className='linksContainer'>
                     {links.map((link: any, index: number) => {
                         const {text, onclick} = link;
+                        const clickEvent = typeof onclick === "string" ? () => {} : onclick;
                         return (
-                            <a key={index} href={onclick} className='link'>{text}</a>
+                            <a key={index} href={onclick} className='link' onClick={clickEvent}>{text}</a>
                         )
                     })}
                 </div>}

@@ -1,26 +1,32 @@
 import React from 'react';
 
-import { BarcodeResult } from 'scanbot-web-sdk/@types';
+import {BarcodeResult} from 'scanbot-web-sdk/@types';
 
 import ImageResultsPage from './pages/image-results-page';
 import ImageDetailPage from './pages/image-detail-page';
 import CroppingPage from './pages/cropping-page';
 
 import Pages from './model/pages';
-import { ScanbotSdkService } from './service/scanbot-sdk-service';
-import { RoutePath, RoutingService } from './service/routing-service';
+import {ScanbotSdkService} from './service/scanbot-sdk-service';
+import {RoutePath, RoutingService} from './service/routing-service';
 
 import DocumentScannerComponent from './rtu-ui/document-scanner-component';
-import { AnimationType } from './rtu-ui/enum/animation-type';
+import {AnimationType} from './rtu-ui/enum/animation-type';
 import BarcodeScannerComponent from './rtu-ui/barcode-scanner-component';
 import Barcodes from './model/barcodes';
 import Onboarding from './pages/onboarding/onboarding-carousel';
 import {StorageService} from "./service/storage-service";
 
 import MainMenu from './pages/main-menu/main-menu';
-import {Switch, Route, Redirect, withRouter} from 'react-router-dom';
+import {Redirect, Route, Switch, withRouter} from 'react-router-dom';
+import TextPage from "./pages/text-page";
+import FileLoader from "./utils/file-loader";
+
+const librariesTxt = require('./assets/Libraries.txt');
 
 class App extends React.Component<any, any> {
+
+    acknowledgements?: string;
 
     constructor(props: any) {
         super(props);
@@ -57,9 +63,9 @@ class App extends React.Component<any, any> {
             if (this._barcodeScanner?.isVisible()) {
                 this._barcodeScanner?.pop();
             }
-
         });
 
+        this.acknowledgements = await FileLoader.load(librariesTxt);
 
     }
 
@@ -70,19 +76,6 @@ class App extends React.Component<any, any> {
 		}
 		return 'en';
 	}
-
-    // navigation?: any;
-
-    // toolbarHeight() {
-    //     return (this.navigation as HTMLHeadingElement)?.clientHeight ?? 0;
-    // }
-
-    // containerHeight() {
-    //     if (!this.navigation) {
-    //         return "100%";
-    //     }
-    //     return (window.innerHeight - 2 * this.toolbarHeight()) ?? 0;
-    // }
 
     onOnboardingSkip() {
         StorageService.instance.setHasVisited();
@@ -97,6 +90,10 @@ class App extends React.Component<any, any> {
             callDocument: () => this._documentScanner?.push(AnimationType.PushRight),
             callBarcode: () => this._barcodeScanner?.push(AnimationType.PushBottom),
             viewDocuments: () => RoutingService.instance.goTo(RoutePath.ViewDocuments),
+            viewAcknowledgements: () => {
+                console.log("???");
+                RoutingService.instance.goTo(RoutePath.Acknowledgements)
+            }
         };
 
         return (
@@ -118,6 +115,9 @@ class App extends React.Component<any, any> {
                     </Route>
                     <Route path="/view-documents/:id/cropping-view">
                         <CroppingPage sdk={this.state.sdk}/>
+                    </Route>
+                    <Route path={"/" + RoutePath.Acknowledgements}>
+                        <TextPage text={this.acknowledgements}/>
                     </Route>
                 </Switch>
             </>

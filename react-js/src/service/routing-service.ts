@@ -14,6 +14,8 @@ export enum RoutePath {
     LicenseInfo = "license-info",
     CroppingView = "cropping-view",
 
+    Acknowledgements = "acknowledgements"
+
 }
 
 export class RoutingService {
@@ -24,7 +26,6 @@ export class RoutingService {
 
     public static initialize(history: any) {
         console.log("Initializing routing service with history: ", history);
-        console.log(RoutingService)
         this.instance = new RoutingService();
         this.instance.history = history;
     }
