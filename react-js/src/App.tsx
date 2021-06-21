@@ -85,7 +85,7 @@ class App extends React.Component<any, any> {
 
         const mainMenuProps = {
             language: this.state.language,
-            pageCount: Pages.instance.count(),
+            pageCount: this.state.pageCount,
             callDocument: () => this._documentScanner?.push(AnimationType.PushRight),
             callBarcode: () => this._barcodeScanner?.push(AnimationType.PushBottom),
             viewDocuments: () => RoutingService.instance.goTo(RoutePath.ViewDocuments),
@@ -153,6 +153,9 @@ class App extends React.Component<any, any> {
     async onDocumentDetected(result: any) {
         ScanbotSdkService.instance.sdk?.utils.flash();
         Pages.instance.add(result);
+        this.setState({
+            pageCount: Pages.instance.count()
+        })
     }
 
     async onBarcodesDetected(result: BarcodeResult) {
