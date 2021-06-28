@@ -1,6 +1,5 @@
 import React from "react";
 import Pages from "../model/pages";
-// import {GridList, GridListTile} from "@material-ui/core";
 
 import Header from "./main-menu/header";
 import { BottomBar } from "../subviews/bottom-bar";
@@ -36,24 +35,11 @@ export default class ImageResultsPage extends React.Component<any, any>{
             <div className='component-imageResults'>
                 <Header back={true} path={RoutePath.Home}/>
                 <div className='resultsGridContainer'>
-                    {/* <GridList className='resultsGrid' style={{padding: Pages.instance.count() > 0 ? '8px' : '0'}} cellHeight={160} cols={3}>
-                        {this.state.images.map((image: any) => {
-                            return (
-                                <GridListTile key={image.index} cols={1} onClick={(e) => {
-                                    this.onDetailButtonClick(image.index)
-                                    RoutingService.instance.viewDetails(image.index)
-                                    }
-                                }>
-                                    <img className='resultsGrid_image' src={image.base64} alt={"."}/>
-                                </GridListTile>
-                            )
-                        })}
-                    </GridList> */}
                     <div className='resultsGrid' style={{padding: Pages.instance.count() > 0 ? '8px' : '0'}}>
                         {this.state.images.map((image: any) => {
                             return (
                                 <div key={image.index} className='resultsGrid_tile' onClick={(e) => {
-                                    this.onDetailButtonClick(image.index)
+                                    this.onDetailButtonClick(image.index);
                                     RoutingService.instance.viewDetails(image.index)
                                     }
                                 }>
@@ -81,13 +67,13 @@ export default class ImageResultsPage extends React.Component<any, any>{
         const bytes = await ScanbotSdkService.instance.generatePDF(Pages.instance.get());
         ImageUtils.saveBytes(bytes, MiscUtils.generateUUID() + ".pdf");
     }
-    
+
     async saveTIFF() {
         const bytes = await ScanbotSdkService.instance.generateTIFF(Pages.instance.get());
         ImageUtils.saveBytes(bytes, MiscUtils.generateUUID() + ".tiff");
     }
 
-    async onDetailButtonClick (index: number) {
+    async onDetailButtonClick(index: number) {
         Pages.instance.setActiveItem(index);
         this.setState({activeImage: await ScanbotSdkService.instance.documentImageAsBase64(index)});
     }
