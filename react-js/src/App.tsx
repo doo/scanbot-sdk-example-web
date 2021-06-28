@@ -71,7 +71,8 @@ class App extends React.Component<any, any> {
         this.acknowledgements = await FileLoader.load(librariesTxt);
         this.setState({
             version: {
-                app: await FileLoader.loadVersionInfo()
+                app: await FileLoader.loadVersionInfo(),
+                sdk: ScanbotSdkService.instance.sdk?.version
             }
         });
     }
