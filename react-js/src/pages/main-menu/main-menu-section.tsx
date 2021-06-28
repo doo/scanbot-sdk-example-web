@@ -33,7 +33,7 @@ export default class Section extends React.Component<any, any> {
                     {links.map((link: any, index: number) => {
                         const {text, onclick} = link;
                         const clickEvent = typeof onclick === "string" ? () => {} : onclick;
-                        const href = typeof onclick === 'string' ? onclick : '#';
+                        const href = typeof onclick === 'string' ? onclick : undefined;
                         return (<a key={index} href={href} className='link' onClick={clickEvent}>{text}</a>)
                     })}
                 </div>}
