@@ -4,7 +4,7 @@ export enum RoutePath {
     Onboarding = '/welcome',
     DocumentScanner = "document-scanner",
     BarcodeScanner = "barcode-scanner",
-    ViewDocuments = 'view-documents',
+    ViewDocuments = '/view-documents',
 
     DocumentOnJpeg = "document-on-jpeg",
     BarcodeOnJpeg = "barcode-on-jpeg",
@@ -14,7 +14,7 @@ export enum RoutePath {
     LicenseInfo = "license-info",
     CroppingView = "cropping-view",
 
-    Acknowledgements = "acknowledgements"
+    Acknowledgements = "/acknowledgements"
 
 }
 

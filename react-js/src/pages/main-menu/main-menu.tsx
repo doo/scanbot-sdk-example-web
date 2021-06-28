@@ -6,7 +6,6 @@ import {sectionContent} from './main-menu-model'
 
 import Header from "./header";
 import Footer from "./footer";
-import CrashReportingAlert from "./crash-reporting-alert";
 
 export default class MainMenu extends React.Component<any, any> {
 

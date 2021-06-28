@@ -105,7 +105,7 @@ class App extends React.Component<any, any> {
                     <Route exact path="/">
                         {this.state.showOnboarding ? <Redirect to='/welcome'/> : <MainMenu {...mainMenuProps}/>}
                     </Route>
-                    <Route exact path="/view-documents">
+                    <Route exact path={RoutePath.ViewDocuments}>
                         <ImageResultsPage sdk={this.state.sdk} />
                     </Route>
                     <Route exact path="/view-documents/:id">
@@ -114,7 +114,7 @@ class App extends React.Component<any, any> {
                     <Route path="/view-documents/:id/cropping-view">
                         <CroppingPage sdk={this.state.sdk}/>
                     </Route>
-                    <Route path={"/" + RoutePath.Acknowledgements}>
+                    <Route path={RoutePath.Acknowledgements}>
                         <TextPage text={this.acknowledgements}/>
                     </Route>
                 </Switch>
