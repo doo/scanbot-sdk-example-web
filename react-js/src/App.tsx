@@ -37,6 +37,10 @@ class App extends React.Component<any, any> {
             error: {
                 message: undefined
             },
+            version: {
+                app: "0",
+                sdk: "0"
+            },
             loading: true,
             language: this.languageOrDefault(),
             showOnboarding: !StorageService.instance.getHasVisited(),
@@ -65,7 +69,11 @@ class App extends React.Component<any, any> {
         });
 
         this.acknowledgements = await FileLoader.load(librariesTxt);
-
+        this.setState({
+            version: {
+                app: await FileLoader.loadVersionInfo()
+            }
+        });
     }
 
     languageOrDefault(): string {
@@ -86,6 +94,7 @@ class App extends React.Component<any, any> {
         const mainMenuProps = {
             language: this.state.language,
             pageCount: this.state.pageCount,
+            version: this.state.version,
             callDocument: () => this._documentScanner?.push(AnimationType.PushRight),
             callBarcode: () => this._barcodeScanner?.push(AnimationType.PushBottom),
             viewDocuments: () => RoutingService.instance.goTo(RoutePath.ViewDocuments),

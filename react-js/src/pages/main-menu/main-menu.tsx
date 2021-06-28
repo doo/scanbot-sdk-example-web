@@ -10,7 +10,7 @@ import Footer from "./footer";
 export default class MainMenu extends React.Component<any, any> {
 
     render() {
-        const {language} = this.props;
+        const {language, version} = this.props;
         const content = sectionContent({...this.props});
         return (
             <div className ='component-mainMenu'>
@@ -20,7 +20,7 @@ export default class MainMenu extends React.Component<any, any> {
                     <Section {...content.dataDetectors} />
                     <Section {...content.about} />
                     <Section {...content.legal} />
-                    <Footer language={language} />
+                    <Footer language={language} version={version} />
                 </div>
             </div>
         )
