@@ -5,15 +5,12 @@ import { ImageFilter } from 'scanbot-web-sdk/@types';
 
 import Header from "./main-menu/header";
 import { BottomBar } from "../subviews/bottom-bar";
-import FilterDialog from "../subviews/FilterDialog";
-
-import Swal from 'sweetalert2';
-
+import FilterDialog from "../subviews/filter-dialog";
 
 import Pages from '../model/pages';
-
 import { ScanbotSdkService } from '../service/scanbot-sdk-service';
 import { RoutePath, RoutingService } from '../service/routing-service';
+import DetailedImageFilter from "../model/DetailedImageFilter";
 
 export default class ImageDetailPage extends React.Component<any, any>{
 
@@ -21,8 +18,9 @@ export default class ImageDetailPage extends React.Component<any, any>{
         super(props);
 
         this.state = {
-            filterDialog: {
-                visible: false
+            dialog: {
+                visible: false,
+                filters: []
             },
             updatedImage: undefined
         }
@@ -38,30 +36,30 @@ export default class ImageDetailPage extends React.Component<any, any>{
         RoutingService.instance.manualGoTo(`${index}/cropping-view`, {index: index})
     }
 
-    async applyFilter() {
+    async openFilterSelector() {
+        this.setState({dialog: {visible: true, filters: ScanbotSdkService.instance.availableFilters()}});
+    }
+    closeFilterSelector() {
+        this.setState({dialog: {visible: false}})
+    }
 
-        this.setState({filterDialog: {visible: true}});
-        return;
+    async applyFilter(filter: DetailedImageFilter) {
+        if (!filter) {
+            return;
+        }
+
+        this.closeFilterSelector();
 
         const page = Pages.instance.getActiveItem();
-        const result = await Swal.fire({
-            title: 'Select filter',
-            input: 'select',
-            inputOptions: ScanbotSdkService.instance.availableFilters(),
-            inputPlaceholder: page.filter ?? "none"
-        });
-
-        const filter = ScanbotSdkService.instance.filterByIndex(result.value);
 
         // "None" is not an actual filter, only used in this example app
-        if (filter === "none") {
+        if (filter.name === "none") {
             page.filter = undefined;
             page.filtered = undefined;
         } else {
+            const image = page.cropped ?? page.original;
             page.filter = filter;
-            page.filtered = await ScanbotSdkService.instance.applyFilter(
-                page.cropped ?? page.original,
-                filter as ImageFilter);
+            page.filtered = await ScanbotSdkService.instance.applyFilter(image, filter.name);
         }
 
         const index = Pages.instance.getActiveIndex();
@@ -76,9 +74,11 @@ export default class ImageDetailPage extends React.Component<any, any>{
     render() {
         return (
             <div className='component-imageDetail'>
-                <FilterDialog visible={this.state.filterDialog.visible} onClose={() => {
-                    this.setState({filterDialog: {visible: false}})
-                }}/>
+                <FilterDialog
+                    data={this.state.dialog}
+                    onClose={this.closeFilterSelector.bind(this)}
+                    onApply={this.applyFilter.bind(this)}
+                />
 
                 <Header back={true} path={RoutePath.ViewDocuments}/>
                 <div className='imageDetailContainer'>
@@ -87,7 +87,7 @@ export default class ImageDetailPage extends React.Component<any, any>{
                 <BottomBar
                     buttons={[
                         {text: "CROP", action: this.openCroppingUI.bind(this)},
-                        {text: "FILTER", action: this.applyFilter.bind(this)},
+                        {text: "FILTER", action: this.openFilterSelector.bind(this)},
                         {text: "DELETE", action: this.deletePage.bind(this), right: true}
                     ]}
                 />
