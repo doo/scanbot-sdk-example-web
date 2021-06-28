@@ -4,7 +4,7 @@ export enum RoutePath {
     Onboarding = '/welcome',
     DocumentScanner = "document-scanner",
     BarcodeScanner = "barcode-scanner",
-    ViewDocuments = '/view-documents',
+    ViewDocuments = 'view-documents',
 
     DocumentOnJpeg = "document-on-jpeg",
     BarcodeOnJpeg = "barcode-on-jpeg",
@@ -64,11 +64,7 @@ export class RoutingService {
     }
 
     public manualGoTo(path: string, state: any) {
-        this.history.push({
-            pathname: path,
-            // search: '?query=abc',
-            state: state
-        })
+        this.history.push({pathname: path, state: state});
     }
 
     public viewDetails(index: number) {

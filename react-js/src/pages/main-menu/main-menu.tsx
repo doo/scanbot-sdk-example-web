@@ -16,7 +16,6 @@ export default class MainMenu extends React.Component<any, any> {
         return (
             <div className ='component-mainMenu'>
                 <Header />
-                <CrashReportingAlert language={language}/>
                 <div className='contentContainer'>
                     <Section {...content.documentScanner} />
                     <Section {...content.dataDetectors} />
