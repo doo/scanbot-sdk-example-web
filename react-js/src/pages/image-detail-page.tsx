@@ -1,8 +1,6 @@
 
 import React from "react";
 
-import { ImageFilter } from 'scanbot-web-sdk/@types';
-
 import Header from "./main-menu/header";
 import { BottomBar } from "../subviews/bottom-bar";
 import FilterDialog from "../subviews/filter-dialog";
