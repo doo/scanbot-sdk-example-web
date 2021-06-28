@@ -25,7 +25,6 @@ export class RoutingService {
     private history: any;
 
     public static initialize(history: any) {
-        console.log("Initializing routing service with history: ", history);
         this.instance = new RoutingService();
         this.instance.history = history;
     }
@@ -75,12 +74,4 @@ export class RoutingService {
     public viewDetails(index: number) {
         this.history.push(`${RoutePath.ViewDocuments}/${index}`);
     }
-
-    // public crop(index: number, state = {}) {
-    //     this.history.push({
-    //             pathname: `${RoutePath.ViewDocuments}/${index}/cropping-view`,
-    //             // search: '?query=abc',
-    //             state: state
-    //     })
-    // }
 }

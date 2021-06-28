@@ -15,7 +15,7 @@ class SkipButton extends React.Component<any, any> {
 	render() {
 		const color = isEven(this.props.index) ? 'white' : '#C8193C';
 		const text = OnboardingModel.TEXT[this.props.language].buttonText[this.props.index < 3 ? 0 : 1];
-		return <a href='#' className='link' style={{color: color}} onClick={this.props.skip}>{text}</a>;
+		return <a href='/#' className='link' style={{color: color}} onClick={this.props.skip}>{text}</a>;
 	}
 }
 
@@ -46,7 +46,7 @@ class Onboarding extends React.Component<any, any> {
 
 	handleSlide() {
 		let next = this.state.slideIndex + 1;
-		if (next - 1 == this.indices[this.indices.length - 1]) {
+		if (next - 1 === this.indices[this.indices.length - 1]) {
 			next = 0;
 		}
 

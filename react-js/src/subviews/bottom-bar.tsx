@@ -1,5 +1,4 @@
 import React from "react";
-import {Styles} from "../model/styles";
 
 export class BottomBar extends React.Component<any, any> {
 
@@ -13,6 +12,7 @@ export class BottomBar extends React.Component<any, any> {
     private createButtons() {
         return this.props.buttons.map((button: any) => this.createButton(button));
     }
+
     private createButton(data: any) {
         const button = <button key={data.text} className='bottomBar_button' onClick={data.action}>{data.text}</button>;
 

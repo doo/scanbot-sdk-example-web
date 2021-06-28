@@ -7,16 +7,10 @@ import {RoutePath} from "../service/routing-service";
 
 export default class TextPage extends React.Component<any, any> {
 
-    constructor(props: any) {
-        super(props);
+    blockStyle(): CSSProperties {
+        return {margin: "5px", whiteSpace: "break-spaces"}
     }
 
-    blockStyle(): CSSProperties {
-        return {
-            margin: "5px",
-            whiteSpace: "break-spaces"
-        }
-    }
     render() {
         return (
             <div style={{width: "100%", height: "100%"}}>
