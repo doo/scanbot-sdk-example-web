@@ -1,10 +1,18 @@
+
 import React from "react";
+
+import { ImageFilter } from 'scanbot-web-sdk/@types';
+
 import Header from "./main-menu/header";
 import { BottomBar } from "../subviews/bottom-bar";
+import FilterDialog from "../subviews/FilterDialog";
+
 import Swal from 'sweetalert2';
-import { ImageFilter } from 'scanbot-web-sdk/@types';
-import { ScanbotSdkService } from '../service/scanbot-sdk-service';
+
+
 import Pages from '../model/pages';
+
+import { ScanbotSdkService } from '../service/scanbot-sdk-service';
 import { RoutePath, RoutingService } from '../service/routing-service';
 
 export default class ImageDetailPage extends React.Component<any, any>{
@@ -13,6 +21,9 @@ export default class ImageDetailPage extends React.Component<any, any>{
         super(props);
 
         this.state = {
+            filterDialog: {
+                visible: false
+            },
             updatedImage: undefined
         }
     }
@@ -28,6 +39,10 @@ export default class ImageDetailPage extends React.Component<any, any>{
     }
 
     async applyFilter() {
+
+        this.setState({filterDialog: {visible: true}});
+        return;
+
         const page = Pages.instance.getActiveItem();
         const result = await Swal.fire({
             title: 'Select filter',
@@ -61,6 +76,10 @@ export default class ImageDetailPage extends React.Component<any, any>{
     render() {
         return (
             <div className='component-imageDetail'>
+                <FilterDialog visible={this.state.filterDialog.visible} onClose={() => {
+                    this.setState({filterDialog: {visible: false}})
+                }}/>
+
                 <Header back={true} path={RoutePath.ViewDocuments}/>
                 <div className='imageDetailContainer'>
                     <img className='imageDetail' src={this.state.updatedImage ?? this.props.image} alt={"."}/>
