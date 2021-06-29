@@ -146,9 +146,6 @@ export class ScanbotSdkService {
                 "A filter for black and white conversion primary used for low-contrast documents.")
         ];
     }
-    filterByIndex(value: string) {
-        return this.availableFilters()[parseInt(value)];
-    }
 
     public async applyFilter(image: ArrayBuffer, filter: ImageFilter) {
         return await this.sdk!.applyFilter(image, filter);

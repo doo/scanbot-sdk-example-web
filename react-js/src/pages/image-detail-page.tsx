@@ -26,7 +26,9 @@ export default class ImageDetailPage extends React.Component<any, any>{
 
     async componentDidMount() {
         const index = Pages.instance.getActiveIndex();
-        this.setState({updatedImage: await ScanbotSdkService.instance.documentImageAsBase64(index)})
+        this.setState({
+            updatedImage: await ScanbotSdkService.instance.documentImageAsBase64(index),
+        });
     }
 
     openCroppingUI() {
@@ -35,7 +37,13 @@ export default class ImageDetailPage extends React.Component<any, any>{
     }
 
     async openFilterSelector() {
-        this.setState({dialog: {visible: true, filters: ScanbotSdkService.instance.availableFilters()}});
+        this.setState({
+            dialog: {
+                visible: true,
+                filters: ScanbotSdkService.instance.availableFilters(),
+                currentFilter: Pages.instance.getActiveItem().filter
+            }
+        });
     }
     closeFilterSelector() {
         this.setState({dialog: {visible: false}})

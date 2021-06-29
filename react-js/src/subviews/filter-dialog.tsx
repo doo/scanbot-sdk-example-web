@@ -51,18 +51,42 @@ export default class FilterDialog extends React.Component<any, any> {
         );
     }
 
+    hasSelectedFilter(): boolean {
+        return !!this.findSelected();
+    }
     findSelected() {
-        return this.props.data.filters.find((filter: DetailedImageFilter) => filter.selected);
+        const result = this.props.data.filters.find((filter: DetailedImageFilter) => filter.selected);
+        return result;
+    }
+
+    setActiveFilter(filters: DetailedImageFilter[], currentFilterName: string) {
+        filters.forEach((filter: DetailedImageFilter) => {
+            if (filter.name === currentFilterName) {
+                filter.selected = true;
+                return;
+            }
+        });
     }
 
     renderFilters() {
-        if (!this.props.data.filters) {
+        const {filters, currentFilter} = this.props.data;
+        if (!filters) {
             return null;
         }
-        return this.props.data.filters.map((filter: DetailedImageFilter) => this.renderFilter(filter));
+
+        if (!this.hasSelectedFilter()) {
+            if (currentFilter) {
+                this.setActiveFilter(filters, currentFilter.name);
+            } else {
+                this.setActiveFilter(filters, "none")
+            }
+        }
+
+        return filters.map((filter: DetailedImageFilter) => this.renderFilter(filter));
     }
 
     renderFilter(filter: DetailedImageFilter) {
+
         return (
             <ListItem key={filter.name} button selected={filter.selected} onClick={() => {
                 this.props.data.filters.forEach((filter: DetailedImageFilter) => {
