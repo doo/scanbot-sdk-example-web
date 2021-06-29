@@ -38,11 +38,10 @@ export default class ImageResultsPage extends React.Component<any, any>{
                     <div className='resultsGrid' style={{padding: Pages.instance.count() > 0 ? '8px' : '0'}}>
                         {this.state.images.map((image: any) => {
                             return (
-                                <div key={image.index} className='resultsGrid_tile' onClick={(e) => {
-                                    this.onDetailButtonClick(image.index);
+                                <div key={image.index} className='resultsGrid_tile' onClick={async (e) => {
+                                    await this.onDetailButtonClick(image.index);
                                     RoutingService.instance.viewDetails(image.index)
-                                    }
-                                }>
+                                }}>
                                     <img className='resultsGrid_image' src={image.base64} alt={"."}/>
                                 </div>
                             )
