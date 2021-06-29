@@ -60,4 +60,8 @@ export default class Pages {
         this.list.splice(this.getActiveIndex(), 1);
         this.activeIndex = -1;
     }
+
+    isEmpty() {
+        return this.count() === 0;
+    }
 }

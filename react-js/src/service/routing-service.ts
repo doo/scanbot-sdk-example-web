@@ -70,4 +70,18 @@ export class RoutingService {
     public viewDetails(index: number) {
         this.history.push(`${RoutePath.ViewDocuments}/${index}`);
     }
+
+    public isHome(): boolean {
+        return this.history.location.pathname === RoutePath.Home;
+    }
+
+    public isAtImageResult(): boolean {
+        const path = this.history.location.pathname;
+        // If it has an additional slash after view-documents, we're dealing with a specific image view
+        return path.includes(RoutePath.ViewDocuments + RoutePath.Home);
+    }
+
+    static exists() {
+        return this.instance !== undefined;
+    }
 }

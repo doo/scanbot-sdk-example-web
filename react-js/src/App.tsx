@@ -104,6 +104,12 @@ class App extends React.Component<any, any> {
             }
         };
 
+        if (Pages.instance.isEmpty() && RoutingService.exists() && RoutingService.instance.isAtImageResult()) {
+            RoutingService.instance.home();
+            this.setState({});
+            return <div/>;
+        }
+
         return (
             <>
                 {this.documentScanner()}
