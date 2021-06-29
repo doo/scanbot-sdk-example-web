@@ -1,15 +1,18 @@
+
 import React, {CSSProperties} from 'react';
-import Button from '@material-ui/core/Button';
+
+import AppBar from '@material-ui/core/AppBar';
+import Slide from '@material-ui/core/Slide';
 import Dialog from '@material-ui/core/Dialog';
 import ListItemText from '@material-ui/core/ListItemText';
+import Button from '@material-ui/core/Button';
 import ListItem from '@material-ui/core/ListItem';
 import List from '@material-ui/core/List';
-import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
-import Slide from '@material-ui/core/Slide';
+
 import DetailedImageFilter from "../model/DetailedImageFilter";
 import StringUtils from "../utils/string-utils";
 

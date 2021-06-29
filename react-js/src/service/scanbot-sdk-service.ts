@@ -163,7 +163,7 @@ export class ScanbotSdkService {
         if (!existing.filter) {
             return;
         }
-        existing.filtered = await this.applyFilter(existing.cropped, existing.filter);
+        existing.filtered = await this.applyFilter(existing.cropped ?? existing.original, existing.filter.name);
     }
 
     async generatePDF(pages: any[]) {
