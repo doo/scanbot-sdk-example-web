@@ -1,138 +1,140 @@
 @import '../../library';
 
 .component-mainMenu {
+	.sectionContainer {
+		max-width: 1140px;
+		background-color: white;
+		box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 2px 1px 0 rgba(0, 0, 0, 0.12),
+			0 1px 1px 0 rgba(0, 0, 0, 0.14);
+		padding: 16px 16px 0px 16px;
+		margin: 0 auto 24px auto;
 
-    .sectionContainer {
-        max-width: 1140px;
-        margin-bottom: 25px;
-        background-color: white;
-        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 2px 1px 0 rgba(0, 0, 0, 0.12), 0 1px 1px 0 rgba(0, 0, 0, 0.14);
-        padding: 24px 24px 0px 24px;
-        margin: 0 auto;
-        margin-bottom: 24px;
-    
-        .titleContainer {
-            display: flex;
-    
-            .icon {
-                width: 14px;
-                height: 14px;
-                object-fit: contain;  
-                margin-right: 8px;
-            }
-    
-            .title {
-                font-size: 10px;
-                font-weight: 500;
-                line-height: 16px;
-                letter-spacing: 1.5px;
-                color: #939799;
-            }
-        }
-    
-        .cardsContainer {
-            display: flex;
-            flex-direction: column;
+		@include breakpoint-up(md) {
+			padding: 24px 24px 0px 24px;
+		}
 
-            @include breakpoint-up(md) {
-                display: grid;
-                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            }
-    
-            >.card:not(:last-child) {
-                border-bottom: 1px solid rgba(33, 33, 33, 0.08);
-            }
-    
-            .card {
-                display: flex;
-                padding: 16px 0;
-                cursor: pointer;
+		.titleContainer {
+			display: flex;
 
-                @include breakpoint-up(md) {
-                    flex-direction: column;
-                    align-items: center;
-                    text-align: center;
-                }
-    
-                .imageContainer {
-                    position: relative;
-    
-                    .image {
-                        height: 50px;
-                        object-fit: contain;
+			.icon {
+				width: 14px;
+				height: 14px;
+				object-fit: contain;
+				margin-right: 8px;
+			}
 
-                        @include breakpoint-up(md) {
-                            height: 115px;
-                            margin-bottom: 8px;
-                        }
-                    }
-    
-                    .tooltip {
-                        position: absolute;
-                        right: -5px;
-                        top: -5px;
-                        font-size: 10px;
-                        font-weight: 500;
-                        line-height: 1.6;
-                        background-color: $color-brand;
-                        border-radius: 50%;
-                        width: 15px;
-                        height: 15px;
-                        text-align: center;
-                        color: white;
+			.title {
+				font-size: 10px;
+				font-weight: 500;
+				line-height: 16px;
+				letter-spacing: 1.5px;
+				color: #939799;
+			}
+		}
 
-                        @include breakpoint-up(md) {
-                            width: 32px;
-                            height: 32px;
-                            font-size: 20px;
-                        }
-                    }
-                }
-    
-                .textContainer {
-                    margin-left: 20px;
+		.cardsContainer {
+			display: flex;
+			flex-direction: column;
 
-                    @include breakpoint-up(md) {
-                        margin-left: 0;
-                    }
-    
-                    .title {
-                        font-size: 16px;
-                        line-height: 1.5;
-                        font-weight: normal;
-                        letter-spacing: 0.5px;
-                        color: rgba(0, 0, 0, 0.87)
-                    }
-        
-                    .description {
-                        font-size: 14px;
-                        line-height: 1.43;
-                        letter-spacing: 0.25px;
-                        color: rgba(0, 0, 0, 0.6);
+			@include breakpoint-up(md) {
+				display: grid;
+				grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+			}
 
-                        @include breakpoint-up(md) {
-                            padding: 0 8px;
-                        }
-                    }
-                }
-            }
-        }
-    
-        .linksContainer {
-            .link {
-                font-size: 16px;
-                line-height: 1.5;
-                font-weight: normal;
-                letter-spacing: 0.5px;
-                color: rgba(0, 0, 0, 0.87);
-                padding: 12px 0;
-                text-decoration: none;
-                display: block;
-            }
-    
-            >.link:not(:last-child) {
-                border-bottom: 1px solid rgba(33, 33, 33, 0.08);
-            }
-        }
-    }
+			> .card:not(:last-child) {
+				border-bottom: 1px solid rgba(33, 33, 33, 0.08);
+			}
+
+			.card {
+				display: flex;
+				padding: 16px 0;
+				cursor: pointer;
+
+				@include breakpoint-up(md) {
+					flex-direction: column;
+					align-items: center;
+					text-align: center;
+				}
+
+				.imageContainer {
+					position: relative;
+
+					.image {
+						height: 50px;
+						object-fit: contain;
+
+						@include breakpoint-up(md) {
+							height: 115px;
+							margin-bottom: 8px;
+						}
+					}
+
+					.tooltip {
+						position: absolute;
+						right: -5px;
+						top: -5px;
+						font-size: 10px;
+						font-weight: 500;
+						line-height: 1.6;
+						background-color: $color-brand;
+						border-radius: 50%;
+						width: 15px;
+						height: 15px;
+						text-align: center;
+						color: white;
+
+						@include breakpoint-up(md) {
+							width: 32px;
+							height: 32px;
+							font-size: 20px;
+						}
+					}
+				}
+
+				.textContainer {
+					margin-left: 20px;
+
+					@include breakpoint-up(md) {
+						margin-left: 0;
+					}
+
+					.title {
+						font-size: 16px;
+						line-height: 1.5;
+						font-weight: normal;
+						letter-spacing: 0.5px;
+						color: rgba(0, 0, 0, 0.87);
+					}
+
+					.description {
+						font-size: 14px;
+						line-height: 1.43;
+						letter-spacing: 0.25px;
+						color: rgba(0, 0, 0, 0.6);
+
+						@include breakpoint-up(md) {
+							padding: 0 8px;
+						}
+					}
+				}
+			}
+		}
+
+		.linksContainer {
+			.link {
+				font-size: 16px;
+				line-height: 1.5;
+				font-weight: normal;
+				letter-spacing: 0.5px;
+				color: rgba(0, 0, 0, 0.87);
+				padding: 12px 0;
+				text-decoration: none;
+				display: block;
+			}
+
+			> .link:not(:last-child) {
+				border-bottom: 1px solid rgba(33, 33, 33, 0.08);
+			}
+		}
+	}
 }
