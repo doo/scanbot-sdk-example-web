@@ -11,7 +11,7 @@ updates:
       interval: "weekly"
     open-pull-requests-limit: 10
     reviewers:
-      - "Nikituh"
+      - "rutkayb"
       - "marcosaia1812"
     target-branch: "dependency-update"
 
@@ -21,6 +21,6 @@ updates:
       interval: "weekly"
     open-pull-requests-limit: 10
     reviewers:
-      - "Nikituh"
+      - "rutkayb"
       - "marcosaia1812"
     target-branch: "dependency-update"
