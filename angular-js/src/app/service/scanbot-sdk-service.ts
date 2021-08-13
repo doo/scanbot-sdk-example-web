@@ -130,9 +130,7 @@ export class ScanbotSdkService {
       'gray',
       'colorDocument',
       'blackAndWhite',
-      'edgeHighlight',
-      'trinarization',
-      'lightMapNormalization'
+      'edgeHighlight'
     ];
   }
 
