@@ -40,11 +40,17 @@ window.onload = async () => {
         Utils.getElementByClassName("cropping-controller").style.display = "block";
 
         const index = Utils.getElementByClassName("detection-result-image").getAttribute("index");
+        
+        let rotations = results[index].rotations;
+        if (!rotations) {
+            rotations = 0;
+        }
+
         const options = {
             containerId: Config.croppingViewContainerId(),
             image: results[index].original,
             polygon: results[index].polygon,
-            rotations: results[index].rotations ?? 0,
+            rotations: rotations,
             disableScroll: true,
             style: {
                 padding: 20,
@@ -178,7 +184,11 @@ window.onload = async () => {
         if (filter === "none") {
             results[index].filtered = undefined;
         } else {
-            const toFilter = results[index].cropped ?? results[index].original;
+            let toFilter = results[index].cropped;
+            if (!toFilter) {
+                toFilter = results[index].original;
+            }
+            
             results[index].filter = filter;
             results[index].filtered = await scanbotSDK.applyFilter(toFilter, filter);
         }
