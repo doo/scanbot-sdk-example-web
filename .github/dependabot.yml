@@ -13,14 +13,13 @@ updates:
     reviewers:
       - "rutkayb"
       - "marcosaia1812"
-    target-branch: "dependency-update"
+      - "Sarbjyotsingh"
 
   - package-ecosystem: "npm" # See documentation for possible values
     directory: "/react-js" # Location of package manifests
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 10
-    reviewers:
       - "rutkayb"
       - "marcosaia1812"
-    target-branch: "dependency-update"
+      - "Sarbjyotsingh"
