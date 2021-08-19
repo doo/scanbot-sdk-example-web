@@ -10,6 +10,8 @@ import {
     ICroppingViewHandle,
     BarcodeScannerConfiguration,
     IBarcodeScannerHandle,
+    BinarizationFilter,
+    ColorFilter,
     ImageFilter,
     TiffGenerationOptions,
     PdfGenerationOptions,
@@ -19,7 +21,6 @@ import {
 
 import Pages from "../model/pages";
 import {ImageUtils} from "../utils/image-utils";
-import DetailedImageFilter from "../model/DetailedImageFilter";
 
 
 export class ScanbotSdkService {
@@ -112,39 +113,32 @@ export class ScanbotSdkService {
         this.croppingView?.dispose();
     }
 
-    public availableFilters(): DetailedImageFilter[] {
+    public binarizationFilters(): BinarizationFilter[] {
         return [
-            new DetailedImageFilter("none",
-                "Passthrough filter. Does not alter the image."),
-            new DetailedImageFilter("color",
-                "Optimizes colors, contrast and brightness. Usecase: photos."),
-            new DetailedImageFilter("gray",
-                "Standard grayscale filter. Creates a grayscaled 8-bit image."),
-            new DetailedImageFilter("colorDocument",
-                "Fixes white-balance and cleans up the background. Usecase: images of paper documents."),
-            new DetailedImageFilter("blackAndWhite",
-                "Black and white filter with background cleaning. " +
-                "Creates a grayscaled 8-bit image with mostly black or white pixels. " +
-                "Usecase: Textual documents or documents with black and white illustrations."),
-            new DetailedImageFilter("edgeHighlight",
-                "A filter that enhances edges in low-contrast documents."),
-            new DetailedImageFilter("binarized",
-                "Standard binarization filter with contrast optimization. " +
-                "Creates a grayscaled 8-bit image with mostly black or white pixels. " +
-                "Usecase: Preparation for optical character recognition."),
-            new DetailedImageFilter("otsuBinarization",
-                "A filter for black and white conversion using OTSU binarization."),
-            new DetailedImageFilter("pureBinarized",
-                "A filter for binarizing an image. " +
-                "Creates an 8-bit image with pixel values set to eiter 0 or 255. " +
-                "Usecase: Preparation for optical character recognition."),
-            new DetailedImageFilter("lowLightBinarization",
-                "Binarization filter primary intended to use on low-contrast documents with heavy shadows."),
-            new DetailedImageFilter("lowLightBinarization2",
-                "Binarization filter primary intended to use on low-contrast documents with heavy shadows."),
-            new DetailedImageFilter("deepBinarization",
-                "A filter for black and white conversion primary used for low-contrast documents.")
+            'binarized',
+            'otsuBinarization',
+            'pureBinarized',
+            'lowLightBinarization',
+            'lowLightBinarization2',
+            'deepBinarization'
         ];
+    }
+
+    public colorFilters(): ColorFilter[] {
+        return [
+            'color',
+            'gray',
+            'colorDocument',
+            'blackAndWhite',
+            'edgeHighlight'
+        ];
+    }
+
+    public availableFilters(): string[] {
+        return ["none"].concat(this.binarizationFilters()).concat(this.colorFilters());
+    }
+    filterByIndex(value: string) {
+        return this.availableFilters()[parseInt(value)];
     }
 
     public async applyFilter(image: ArrayBuffer, filter: ImageFilter) {
@@ -163,7 +157,7 @@ export class ScanbotSdkService {
         if (!existing.filter) {
             return;
         }
-        existing.filtered = await this.applyFilter(existing.cropped ?? existing.original, existing.filter.name);
+        existing.filtered = await this.applyFilter(existing.cropped, existing.filter);
     }
 
     async generatePDF(pages: any[]) {
