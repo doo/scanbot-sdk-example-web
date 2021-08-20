@@ -1,93 +1,93 @@
 @import '../../library';
 
 .header {
-    background-color: $color-brand;
-    width: 100%;
-    padding: 32px 0;
-    display: flex;
-    justify-content: center;
-    position: relative;
+	background-color: $color-brand;
+	width: 100%;
+	padding: 32px 0;
+	display: flex;
+	justify-content: center;
+	position: relative;
 
-    .backButton {
-        background-color: transparent;
-        border: none;
-        color: white;
-        font-size: 20px;
-        cursor: pointer;
-        position: absolute;
-        left: 5%;
-    }
+	.backButton {
+		background-color: transparent;
+		border: none;
+		color: white;
+		font-size: 20px;
+		cursor: pointer;
+		position: absolute;
+		left: 5%;
+	}
 
-    .logo {
-        max-width: 185px;
-        cursor: pointer;
-    }
+	.logo {
+		max-width: 185px;
+		cursor: pointer;
+	}
 }
 
-
 .component-mainMenu {
-    background-color: $color-background-lightGrey;
+	background-color: $color-background-lightGrey;
+	height: 100%;
 
-    @include breakpoint-up(sm) {
-        height: 100%;
-    }
+	// @include breakpoint-up(sm) {
+	//     height: 100%;
+	// }
 
-    .header {
-        background-color: $color-brand;
-        width: 100%;
-        padding: 32px 0;
-        display: flex;
-        justify-content: center;
-    
-        .logo {
-            max-width: 185px;
-        }
-    }
-    
-    .alertContainer {
-        padding: 20px;
-        background-color: white;
-    
-        .alert {
-            font-size: 14px;
-            font-weight: normal;
-            line-height: 1.43;
-            letter-spacing: 0.25px;
-            color: $color-text-grey;
-            max-width: 1140px;
-            margin: 0 auto;
-        }
-    
-        .alertButtonContainer {
-            display: flex;
-            justify-content: flex-end;
-            padding-top: 16px;
-            max-width: 1140px;
-            margin: 0 auto;
-            
-            .alertButton {
-                float: right;
-                color: $color-brand;
-                border: none;
-                background-color: transparent;
-                font-size: 14px;
-                font-weight: 500;
-                line-height: 1.14;
-                letter-spacing: 1.25px;
-                font-family: 'Roboto', sans-serif !important;
-            }
-        }
-    }
-    
-    .contentContainer {
-        padding: 20px;
-    
-        .footer {
-            font-size: 12px;
-            line-height: 1.33;
-            letter-spacing: 0.4px;
-            text-align: center;
-            color: #6e7375;
-        }
-    }
+	.header {
+		background-color: $color-brand;
+		width: 100%;
+		padding: 32px 0;
+		display: flex;
+		justify-content: center;
+
+		.logo {
+			max-width: 185px;
+		}
+	}
+
+	.alertContainer {
+		padding: 20px;
+		background-color: white;
+
+		.alert {
+			font-size: 14px;
+			font-weight: normal;
+			line-height: 1.43;
+			letter-spacing: 0.25px;
+			color: $color-text-grey;
+			max-width: 1140px;
+			margin: 0 auto;
+		}
+
+		.alertButtonContainer {
+			display: flex;
+			justify-content: flex-end;
+			padding-top: 16px;
+			max-width: 1140px;
+			margin: 0 auto;
+
+			.alertButton {
+				float: right;
+				color: $color-brand;
+				border: none;
+				background-color: transparent;
+				font-size: 14px;
+				font-weight: 500;
+				line-height: 1.14;
+				letter-spacing: 1.25px;
+				font-family: 'Roboto', sans-serif !important;
+			}
+		}
+	}
+
+	.contentContainer {
+		padding: 20px;
+
+		.footer {
+			font-size: 12px;
+			line-height: 1.33;
+			letter-spacing: 0.4px;
+			text-align: center;
+			color: #6e7375;
+		}
+	}
 }
