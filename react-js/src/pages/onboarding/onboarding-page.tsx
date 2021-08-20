@@ -55,7 +55,7 @@ export default class OnboardingPage extends React.Component<any, any> {
 					<Swiper className='swiper' style={{fill: isEven(id) ? 'white' : '#C8193C'}}/>
 						<img
 							className='nextButton'
-							onClick={id === 3 ? () => skip() : () => handleSlide()}
+							onClick={id === 3 ? skip : () => handleSlide()}
 							src={isEven(id) ? button.next.red : button.next.white}
 							alt='next button'
 						/>
