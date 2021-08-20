@@ -43,7 +43,6 @@ class App extends React.Component<any, any> {
 			},
 			loading: true,
 			language: this.languageOrDefault(),
-			showOnboarding: !StorageService.instance.getHasVisited(),
 		};
 	}
 
@@ -87,6 +86,8 @@ class App extends React.Component<any, any> {
 	}
 
 	render() {
+		const showOnboarding = !StorageService.instance.getHasVisited();
+
 		const mainMenuProps = {
 			language: this.state.language,
 			pageCount: this.state.pageCount,
@@ -124,7 +125,7 @@ class App extends React.Component<any, any> {
 						/>
 					</Route>
 					<Route exact path='/'>
-						{this.state.showOnboarding ? (
+						{showOnboarding ? (
 							<Redirect to='/welcome' />
 						) : (
 							<MainMenu {...mainMenuProps} />
