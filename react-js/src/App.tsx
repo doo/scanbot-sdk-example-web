@@ -85,11 +85,6 @@ class App extends React.Component<any, any> {
 		return 'en';
 	}
 
-	onOnboardingSkip() {
-		StorageService.instance.setHasVisited();
-		this.setState({ showOnboarding: false });
-	}
-
 	render() {
 		const mainMenuProps = {
 			language: this.state.language,
@@ -121,7 +116,6 @@ class App extends React.Component<any, any> {
 				<Switch>
 					<Route path='/welcome'>
 						<Onboarding
-							skip={this.onOnboardingSkip.bind(this)}
 							language={this.state.language}
 						/>
 					</Route>

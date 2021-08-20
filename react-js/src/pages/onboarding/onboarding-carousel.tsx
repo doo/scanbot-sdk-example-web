@@ -5,6 +5,8 @@ import Carousel from 'nuka-carousel';
 import OnboardingPage from './onboarding-page';
 import OnboardingModel from './onboarding-model';
 import './onboarding-styles.scss';
+import { StorageService } from '../../service/storage-service';
+import { RoutingService } from '../../service/routing-service';
 
 function isEven(n: number) {
 	return n % 2 === 0;
@@ -72,6 +74,11 @@ class Onboarding extends React.Component<any, any> {
 		this.setState({ slideIndex: id });
 	}
 
+	onOnboardingSkip() {
+		StorageService.instance.setHasVisited();
+		RoutingService.instance.home();
+	}
+
 	render() {
 		return (
 			<div className='component-carousel'>
@@ -93,7 +100,7 @@ class Onboarding extends React.Component<any, any> {
 								setSlide={this.setSlide.bind(this)}
 								id={id}
 								lang={this.props.language}
-								skip={this.props.skip}
+								skip={this.onOnboardingSkip.bind(this)}
 							/>
 						);
 					})}
@@ -113,7 +120,7 @@ class Onboarding extends React.Component<any, any> {
 					<SkipButton
 						index={this.state.slideIndex}
 						language={this.props.language}
-						skip={this.props.skip}
+						skip={this.onOnboardingSkip.bind(this)}
 					/>
 				</div>
 			</div>
