@@ -21,6 +21,7 @@ import MainMenu from './pages/main-menu/main-menu';
 import { Redirect, Route, Switch, withRouter } from 'react-router-dom';
 import TextPage from './pages/text-page';
 import FileLoader from './utils/file-loader';
+import { Toast } from './subviews/toast';
 
 const librariesTxt = require('./assets/Libraries.txt');
 
@@ -113,6 +114,9 @@ class App extends React.Component<any, any> {
 			<>
 				{this.documentScanner()}
 				{this.barcodeScanner()}
+
+				<Toast alert={this.state.alert} onClose={() => this.setState({alert: undefined})}/>
+
 				<Switch>
 					<Route path='/welcome'>
 						<Onboarding
