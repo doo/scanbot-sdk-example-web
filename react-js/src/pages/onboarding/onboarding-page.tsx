@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { ReactComponent as Swiper } from '../../assets/swiper.svg';
+import { ImageUtils } from '../../utils/image-utils';
 import OnboardingModel from "./onboarding-model";
 import './onboarding-styles.scss'
 
@@ -9,21 +10,21 @@ function isEven(n: number) {
 }
 
 const screens = [
-	require(`../../assets/newscreen${0}.svg`),
-	require(`../../assets/newscreen${1}.svg`),
-	require(`../../assets/newscreen${2}.svg`),
-	require(`../../assets/newscreen${3}.svg`)
+	ImageUtils.loadImageFromAssets(`newscreen${0}.svg`),
+	ImageUtils.loadImageFromAssets(`newscreen${1}.svg`),
+	ImageUtils.loadImageFromAssets(`newscreen${2}.svg`),
+	ImageUtils.loadImageFromAssets(`newscreen${3}.svg`)
 ];
 
 const background = {
-	white: require('../../assets/ScanbotSDKwhite.svg'),
-	red: require('../../assets/ScanbotSDKred.svg')
+	white: ImageUtils.loadImageFromAssets('ScanbotSDKwhite.svg'),
+	red: ImageUtils.loadImageFromAssets('ScanbotSDKred.svg')
 };
 
 const button = {
 	next: {
-		red: require('../../assets/nextButtonRed.png'),
-		white: require('../../assets/nextButtonWhite.png')
+		red: ImageUtils.loadImageFromAssets('nextButtonRed.png'),
+		white: ImageUtils.loadImageFromAssets('nextButtonWhite.png')
 	}
 };
 

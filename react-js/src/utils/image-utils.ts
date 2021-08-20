@@ -116,4 +116,7 @@ export class ImageUtils {
         return images;
     }
 
+    public static loadImageFromAssets(filename: string) {
+        return require('../assets/' + filename);
+    }
 }

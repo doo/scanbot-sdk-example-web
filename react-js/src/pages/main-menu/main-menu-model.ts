@@ -1,5 +1,7 @@
+import { ImageUtils } from "../../utils/image-utils";
+
 function loadImage(filename: string) {
-	return require('../../assets/menu/' + filename);
+	return ImageUtils.loadImageFromAssets('menu/' + filename);
 }
 
 export const sectionContent = ({ ...args }: any) => {
