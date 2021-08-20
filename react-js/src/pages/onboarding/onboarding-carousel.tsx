@@ -21,7 +21,6 @@ class SkipButton extends React.Component<any, any> {
 			];
 		return (
 			<a
-				href='/#'
 				className='link'
 				style={{ color: color }}
 				onClick={this.props.skip}
