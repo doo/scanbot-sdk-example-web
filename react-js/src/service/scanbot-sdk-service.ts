@@ -75,14 +75,14 @@ export class ScanbotSdkService {
             containerId: ScanbotSdkService.DOCUMENT_SCANNER_CONTAINER,
             text: {
                 hint: {
-                  OK: 'Dokument wird erfasst... Bitte bewegen Sie die Kamera nicht.',
-                  OK_SmallSize: 'Das Dokument ist zu klein. Versuchen Sie bitte näher heranzugehen.',
-                  OK_BadAngles: 'Dies ist ein schlechter Kamerawinkel. Halten Sie bitte das Gerät gerade über das Dokument.',
-                  OK_BadAspectRatio: 'Drehen Sie das Gerät seitlich, so dass das Dokument besser in den Bildschirm passt.',
-                  OK_OffCenter: 'Versuchen Sie bitte, das Gerät über die Mitte des Dokuments zu halten.',
-                  Error_NothingDetected: 'Bitte halten Sie das Gerät zum Scannen über ein Dokument.',
-                  Error_Brightness: 'Es ist zu dunkel, bitte sorgen Sie für ausreichende Beleuchtung.',
-                  Error_Noise: 'Bitte legen Sie das Dokument auf eine glatte Oberfläche.',
+                    OK : "Capturing your document...",
+                    OK_SmallSize : "The document is too small. Try moving closer.",
+                    OK_BadAngles : "This is a bad camera angle. Hold the device straight over the document.",
+                    OK_BadAspectRatio : "Rotate the device sideways, so that the document fits better into the screen.",
+                    OK_OffCenter : "Try holding the device at the center of the document.",
+                    Error_NothingDetected : "Please hold the device over a document to start scanning.",
+                    Error_Brightness : "It is too dark. Try turning on a light.",
+                    Error_Noise : "Please move the document to a clear surface.",
                 }
             },
         };
