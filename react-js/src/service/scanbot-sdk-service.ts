@@ -21,6 +21,7 @@ import {
 
 import Pages from "../model/pages";
 import {ImageUtils} from "../utils/image-utils";
+import { BarcodeFormat } from "scanbot-web-sdk/@types/model/barcode/barcode-format";
 
 
 export class ScanbotSdkService {
@@ -71,7 +72,19 @@ export class ScanbotSdkService {
     public async createDocumentScanner(detectionCallback: any) {
         const config: DocumentScannerConfiguration = {
             onDocumentDetected: detectionCallback,
-            containerId: ScanbotSdkService.DOCUMENT_SCANNER_CONTAINER
+            containerId: ScanbotSdkService.DOCUMENT_SCANNER_CONTAINER,
+            text: {
+                hint: {
+                  OK: 'Dokument wird erfasst... Bitte bewegen Sie die Kamera nicht.',
+                  OK_SmallSize: 'Das Dokument ist zu klein. Versuchen Sie bitte näher heranzugehen.',
+                  OK_BadAngles: 'Dies ist ein schlechter Kamerawinkel. Halten Sie bitte das Gerät gerade über das Dokument.',
+                  OK_BadAspectRatio: 'Drehen Sie das Gerät seitlich, so dass das Dokument besser in den Bildschirm passt.',
+                  OK_OffCenter: 'Versuchen Sie bitte, das Gerät über die Mitte des Dokuments zu halten.',
+                  Error_NothingDetected: 'Bitte halten Sie das Gerät zum Scannen über ein Dokument.',
+                  Error_Brightness: 'Es ist zu dunkel, bitte sorgen Sie für ausreichende Beleuchtung.',
+                  Error_Noise: 'Bitte legen Sie das Dokument auf eine glatte Oberfläche.',
+                }
+            },
         };
 
         if (this.sdk) {
@@ -84,10 +97,32 @@ export class ScanbotSdkService {
     }
 
     public async createBarcodeScanner(callback: any) {
+        const barcodeFormats: BarcodeFormat[] = [
+            "AZTEC", 
+            "CODABAR", 
+            "CODE_39", 
+            "CODE_93", 
+            "CODE_128", 
+            "DATA_MATRIX", 
+            "EAN_8", 
+            "EAN_13", 
+            "ITF", 
+            "MAXICODE", 
+            "PDF_417", 
+            "QR_CODE", 
+            "RSS_14", 
+            "RSS_EXPANDED", 
+            "UPC_A", 
+            "UPC_E", 
+            "UPC_EAN_EXTENSION", 
+            "MSI_PLESSEY"
+        ];
+
         const config: BarcodeScannerConfiguration = {
             containerId: ScanbotSdkService.BARCODE_SCANNER_CONTAINER,
             captureDelay: 1000,
-            onBarcodesDetected: callback
+            onBarcodesDetected: callback,
+            barcodeFormats: barcodeFormats,
         };
         if (this.sdk) {
             this.barcodeScanner = await this.sdk!.createBarcodeScanner(config);
