@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 import {ScanbotSdkService} from "../service/scanbot-sdk-service";
 import {DocumentRepository} from "../service/document-repository";
@@ -8,9 +8,8 @@ import {
   BarcodeResult,
   BarcodeScannerConfiguration,
 } from "scanbot-web-sdk/@types";
-import ViewUtils from "../service/view-utils";
 import {ToastrService} from "ngx-toastr";
-import { BarcodeFormat } from 'scanbot-web-sdk/@types/model/barcode/barcode-format';
+import {BarcodeFormat} from 'scanbot-web-sdk/@types/model/barcode/barcode-format';
 
 @Component({
   selector: 'app-barcode-scanner',
