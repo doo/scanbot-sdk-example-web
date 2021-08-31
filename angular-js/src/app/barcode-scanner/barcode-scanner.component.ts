@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 import {ScanbotSdkService} from "../service/scanbot-sdk-service";
 import {DocumentRepository} from "../service/document-repository";
@@ -8,8 +8,8 @@ import {
   BarcodeResult,
   BarcodeScannerConfiguration,
 } from "scanbot-web-sdk/@types";
-import ViewUtils from "../service/view-utils";
 import {ToastrService} from "ngx-toastr";
+import {BarcodeFormat} from 'scanbot-web-sdk/@types/model/barcode/barcode-format';
 
 @Component({
   selector: 'app-barcode-scanner',
@@ -40,9 +40,31 @@ export class BarcodeScannerComponent implements OnInit {
   }
 
   async startScanner() {
+    const barcodeFormats: BarcodeFormat[] = [
+      "AZTEC", 
+      "CODABAR", 
+      "CODE_39", 
+      "CODE_93", 
+      "CODE_128", 
+      "DATA_MATRIX", 
+      "EAN_8", 
+      "EAN_13", 
+      "ITF", 
+      "MAXICODE", 
+      "PDF_417", 
+      "QR_CODE", 
+      "RSS_14", 
+      "RSS_EXPANDED", 
+      "UPC_A", 
+      "UPC_E", 
+      "UPC_EAN_EXTENSION", 
+      "MSI_PLESSEY"
+  ];
+
     const configuration: BarcodeScannerConfiguration = {
       onBarcodesDetected: this.onBarcodesDetected.bind(this),
-      containerId: ScanbotSdkService.BARCODE_SCANNER_CONTAINER_ID
+      containerId: ScanbotSdkService.BARCODE_SCANNER_CONTAINER_ID,
+      barcodeFormats: barcodeFormats
     };
 
     await this.sdk.scanBarcodes(configuration);

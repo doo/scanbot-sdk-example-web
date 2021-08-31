@@ -21,7 +21,19 @@ window.onload = async () => {
             autoCaptureEnabled: true,
             ignoreBadAspectRatio: false,
             onDocumentDetected: onDocumentDetected,
-            onError: onScannerError
+            onError: onScannerError,
+            text: {
+                hint: {
+                    OK : "Capturing your document...",
+                    OK_SmallSize : "The document is too small. Try moving closer.",
+                    OK_BadAngles : "This is a bad camera angle. Hold the device straight over the document.",
+                    OK_BadAspectRatio : "Rotate the device sideways, so that the document fits better into the screen.",
+                    OK_OffCenter : "Try holding the device at the center of the document.",
+                    Error_NothingDetected : "Please hold the device over a document to start scanning.",
+                    Error_Brightness : "It is too dark. Try turning on a light.",
+                    Error_Noise : "Please move the document to a clear surface.",
+                }
+            },
         };
 
         documentScanner = await scanbotSDK.createDocumentScanner(config);
@@ -74,6 +86,27 @@ window.onload = async () => {
     Utils.getElementByClassName("barcode-scanner-button").onclick = async (e) => {
         Utils.getElementByClassName("barcode-scanner-controller").style.display = "block";
 
+        const barcodeFormats = [
+            "AZTEC", 
+            "CODABAR", 
+            "CODE_39", 
+            "CODE_93", 
+            "CODE_128", 
+            "DATA_MATRIX", 
+            "EAN_8", 
+            "EAN_13", 
+            "ITF", 
+            "MAXICODE", 
+            "PDF_417", 
+            "QR_CODE", 
+            "RSS_14", 
+            "RSS_EXPANDED", 
+            "UPC_A", 
+            "UPC_E", 
+            "UPC_EAN_EXTENSION", 
+            "MSI_PLESSEY"
+        ];
+
         const config = {
             containerId: Config.barcodeScannerContainerId(),
             // style: {
@@ -86,7 +119,8 @@ window.onload = async () => {
             //     }
             // },
             onBarcodesDetected: onBarcodesDetected,
-            onError: onScannerError
+            onError: onScannerError,
+            barcodeFormats: barcodeFormats
         };
 
         barcodeScanner = await scanbotSDK.createBarcodeScanner(config);
