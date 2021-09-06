@@ -40,7 +40,19 @@ export class DocumentScannerComponent implements OnInit {
   async startScanner() {
     const configuration: DocumentScannerConfiguration = {
       onDocumentDetected: this.onDocumentDetected.bind(this),
-      containerId: ScanbotSdkService.CONTAINER_ID
+      containerId: ScanbotSdkService.CONTAINER_ID,
+      text: {
+        hint: {
+            OK : "Capturing your document...",
+            OK_SmallSize : "The document is too small. Try moving closer.",
+            OK_BadAngles : "This is a bad camera angle. Hold the device straight over the document.",
+            OK_BadAspectRatio : "Rotate the device sideways, so that the document fits better into the screen.",
+            OK_OffCenter : "Try holding the device at the center of the document.",
+            Error_NothingDetected : "Please hold the device over a document to start scanning.",
+            Error_Brightness : "It is too dark. Try turning on a light.",
+            Error_Noise : "Please move the document to a clear surface.",
+        }
+      },
     };
 
     await this.sdk.scanDocuments(configuration);
