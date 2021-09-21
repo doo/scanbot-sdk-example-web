@@ -1,16 +1,15 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { MrzScannerComponent } from './mrz-scanner.component';
+import { MrzScannerComponent } from "./mrz-scanner.component";
 
-describe('MrzScannerComponent', () => {
+describe("MrzScannerComponent", () => {
   let component: MrzScannerComponent;
   let fixture: ComponentFixture<MrzScannerComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MrzScannerComponent ]
-    })
-    .compileComponents();
+      declarations: [MrzScannerComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('MrzScannerComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

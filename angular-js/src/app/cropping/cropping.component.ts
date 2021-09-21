@@ -1,22 +1,25 @@
-import { Component, OnInit } from '@angular/core';
-import {Router} from "@angular/router";
-import {ScanbotSdkService} from "../service/scanbot-sdk-service";
-import {DocumentRepository} from "../service/document-repository";
-import {NavigationUtils} from "../service/navigation-utils";
-import {RoutePaths} from "../model/RoutePaths";
+import { Component, OnInit } from "@angular/core";
+import { Router } from "@angular/router";
+import { ScanbotSdkService } from "../service/scanbot-sdk-service";
+import { DocumentRepository } from "../service/document-repository";
+import { NavigationUtils } from "../service/navigation-utils";
+import { RoutePaths } from "../model/RoutePaths";
 
 @Component({
-  selector: 'app-cropping',
-  templateUrl: './cropping.component.html',
-  styleUrls: ['./cropping.component.scss']
+  selector: "app-cropping",
+  templateUrl: "./cropping.component.html",
+  styleUrls: ["./cropping.component.scss"],
 })
 export class CroppingComponent implements OnInit {
-
   router: Router;
   sdk: ScanbotSdkService;
   repository: DocumentRepository;
 
-  constructor(_router: Router, _sdk: ScanbotSdkService, _documents: DocumentRepository) {
+  constructor(
+    _router: Router,
+    _sdk: ScanbotSdkService,
+    _documents: DocumentRepository
+  ) {
     this.router = _router;
     this.sdk = _sdk;
     this.repository = _documents;
@@ -27,7 +30,7 @@ export class CroppingComponent implements OnInit {
     if (!this.sdk.isReady()) {
       this.sdk.onReady = () => {
         this.openCroppingView();
-      }
+      };
     } else {
       this.openCroppingView();
     }
@@ -54,14 +57,14 @@ export class CroppingComponent implements OnInit {
           handles: {
             size: 14,
             color: "white",
-            border: "1px solid lightgray"
-          }
+            border: "1px solid lightgray",
+          },
         },
         magneticLines: {
           // disabled: true,
-          color: "red"
-        }
-      }
+          color: "red",
+        },
+      },
     };
     await this.sdk.crop(options);
   }
@@ -76,7 +79,11 @@ export class CroppingComponent implements OnInit {
 
   async onApplyClick() {
     const result = await this.sdk.applyCrop();
-    this.repository.updateActiveItem(result.image, result.polygon, result.rotations);
+    this.repository.updateActiveItem(
+      result.image,
+      result.polygon,
+      result.rotations
+    );
     await this.router.navigateByUrl(RoutePaths.ImageDetails);
   }
 }

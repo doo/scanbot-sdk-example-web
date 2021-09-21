@@ -5,9 +5,7 @@
         "project": ["tsconfig.json", "e2e/tsconfig.json"],
         "createDefaultProgram": true
       },
-      "extends": [
-        "../.eslint.json"
-      ]
+      "extends": ["../.eslint.json"]
     }
   ]
 }

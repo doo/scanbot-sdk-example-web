@@ -1,17 +1,16 @@
-import {Component} from '@angular/core';
+import { Component } from "@angular/core";
 
-import {Router} from '@angular/router';
-import {ScanbotSdkService} from './service/scanbot-sdk-service';
-import {NavigationUtils} from './service/navigation-utils';
-import {RoutePaths} from './model/RoutePaths';
+import { Router } from "@angular/router";
+import { ScanbotSdkService } from "./service/scanbot-sdk-service";
+import { NavigationUtils } from "./service/navigation-utils";
+import { RoutePaths } from "./model/RoutePaths";
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  selector: "app-root",
+  templateUrl: "./app.component.html",
+  styleUrls: ["./app.component.scss"],
 })
 export class AppComponent {
-
   SDK: ScanbotSdkService;
 
   router: Router;
@@ -21,8 +20,7 @@ export class AppComponent {
     this.SDK = _sdk;
   }
   async onBackButtonClick() {
-
-    let destination = '/';
+    let destination = "/";
     if (NavigationUtils.isAtPath(RoutePaths.DocumentScanner)) {
       this.SDK.disposeDocumentScanner();
     }
