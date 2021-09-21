@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from "@angular/router";
-import { ScanbotSdkService } from "../service/scanbot-sdk-service";
-import { DocumentRepository } from "../service/document-repository";
-import { NavigationUtils } from "../service/navigation-utils";
-import { ToastrService } from "ngx-toastr";
+import { Router } from '@angular/router';
+import { ScanbotSdkService } from '../service/scanbot-sdk-service';
+import { DocumentRepository } from '../service/document-repository';
+import { NavigationUtils } from '../service/navigation-utils';
+import { ToastrService } from 'ngx-toastr';
 import { MrzResult } from 'scanbot-web-sdk/@types/model/mrz/mrz-result';
 
 @Component({
@@ -61,6 +61,6 @@ export class MrzScannerComponent implements OnInit {
 
   async onScanningDone() {
     this.sdk.disposeMrzScanner();
-    await this.router.navigateByUrl("/");
+    await this.router.navigateByUrl('/');
   }
 }

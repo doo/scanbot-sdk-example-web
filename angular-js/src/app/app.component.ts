@@ -1,9 +1,9 @@
-import {Component} from "@angular/core";
+import {Component} from '@angular/core';
 
-import {Router} from "@angular/router";
-import {ScanbotSdkService} from "./service/scanbot-sdk-service";
-import {NavigationUtils} from "./service/navigation-utils";
-import {RoutePaths} from "./model/RoutePaths";
+import {Router} from '@angular/router';
+import {ScanbotSdkService} from './service/scanbot-sdk-service';
+import {NavigationUtils} from './service/navigation-utils';
+import {RoutePaths} from './model/RoutePaths';
 
 @Component({
   selector: 'app-root',
@@ -22,7 +22,7 @@ export class AppComponent {
   }
   async onBackButtonClick() {
 
-    let destination = "/";
+    let destination = '/';
     if (NavigationUtils.isAtPath(RoutePaths.DocumentScanner)) {
       this.SDK.disposeDocumentScanner();
     }

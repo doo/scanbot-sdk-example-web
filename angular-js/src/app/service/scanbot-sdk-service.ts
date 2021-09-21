@@ -1,7 +1,7 @@
-import { Injectable } from "@angular/core";
+import { Injectable } from '@angular/core';
 
 // Import SDK from webpack directory to ensure web assembly binary and worker and bundled with webpack
-import ScanbotSDK from "scanbot-web-sdk/webpack";
+import ScanbotSDK from 'scanbot-web-sdk/webpack';
 
 // Other typings should be imported from @types
 import {
@@ -15,20 +15,20 @@ import {
   PdfGenerationOptions,
   PdfGenerator,
   TiffGenerationOptions,
-  TiffGenerator, 
-  BarcodeScannerConfiguration, 
+  TiffGenerator,
+  BarcodeScannerConfiguration,
   IBarcodeScannerHandle,
-} from "scanbot-web-sdk/@types";
+} from 'scanbot-web-sdk/@types';
 
-import { IMrzScannerHandle } from "scanbot-web-sdk/@types/interfaces/i-mrz-scanner-handle";
-import { MrzScannerConfiguration } from "scanbot-web-sdk/@types/model/configuration/mrz-scanner-configuration";
+import { IMrzScannerHandle } from 'scanbot-web-sdk/@types/interfaces/i-mrz-scanner-handle';
+import { MrzScannerConfiguration } from 'scanbot-web-sdk/@types/model/configuration/mrz-scanner-configuration';
 
 @Injectable()
 export class ScanbotSdkService {
 
-  static CONTAINER_ID = "scanbot-camera-container";
-  static BARCODE_SCANNER_CONTAINER_ID = "barcode-scanner-container";
-  static MRZ_SCANNER_CONTAINER_ID = "barcode-scanner-container";
+  static CONTAINER_ID = 'scanbot-camera-container';
+  static BARCODE_SCANNER_CONTAINER_ID = 'barcode-scanner-container';
+  static MRZ_SCANNER_CONTAINER_ID = 'barcode-scanner-container';
 
   private instance: ScanbotSDK;
 
@@ -44,7 +44,7 @@ export class ScanbotSdkService {
   }
 
   constructor() {
-    const options = { licenseKey: "" };
+    const options = { licenseKey: '' };
     ScanbotSDK.initialize(options).then(result => {
       this.instance = result;
       if (this.onReady) {
@@ -75,7 +75,7 @@ export class ScanbotSdkService {
   disposeDocumentScanner() {
     this.documentScanner.dispose();
   }
-  
+
   disposeBarcodeScanner() {
     this.barcodeScanner.dispose();
   }
@@ -109,15 +109,15 @@ export class ScanbotSdkService {
   }
 
   async generatePDF(pages: any[]) {
-    const options: PdfGenerationOptions = { standardPaperSize: "A4", landscape: true, dpi: 100 };
-    const generator: PdfGenerator = await this.instance!.beginPdf(options);
+    const options: PdfGenerationOptions = { standardPaperSize: 'A4', landscape: true, dpi: 100 };
+    const generator: PdfGenerator = await this.instance.beginPdf(options);
     for (const page of pages) {
       await generator.addPage(page.filtered ?? page.cropped ?? page.original);
     }
     return await generator.complete();
   }
   async generateTIFF(pages: any[]) {
-    const options: TiffGenerationOptions = { binarizationFilter: "deepBinarization", dpi: 123 };
+    const options: TiffGenerationOptions = { binarizationFilter: 'deepBinarization', dpi: 123 };
     const generator: TiffGenerator = await this.instance.beginTiff(options);
     for (const page of pages) {
       await generator.addPage(page.cropped ?? page.original);
@@ -151,10 +151,10 @@ export class ScanbotSdkService {
   }
 
   public availableFilters(): string[] {
-    return ["none"].concat(this.binarizationFilters()).concat(this.colorFilters());
+    return ['none'].concat(this.binarizationFilters()).concat(this.colorFilters());
   }
 
   filterByIndex(value: string) {
-    return this.availableFilters()[parseInt(value)];
+    return this.availableFilters()[parseInt(value, 10)];
   }
 }

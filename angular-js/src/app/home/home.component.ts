@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from "@angular/router";
-import { ScanbotSdkService } from "../service/scanbot-sdk-service";
-import { NavigationUtils } from "../service/navigation-utils";
-import { ImageUtils } from "../service/image-utils";
-import { DocumentRepository } from "../service/document-repository";
+import { Router } from '@angular/router';
+import { ScanbotSdkService } from '../service/scanbot-sdk-service';
+import { NavigationUtils } from '../service/navigation-utils';
+import { ImageUtils } from '../service/image-utils';
+import { DocumentRepository } from '../service/document-repository';
 import Swal from 'sweetalert2';
-import { RoutePaths } from "../model/RoutePaths";
+import { RoutePaths } from '../model/RoutePaths';
 
 export enum FeatureId {
   Picker,
@@ -23,12 +23,12 @@ export class HomeComponent implements OnInit {
   documents: DocumentRepository;
 
   features: any = [
-    { route: RoutePaths.DocumentScanner, name: "Scan Documents" },
-    { route: RoutePaths.BarcodeScanner, name: "Scan Barcodes" },
-    { route: RoutePaths.MrzScanner, name: "Scan MRZ" },
-    { id: FeatureId.Picker, name: "Pick image" },
-    { route: RoutePaths.ImageResults, name: "Image Results" },
-    { id: FeatureId.License, name: "Check License" }
+    { route: RoutePaths.DocumentScanner, name: 'Scan Documents' },
+    { route: RoutePaths.BarcodeScanner, name: 'Scan Barcodes' },
+    { route: RoutePaths.MrzScanner, name: 'Scan MRZ' },
+    { id: FeatureId.Picker, name: 'Pick image' },
+    { route: RoutePaths.ImageResults, name: 'Image Results' },
+    { id: FeatureId.License, name: 'Check License' }
   ];
 
   constructor(_router: Router, _sdk: ScanbotSdkService, _repository: DocumentRepository) {
@@ -53,7 +53,7 @@ export class HomeComponent implements OnInit {
     }
 
     if (e.id === FeatureId.License) {
-      await Swal.fire({ title: "License Info", text: await this.sdk.licenseInfoString() })
+      await Swal.fire({ title: 'License Info', text: await this.sdk.licenseInfoString() })
     }
   }
 }
