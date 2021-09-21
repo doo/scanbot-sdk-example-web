@@ -10,6 +10,9 @@ class Config {
     static barcodeScannerContainerId() {
         return "barcode-scanner-container";
     }
+    static mrzScannerContainerId() {
+        return "mrz-scanner-container";
+    }
     static croppingViewContainerId() {
         return "cropping-view-container";
     }
