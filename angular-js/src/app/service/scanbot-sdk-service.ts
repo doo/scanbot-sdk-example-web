@@ -1,4 +1,4 @@
-import {Injectable} from "@angular/core";
+import { Injectable } from "@angular/core";
 
 // Import SDK from webpack directory to ensure web assembly binary and worker and bundled with webpack
 import ScanbotSDK from "scanbot-web-sdk/webpack";
@@ -15,14 +15,20 @@ import {
   PdfGenerationOptions,
   PdfGenerator,
   TiffGenerationOptions,
-  TiffGenerator, BarcodeScannerConfiguration, IBarcodeScannerHandle
+  TiffGenerator, 
+  BarcodeScannerConfiguration, 
+  IBarcodeScannerHandle,
 } from "scanbot-web-sdk/@types";
+
+import { IMrzScannerHandle } from "scanbot-web-sdk/@types/interfaces/i-mrz-scanner-handle";
+import { MrzScannerConfiguration } from "scanbot-web-sdk/@types/model/configuration/mrz-scanner-configuration";
 
 @Injectable()
 export class ScanbotSdkService {
 
   static CONTAINER_ID = "scanbot-camera-container";
   static BARCODE_SCANNER_CONTAINER_ID = "barcode-scanner-container";
+  static MRZ_SCANNER_CONTAINER_ID = "barcode-scanner-container";
 
   private instance: ScanbotSDK;
 
@@ -30,6 +36,7 @@ export class ScanbotSdkService {
 
   private documentScanner: IDocumentScannerHandle;
   private barcodeScanner: IBarcodeScannerHandle;
+  private mrzScanner: IMrzScannerHandle;
   private cropper: ICroppingViewHandle;
 
   isReady(): boolean {
@@ -37,7 +44,7 @@ export class ScanbotSdkService {
   }
 
   constructor() {
-    const options = {licenseKey: ""};
+    const options = { licenseKey: "" };
     ScanbotSDK.initialize(options).then(result => {
       this.instance = result;
       if (this.onReady) {
@@ -54,6 +61,10 @@ export class ScanbotSdkService {
     this.barcodeScanner = await this.instance.createBarcodeScanner(configuration);
   }
 
+  async scanMrz(configuration: MrzScannerConfiguration) {
+    this.mrzScanner = await this.instance.createMrzScanner(configuration);
+  }
+
   delayAutoCapture() {
     this.documentScanner.disableAutoCapture();
     setTimeout(() => {
@@ -64,8 +75,13 @@ export class ScanbotSdkService {
   disposeDocumentScanner() {
     this.documentScanner.dispose();
   }
+  
   disposeBarcodeScanner() {
     this.barcodeScanner.dispose();
+  }
+
+  disposeMrzScanner() {
+    this.mrzScanner.dispose();
   }
 
   async crop(configuration: CroppingViewConfiguration) {
@@ -93,7 +109,7 @@ export class ScanbotSdkService {
   }
 
   async generatePDF(pages: any[]) {
-    const options: PdfGenerationOptions = {standardPaperSize: "A4", landscape: true, dpi: 100};
+    const options: PdfGenerationOptions = { standardPaperSize: "A4", landscape: true, dpi: 100 };
     const generator: PdfGenerator = await this.instance!.beginPdf(options);
     for (const page of pages) {
       await generator.addPage(page.filtered ?? page.cropped ?? page.original);
@@ -101,7 +117,7 @@ export class ScanbotSdkService {
     return await generator.complete();
   }
   async generateTIFF(pages: any[]) {
-    const options: TiffGenerationOptions = {binarizationFilter: "deepBinarization", dpi: 123};
+    const options: TiffGenerationOptions = { binarizationFilter: "deepBinarization", dpi: 123 };
     const generator: TiffGenerator = await this.instance.beginTiff(options);
     for (const page of pages) {
       await generator.addPage(page.cropped ?? page.original);

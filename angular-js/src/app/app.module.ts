@@ -13,6 +13,7 @@ import { BarcodeScannerComponent } from './barcode-scanner/barcode-scanner.compo
 import { ToastrModule } from 'ngx-toastr';
 import {CommonModule} from "@angular/common";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import { MrzScannerComponent } from './mrz-scanner/mrz-scanner.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
     ImageResultsComponent,
     ImageDetailsComponent,
     CroppingComponent,
-    BarcodeScannerComponent
+    BarcodeScannerComponent,
+    MrzScannerComponent
   ],
   imports: [
     BrowserModule,
