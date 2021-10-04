@@ -27,7 +27,7 @@ import { MrzScannerConfiguration } from "scanbot-web-sdk/@types/model/configurat
 export class ScanbotSdkService {
   static CONTAINER_ID = "scanbot-camera-container";
   static BARCODE_SCANNER_CONTAINER_ID = "barcode-scanner-container";
-  static MRZ_SCANNER_CONTAINER_ID = "barcode-scanner-container";
+  static MRZ_SCANNER_CONTAINER_ID = "mrz-scanner-container";
 
   private instance: ScanbotSDK;
 
