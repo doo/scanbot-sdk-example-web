@@ -59,12 +59,12 @@ pipeline {
         success {
             slackSend channel: '#scanbot-ci-wrappers',
             color: 'good',
-            message: "${env.JOB_NAME} - #${env.BUILD_NUMBER} Success after ${currentBuild.durationString} (${env.BUILD_URL})"   
+            message: "${env.JOB_NAME} - #${env.BUILD_NUMBER} Success after ${currentBuild.durationString.replace(' and counting', '')} (${env.BUILD_URL})"   
         }
         failure {
             slackSend channel: '#scanbot-ci-wrappers',
             color: 'danger',
-            message: "${env.JOB_NAME} - #${env.BUILD_NUMBER} Failure after ${currentBuild.durationString} (${env.BUILD_URL})"   
+            message: "${env.JOB_NAME} - #${env.BUILD_NUMBER} Failure after ${currentBuild.durationString.replace(' and counting', '')} (${env.BUILD_URL})"   
         }
     }
 }
