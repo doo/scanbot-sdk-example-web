@@ -61,7 +61,7 @@ pipeline {
         always {
             slackSend channel: '#jenkinsbuilds',
             color: COLOR_MAP[currentBuild.currentResult],
-            message: "${env.JOB_NAME} - #${env.BUILD_NUMBER} Success after ${currentBuild.durationString.replace(' and counting', '')} (<${env.BUILD_URL}>|Open)"  
+            message: "${env.JOB_NAME} - #${env.BUILD_NUMBER} Success after ${currentBuild.durationString.replace(' and counting', '')} (<${env.RUN_DISPLAY_URL}|Open>)"  
         }
     }
 }
