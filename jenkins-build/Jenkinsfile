@@ -8,7 +8,7 @@ pipeline {
                 script {
                     checkout([$class: 'GitSCM',
                         branches: [[name: "hp/jenkins-build"]],
-                        userRemoteConfigs: [[url: 'git@github.com:doo/scanbot-sdk-example-web.git']]
+                        userRemoteConfigs: [[credentialsId: 'scanbot-ci-ssh', url: 'git@github.com:doo/scanbot-sdk-example-web.git']]
                     ])
                 }
             }
