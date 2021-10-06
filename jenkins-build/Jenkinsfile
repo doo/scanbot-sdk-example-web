@@ -1,4 +1,5 @@
 pipeline {
+    def COLOR_MAP = ['SUCCESS': 'good', 'FAILURE': 'danger', 'ABORTED': 'warning']
     agent any
     options { timestamps () }
     stages {
@@ -56,15 +57,10 @@ pipeline {
         }
     }
     post {
-        success {
-            slackSend channel: '#scanbot-ci-wrappers',
-            color: 'good',
-            message: "${env.JOB_NAME} - #${env.BUILD_NUMBER} Success after ${currentBuild.durationString.replace(' and counting', '')} (${env.BUILD_URL})"   
-        }
-        failure {
-            slackSend channel: '#scanbot-ci-wrappers',
-            color: 'danger',
-            message: "${env.JOB_NAME} - #${env.BUILD_NUMBER} Failure after ${currentBuild.durationString.replace(' and counting', '')} (${env.BUILD_URL})"   
+        always {
+            slackSend channel: '#jenkinsbuilds',
+            color: COLOR_MAP[currentBuild.currentResult],
+            message: "${env.JOB_NAME} - #${env.BUILD_NUMBER} Success after ${currentBuild.durationString.replace(' and counting', '')} (<${env.BUILD_URL}>|Open)"  
         }
     }
 }
