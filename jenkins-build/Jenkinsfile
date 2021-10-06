@@ -12,12 +12,14 @@ pipeline {
                 }
             }
         }
-        stage('Build Docker Image') {
+        stage('Build Docker Images') {
             steps {
                 script {
                     sh '''
                         set -ex
-                        docker build -t web-sdk:latest .
+                        docker build -t web-sdk-react:latest -f jenkins-build/Dockerfiles/react.Dockerfile .
+                        docker build -t web-sdk-plain:latest -f jenkins-build/Dockerfiles/plain.Dockerfile .
+                        docker build -t web-sdk-angular:latest -f jenkins-build/Dockerfiles/angular.Dockerfile .
                         '''
                 }
             }
@@ -27,7 +29,7 @@ pipeline {
                 script {
                     sh '''
                         set -ex
-                        docker run -v "$(pwd)":/sources --rm --name scanbot-web-react-build web-sdk:latest /bin/bash build_scripts/build_react.sh
+                        docker run -v "$(pwd)":/sources --rm --name scanbot-web-react-build web-sdk-react:latest /bin/bash jenkins-build/scripts/build_react.sh
                         '''
                 }
             }
@@ -37,7 +39,7 @@ pipeline {
                 script {
                     sh '''
                         set -ex
-                        docker run -v "$(pwd)":/sources --rm --name scanbot-web-plain-build web-sdk:latest /bin/bash build_scripts/build_plain.sh
+                        docker run -v "$(pwd)":/sources --rm --name scanbot-web-plain-build web-sdk-plain:latest /bin/bash jenkins-build/scripts/build_plain.sh
                         '''
                 }
             }
@@ -47,7 +49,7 @@ pipeline {
                 script {
                     sh '''
                         set -ex
-                        docker run -v "$(pwd)":/sources --rm --name scanbot-web-angular-build web-sdk:latest /bin/bash build_scripts/build_angular.sh
+                        docker run -v "$(pwd)":/sources --rm --name scanbot-web-angular-build web-sdk-angular:latest /bin/bash jenkins-build/scripts/build_angular.sh
                         '''
                 }
             }

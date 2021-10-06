@@ -2,4 +2,4 @@
 set -ex
 
 cd plain-js/
-php -S localhost:8000
+#php -S localhost:8000

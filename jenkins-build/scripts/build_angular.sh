@@ -2,7 +2,8 @@
 set -ex
 
 cd angular-js/
-ng serve
+npm install
+#ng serve
 ng build
-ng test
-ng e2e
+#ng test
+#ng e2e
