@@ -2,7 +2,7 @@ pipeline {
     agent {
         docker { image 'node:16-alpine' }
     }
-    options { timestamps }
+    options { timestamps () }
     stages {
         stage('Build React App') {
             steps {
