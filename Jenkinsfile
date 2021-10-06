@@ -12,12 +12,22 @@ pipeline {
                 }
             }
         }
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    sh '''
+                        set -ex
+                        docker build -t web-sdk:latest .
+                        '''
+                }
+            }
+        }
         stage('Build React App') {
             steps {
                 script {
                     sh '''
                         set -ex
-                        docker run -v "$(pwd)":/build --rm --name scanbot-web-react-build node:16-alpine /bin/bash build_scripts/build_react.sh
+                        docker run -v "$(pwd)":/sources --rm --name scanbot-web-react-build web-sdk:latest /bin/bash build_scripts/build_react.sh
                         '''
                 }
             }
@@ -27,7 +37,7 @@ pipeline {
                 script {
                     sh '''
                         set -ex
-                        docker run -v "$(pwd)":/build --rm --name scanbot-web-plain-build node:16-alpine /bin/bash build_scripts/build_plain.sh
+                        docker run -v "$(pwd)":/sources --rm --name scanbot-web-plain-build web-sdk:latest /bin/bash build_scripts/build_plain.sh
                         '''
                 }
             }
@@ -37,7 +47,7 @@ pipeline {
                 script {
                     sh '''
                         set -ex
-                        docker run -v "$(pwd)":/build --rm --name scanbot-web-angular-build node:16-alpine /bin/bash build_scripts/build_angular.sh
+                        docker run -v "$(pwd)":/sources --rm --name scanbot-web-angular-build web-sdk:latest /bin/bash build_scripts/build_angular.sh
                         '''
                 }
             }
