@@ -1,7 +1,5 @@
 pipeline {
-    agent {
-        docker { image 'node:16-alpine' }
-    }
+    agent any
     options { timestamps () }
     stages {
         stage('Clone Repo') {
@@ -9,7 +7,7 @@ pipeline {
                 script {
                     checkout([$class: 'GitSCM',
                         branches: [[name: "hp/jenkins-build"]],
-                        userRemoteConfigs: [[credentialsId: 'scanbot-ci-ssh', url: 'git@github.com:doo/scanbot-sdk-example-web.git']]
+                        userRemoteConfigs: [[url: 'git@github.com:doo/scanbot-sdk-example-web.git']]
                     ])
                 }
             }
@@ -19,9 +17,7 @@ pipeline {
                 script {
                     sh '''
                         set -ex
-                        cd react-js/
-                        npm install
-                        npm start
+                        docker run -v "$(pwd)":/build --rm --name scanbot-web-react-build node:16-alpine /bin/bash build_scripts/build_react.sh
                         '''
                 }
             }
@@ -31,8 +27,7 @@ pipeline {
                 script {
                     sh '''
                         set -ex
-                        cd plain-js/
-                        php -S localhost:8000
+                        docker run -v "$(pwd)":/build --rm --name scanbot-web-plain-build node:16-alpine /bin/bash build_scripts/build_plain.sh
                         '''
                 }
             }
@@ -42,11 +37,7 @@ pipeline {
                 script {
                     sh '''
                         set -ex
-                        cd angular-js/
-                        ng serve
-                        ng build
-                        ng test
-                        ng e2e
+                        docker run -v "$(pwd)":/build --rm --name scanbot-web-angular-build node:16-alpine /bin/bash build_scripts/build_angular.sh
                         '''
                 }
             }
