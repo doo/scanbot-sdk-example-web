@@ -1,5 +1,6 @@
+def COLOR_MAP = ['SUCCESS': 'good', 'FAILURE': 'danger', 'ABORTED': 'warning']
+
 pipeline {
-    def COLOR_MAP = ['SUCCESS': 'good', 'FAILURE': 'danger', 'ABORTED': 'warning']
     agent any
     options { timestamps () }
     stages {
