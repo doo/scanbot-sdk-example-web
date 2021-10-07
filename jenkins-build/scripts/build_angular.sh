@@ -2,7 +2,7 @@
 set -ex
 
 cd angular-js/
-npm install -g @angular/cli
+npm install
 ng build
 
 # to start the dev server run: 
