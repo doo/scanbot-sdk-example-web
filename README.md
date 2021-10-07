@@ -6,7 +6,6 @@ The [Scanbot Web Document Scanner SDK](https://scanbot.io/en/sdk/web-scanner-sdk
 to integrate document scanning on your website or in your web application. It features real-time document detection
 with user guidance, auto-snapping, auto-cropping and perspective correction.
 
-
 ## How does it work?
 
 The SDK is a native SDK built for the web via [Emscripten](https://emscripten.org/).
@@ -14,7 +13,6 @@ It relies on [WebAssembly](https://webassembly.org) and Camera access via HTML M
 
 The react component is built with [React](https://reactjs.org/)
 and the plain JavaScript bundle with [Preact](https://preactjs.com/).
-
 
 ## How to run the example apps?
 
@@ -24,6 +22,7 @@ The React example app relies on the `npm` [package](https://www.npmjs.com/packag
 of the Scanbot Web Document Scanner SDK.
 
 To run the React example app:
+
 ```
 cd react-js/
 npm install
@@ -33,23 +32,25 @@ npm start
 ### Plain JavaScript App
 
 The vanilla JavaScript app downloads the Scanbot Web SDK from an unofficial CDN:
+
 ```
 https://cdn.jsdelivr.net/npm/scanbot-web-sdk@1.0.0-rc1/bundle/ScanbotSDK.min.js
 ```
 
 To run the JavaScript example:
+
 ```
 cd plain-js/
 php -S localhost:8000
 ```
 
-
 ## Documentation
+
 For the developer guide and full API reference of the Scanbot Web Document Scanner SDK please check out the
 [documentation](https://scanbotsdk.github.io/documentation/web/).
 
-
 ## Please note
+
 The Scanbot Web Document Scanner SDK will run without a license for one minute per session!
 
 After the trial period is over all Scanbot Web SDK functions
