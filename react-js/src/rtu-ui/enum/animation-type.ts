@@ -1,7 +1,6 @@
-
 export enum AnimationType {
-    None,
-    PushRight,
-    PushBottom,
-    Pop
+  None,
+  PushRight,
+  PushBottom,
+  Pop,
 }

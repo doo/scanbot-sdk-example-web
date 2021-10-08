@@ -1,9 +1,8 @@
-import {NavigationUtils} from "./navigation-utils";
+import { NavigationUtils } from "./navigation-utils";
 
 export class ImageUtils {
-
   public static pick(): Promise<any> {
-    return new Promise<any>(resolve => {
+    return new Promise<any>((resolve) => {
       const picker = NavigationUtils.getElementByClassName("file-picker");
       picker.click();
 
@@ -17,7 +16,7 @@ export class ImageUtils {
 
         reader.onload = async (e) => {
           // @ts-ignore
-          resolve({original: new Uint8Array(reader.result)});
+          resolve({ original: new Uint8Array(reader.result) });
         };
       };
     });
@@ -29,7 +28,7 @@ export class ImageUtils {
     document.body.appendChild(a);
     // @ts-ignore
     a.style = "display: none";
-    const blob = new Blob([data], {type: `application/${extension}`});
+    const blob = new Blob([data], { type: `application/${extension}` });
     const url = window.URL.createObjectURL(blob);
     a.href = url;
     a.download = name;

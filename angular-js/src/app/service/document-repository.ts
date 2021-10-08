@@ -1,9 +1,8 @@
-import {Injectable} from "@angular/core";
-import {Barcode, Polygon} from "scanbot-web-sdk/@types";
+import { Injectable } from "@angular/core";
+import { Barcode, Polygon } from "scanbot-web-sdk/@types";
 
 @Injectable()
 export class DocumentRepository {
-
   private readonly pages: any[];
   private activeIndex: number = -1;
 
@@ -30,7 +29,7 @@ export class DocumentRepository {
   }
 
   hasActiveItem() {
-    return this.activeIndex !== -1
+    return this.activeIndex !== -1;
   }
   getActiveItem() {
     return this.pages[this.activeIndex];

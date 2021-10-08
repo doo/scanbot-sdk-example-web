@@ -1,6 +1,4 @@
-
 export default class ViewUtils {
-
   public static flash() {
     const flash = document.getElementsByClassName("flash")[0] as HTMLDivElement;
     flash.style.display = "block";
@@ -9,7 +7,7 @@ export default class ViewUtils {
       this.animateFlashOpacity("0.0", () => {
         flash.style.opacity = "1.0";
         flash.style.display = "none";
-      })
+      });
     });
   }
   private static animateFlashOpacity(opacity, complete) {

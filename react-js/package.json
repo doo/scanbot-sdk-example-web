@@ -27,7 +27,7 @@
     "pdfjs-dist": "2.6.347",
     "react-pdf": "5.3.0",
     "worker-loader": "3.0.8",
-    "scanbot-web-sdk": "2.4.1"
+    "scanbot-web-sdk": "2.5.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -49,5 +49,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "prettier": "2.4.1"
   }
 }
