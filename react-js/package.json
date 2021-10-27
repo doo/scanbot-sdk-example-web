@@ -27,7 +27,7 @@
     "pdfjs-dist": "2.6.347",
     "react-pdf": "5.3.0",
     "worker-loader": "3.0.8",
-    "scanbot-web-sdk": "2.5.2-beta2"
+    "scanbot-web-sdk": "2.5.2-beta3"
   },
   "scripts": {
     "start": "react-scripts start",
