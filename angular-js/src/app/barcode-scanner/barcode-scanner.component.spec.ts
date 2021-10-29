@@ -1,16 +1,15 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { BarcodeScannerComponent } from './barcode-scanner.component';
+import { BarcodeScannerComponent } from "./barcode-scanner.component";
 
-describe('BarcodeScannerComponent', () => {
+describe("BarcodeScannerComponent", () => {
   let component: BarcodeScannerComponent;
   let fixture: ComponentFixture<BarcodeScannerComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ BarcodeScannerComponent ]
-    })
-    .compileComponents();
+      declarations: [BarcodeScannerComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('BarcodeScannerComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

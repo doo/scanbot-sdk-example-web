@@ -1,4 +1,3 @@
-
 @import "src/app/common/styles/bottom-bar";
 
 #scanbot-camera-container {
@@ -8,12 +7,12 @@
 }
 
 .flash {
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  background-color:#fff;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
   display: none;
   z-index: 5000;
 }
