@@ -38,3 +38,5 @@ import { MrzScannerComponent } from "./mrz-scanner/mrz-scanner.component";
   bootstrap: [AppComponent],
 })
 export class AppModule {}
+
+// THIS IS A TEST
