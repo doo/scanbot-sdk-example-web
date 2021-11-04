@@ -56,7 +56,10 @@ export class ImageUtils {
     a.href = url;
     a.download = name;
     a.click();
-    window.URL.revokeObjectURL(url);
+    // Workaround for iOS 12, we were losing the cache and it was ending up WebKitBlobResource error
+    setTimeout(() => {
+      window.URL.revokeObjectURL(url);
+    }, 100);
   }
 
   static async downscale(sdk: ScanbotSDK, data: Uint8Array): Promise<any> {

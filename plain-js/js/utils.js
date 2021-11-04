@@ -45,13 +45,17 @@ class Utils {
     const extension = name.split(".")[1];
     const a = document.createElement("a");
     document.body.appendChild(a);
+    // @ts-ignore
     a.style = "display: none";
     const blob = new Blob([data], { type: `application/${extension}` });
     const url = window.URL.createObjectURL(blob);
     a.href = url;
     a.download = name;
     a.click();
-    window.URL.revokeObjectURL(url);
+    // Workaround for iOS 12, we were losing the cache and it was ending up WebKitBlobResource error
+    setTimeout(() => {
+      window.URL.revokeObjectURL(url);
+    }, 100);
   }
 
   static generateName() {
