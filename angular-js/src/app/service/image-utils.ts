@@ -1,22 +1,34 @@
-import { NavigationUtils } from "./navigation-utils";
-
 export class ImageUtils {
-  public static pick(): Promise<any> {
+  public static readonly MIME_TYPE_JPEG = "image/jpeg";
+  public static readonly MIME_TYPE_PDF = "application/pdf";
+
+  public static pick(mime: string, asDataUrl?: boolean): Promise<any> {
     return new Promise<any>((resolve) => {
-      const picker = NavigationUtils.getElementByClassName("file-picker");
+      const picker = document.createElement("input") as HTMLInputElement;
+      picker.type = "file";
+      picker.accept = mime;
       picker.click();
 
       picker.onchange = (e) => {
-        console.log("change");
         e.preventDefault();
         let reader = new FileReader();
         // @ts-ignore
         let file = e.target.files[0];
-        reader.readAsArrayBuffer(file);
+        if (asDataUrl) {
+          reader.readAsDataURL(file);
+        } else {
+          reader.readAsArrayBuffer(file);
+        }
 
         reader.onload = async (e) => {
-          // @ts-ignore
-          resolve({ original: new Uint8Array(reader.result) });
+          const result = reader.result;
+          if (asDataUrl) {
+            resolve({ data: result });
+          } else {
+            // @ts-ignore
+            resolve({ original: new Uint8Array(result) });
+          }
+          picker.remove();
         };
       };
     });

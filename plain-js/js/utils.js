@@ -41,6 +41,10 @@ class Utils {
     return document.getElementsByClassName(name)[0];
   }
 
+  static getElementById(id) {
+    return document.getElementById(id);
+  }
+
   static saveBytes(data, name) {
     const extension = name.split(".")[1];
     const a = document.createElement("a");

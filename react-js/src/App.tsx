@@ -429,8 +429,18 @@ export default class App extends React.Component<any, any> {
       const color = info?.status === "Trial" ? "success" : "error";
       this.setState({ alert: { color: color, text: JSON.stringify(info) } });
     } else if (feature.id === RoutePath.DocumentOnJpeg) {
-      const result = await ImageUtils.pick(ImageUtils.MIME_TYPE_JPEG);
-      Pages.instance.add(result);
+      const image = await ImageUtils.pick(ImageUtils.MIME_TYPE_JPEG);
+      
+      const contourDetectionResult = await ScanbotSdkService.instance.detectDocument(image.original);
+      if (contourDetectionResult.success === true && contourDetectionResult.polygon) {
+        const cropped = await ScanbotSdkService.instance.cropAndRotateImageCcw(image.original, contourDetectionResult.polygon, 0);
+        const documentDetectionResult = { ...contourDetectionResult, original: image.original, cropped: cropped };
+
+        Pages.instance.add(documentDetectionResult);
+        alert("Detection successful");
+      } else {
+        alert("Detection failed");
+      }
     } else if (feature.id === RoutePath.BarcodeOnJpeg) {
       const result = await ImageUtils.pick(ImageUtils.MIME_TYPE_JPEG, true);
       const detection = await ScanbotSdkService.instance.sdk?.detectBarcodes(
