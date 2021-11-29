@@ -43,8 +43,9 @@
       <div class="main-list-item document-scanner-button">Document Scanner</div>
       <div class="main-list-item barcode-scanner-button">Barcode Scanner</div>
       <div class="main-list-item mrz-scanner-button">MRZ Scanner</div>
-      <div class="main-list-item pick-image-button">Pick Image</div>
-      <div class="main-list-item scanner-results-button">Image Results</div>
+      <div class="main-list-item" id="pick-document-button">Pick Document Image</div>
+      <div class="main-list-item" id="pick-barcode-button">Pick Barcode Image</div>
+      <div class="main-list-item scanner-results-button">Document Results</div>
       <div class="main-list-item license-info-button">License Info</div>
     </div>
 
@@ -162,7 +163,7 @@
     ></script>
 
     <!-- Add ScanbotSDK framework -->
-    <script src="https://cdn.jsdelivr.net/npm/scanbot-web-sdk@2.5.3/bundle/ScanbotSDK.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/scanbot-web-sdk@2.6.0-beta2/bundle/ScanbotSDK.min.js"></script>
     <!-- After, initialize the Scanbot SDK in your own script -->
     <script src="js/lib/toastify.js"></script>
     <script src="js/config.js"></script>
