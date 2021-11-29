@@ -326,6 +326,10 @@ export default class App extends React.Component<any, any> {
   }
 
   async onDocumentDetected(result: any) {
+    const blurDetector = await ScanbotSdkService.instance.createBlurDetector();
+    console.log('estimateBlurrinessOnBuffer', await blurDetector?.estimateBlurrinessOnBuffer(result.original));
+    await blurDetector?.release();
+
     ScanbotSdkService.instance.sdk?.utils.flash();
     Pages.instance.add(result);
   }
@@ -430,7 +434,7 @@ export default class App extends React.Component<any, any> {
       this.setState({ alert: { color: color, text: JSON.stringify(info) } });
     } else if (feature.id === RoutePath.DocumentOnJpeg) {
       const image = await ImageUtils.pick(ImageUtils.MIME_TYPE_JPEG);
-      
+
       const contourDetectionResult = await ScanbotSdkService.instance.detectDocument(image.original);
       if (contourDetectionResult.success === true && contourDetectionResult.polygon) {
         const cropped = await ScanbotSdkService.instance.cropAndRotateImageCcw(image.original, contourDetectionResult.polygon, 0);

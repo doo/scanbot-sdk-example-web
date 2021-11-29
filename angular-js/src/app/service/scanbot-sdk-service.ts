@@ -182,4 +182,8 @@ export class ScanbotSdkService {
   async cropAndRotateImageCcw(image: ArrayBuffer, polygon: Polygon, rotations: number): Promise<Uint8Array> {
     return await this.instance!.cropAndRotateImageCcw(image, polygon, rotations);
   }
+
+  public async createBlurDetector() {
+    return this.instance?.createBlurDetector();
+  }
 }

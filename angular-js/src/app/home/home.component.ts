@@ -61,6 +61,10 @@ export class HomeComponent implements OnInit {
         const cropped = await this.sdk.cropAndRotateImageCcw(image.original, contourDetectionResult.polygon, 0);
         const documentDetectionResult = { ...contourDetectionResult, original: image.original, cropped: cropped };
 
+        const blurDetector = await this.sdk.createBlurDetector();
+        console.log('estimateBlurrinessOnBuffer', await blurDetector.estimateBlurrinessOnBuffer(documentDetectionResult.original));
+        await blurDetector.release();
+
         this.documents.add(documentDetectionResult);
         alert("Detection successful");
       } else {

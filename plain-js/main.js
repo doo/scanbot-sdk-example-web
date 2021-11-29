@@ -173,6 +173,10 @@ window.onload = async () => {
           result.original = reader.result;
           result.cropped = cropped;
 
+          const blurDetector = await scanbotSDK.createBlurDetector();
+          console.log('estimateBlurrinessOnBuffer', await blurDetector.estimateBlurrinessOnBuffer(result.original));
+          await blurDetector.release();
+
           results.push(result);
           Utils.getElementByClassName(
             "detection-results-controller"
