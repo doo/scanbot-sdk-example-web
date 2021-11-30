@@ -18,10 +18,15 @@ import {
   TiffGenerator,
   BarcodeScannerConfiguration,
   IBarcodeScannerHandle,
+  Polygon,
+  ContourDetectionResult,
+  BarcodeResult
 } from "scanbot-web-sdk/@types";
 
 import { IMrzScannerHandle } from "scanbot-web-sdk/@types/interfaces/i-mrz-scanner-handle";
 import { MrzScannerConfiguration } from "scanbot-web-sdk/@types/model/configuration/mrz-scanner-configuration";
+import { BarcodeFormat } from "scanbot-web-sdk/@types/model/barcode/barcode-format";
+import { EngineMode } from "scanbot-web-sdk/@types/model/barcode/engine-mode";
 
 @Injectable()
 export class ScanbotSdkService {
@@ -164,5 +169,21 @@ export class ScanbotSdkService {
 
   filterByIndex(value: string) {
     return this.availableFilters()[parseInt(value, 10)];
+  }
+
+  async detectBarcodes(base64: string, engineMode?: EngineMode, barcodeFormats?: BarcodeFormat[]): Promise<BarcodeResult> {
+    return await this.instance!.detectBarcodes(base64, engineMode, barcodeFormats);
+  }
+
+  async detectDocument(image: ArrayBuffer): Promise<ContourDetectionResult> {
+    return await this.instance!.detectDocument(image);
+  }
+
+  async cropAndRotateImageCcw(image: ArrayBuffer, polygon: Polygon, rotations: number): Promise<Uint8Array> {
+    return await this.instance!.cropAndRotateImageCcw(image, polygon, rotations);
+  }
+
+  public async createBlurDetector() {
+    return this.instance?.createBlurDetector();
   }
 }

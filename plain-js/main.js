@@ -155,7 +155,7 @@ window.onload = async () => {
     await reloadDetectionResults();
   };
 
-  Utils.getElementByClassName("pick-image-button").onclick = (e) => {
+  Utils.getElementById("pick-document-button").onclick = (e) => {
     const picker = Utils.getElementByClassName("file-picker");
     picker.click();
 
@@ -167,11 +167,50 @@ window.onload = async () => {
       reader.readAsArrayBuffer(file);
 
       reader.onload = async (e) => {
-        results.push({ original: new Int8Array(reader.result) });
-        Utils.getElementByClassName(
-          "detection-results-controller"
-        ).style.display = "block";
-        await reloadDetectionResults();
+        const result = await scanbotSDK.detectDocument(reader.result);
+        if (result.success === true) {
+          const cropped = await scanbotSDK.cropAndRotateImageCcw(reader.result, result.polygon, 0);
+          result.original = reader.result;
+          result.cropped = cropped;
+
+          const blurDetector = await scanbotSDK.createBlurDetector();
+          console.log('estimateBlurrinessOnBuffer', await blurDetector.estimateBlurrinessOnBuffer(result.original));
+          await blurDetector.release();
+
+          results.push(result);
+          Utils.getElementByClassName(
+            "detection-results-controller"
+          ).style.display = "block";
+          await reloadDetectionResults();
+
+        } else {
+          alert("Detection failed");
+        }
+      };
+
+      e.target.value = null;
+    };
+  };
+
+  Utils.getElementById("pick-barcode-button").onclick = (e) => {
+    const picker = Utils.getElementByClassName("file-picker");
+    picker.click();
+
+    picker.onchange = (e) => {
+      e.preventDefault();
+      let reader = new FileReader();
+      let file = e.target.files[0];
+      reader.readAsDataURL(file);
+
+      reader.onload = async (e) => {
+        const result = await scanbotSDK.detectBarcodes(reader.result);
+        if (result.barcodes && result.barcodes.length > 0) {
+          onBarcodesDetected(result);
+        } else {
+          alert("Detection failed");
+        }
+
+        console.log("barcode detection result", result);
       };
     };
   };

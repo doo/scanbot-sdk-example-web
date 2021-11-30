@@ -1,3 +1,5 @@
+import { Barcode } from "scanbot-web-sdk/@types";
+
 export class Utils {
   static generateUUID() {
     const length = 5;
@@ -9,5 +11,11 @@ export class Utils {
       result += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
     return result;
+  }
+
+  static formatBarcodes(codes: Barcode[]): string {
+    return JSON.stringify(
+      codes.map((code: Barcode) => code.text + " (" + code.format + ") ")
+    );
   }
 }

@@ -16,12 +16,15 @@ import {
   PdfGenerationOptions,
   TiffGenerator,
   PdfGenerator,
+  Polygon,
 } from "scanbot-web-sdk/@types";
 
 import Pages from "../model/pages";
 import { ImageUtils } from "../utils/image-utils";
 import { BarcodeFormat } from "scanbot-web-sdk/@types/model/barcode/barcode-format";
 import { IMrzScannerHandle } from "scanbot-web-sdk/@types/interfaces/i-mrz-scanner-handle";
+import { ContourDetectionResult } from "scanbot-web-sdk/@types/model/document/contour-detection-result";
+import BlurDetector from "scanbot-web-sdk/@types/service/blur-detector";
 
 export class ScanbotSdkService {
   static DOCUMENT_SCANNER_CONTAINER = "document-scanner-view";
@@ -69,6 +72,10 @@ export class ScanbotSdkService {
       return false;
     }
     return info.status === "Trial" || info.status === "Okay";
+  }
+
+  public async createBlurDetector() {
+    return this.sdk?.createBlurDetector();
   }
 
   public async createDocumentScanner(detectionCallback: any) {
@@ -241,5 +248,13 @@ export class ScanbotSdkService {
       await generator.addPage(page.cropped ?? page.original);
     }
     return await generator.complete();
+  }
+
+  async detectDocument(image: ArrayBuffer): Promise<ContourDetectionResult> {
+    return await this.sdk!.detectDocument(image);
+  }
+
+  async cropAndRotateImageCcw(image: ArrayBuffer, polygon: Polygon, rotations: number): Promise<Uint8Array> {
+    return await this.sdk!.cropAndRotateImageCcw(image, polygon, rotations);
   }
 }
