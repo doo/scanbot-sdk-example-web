@@ -59,3 +59,5 @@ You have to refresh the page to get another trial period.
 
 To get an unrestricted, **no-strings-attached** 30-day trial license,
 please reach out to our sales team via sdk@scanbot.io
+
+
