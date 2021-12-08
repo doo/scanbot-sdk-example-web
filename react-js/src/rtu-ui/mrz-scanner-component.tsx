@@ -16,8 +16,10 @@ export default class MrzScannerComponent extends BaseScannerComponent {
     this.props.onMrzsDetected(result);
   }
 
-  onError() {
-    this.props.onError();
+  onMrzScannerError(e: Error) {
+    console.log(e.name + ': ' + e.message);
+    alert(e.name + ': ' + e.message);
+    this.pop();
   }
 
   async push(type: AnimationType) {
@@ -26,7 +28,7 @@ export default class MrzScannerComponent extends BaseScannerComponent {
     this.updateAnimationType(type, async () => {
       await ScanbotSdkService.instance.createMrzScanner(
         this.onMrzsDetected.bind(this),
-        this.onError.bind(this)
+        this.onMrzScannerError.bind(this)
       );
     });
   }
