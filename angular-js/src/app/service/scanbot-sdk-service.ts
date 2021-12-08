@@ -52,20 +52,32 @@ export class ScanbotSdkService {
     });
   }
 
-  async scanDocuments(configuration: DocumentScannerConfiguration) {
-    this.documentScanner = await this.instance.createDocumentScanner(
-      configuration
-    );
+  async scanDocuments(configuration: DocumentScannerConfiguration, errorCallback: (e: Error) => void) {
+    try {
+      this.documentScanner = await this.instance.createDocumentScanner(
+        configuration
+      );
+    } catch (e) {
+      errorCallback(e);
+    }
   }
 
-  async scanBarcodes(configuration: BarcodeScannerConfiguration) {
-    this.barcodeScanner = await this.instance.createBarcodeScanner(
-      configuration
-    );
+  async scanBarcodes(configuration: BarcodeScannerConfiguration, errorCallback: (e: Error) => void) {
+    try {
+      this.barcodeScanner = await this.instance.createBarcodeScanner(
+        configuration
+      );
+    } catch (e) {
+      errorCallback(e);
+    }
   }
 
-  async scanMrz(configuration: MrzScannerConfiguration) {
-    this.mrzScanner = await this.instance.createMrzScanner(configuration);
+  async scanMrz(configuration: MrzScannerConfiguration, errorCallback: (e: Error) => void) {
+    try {
+      this.mrzScanner = await this.instance.createMrzScanner(configuration);
+    } catch (e) {
+      errorCallback(e);
+    }
   }
 
   delayAutoCapture() {

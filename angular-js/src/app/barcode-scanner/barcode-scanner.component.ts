@@ -71,7 +71,13 @@ export class BarcodeScannerComponent implements OnInit {
       barcodeFormats,
     };
 
-    await this.sdk.scanBarcodes(configuration);
+    await this.sdk.scanBarcodes(configuration, this.barcodeScannerError.bind(this));
+  }
+
+  barcodeScannerError(e: Error) {
+    console.log(e.name + ': ' + e.message);
+    alert(e.name + ': ' + e.message);
+    this.router.navigateByUrl("/");
   }
 
   async onBarcodesDetected(result: BarcodeResult) {
