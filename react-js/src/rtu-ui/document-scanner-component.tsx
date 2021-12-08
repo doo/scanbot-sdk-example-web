@@ -18,6 +18,12 @@ export default class DocumentScannerComponent extends BaseScannerComponent {
     document.getElementById("count-label")!.innerHTML = this.labelText();
   }
 
+  onDocumentScannerError(e: Error) {
+    console.log(e.name + ': ' + e.message);
+    alert(e.name + ': ' + e.message);
+    this.pop();
+  }
+
   labelText() {
     return Pages.instance.count() + " Pages";
   }
@@ -27,7 +33,8 @@ export default class DocumentScannerComponent extends BaseScannerComponent {
     this.pushType = type;
     this.updateAnimationType(type, async () => {
       await ScanbotSdkService.instance.createDocumentScanner(
-        this.onDocumentDetected.bind(this)
+        this.onDocumentDetected.bind(this),
+        this.onDocumentScannerError.bind(this),
       );
     });
   }

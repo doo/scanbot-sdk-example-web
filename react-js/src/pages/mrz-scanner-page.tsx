@@ -5,7 +5,7 @@ export default class MrzScannerPage extends React.Component<any, any> {
   async componentDidMount(): Promise<void> {
     await ScanbotSdkService.instance.createMrzScanner(
       this.props.onMrzsDetected,
-      this.props.onError
+      this.props.onMrzDetectionError,
     );
   }
 
