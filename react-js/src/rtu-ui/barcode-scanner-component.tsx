@@ -18,6 +18,12 @@ export default class BarcodeScannerComponent extends BaseScannerComponent {
     document.getElementById("count-label")!.innerHTML = this.labelText();
   }
 
+  onBarcodeScannerError(e: Error) {
+    console.log(e.name + ': ' + e.message);
+    alert(e.name + ': ' + e.message);
+    this.pop();
+  }
+
   labelText() {
     return Barcodes.instance.count() + " Barcodes";
   }
@@ -27,7 +33,8 @@ export default class BarcodeScannerComponent extends BaseScannerComponent {
     this.pushType = type;
     this.updateAnimationType(type, async () => {
       await ScanbotSdkService.instance.createBarcodeScanner(
-        this.onBarcodesDetected.bind(this)
+        this.onBarcodesDetected.bind(this),
+        this.onBarcodeScannerError.bind(this),
       );
     });
   }

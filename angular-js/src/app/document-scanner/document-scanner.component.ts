@@ -61,7 +61,13 @@ export class DocumentScannerComponent implements OnInit {
       },
     };
 
-    await this.sdk.scanDocuments(configuration);
+    await this.sdk.scanDocuments(configuration, this.documentScannerError.bind(this));
+  }
+
+  documentScannerError(e: Error) {
+    console.log(e.name + ': ' + e.message);
+    alert(e.name + ': ' + e.message);
+    this.router.navigateByUrl("/");
   }
 
   async onDocumentDetected(result: DocumentDetectionResult) {
