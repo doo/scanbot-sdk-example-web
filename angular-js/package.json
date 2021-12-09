@@ -26,7 +26,7 @@
     "sweetalert2": "10.16.9",
     "tslib": "1.14.1",
     "zone.js": "0.10.3",
-    "scanbot-web-sdk": "2.6.0"
+    "scanbot-web-sdk": "2.6.1-alpha4"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "0.900.7",

@@ -40,7 +40,13 @@ window.onload = async () => {
       },
     };
 
-    documentScanner = await scanbotSDK.createDocumentScanner(config);
+    try {
+      documentScanner = await scanbotSDK.createDocumentScanner(config);
+    } catch (e) {
+      console.log(e.name + ': ' + e.message);
+      alert(e.name + ': ' + e.message);
+      Utils.getElementByClassName("scanbot-camera-controller").style.display = "none";
+    }
   };
 
   Utils.getElementByClassName("detection-done-button").onclick = async (e) => {
@@ -133,7 +139,13 @@ window.onload = async () => {
       barcodeFormats: barcodeFormats,
     };
 
-    barcodeScanner = await scanbotSDK.createBarcodeScanner(config);
+    try {
+      barcodeScanner = await scanbotSDK.createBarcodeScanner(config);
+    } catch (e) {
+      console.log(e.name + ': ' + e.message);
+      alert(e.name + ': ' + e.message);
+      Utils.getElementByClassName("barcode-scanner-controller").style.display = "none";
+    }
   };
 
   Utils.getElementByClassName("mrz-scanner-button").onclick = async (e) => {
@@ -146,7 +158,13 @@ window.onload = async () => {
       onError: onScannerError,
     };
 
-    mrzScanner = await scanbotSDK.createMrzScanner(config);
+    try {
+      mrzScanner = await scanbotSDK.createMrzScanner(config);
+    } catch (e) {
+      console.log(e.name + ': ' + e.message);
+      alert(e.name + ': ' + e.message);
+      Utils.getElementByClassName("mrz-scanner-controller").style.display = "none";
+    }
   };
 
   Utils.getElementByClassName("scanner-results-button").onclick = async (e) => {
