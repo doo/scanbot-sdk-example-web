@@ -76,11 +76,7 @@ export class ScanbotSdkService {
     return this.sdk?.createBlurDetector();
   }
 
-<<<<<<< HEAD
-  public async createDocumentScanner(detectionCallback: any) {
-=======
   public async createDocumentScanner(detectionCallback: any, errorCallback: (e: Error) => void) {
->>>>>>> EPIC-1495-unsupported_error_media_devices
     const config: DocumentScannerConfiguration = {
       onDocumentDetected: detectionCallback,
       containerId: ScanbotSdkService.DOCUMENT_SCANNER_CONTAINER,
