@@ -24,11 +24,6 @@ import { ImageUtils } from "../utils/image-utils";
 import { BarcodeFormat } from "scanbot-web-sdk/@types/model/barcode/barcode-format";
 import { IMrzScannerHandle } from "scanbot-web-sdk/@types/interfaces/i-mrz-scanner-handle";
 import { ContourDetectionResult } from "scanbot-web-sdk/@types/model/document/contour-detection-result";
-<<<<<<< HEAD
-import BlurDetector from "scanbot-web-sdk/@types/service/blur-detector";
-
-=======
->>>>>>> EPIC-1495-unsupported_error_media_devices
 export class ScanbotSdkService {
   static DOCUMENT_SCANNER_CONTAINER = "document-scanner-view";
   static CROPPING_VIEW_CONTAINER = "cropping-view";
