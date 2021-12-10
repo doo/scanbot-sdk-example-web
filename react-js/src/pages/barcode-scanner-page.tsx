@@ -4,7 +4,8 @@ import { ScanbotSdkService } from "../service/scanbot-sdk-service";
 export default class BarcodeScannerPage extends React.Component<any, any> {
   async componentDidMount(): Promise<void> {
     await ScanbotSdkService.instance.createBarcodeScanner(
-      this.props.onBarcodesDetected
+      this.props.onBarcodesDetected,
+      this.props.onBarcodeDetectionError,
     );
   }
 

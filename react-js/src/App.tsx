@@ -159,9 +159,6 @@ export default class App extends React.Component<any, any> {
           ref={(ref) => (this._mrzScanner = ref)}
           sdk={this.state.sdk}
           onMrzsDetected={this.onMrzDetected.bind(this)}
-          onError={() => {
-            console.log("Mrz error");
-          }}
         />
       );
     }

@@ -24,8 +24,6 @@ import { ImageUtils } from "../utils/image-utils";
 import { BarcodeFormat } from "scanbot-web-sdk/@types/model/barcode/barcode-format";
 import { IMrzScannerHandle } from "scanbot-web-sdk/@types/interfaces/i-mrz-scanner-handle";
 import { ContourDetectionResult } from "scanbot-web-sdk/@types/model/document/contour-detection-result";
-import BlurDetector from "scanbot-web-sdk/@types/service/blur-detector";
-
 export class ScanbotSdkService {
   static DOCUMENT_SCANNER_CONTAINER = "document-scanner-view";
   static CROPPING_VIEW_CONTAINER = "cropping-view";
@@ -78,7 +76,7 @@ export class ScanbotSdkService {
     return this.sdk?.createBlurDetector();
   }
 
-  public async createDocumentScanner(detectionCallback: any) {
+  public async createDocumentScanner(detectionCallback: any, errorCallback: (e: Error) => void) {
     const config: DocumentScannerConfiguration = {
       onDocumentDetected: detectionCallback,
       containerId: ScanbotSdkService.DOCUMENT_SCANNER_CONTAINER,
@@ -100,7 +98,11 @@ export class ScanbotSdkService {
     };
 
     if (this.sdk) {
-      this.documentScanner = await this.sdk!.createDocumentScanner(config);
+      try {
+        this.documentScanner = await this.sdk!.createDocumentScanner(config);
+      } catch (e) {
+        errorCallback(e);
+      }
     }
   }
 
@@ -108,7 +110,7 @@ export class ScanbotSdkService {
     this.documentScanner?.dispose();
   }
 
-  public async createBarcodeScanner(callback: any) {
+  public async createBarcodeScanner(callback: any, errorCallback: (e: Error) => void) {
     const barcodeFormats: BarcodeFormat[] = [
       "AZTEC",
       "CODABAR",
@@ -137,7 +139,11 @@ export class ScanbotSdkService {
       barcodeFormats: barcodeFormats,
     };
     if (this.sdk) {
-      this.barcodeScanner = await this.sdk!.createBarcodeScanner(config);
+      try {
+        this.barcodeScanner = await this.sdk!.createBarcodeScanner(config);
+      } catch (e) {
+        errorCallback(e);
+      }
     }
   }
 
@@ -145,15 +151,18 @@ export class ScanbotSdkService {
     this.barcodeScanner?.dispose();
   }
 
-  public async createMrzScanner(onMrzDetected: any, onError: any) {
+  public async createMrzScanner(onMrzDetected: any, errorCallback: (e: Error) => void) {
     const config = {
       containerId: ScanbotSdkService.MRZ_SCANNER_CONTAINER,
       onMrzDetected: onMrzDetected,
-      onError: onError,
     };
 
     if (this.sdk) {
-      this.mrzScanner = await this.sdk!.createMrzScanner(config);
+      try {
+        this.mrzScanner = await this.sdk!.createMrzScanner(config);
+      } catch (e) {
+        errorCallback(e);
+      }
     }
   }
 
