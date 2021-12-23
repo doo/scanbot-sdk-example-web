@@ -41,7 +41,27 @@ window.onload = async () => {
     };
 
     try {
-      documentScanner = await scanbotSDK.createDocumentScanner(config);
+      let timerTriggered = false;
+      documentScanner = await (new Promise((resolve, reject) => {
+        scanbotSDK.createDocumentScanner(config)
+          .then((scanner) => {
+            if (!timerTriggered) {
+              resolve(scanner);
+            } else {
+              scanner.dispose();
+            }
+          })
+          .catch((err) => {
+            reject(err);
+          });
+
+        setTimeout(function () {
+          if (!documentScanner) {
+            timerTriggered = true;
+            reject(new Error('Please check your camera permissions'));
+          }
+        }, 10000)
+      }));
     } catch (e) {
       console.log(e.name + ': ' + e.message);
       alert(e.name + ': ' + e.message);
