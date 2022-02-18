@@ -29,7 +29,7 @@ npm install
 npm start
 ```
 
-### Plain JavaScript App
+### Plain JavaScript App 
 
 The vanilla JavaScript app downloads the Scanbot Web SDK from an unofficial CDN:
 
