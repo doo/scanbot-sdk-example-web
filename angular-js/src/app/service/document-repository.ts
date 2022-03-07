@@ -31,8 +31,14 @@ export class DocumentRepository {
   hasActiveItem() {
     return this.activeIndex !== -1;
   }
+  
   getActiveItem() {
     return this.pages[this.activeIndex];
+  }
+
+  removeActiveItem() {
+    this.pages.splice(this.activeIndex, 1);
+    this.activeIndex = -1;
   }
 
   setActiveItem(index: number) {
