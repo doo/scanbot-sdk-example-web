@@ -98,6 +98,25 @@ window.onload = async () => {
     };
     croppingView = await scanbotSDK.openCroppingView(options);
   };
+
+  Utils.getElementByClassName("delete-button").onclick = async (e) => {
+    const index = Utils.getElementByClassName(
+      "detection-result-image"
+    ).getAttribute("index");
+
+    results.splice(index, 1);
+
+    const controller =
+      e.target.parentElement.parentElement.parentElement.className;
+    Utils.getElementByClassName(controller).style.display = "none";
+
+    Utils.getElementByClassName(
+      "detection-results-controller"
+    ).style.display = "block";
+
+    await reloadDetectionResults();
+  };
+
   Utils.getElementByClassName("barcode-scanner-button").onclick = async (e) => {
     Utils.getElementByClassName("barcode-scanner-controller").style.display =
       "block";
