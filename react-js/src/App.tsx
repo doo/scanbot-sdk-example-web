@@ -457,17 +457,22 @@ export default class App extends React.Component<any, any> {
       }
     } else if (feature.id === RoutePath.BarcodeOnPdf) {
       const pdf = await ImageUtils.pick(ImageUtils.MIME_TYPE_PDF, true);
+      console.log('Converting the pdf to images');
       const images = await ImageUtils.pdfToImage(pdf.data);
-      const detection = await ScanbotSdkService.instance.sdk?.detectBarcodes(
-        images[0]
-      );
-      if (detection !== undefined) {
-        this.setState({
-          alert: {
-            color: "success",
-            text: this.formatBarcodes(detection.barcodes),
-          },
-        });
+
+      for (let i = 0; i < images.length; i++) {
+        console.log(`Detect barcodes on page ${i}`);
+        const detection = await ScanbotSdkService.instance.sdk?.detectBarcodes(
+          images[i]
+        );
+        if (detection !== undefined && detection.barcodes.length > 0) {
+          this.setState({
+            alert: {
+              color: "success",
+              text: this.formatBarcodes(detection.barcodes),
+            },
+          });
+        }
       }
     }
   }
