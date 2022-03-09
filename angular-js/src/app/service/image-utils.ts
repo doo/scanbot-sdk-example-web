@@ -5,7 +5,10 @@ export class ImageUtils {
   public static pick(mime: string, asDataUrl?: boolean): Promise<any> {
     return new Promise<any>((resolve) => {
       const picker = document.createElement("input") as HTMLInputElement;
+      picker.id = 'picker';
       document.body.appendChild(picker);
+      document.getElementById("picker").style.visibility = "hidden";
+      
       picker.type = "file";
       picker.accept = mime;
       picker.click();
@@ -29,7 +32,8 @@ export class ImageUtils {
             // @ts-ignore
             resolve({ original: new Uint8Array(result) });
           }
-          document.body.removeChild(picker)
+          
+          picker.remove();
         };
       };
     });
