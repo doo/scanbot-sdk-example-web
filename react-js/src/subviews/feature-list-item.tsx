@@ -10,7 +10,7 @@ export default class FeatureListItem extends React.Component<any, any> {
       marginLeft: "3%",
     };
     return (
-      <div onClick={() => this.props.onClick(this.props.data)} style={style}>
+      <div id={this.props.id} onClick={() => this.props.onClick(this.props.data)} style={style}>
         {this.props.data.name}
       </div>
     );

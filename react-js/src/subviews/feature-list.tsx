@@ -8,6 +8,7 @@ export default class FeatureList extends React.Component<any, any> {
       <div>
         {Features.LIST.map((feature) => (
           <FeatureListItem
+            id={feature.id}
             key={feature.id}
             onClick={() => {
               this.props.onItemClick(feature);

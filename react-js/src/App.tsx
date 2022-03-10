@@ -430,7 +430,7 @@ export default class App extends React.Component<any, any> {
       const color = info?.status === "Trial" ? "success" : "error";
       this.setState({ alert: { color: color, text: JSON.stringify(info) } });
     } else if (feature.id === RoutePath.DocumentOnJpeg) {
-      const image = await ImageUtils.pick(ImageUtils.MIME_TYPE_JPEG);
+      const image = await ImageUtils.pick(ImageUtils.MIME_TYPE_JPEG, document.getElementById(feature.id) as any);
 
       const contourDetectionResult = await ScanbotSdkService.instance.detectDocument(image.original);
       if (contourDetectionResult.success === true && contourDetectionResult.polygon) {
@@ -443,7 +443,7 @@ export default class App extends React.Component<any, any> {
         alert("Detection failed");
       }
     } else if (feature.id === RoutePath.BarcodeOnJpeg) {
-      const result = await ImageUtils.pick(ImageUtils.MIME_TYPE_JPEG, true);
+      const result = await ImageUtils.pick(ImageUtils.MIME_TYPE_JPEG, document.getElementById(feature.id) as any, true);
       const detection = await ScanbotSdkService.instance.sdk?.detectBarcodes(
         result.data
       );
@@ -456,7 +456,7 @@ export default class App extends React.Component<any, any> {
         });
       }
     } else if (feature.id === RoutePath.BarcodeOnPdf) {
-      const pdf = await ImageUtils.pick(ImageUtils.MIME_TYPE_PDF, true);
+      const pdf = await ImageUtils.pick(ImageUtils.MIME_TYPE_PDF, document.getElementById(feature.id) as any, true);
       console.log('Converting the pdf to images');
       const images = await ImageUtils.pdfToImage(pdf.data);
 

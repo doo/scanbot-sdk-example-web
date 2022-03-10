@@ -13,12 +13,24 @@ export class ImageUtils {
   public static readonly MIME_TYPE_JPEG = "image/jpeg";
   public static readonly MIME_TYPE_PDF = "application/pdf";
 
-  public static pick(mime: string, asDataUrl?: boolean): Promise<any> {
+  public static pick(mime: string, parentElement: HTMLElement, asDataUrl?: boolean): Promise<any> {
     return new Promise<any>((resolve) => {
-      const picker = document.createElement("input") as HTMLInputElement;
-      picker.type = "file";
-      picker.accept = mime;
-      picker.click();
+      let picker = document.getElementById("picker" + parentElement.id) as HTMLInputElement;
+
+      if (!picker) {
+        picker = document.createElement("input") as HTMLInputElement;
+        parentElement.appendChild(picker);
+        picker.id = "picker" + parentElement?.id;
+        picker.type = "file";
+        picker.accept = mime;
+       
+        picker.style.marginLeft = '5px';
+        parentElement.style.whiteSpace = "nowrap"
+        parentElement.style.textOverflow = "ellipsis"
+        parentElement.style.flexDirection = "row";
+        parentElement.style.display = 'flex';
+        parentElement.style.alignItems = 'center';
+      }
 
       picker.onchange = (e) => {
         e.preventDefault();
