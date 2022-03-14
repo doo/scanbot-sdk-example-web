@@ -101,7 +101,7 @@ export class ScanbotSdkService {
       try {
         this.documentScanner = await this.sdk!.createDocumentScanner(config);
       } catch (e) {
-        errorCallback(e);
+        errorCallback(e as Error);
       }
     }
   }
@@ -142,7 +142,7 @@ export class ScanbotSdkService {
       try {
         this.barcodeScanner = await this.sdk!.createBarcodeScanner(config);
       } catch (e) {
-        errorCallback(e);
+        errorCallback(e as Error);
       }
     }
   }
@@ -161,7 +161,7 @@ export class ScanbotSdkService {
       try {
         this.mrzScanner = await this.sdk!.createMrzScanner(config);
       } catch (e) {
-        errorCallback(e);
+        errorCallback(e as Error);
       }
     }
   }
