@@ -6,13 +6,16 @@
 </div>
 
 <div class="bottom-bar">
-  <button
-    class="bottom-bar-button open-cropping-view"
-    (click)="openCroppingView()"
-  >
+  <button class="bottom-bar-button open-cropping-view" (click)="openCroppingView()">
     CROP
   </button>
   <button class="bottom-bar-button apply-filter" (click)="applyFilter()">
     FILTER
   </button>
+
+  <div class="align-right-bottom-bar-button">
+    <button class="bottom-bar-button delete-button" (click)="deleteActiveItem()">
+      DELETE
+    </button>
+  </div>
 </div>

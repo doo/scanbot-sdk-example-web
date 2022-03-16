@@ -1,176 +1,164 @@
 <html>
-  <head>
-    <title>Scanbot Web SDK Example</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css"
-      integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I"
-      crossorigin="anonymous"
-    />
 
-    <link rel="stylesheet" type="text/css" href="main.css" />
-    <link rel="stylesheet" type="text/css" href="js/lib/toastify.css" />
-    <link
-      href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet"
-    />
-  </head>
+<head>
+  <title>Scanbot Web SDK Example</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css"
+    integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous" />
 
-  <body>
-    <nav class="navbar navbar-dark" style="background-color: #c8193c">
+  <link rel="stylesheet" type="text/css" href="main.css" />
+  <link rel="stylesheet" type="text/css" href="js/lib/toastify.css" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+</head>
+
+<body>
+  <nav class="navbar navbar-dark" style="background-color: #c8193c">
+    <div class="navbar-brand mb-0 h3">
+      <span class="back-button"></span>Scanbot Web SDK
+    </div>
+  </nav>
+
+  <div class="flash"></div>
+
+  <input class="file-picker" type="file" accept="image/x-png,image/gif,image/jpeg" width="48" height="48" />
+
+  <div class="loading-screen">
+    <div class="progress-bar"></div>
+  </div>
+
+  <div class="content-container">
+    <div class="main-list-item document-scanner-button">Document Scanner</div>
+    <div class="main-list-item barcode-scanner-button">Barcode Scanner</div>
+    <div class="main-list-item mrz-scanner-button">MRZ Scanner</div>
+    <div class="main-list-item" id="pick-document-button">Pick Document Image</div>
+    <div class="main-list-item" id="pick-barcode-button">Pick Barcode Image</div>
+    <div class="main-list-item scanner-results-button">Document Results</div>
+    <div class="main-list-item license-info-button">License Info</div>
+  </div>
+
+  <div class="controller scanbot-camera-controller">
+    <nav class="navbar navbar-dark">
       <div class="navbar-brand mb-0 h3">
-        <span class="back-button"></span>Scanbot Web SDK
+        <span class="back-button">&#8249;</span>
+        Document Scanner
       </div>
     </nav>
-
-    <div class="flash"></div>
-
-    <input
-      class="file-picker"
-      type="file"
-      accept="image/x-png,image/gif,image/jpeg"
-      width="48"
-      height="48"
-    />
-
-    <div class="loading-screen">
-      <div class="progress-bar"></div>
+    <div id="scanbot-camera-container" class="view-controller-container">
+      <div class="web-sdk-progress-bar"></div>
     </div>
-
-    <div class="content-container">
-      <div class="main-list-item document-scanner-button">Document Scanner</div>
-      <div class="main-list-item barcode-scanner-button">Barcode Scanner</div>
-      <div class="main-list-item mrz-scanner-button">MRZ Scanner</div>
-      <div class="main-list-item" id="pick-document-button">Pick Document Image</div>
-      <div class="main-list-item" id="pick-barcode-button">Pick Barcode Image</div>
-      <div class="main-list-item scanner-results-button">Document Results</div>
-      <div class="main-list-item license-info-button">License Info</div>
-    </div>
-
-    <div class="controller scanbot-camera-controller">
-      <nav class="navbar navbar-dark">
-        <div class="navbar-brand mb-0 h3">
-          <span class="back-button">&#8249;</span>
-          Document Scanner
-        </div>
-      </nav>
-      <div id="scanbot-camera-container" class="view-controller-container">
-        <div class="web-sdk-progress-bar"></div>
-      </div>
-      <div class="action-bar">
-        <div class="action-bar-button page-count-indicator">0 PAGES</div>
-        <div class="align-right-button">
-          <button class="action-bar-button detection-done-button">DONE</button>
-        </div>
+    <div class="action-bar">
+      <div class="action-bar-button page-count-indicator">0 PAGES</div>
+      <div class="align-right-button">
+        <button class="action-bar-button detection-done-button">DONE</button>
       </div>
     </div>
+  </div>
 
-    <div class="controller barcode-scanner-controller">
-      <nav class="navbar navbar-dark">
-        <div class="navbar-brand mb-0 h3">
-          <span class="back-button">&#8249;</span>Barcode Scanner
-        </div>
-      </nav>
-      <div id="barcode-scanner-container" class="view-controller-container">
-        <div class="web-sdk-progress-bar"></div>
+  <div class="controller barcode-scanner-controller">
+    <nav class="navbar navbar-dark">
+      <div class="navbar-brand mb-0 h3">
+        <span class="back-button">&#8249;</span>Barcode Scanner
       </div>
-      <div class="action-bar">
-        <div class="barcode-result-container"></div>
+    </nav>
+    <div id="barcode-scanner-container" class="view-controller-container">
+      <div class="web-sdk-progress-bar"></div>
+    </div>
+    <div class="action-bar">
+      <div class="barcode-result-container"></div>
+    </div>
+  </div>
+
+  <div class="controller mrz-scanner-controller">
+    <nav class="navbar navbar-dark">
+      <div class="navbar-brand mb-0 h3">
+        <span class="back-button">&#8249;</span>MRZ Scanner
+      </div>
+    </nav>
+    <div id="mrz-scanner-container" class="view-controller-container">
+      <div class="web-sdk-progress-bar"></div>
+    </div>
+    <div class="action-bar"></div>
+  </div>
+
+  <div class="controller cropping-controller">
+    <nav class="navbar navbar-dark">
+      <div class="navbar-brand mb-0 h3">
+        <span class="back-button">&#8249;</span>Cropping View
+      </div>
+    </nav>
+    <div id="cropping-view-container" class="view-controller-container"></div>
+    <div class="action-bar cropping-view-action-bar">
+      <button class="action-bar-button detect-button">DETECT</button>
+      <button class="action-bar-button rotate-button">ROTATE</button>
+      <div class="align-right-button">
+        <button class="action-bar-button apply-button">APPLY</button>
       </div>
     </div>
+  </div>
 
-    <div class="controller mrz-scanner-controller">
-      <nav class="navbar navbar-dark">
-        <div class="navbar-brand mb-0 h3">
-          <span class="back-button">&#8249;</span>MRZ Scanner
-        </div>
-      </nav>
-      <div id="mrz-scanner-container" class="view-controller-container">
-        <div class="web-sdk-progress-bar"></div>
+  <div class="controller detection-results-controller">
+    <nav class="navbar navbar-dark">
+      <div class="navbar-brand mb-0 h3">
+        <span class="back-button">&#8249;</span>Detection Results
       </div>
-      <div class="action-bar"></div>
+    </nav>
+    <div class="view-controller-container detection-results-container"></div>
+    <div class="action-bar detection-results-action-bar">
+      <button class="action-bar-button pdf-button">SAVE PDF</button>
+      <button class="action-bar-button tiff-button">SAVE TIFF</button>
     </div>
+  </div>
 
-    <div class="controller cropping-controller">
-      <nav class="navbar navbar-dark">
-        <div class="navbar-brand mb-0 h3">
-          <span class="back-button">&#8249;</span>Cropping View
-        </div>
-      </nav>
-      <div id="cropping-view-container" class="view-controller-container"></div>
-      <div class="action-bar cropping-view-action-bar">
-        <button class="action-bar-button detect-button">DETECT</button>
-        <button class="action-bar-button rotate-button">ROTATE</button>
-        <div class="align-right-button">
-          <button class="action-bar-button apply-button">APPLY</button>
-        </div>
+  <div class="controller detection-result-controller">
+    <nav class="navbar navbar-dark">
+      <div class="navbar-brand mb-0 h3">
+        <span class="back-button">&#8249;</span>Detection Result
       </div>
-    </div>
-
-    <div class="controller detection-results-controller">
-      <nav class="navbar navbar-dark">
-        <div class="navbar-brand mb-0 h3">
-          <span class="back-button">&#8249;</span>Detection Results
-        </div>
-      </nav>
-      <div class="view-controller-container detection-results-container"></div>
-      <div class="action-bar detection-results-action-bar">
-        <button class="action-bar-button pdf-button">SAVE PDF</button>
-        <button class="action-bar-button tiff-button">SAVE TIFF</button>
+    </nav>
+    <div class="view-controller-container detection-result-container"></div>
+    <div class="action-bar detection-result-action-bar">
+      <button class="action-bar-button crop-button">CROP</button>
+      <div class="filter-selector-container">
+        <div class="filter-selector-label">FILTER</div>
+        <select class="action-bar-filter-select">
+          <option>none</option>
+          <option>color</option>
+          <option>gray</option>
+          <option>binarized</option>
+          <option>otsuBinarization</option>
+          <option>pureBinarized</option>
+          <option>lowLightBinarization</option>
+          <option>lowLightBinarization2</option>
+          <option>deepBinarization</option>
+          <option>colorDocument</option>
+          <option>blackAndWhite</option>
+          <option>edgeHighlight</option>
+        </select>
       </div>
-    </div>
-
-    <div class="controller detection-result-controller">
-      <nav class="navbar navbar-dark">
-        <div class="navbar-brand mb-0 h3">
-          <span class="back-button">&#8249;</span>Detection Result
-        </div>
-      </nav>
-      <div class="view-controller-container detection-result-container"></div>
-      <div class="action-bar detection-result-action-bar">
-        <button class="action-bar-button crop-button">CROP</button>
-        <div class="filter-selector-container">
-          <div class="filter-selector-label">FILTER</div>
-          <select class="action-bar-filter-select">
-            <option>none</option>
-            <option>color</option>
-            <option>gray</option>
-            <option>binarized</option>
-            <option>otsuBinarization</option>
-            <option>pureBinarized</option>
-            <option>lowLightBinarization</option>
-            <option>lowLightBinarization2</option>
-            <option>deepBinarization</option>
-            <option>colorDocument</option>
-            <option>blackAndWhite</option>
-            <option>edgeHighlight</option>
-          </select>
-        </div>
+      <div class="align-right-button">
+        <button class="action-bar-button delete-button">DELETE</button>
       </div>
     </div>
+  </div>
 
-    <script
-      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"
-      integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/"
-      crossorigin="anonymous"
-    ></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"
+    integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/"
+    crossorigin="anonymous"></script>
 
-    <!-- Add ScanbotSDK framework -->
-    <script src="https://cdn.jsdelivr.net/npm/scanbot-web-sdk@2.6.1/bundle/ScanbotSDK.min.js"></script>
-    <!-- After, initialize the Scanbot SDK in your own script -->
-    <script src="js/lib/toastify.js"></script>
-    <script src="js/config.js"></script>
-    <script src="js/utils.js"></script>
-    <script src="js/view-utils.js"></script>
-    <script src="main.js"></script>
+  <!-- Add ScanbotSDK framework -->
+  <script src="https://cdn.jsdelivr.net/npm/scanbot-web-sdk@2.7.0/bundle/ScanbotSDK.min.js"></script>
+  <!-- After, initialize the Scanbot SDK in your own script -->
+  <script src="js/lib/toastify.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/view-utils.js"></script>
+  <script src="main.js"></script>
 
-    <div class="version-info"></div>
-  </body>
+  <div class="version-info"></div>
+</body>
+
 </html>

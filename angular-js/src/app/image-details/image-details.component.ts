@@ -57,6 +57,12 @@ export class ImageDetailsComponent implements OnInit {
     await this.router.navigateByUrl(RoutePaths.Cropping);
   }
 
+  async deleteActiveItem() {
+    this.repository.removeActiveItem();
+
+    await this.router.navigateByUrl(RoutePaths.ImageResults);
+  }
+
   async applyFilter() {
     const result = await Swal.fire({
       title: "Select filter",
