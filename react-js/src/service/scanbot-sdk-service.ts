@@ -236,12 +236,11 @@ export class ScanbotSdkService {
     const options: PdfGenerationOptions = {
       standardPaperSize: "A4",
       landscape: true,
-      dpi: 1,
+      dpi: 300,
     };
     const generator: PdfGenerator = await this.sdk!.beginPdf(options);
     for (const page of pages) {
       let image = page.filtered ?? page.cropped ?? page.original;
-      image = await ImageUtils.downscale(this.sdk!, image);
       await generator.addPage(image);
     }
     return await generator.complete();
