@@ -231,12 +231,12 @@ export class ScanbotSdkService {
     );
   }
 
-  async generatePDF(pages: any[]) {
+  async generatePDF(pages: any[], dpi: number) {
     // When scaling down an image, also lower the dots-per-inch parameter. Else it won't fill the page
     const options: PdfGenerationOptions = {
       standardPaperSize: "A4",
       landscape: true,
-      dpi: 300,
+      dpi: dpi,
     };
     const generator: PdfGenerator = await this.sdk!.beginPdf(options);
     for (const page of pages) {
@@ -248,7 +248,7 @@ export class ScanbotSdkService {
 
   async generateTIFF(pages: any[]) {
     const options: TiffGenerationOptions = {
-      binarizationFilter: "deepBinarization",
+      binarizationFilter: "binarized",
       dpi: 123,
     };
     const generator: TiffGenerator = await this.sdk!.beginTiff(options);

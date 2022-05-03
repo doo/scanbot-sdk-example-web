@@ -225,7 +225,10 @@ export default class App extends React.Component<any, any> {
     }
     if (route === RoutePath.ImageResults) {
       return [
-        { text: "SAVE PDF", action: this.savePDF.bind(this) },
+        { text: "PDF 300", action: this.savePDF300.bind(this) },
+        { text: "PDF 200", action: this.savePDF200.bind(this) },
+        { text: "PDF 72", action: this.savePDF72.bind(this) },
+        { text: "PDF 0", action: this.savePDF0.bind(this) },
         { text: "SAVE TIFF", action: this.saveTIFF.bind(this) },
       ];
     }
@@ -267,9 +270,24 @@ export default class App extends React.Component<any, any> {
     });
   }
 
-  async savePDF() {
+
+  
+  async savePDF300() {
+    this.savePDF(300);
+  }
+  async savePDF200() {
+    this.savePDF(200);
+  }
+  async savePDF72() {
+    this.savePDF(72);
+  }
+  async savePDF0() {
+    this.savePDF(0);
+  }
+  async savePDF(dpi: number) {
     const bytes = await ScanbotSdkService.instance.generatePDF(
-      Pages.instance.get()
+      Pages.instance.get(),
+      dpi
     );
     ImageUtils.saveBytes(bytes, MiscUtils.generateUUID() + ".pdf");
   }
