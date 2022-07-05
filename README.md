@@ -2,7 +2,7 @@
 
 ## What is it?
 
-The [Scanbot Web Document Scanner SDK](https://scanbot.io/en/sdk/web-scanner-sdk/web-document-scanner-sdk) makes it possible
+The [Scanbot Web Document Scanner SDK](https://scanbot.io/products/document-scanning/web-document-scanner/) makes it possible
 to integrate document scanning on your website or in your web application. It features real-time document detection
 with user guidance, auto-snapping, auto-cropping and perspective correction.
 
