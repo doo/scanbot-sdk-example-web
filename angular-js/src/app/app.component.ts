@@ -33,6 +33,10 @@ export class AppComponent {
       this.SDK.disposeMrzScanner();
     }
 
+    if (NavigationUtils.isAtPath(RoutePaths.TextDataScanner)) {
+      this.SDK.disposeTextDataScanner();
+    }
+
     if (NavigationUtils.isAtPath(RoutePaths.ImageDetails)) {
       destination = RoutePaths.ImageResults;
     }

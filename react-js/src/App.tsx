@@ -2,7 +2,7 @@ import React from "react";
 import { AppBar } from "@material-ui/core";
 import Swal from "sweetalert2";
 
-import { Barcode, BarcodeResult, ImageFilter } from "scanbot-web-sdk/@types";
+import { Barcode, BarcodeResult, ImageFilter, TextDataScannerResult } from "scanbot-web-sdk/@types";
 
 import { NavigationContent } from "./subviews/navigation-content";
 import { Toast } from "./subviews/toast";
@@ -27,6 +27,7 @@ import Barcodes from "./model/barcodes";
 import ErrorLabel from "./subviews/error-label";
 import MrzScannerComponent from "./rtu-ui/mrz-scanner-component";
 import { MrzResult } from "scanbot-web-sdk/@types/model/mrz/mrz-result";
+import TextDataScannerComponent from "./rtu-ui/text-data-scanner-component";
 
 export default class App extends React.Component<any, any> {
   constructor(props: any) {
@@ -87,6 +88,7 @@ export default class App extends React.Component<any, any> {
         {this.documentScanner()}
         {this.barcodeScanner()}
         {this.mrzScanner()}
+        {this.textDataScanner()}
 
         <Toast
           alert={this.state.alert}
@@ -163,6 +165,21 @@ export default class App extends React.Component<any, any> {
       );
     }
     return this._mrzScannerHtmlComponent;
+  }
+
+  _textDataScannerHtmlComponent: any;
+  _textDataScanner?: TextDataScannerComponent | null;
+  textDataScanner() {
+    if (!this._textDataScannerHtmlComponent) {
+      this._textDataScannerHtmlComponent = (
+        <TextDataScannerComponent
+          ref={(ref) => (this._textDataScanner = ref)}
+          sdk={this.state.sdk}
+          onTextDataDetected={this.onTextDataDetected.bind(this)}
+        />
+      );
+    }
+    return this._textDataScannerHtmlComponent;
   }
 
   decideContent() {
@@ -393,6 +410,27 @@ export default class App extends React.Component<any, any> {
     }, 1000);
   }
 
+  async onTextDataDetected(textData: TextDataScannerResult) {
+    if (!textData) return;
+
+    if (textData.text) {
+      var text = `Text: ${textData.text} | confidence: ${textData.confidence} | isValidated: ${textData.validated}`;
+
+      this.setState({
+        alert: { color: "success", text: text },
+      });
+    }
+
+    if (textData.validated) {
+      ScanbotSdkService.instance.textDataScanner?.pauseDetection();
+
+      alert(textData.text);
+
+      setTimeout(() => { ScanbotSdkService.instance.textDataScanner?.resumeDetection() }, 500);
+    }
+  }
+
+
   formatBarcodes(codes: Barcode[]): string {
     return JSON.stringify(
       codes.map((code: Barcode) => code.text + " (" + code.format + ") ")
@@ -418,6 +456,10 @@ export default class App extends React.Component<any, any> {
     }
     if (feature.id === RoutePath.MrzScanner) {
       this._mrzScanner?.push(AnimationType.PushRight);
+      return;
+    }
+    if (feature.id === RoutePath.TextDataScanner) {
+      this._textDataScanner?.push(AnimationType.PushRight);
       return;
     }
     if (feature.route) {
