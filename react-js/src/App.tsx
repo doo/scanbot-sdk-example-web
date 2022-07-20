@@ -62,6 +62,9 @@ export default class App extends React.Component<any, any> {
       if (this._mrzScanner?.isVisible()) {
         this._mrzScanner?.pop();
       }
+      if (this._textDataScanner?.isVisible()) {
+        this._textDataScanner?.pop();
+      }
     });
   }
 
