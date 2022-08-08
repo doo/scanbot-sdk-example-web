@@ -17,6 +17,8 @@ import {
   TiffGenerator,
   PdfGenerator,
   Polygon,
+  TextDataScannerConfiguration,
+  ITextDataScannerHandle,
 } from "scanbot-web-sdk/@types";
 
 import Pages from "../model/pages";
@@ -24,11 +26,18 @@ import { ImageUtils } from "../utils/image-utils";
 import { BarcodeFormat } from "scanbot-web-sdk/@types/model/barcode/barcode-format";
 import { IMrzScannerHandle } from "scanbot-web-sdk/@types/interfaces/i-mrz-scanner-handle";
 import { ContourDetectionResult } from "scanbot-web-sdk/@types/model/document/contour-detection-result";
+
+// eslint-disable-next-line import/no-webpack-loader-syntax
+require("!!file-loader?outputPath=tessdata&name=[name].[ext]!scanbot-web-sdk/bundle/bin/complete/tessdata/eng.traineddata");
+// eslint-disable-next-line import/no-webpack-loader-syntax
+require("!!file-loader?outputPath=tessdata&name=[name].[ext]!scanbot-web-sdk/bundle/bin/complete/tessdata/deu.traineddata");
+
 export class ScanbotSdkService {
   static DOCUMENT_SCANNER_CONTAINER = "document-scanner-view";
   static CROPPING_VIEW_CONTAINER = "cropping-view";
   static BARCODE_SCANNER_CONTAINER = "barcode-scanner-view";
   static MRZ_SCANNER_CONTAINER = "mrz-scanner-view";
+  static TEXTDATA_SCANNER_CONTAINER = "text-data-scanner-view";
 
   public static instance = new ScanbotSdkService();
 
@@ -39,6 +48,7 @@ export class ScanbotSdkService {
   documentScanner?: IDocumentScannerHandle;
   barcodeScanner?: IBarcodeScannerHandle;
   mrzScanner?: IMrzScannerHandle;
+  textDataScanner?: ITextDataScannerHandle;
   croppingView?: ICroppingViewHandle;
 
   public async initialize() {
@@ -169,6 +179,28 @@ export class ScanbotSdkService {
   public disposeMrzScanner() {
     this.mrzScanner?.dispose();
   }
+
+
+  public disposeTextDataScanner() {
+    this.textDataScanner?.dispose();
+  }
+
+  public async createTextDataScanner(onTextDetected: any, errorCallback: (e: Error) => void) {
+    const config: TextDataScannerConfiguration = {
+      containerId: ScanbotSdkService.TEXTDATA_SCANNER_CONTAINER,
+      onTextDetected: onTextDetected,
+      supportedLanguages: ['eng', 'deu']
+    };
+
+    if (this.sdk) {
+      try {
+        this.textDataScanner = await this.sdk!.createTextDataScanner(config);
+      } catch (e) {
+        errorCallback(e as Error);
+      }
+    }
+  }
+
 
   public async openCroppingView(page: any) {
     const configuration: CroppingViewConfiguration = {

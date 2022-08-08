@@ -31,6 +31,7 @@
     <div class="main-list-item document-scanner-button">Document Scanner</div>
     <div class="main-list-item barcode-scanner-button">Barcode Scanner</div>
     <div class="main-list-item mrz-scanner-button">MRZ Scanner</div>
+    <div class="main-list-item text-data-scanner-button"> Text Data Scanner </div>
     <div class="main-list-item" id="pick-document-button">Pick Document Image</div>
     <div class="main-list-item" id="pick-barcode-button">Pick Barcode Image</div>
     <div class="main-list-item scanner-results-button">Document Results</div>
@@ -79,6 +80,18 @@
       <div class="web-sdk-progress-bar"></div>
     </div>
     <div class="action-bar"></div>
+  </div>
+
+  <div class="controller text-data-scanner-controller">
+    <nav class="navbar navbar-dark">
+      <div class="navbar-brand mb-0 h3">
+        <span class="back-button">&#8249;</span>
+        Text Data Scanner
+      </div>
+    </nav>
+    <div id="text-data-scanner-container" class="view-controller-container">
+      <div class="web-sdk-progress-bar"></div>
+    </div>
   </div>
 
   <div class="controller cropping-controller">
@@ -150,7 +163,7 @@
     crossorigin="anonymous"></script>
 
   <!-- Add ScanbotSDK framework -->
-  <script src="https://cdn.jsdelivr.net/npm/scanbot-web-sdk@2.8.1/bundle/ScanbotSDK.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/scanbot-web-sdk@2.9.0-alpha4/bundle/ScanbotSDK.min.js"></script>
   <!-- After, initialize the Scanbot SDK in your own script -->
   <script src="js/lib/toastify.js"></script>
   <script src="js/config.js"></script>

@@ -2,7 +2,7 @@
 
 ## What is it?
 
-The [Scanbot Web Document Scanner SDK](https://scanbot.io/en/sdk/web-scanner-sdk/web-document-scanner-sdk) makes it possible
+The [Scanbot Web Document Scanner SDK](https://scanbot.io/products/document-scanning/web-document-scanner/) makes it possible
 to integrate document scanning on your website or in your web application. It features real-time document detection
 with user guidance, auto-snapping, auto-cropping and perspective correction.
 
@@ -47,7 +47,7 @@ php -S localhost:8000
 ## Documentation
 
 For the developer guide and full API reference of the Scanbot Web Document Scanner SDK please check out the
-[documentation](https://scanbotsdk.github.io/documentation/web/).
+[documentation](https://docs.scanbot.io/document-scanner-sdk/web/introduction/).
 
 ## Please note
 
@@ -57,5 +57,4 @@ After the trial period is over all Scanbot Web SDK functions
 as well as UI components (Document Scanner UI) will stop working.
 You have to refresh the page to get another trial period.
 
-To get an unrestricted, **no-strings-attached** 30-day trial license,
-please reach out to our sales team via sdk@scanbot.io
+To get a free "no-strings-attached" trial license, please submit the [Trial License Form](https://scanbot.io/trial/) on our website.

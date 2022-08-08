@@ -27,6 +27,7 @@ export class HomeComponent implements OnInit {
     { route: RoutePaths.DocumentScanner, name: "Scan Documents" },
     { route: RoutePaths.BarcodeScanner, name: "Scan Barcodes" },
     { route: RoutePaths.MrzScanner, name: "Scan MRZ" },
+    { route: RoutePaths.TextDataScanner, name: "Text Data Scanner" },
     { id: FeatureId.DocumentPicker, name: "Pick Document image" },
     { id: FeatureId.BarcodePicker, name: "Pick Barcode image" },
     { route: RoutePaths.ImageResults, name: "Document Results" },

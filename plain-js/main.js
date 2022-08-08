@@ -186,6 +186,19 @@ window.onload = async () => {
     }
   };
 
+  Utils.getElementByClassName("text-data-scanner-button").onclick = async (e) => {
+    Utils.getElementByClassName("text-data-scanner-controller").style.display = "block";
+    const config = {
+      containerId: Config.textDataScannerContainerId(),
+      onTextDetected: onTextDataDetected,
+      onError: onScannerError,
+      ocrResolutionLimit: 400,
+      supportedLanguages: ['eng', 'deu']
+    };
+
+    textDataScanner = await scanbotSDK.createTextDataScanner(config);
+  };
+
   Utils.getElementByClassName("scanner-results-button").onclick = async (e) => {
     Utils.getElementByClassName("detection-results-controller").style.display =
       "block";
@@ -365,6 +378,8 @@ window.onload = async () => {
         barcodeScanner.dispose();
       } else if (controller.includes("mrz-scanner-controller")) {
         mrzScanner.dispose();
+      } else if (controller.includes("text-data-scanner-controller")) {
+        textDataScanner.dispose();
       } else if (controller.includes("detection-results-controller")) {
       } else if (controller.includes("detection-result-controller")) {
         Utils.getElementByClassName(
@@ -413,6 +428,28 @@ async function onMrzDetected(mrz) {
   setTimeout(() => {
     mrzScanner.resumeDetection();
   }, 1000);
+}
+
+async function onTextDataDetected(textData) {
+  if (!textData) return;
+
+  if (textData.text) {
+    var text = `Text: ${textData.text} | confidence: ${textData.confidence} | isValidated: ${textData.validated}`;
+    Toastify({ text: text, duration: 2000 }).showToast();
+  }
+
+  if (textData.validated) {
+    if (typeof textDataScanner !== 'undefined') {
+      textDataScanner.pauseDetection();
+    }
+
+    alert(textData.text);
+
+    if (typeof textDataScanner !== 'undefined') {
+      setTimeout(() => { textDataScanner.resumeDetection() }, 500);
+    }
+  }
+
 }
 
 async function onDocumentDetected(e) {

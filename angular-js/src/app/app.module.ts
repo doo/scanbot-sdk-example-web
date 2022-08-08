@@ -14,6 +14,7 @@ import { ToastrModule } from "ngx-toastr";
 import { CommonModule } from "@angular/common";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { MrzScannerComponent } from "./mrz-scanner/mrz-scanner.component";
+import { TextDataScannerComponent } from "./text-data-scanner/text-data-scanner.component";
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { MrzScannerComponent } from "./mrz-scanner/mrz-scanner.component";
     CroppingComponent,
     BarcodeScannerComponent,
     MrzScannerComponent,
+    TextDataScannerComponent
   ],
   imports: [
     BrowserModule,

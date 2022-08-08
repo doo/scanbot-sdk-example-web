@@ -10,6 +10,7 @@ import { CroppingComponent } from "./cropping/cropping.component";
 import { RoutePaths } from "./model/RoutePaths";
 import { BarcodeScannerComponent } from "./barcode-scanner/barcode-scanner.component";
 import { MrzScannerComponent } from "./mrz-scanner/mrz-scanner.component";
+import { TextDataScannerComponent } from "./text-data-scanner/text-data-scanner.component";
 
 const routes: Routes = [
   { path: "", redirectTo: RoutePaths.Home, pathMatch: "full" },
@@ -20,6 +21,7 @@ const routes: Routes = [
   { path: RoutePaths.ImageDetails, component: ImageDetailsComponent },
   { path: RoutePaths.BarcodeScanner, component: BarcodeScannerComponent },
   { path: RoutePaths.MrzScanner, component: MrzScannerComponent },
+  { path: RoutePaths.TextDataScanner, component: TextDataScannerComponent },
   { path: RoutePaths.Cropping, component: CroppingComponent },
 ];
 
