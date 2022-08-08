@@ -395,7 +395,7 @@ window.onload = async () => {
     };
   }
 
-  scanbotSDK = await ScanbotSDK.initialize({ licenseKey: Config.license() });
+  scanbotSDK = await ScanbotSDK.initialize({ licenseKey: Config.license(), engine: '/wasm/' });
   ViewUtils.hideLoading();
 };
 
