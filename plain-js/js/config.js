@@ -12,6 +12,9 @@ class Config {
   static mrzScannerContainerId() {
     return "mrz-scanner-container";
   }
+  static textDataScannerContainerId() {
+    return "text-data-scanner-container";
+  }
   static croppingViewContainerId() {
     return "cropping-view-container";
   }
