@@ -17,6 +17,11 @@ export class Features {
       name: "Mrz Scanner",
       route: RoutePath.MrzScanner,
     },
+    {
+      id: RoutePath.TextDataScanner,
+      name: "Text Data Scanner",
+      route: RoutePath.TextDataScanner,
+    },
     { id: RoutePath.DocumentOnJpeg, name: "Detect document on .jpeg" },
     { id: RoutePath.BarcodeOnJpeg, name: "Detect barcodes on .jpeg" },
     { id: RoutePath.BarcodeOnPdf, name: "Detect barcodes on .pdf" },

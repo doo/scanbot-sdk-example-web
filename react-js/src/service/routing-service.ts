@@ -8,6 +8,7 @@ export enum RoutePath {
   BarcodeOnJpeg = "barcode-on-jpeg",
   BarcodeOnPdf = "barcode-on-pdf",
   MrzScanner = "mrz-scanner",
+  TextDataScanner = "text-data-scanner",
   ImageResults = "image-results",
   ImageDetails = "image-details",
   LicenseInfo = "license-info",

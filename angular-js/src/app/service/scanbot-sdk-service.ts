@@ -20,7 +20,9 @@ import {
   IBarcodeScannerHandle,
   Polygon,
   ContourDetectionResult,
-  BarcodeResult
+  BarcodeResult,
+  ITextDataScannerHandle,
+  TextDataScannerConfiguration
 } from "scanbot-web-sdk/@types";
 
 import { IMrzScannerHandle } from "scanbot-web-sdk/@types/interfaces/i-mrz-scanner-handle";
@@ -28,11 +30,17 @@ import { MrzScannerConfiguration } from "scanbot-web-sdk/@types/model/configurat
 import { BarcodeFormat } from "scanbot-web-sdk/@types/model/barcode/barcode-format";
 import { EngineMode } from "scanbot-web-sdk/@types/model/barcode/engine-mode";
 
+// eslint-disable-next-line import/no-webpack-loader-syntax
+require("!!file-loader?outputPath=tessdata&name=[name].[ext]!scanbot-web-sdk/bundle/bin/complete/tessdata/eng.traineddata");
+// eslint-disable-next-line import/no-webpack-loader-syntax
+require("!!file-loader?outputPath=tessdata&name=[name].[ext]!scanbot-web-sdk/bundle/bin/complete/tessdata/deu.traineddata");
+
 @Injectable()
 export class ScanbotSdkService {
   static CONTAINER_ID = "scanbot-camera-container";
   static BARCODE_SCANNER_CONTAINER_ID = "barcode-scanner-container";
   static MRZ_SCANNER_CONTAINER_ID = "mrz-scanner-container";
+  static TEXTDATA_SCANNER_CONTAINER_ID = "textdata-scanner-container";
 
   private instance: ScanbotSDK;
 
@@ -41,6 +49,7 @@ export class ScanbotSdkService {
   private documentScanner: IDocumentScannerHandle;
   private barcodeScanner: IBarcodeScannerHandle;
   private mrzScanner: IMrzScannerHandle;
+  private textDataScanner: ITextDataScannerHandle;
   private cropper: ICroppingViewHandle;
 
   isReady(): boolean {
@@ -85,6 +94,22 @@ export class ScanbotSdkService {
     }
   }
 
+  async scanTextData(configuration: TextDataScannerConfiguration, errorCallback: (e: Error) => void) {
+    try {
+      this.textDataScanner = await this.instance.createTextDataScanner(configuration);
+    } catch (e) {
+      errorCallback(e);
+    }
+  }
+
+  async setTextDataScannerDetectionStatus(pause: boolean) {
+    if (pause) {
+      this.textDataScanner.pauseDetection();
+    } else {
+      this.textDataScanner.resumeDetection();
+    }
+  }
+
   delayAutoCapture() {
     this.documentScanner.disableAutoCapture();
     setTimeout(() => {
@@ -102,6 +127,10 @@ export class ScanbotSdkService {
 
   disposeMrzScanner() {
     this.mrzScanner.dispose();
+  }
+
+  disposeTextDataScanner() {
+    this.textDataScanner.dispose();
   }
 
   async crop(configuration: CroppingViewConfiguration) {

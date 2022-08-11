@@ -26,7 +26,8 @@
     "sweetalert2": "10.16.9",
     "tslib": "1.14.1",
     "zone.js": "0.10.3",
-    "scanbot-web-sdk": "2.8.1"
+    "@types/node": "^12.19.15",
+    "scanbot-web-sdk": "2.9.0"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "0.900.7",
@@ -36,9 +37,9 @@
     "@angular/language-service": "9.0.7",
     "@types/jasmine": "3.5.14",
     "@types/jasminewd2": "2.0.8",
-    "@types/node": "12.19.15",
     "codelyzer": "6.0.2",
     "eslint": "^7.32.0",
+    "file-loader": "^6.2.0",
     "jasmine-core": "3.5.0",
     "jasmine-spec-reporter": "7.0.0",
     "karma": "4.3.0",

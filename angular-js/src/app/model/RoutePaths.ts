@@ -5,5 +5,6 @@ export enum RoutePaths {
   ImageDetails = "image-details",
   BarcodeScanner = "barcode-scanner",
   MrzScanner = "mrz-scanner",
+  TextDataScanner = "text-data-scanner",
   Cropping = "cropping",
 }
