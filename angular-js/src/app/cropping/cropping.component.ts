@@ -86,4 +86,8 @@ export class CroppingComponent implements OnInit {
     );
     await this.router.navigateByUrl(RoutePaths.ImageDetails);
   }
+
+  async ngOnDestroy() {
+    this.sdk.disposeCroppingView();
+  }
 }
