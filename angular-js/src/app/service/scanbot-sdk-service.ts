@@ -133,6 +133,10 @@ export class ScanbotSdkService {
     this.textDataScanner.dispose();
   }
 
+  disposeCroppingView() {
+    this.cropper.dispose();
+  }
+
   async crop(configuration: CroppingViewConfiguration) {
     this.cropper = await this.instance.openCroppingView(configuration);
   }
