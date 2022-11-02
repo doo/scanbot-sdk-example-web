@@ -14,6 +14,12 @@ export class NavigationUtils {
       : "block";
   }
 
+  public static showCameraSwapButton(show: boolean) {
+    NavigationUtils.getElementByClassName("camera-swap-button").style.display = show
+      ? "block"
+      : "none";
+  }
+
   public static isAtPath(path: RoutePaths) {
     return window.location.href.includes(path);
   }

@@ -9,7 +9,10 @@ export default class DocumentScannerComponent extends BaseScannerComponent {
     return this.controller(
       ScanbotSdkService.DOCUMENT_SCANNER_CONTAINER,
       "Document Scanner",
-      this.labelText()
+      this.labelText(),
+      () => {
+        ScanbotSdkService.instance.documentScanner?.swapCameraFacing(true);
+      }
     );
   }
 

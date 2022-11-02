@@ -8,7 +8,10 @@ export default class TextDataScannerComponent extends BaseScannerComponent {
     return this.controller(
       ScanbotSdkService.TEXTDATA_SCANNER_CONTAINER,
       "Text Data Scanner",
-      ""
+      "",
+      () => {
+        ScanbotSdkService.instance.textDataScanner?.swapCameraFacing(true);
+      }
     );
   }
 

@@ -46,6 +46,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     NavigationUtils.showBackButton(false);
+    NavigationUtils.showCameraSwapButton(false);
   }
 
   async onItemClick(e) {

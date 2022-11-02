@@ -1,5 +1,5 @@
 import React from "react";
-import { ArrowBack, MoreVert } from "@material-ui/icons";
+import { ArrowBack, Camera } from "@material-ui/icons";
 import { Constants } from "../model/constants";
 
 export default class ActionBarTop extends React.Component<any, any> {
@@ -17,17 +17,15 @@ export default class ActionBarTop extends React.Component<any, any> {
         />
 
         <div style={Constants.barText()}>{this.props.title}</div>
-        <MoreVert
+        {this.props.onCameraSwitch && <Camera
           style={{
             color: "white",
             height: "52px",
             paddingRight: "10px",
             zIndex: 100,
           }}
-          onClick={() => {
-            console.log("wuuut");
-          }}
-        />
+          onClick={this.props.onCameraSwitch}
+        />}
       </div>
     );
   }
