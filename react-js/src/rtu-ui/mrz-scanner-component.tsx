@@ -8,7 +8,10 @@ export default class MrzScannerComponent extends BaseScannerComponent {
     return this.controller(
       ScanbotSdkService.MRZ_SCANNER_CONTAINER,
       "Mrz Scanner",
-      ""
+      "",
+      () => {
+        ScanbotSdkService.instance.mrzScanner?.swapCameraFacing(true);
+      }
     );
   }
 

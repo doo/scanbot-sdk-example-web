@@ -34,6 +34,7 @@ export class BarcodeScannerComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     NavigationUtils.showBackButton(true);
+    NavigationUtils.showCameraSwapButton(true);
     if (!this.sdk.isReady()) {
       this.sdk.onReady = () => {
         this.startScanner();
