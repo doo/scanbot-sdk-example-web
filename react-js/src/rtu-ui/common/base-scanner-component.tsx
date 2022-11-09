@@ -33,7 +33,7 @@ export default class BaseScannerComponent extends React.Component<any, any> {
 
   previousDestination?: string;
 
-  controller(scannerId: string, title: string, labelText: string) {
+  controller(scannerId: string, title: string, labelText: string, onCameraSwitch?: Function) {
     if (this.state.animation.type === AnimationType.None) {
       return null;
     }
@@ -52,6 +52,7 @@ export default class BaseScannerComponent extends React.Component<any, any> {
           onBack={() => {
             this.pop();
           }}
+          onCameraSwitch={onCameraSwitch}
         />
         <div
           style={{ height: this.containerHeight(), backgroundColor: "black" }}
@@ -82,7 +83,7 @@ export default class BaseScannerComponent extends React.Component<any, any> {
     this._isVisible = false;
   }
 
-  onAnimationStart() {}
+  onAnimationStart() { }
 
   onAnimationEnd() {
     if (this.state.animation.type === AnimationType.Pop) {

@@ -395,6 +395,26 @@ window.onload = async () => {
     };
   }
 
+  const cameraSwapButtons = document.getElementsByClassName("camera-swap-button");
+
+  for (let i = 0; i < cameraSwapButtons.length; i++) {
+    const button = cameraSwapButtons[i];
+    button.onclick = async (e) => {
+      const controller =
+        e.target.parentElement.parentElement.parentElement.className;
+
+      if (controller.includes("scanbot-camera-controller")) {
+        documentScanner.swapCameraFacing(true);
+      } else if (controller.includes("barcode-scanner-controller")) {
+        barcodeScanner.swapCameraFacing(true);
+      } else if (controller.includes("mrz-scanner-controller")) {
+        mrzScanner.swapCameraFacing(true);
+      } else if (controller.includes("text-data-scanner-controller")) {
+        textDataScanner.swapCameraFacing(true);
+      }
+    };
+  }
+
   scanbotSDK = await ScanbotSDK.initialize({ licenseKey: Config.license(), engine: '/wasm/' });
   ViewUtils.hideLoading();
 };

@@ -228,6 +228,22 @@ export class ScanbotSdkService {
     return await this.instance!.cropAndRotateImageCcw(image, polygon, rotations);
   }
 
+  public swapDocumentScannerCameraFacing() {
+    this.documentScanner?.swapCameraFacing(true);
+  }
+
+  public swapBarcodeScannerCameraFacing() {
+    this.barcodeScanner?.swapCameraFacing(true);
+  }
+
+  public swapMrzScannerCameraFacing() {
+    this.mrzScanner?.swapCameraFacing(true);
+  }
+
+  public swapTextDataScannerCameraFacing() {
+    this.textDataScanner?.swapCameraFacing(true);
+  }
+
   public async createBlurDetector() {
     return this.instance?.createBlurDetector();
   }
