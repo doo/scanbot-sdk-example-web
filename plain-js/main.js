@@ -481,6 +481,7 @@ async function onDocumentDetected(e) {
 
 async function onScannerError(e) {
   console.log("Error:", e);
+  alert(e.name + ': ' + e.message);
 }
 
 async function reloadDetectionResults() {
