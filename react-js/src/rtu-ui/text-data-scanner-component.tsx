@@ -22,17 +22,21 @@ export default class TextDataScannerComponent extends BaseScannerComponent {
   onTextDataScannerError(e: Error) {
     console.log(e.name + ': ' + e.message);
     alert(e.name + ': ' + e.message);
-    this.pop();
   }
 
   async push(type: AnimationType) {
     super.push(type);
     this.pushType = type;
     this.updateAnimationType(type, async () => {
-      await ScanbotSdkService.instance.createTextDataScanner(
-        this.onTextDataDetected.bind(this),
-        this.onTextDataScannerError.bind(this)
-      );
+      try {
+        await ScanbotSdkService.instance.createTextDataScanner(
+          this.onTextDataDetected.bind(this),
+          this.onTextDataScannerError.bind(this)
+        );
+      } catch (e) {
+        this.onTextDataScannerError(e);
+        this.pop()
+      }
     });
   }
 

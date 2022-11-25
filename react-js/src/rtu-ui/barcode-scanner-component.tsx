@@ -24,7 +24,6 @@ export default class BarcodeScannerComponent extends BaseScannerComponent {
   onBarcodeScannerError(e: Error) {
     console.log(e.name + ': ' + e.message);
     alert(e.name + ': ' + e.message);
-    this.pop();
   }
 
   labelText() {
@@ -35,10 +34,15 @@ export default class BarcodeScannerComponent extends BaseScannerComponent {
     super.push(type);
     this.pushType = type;
     this.updateAnimationType(type, async () => {
-      await ScanbotSdkService.instance.createBarcodeScanner(
-        this.onBarcodesDetected.bind(this),
-        this.onBarcodeScannerError.bind(this),
-      );
+      try {
+        await ScanbotSdkService.instance.createBarcodeScanner(
+          this.onBarcodesDetected.bind(this),
+          this.onBarcodeScannerError.bind(this),
+        );
+      } catch (e) {
+        this.onBarcodeScannerError(e);
+        this.pop()
+      }
     });
   }
 

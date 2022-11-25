@@ -22,17 +22,21 @@ export default class MrzScannerComponent extends BaseScannerComponent {
   onMrzScannerError(e: Error) {
     console.log(e.name + ': ' + e.message);
     alert(e.name + ': ' + e.message);
-    this.pop();
   }
 
   async push(type: AnimationType) {
     super.push(type);
     this.pushType = type;
     this.updateAnimationType(type, async () => {
-      await ScanbotSdkService.instance.createMrzScanner(
-        this.onMrzsDetected.bind(this),
-        this.onMrzScannerError.bind(this)
-      );
+      try {
+        await ScanbotSdkService.instance.createMrzScanner(
+          this.onMrzsDetected.bind(this),
+          this.onMrzScannerError.bind(this)
+        );
+      } catch (e) {
+        this.onMrzScannerError(e);
+        this.pop()
+      }
     });
   }
 
