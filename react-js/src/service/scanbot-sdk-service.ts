@@ -79,7 +79,7 @@ export class ScanbotSdkService {
     if (!info) {
       return false;
     }
-    return info.status === "Trial" || info.status === "Okay";
+    return info.isValid();
   }
 
   public async createBlurDetector() {
