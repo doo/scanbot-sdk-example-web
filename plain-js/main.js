@@ -154,6 +154,7 @@ window.onload = async () => {
       //     }
       // },
       onBarcodesDetected: onBarcodesDetected,
+      returnBarcodeImage: true,
       onError: onScannerError,
       barcodeFormats: barcodeFormats,
     };
@@ -425,7 +426,12 @@ async function onBarcodesDetected(e) {
     text += " " + barcode.text + " (" + barcode.format + "),";
   });
 
-  Toastify({ text: text.slice(0, -1), duration: 3000 }).showToast();
+  let result;
+  if (e.barcodes[0].barcodeImage) {
+    result = await scanbotSDK.toDataUrl(e.barcodes[0].barcodeImage);
+  }
+
+  Toastify({ text: text.slice(0, -1), duration: 3000, avatar: result }).showToast();
 }
 
 async function onMrzDetected(mrz) {
