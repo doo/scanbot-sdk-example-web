@@ -60,15 +60,20 @@ export class DocumentScannerComponent implements OnInit {
           Error_Noise: "Please move the document to a clear surface.",
         },
       },
+      onError: this.documentScannerError.bind(this)
     };
 
-    await this.sdk.scanDocuments(configuration, this.documentScannerError.bind(this));
+    try {
+      await this.sdk.scanDocuments(configuration);
+    } catch (e) {
+      this.documentScannerError(e);
+      this.router.navigateByUrl("/");
+    }
   }
 
   documentScannerError(e: Error) {
     console.log(e.name + ': ' + e.message);
     alert(e.name + ': ' + e.message);
-    this.router.navigateByUrl("/");
   }
 
   async onDocumentDetected(result: DocumentDetectionResult) {

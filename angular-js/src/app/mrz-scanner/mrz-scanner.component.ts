@@ -44,16 +44,20 @@ export class MrzScannerComponent implements OnInit {
     const configuration = {
       containerId: ScanbotSdkService.MRZ_SCANNER_CONTAINER_ID,
       onMrzDetected: this.onMrzDetected.bind(this),
-      onError: () => { },
+      onError: this.mrzScannerError.bind(this)
     };
 
-    await this.sdk.scanMrz(configuration, this.mrzScannerError.bind(this));
+    try {
+      await this.sdk.scanMrz(configuration);
+    } catch (e) {
+      this.mrzScannerError(e);
+      this.router.navigateByUrl("/");
+    }
   }
 
   mrzScannerError(e: Error) {
     console.log(e.name + ': ' + e.message);
     alert(e.name + ': ' + e.message);
-    this.router.navigateByUrl("/");
   }
 
   async onMrzDetected(mrz: MrzResult) {

@@ -79,7 +79,7 @@ export class ScanbotSdkService {
     if (!info) {
       return false;
     }
-    return info.status === "Trial" || info.status === "Okay";
+    return info.isValid();
   }
 
   public async createBlurDetector() {
@@ -105,15 +105,10 @@ export class ScanbotSdkService {
           Error_Noise: "Please move the document to a clear surface.",
         },
       },
+      onError: errorCallback
     };
 
-    if (this.sdk) {
-      try {
-        this.documentScanner = await this.sdk!.createDocumentScanner(config);
-      } catch (e) {
-        errorCallback(e as Error);
-      }
-    }
+    this.documentScanner = await this.sdk!.createDocumentScanner(config);
   }
 
   public disposeDocumentScanner() {
@@ -147,14 +142,10 @@ export class ScanbotSdkService {
       captureDelay: 1000,
       onBarcodesDetected: callback,
       barcodeFormats: barcodeFormats,
+      onError: errorCallback
     };
-    if (this.sdk) {
-      try {
-        this.barcodeScanner = await this.sdk!.createBarcodeScanner(config);
-      } catch (e) {
-        errorCallback(e as Error);
-      }
-    }
+
+    this.barcodeScanner = await this.sdk!.createBarcodeScanner(config);
   }
 
   public disposeBarcodeScanner() {
@@ -165,15 +156,10 @@ export class ScanbotSdkService {
     const config = {
       containerId: ScanbotSdkService.MRZ_SCANNER_CONTAINER,
       onMrzDetected: onMrzDetected,
+      onError: errorCallback
     };
 
-    if (this.sdk) {
-      try {
-        this.mrzScanner = await this.sdk!.createMrzScanner(config);
-      } catch (e) {
-        errorCallback(e as Error);
-      }
-    }
+    this.mrzScanner = await this.sdk!.createMrzScanner(config);
   }
 
   public disposeMrzScanner() {
@@ -189,16 +175,11 @@ export class ScanbotSdkService {
     const config: TextDataScannerConfiguration = {
       containerId: ScanbotSdkService.TEXTDATA_SCANNER_CONTAINER,
       onTextDetected: onTextDetected,
-      supportedLanguages: ['eng', 'deu']
+      supportedLanguages: ['eng', 'deu'],
+      onError: errorCallback
     };
 
-    if (this.sdk) {
-      try {
-        this.textDataScanner = await this.sdk!.createTextDataScanner(config);
-      } catch (e) {
-        errorCallback(e as Error);
-      }
-    }
+    this.textDataScanner = await this.sdk!.createTextDataScanner(config);
   }
 
 

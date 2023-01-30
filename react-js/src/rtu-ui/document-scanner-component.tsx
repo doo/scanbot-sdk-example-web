@@ -24,7 +24,6 @@ export default class DocumentScannerComponent extends BaseScannerComponent {
   onDocumentScannerError(e: Error) {
     console.log(e.name + ': ' + e.message);
     alert(e.name + ': ' + e.message);
-    this.pop();
   }
 
   labelText() {
@@ -35,10 +34,15 @@ export default class DocumentScannerComponent extends BaseScannerComponent {
     super.push(type);
     this.pushType = type;
     this.updateAnimationType(type, async () => {
-      await ScanbotSdkService.instance.createDocumentScanner(
-        this.onDocumentDetected.bind(this),
-        this.onDocumentScannerError.bind(this),
-      );
+      try {
+        await ScanbotSdkService.instance.createDocumentScanner(
+          this.onDocumentDetected.bind(this),
+          this.onDocumentScannerError.bind(this),
+        );
+      } catch (e) {
+        this.onDocumentScannerError(e);
+        this.pop()
+      }
     });
   }
 

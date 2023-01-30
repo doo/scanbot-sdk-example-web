@@ -44,17 +44,21 @@ export class TextDataScannerComponent implements OnInit {
     const configuration: TextDataScannerConfiguration = {
       containerId: ScanbotSdkService.TEXTDATA_SCANNER_CONTAINER_ID,
       onTextDetected: this.onTextDetected.bind(this),
-      onError: () => { },
-      supportedLanguages: ['eng', 'deu']
+      supportedLanguages: ['eng', 'deu'],
+      onError: this.textDataScannerError.bind(this)
     };
 
-    await this.sdk.scanTextData(configuration, this.textDataScannerError.bind(this));
+    try {
+      await this.sdk.scanTextData(configuration);
+    } catch (e) {
+      this.textDataScannerError(e);
+      this.router.navigateByUrl("/");
+    }
   }
 
   textDataScannerError(e: Error) {
     console.log(e.name + ': ' + e.message);
     alert(e.name + ': ' + e.message);
-    this.router.navigateByUrl("/");
   }
 
   async onTextDetected(textData: TextDataScannerResult) {

@@ -70,15 +70,20 @@ export class BarcodeScannerComponent implements OnInit {
       onBarcodesDetected: this.onBarcodesDetected.bind(this),
       containerId: ScanbotSdkService.BARCODE_SCANNER_CONTAINER_ID,
       barcodeFormats,
+      onError: this.barcodeScannerError.bind(this)
     };
 
-    await this.sdk.scanBarcodes(configuration, this.barcodeScannerError.bind(this));
+    try {
+      await this.sdk.scanBarcodes(configuration);
+    } catch (e) {
+      this.barcodeScannerError(e);
+      this.router.navigateByUrl("/");
+    }
   }
 
   barcodeScannerError(e: Error) {
     console.log(e.name + ': ' + e.message);
     alert(e.name + ': ' + e.message);
-    this.router.navigateByUrl("/");
   }
 
   async onBarcodesDetected(result: BarcodeResult) {
