@@ -32,6 +32,8 @@ export class DocumentScannerComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     NavigationUtils.showBackButton(true);
     NavigationUtils.showCameraSwapButton(true);
+    NavigationUtils.showCameraSwitchButton(true);
+
     if (!this.sdk.isReady()) {
       this.sdk.onReady = () => {
         this.startScanner();
@@ -89,5 +91,17 @@ export class DocumentScannerComponent implements OnInit {
   async onScanningDone() {
     this.sdk.disposeDocumentScanner();
     await this.router.navigateByUrl("/");
+  }
+
+  async onBack() {
+    this.onScanningDone();
+  }
+
+  async onCameraSwap() {
+    this.sdk.swapDocumentScannerCameraFacing();
+  }
+
+  async onCameraSwitch() {
+    this.sdk.switchDocumentScannerCameraFacing();
   }
 }

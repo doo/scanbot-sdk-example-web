@@ -31,6 +31,7 @@ export class TextDataScannerComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     NavigationUtils.showBackButton(true);
     NavigationUtils.showCameraSwapButton(true);
+    NavigationUtils.showCameraSwitchButton(true);
     if (!this.sdk.isReady()) {
       this.sdk.onReady = () => {
         this.startScanner();
