@@ -15,6 +15,8 @@ import { CommonModule } from "@angular/common";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { MrzScannerComponent } from "./mrz-scanner/mrz-scanner.component";
 import { TextDataScannerComponent } from "./text-data-scanner/text-data-scanner.component";
+import { ToolbarComponent } from "./common/components/toolbar/toolbar.component";
+import { MatIconModule } from '@angular/material/icon'
 
 @NgModule({
   declarations: [
@@ -26,7 +28,8 @@ import { TextDataScannerComponent } from "./text-data-scanner/text-data-scanner.
     CroppingComponent,
     BarcodeScannerComponent,
     MrzScannerComponent,
-    TextDataScannerComponent
+    TextDataScannerComponent,
+    ToolbarComponent
   ],
   imports: [
     BrowserModule,
@@ -35,6 +38,7 @@ import { TextDataScannerComponent } from "./text-data-scanner/text-data-scanner.
     CommonModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
+    MatIconModule
   ],
   providers: [],
   bootstrap: [AppComponent],

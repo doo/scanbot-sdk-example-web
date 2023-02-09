@@ -11,7 +11,10 @@ export default class BarcodeScannerComponent extends BaseScannerComponent {
       "Barcode Scanner",
       this.labelText(),
       () => {
-        ScanbotSdkService.instance.barcodeScanner?.swapCameraFacing(true);
+        this.onCameraSwap(ScanbotSdkService.instance.barcodeScanner!, true);
+      },
+      () => {
+        this.onCameraSwitch(ScanbotSdkService.instance.barcodeScanner!);
       }
     );
   }

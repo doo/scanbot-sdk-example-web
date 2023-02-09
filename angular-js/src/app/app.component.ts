@@ -48,7 +48,7 @@ export class AppComponent {
     await this.router.navigateByUrl(destination);
   }
 
-  async onCameraSwitch() {
+  async onCameraSwapClick() {
     if (NavigationUtils.isAtPath(RoutePaths.DocumentScanner)) {
       this.SDK.swapDocumentScannerCameraFacing();
     }
@@ -63,6 +63,24 @@ export class AppComponent {
 
     if (NavigationUtils.isAtPath(RoutePaths.TextDataScanner)) {
       this.SDK.swapTextDataScannerCameraFacing();
+    }
+  }
+
+  async onCameraSwitchClick() {
+    if (NavigationUtils.isAtPath(RoutePaths.DocumentScanner)) {
+      this.SDK.switchDocumentScannerCameraFacing();
+    }
+
+    if (NavigationUtils.isAtPath(RoutePaths.BarcodeScanner)) {
+      this.SDK.switchBarcodeScannerCameraFacing();
+    }
+
+    if (NavigationUtils.isAtPath(RoutePaths.MrzScanner)) {
+      this.SDK.switchMrzScannerCameraFacing();
+    }
+
+    if (NavigationUtils.isAtPath(RoutePaths.TextDataScanner)) {
+      this.SDK.switchTextDataScannerCameraFacing();
     }
   }
 }

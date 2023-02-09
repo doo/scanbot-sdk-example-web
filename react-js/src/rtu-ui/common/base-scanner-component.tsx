@@ -4,10 +4,12 @@ import { AnimationType } from "../enum/animation-type";
 import ActionBarBottom from "./action-bar-bottom";
 import ActionBarTop from "./action-bar-top";
 import { Constants } from "../model/constants";
+import { IScannerCommon } from "scanbot-web-sdk/@types/interfaces/i-scanner-common-handle";
 
 export default class BaseScannerComponent extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
+
     this.state = {
       animation: {
         type: AnimationType.None,
@@ -33,7 +35,25 @@ export default class BaseScannerComponent extends React.Component<any, any> {
 
   previousDestination?: string;
 
-  controller(scannerId: string, title: string, labelText: string, onCameraSwitch?: Function) {
+  protected async onCameraSwap(scanner: IScannerCommon, force: boolean) {
+    alert(`Swapping front/rear camera`);
+    scanner?.swapCameraFacing(true);
+  }
+
+  protected async onCameraSwitch(scanner: IScannerCommon) {
+    const cameras = await scanner?.fetchAvailableCameras()
+    if (cameras) {
+      const currentCameraInfo = scanner?.getActiveCameraInfo();
+      if (currentCameraInfo) {
+        const cameraIndex = cameras.findIndex((cameraInfo) => { return cameraInfo.deviceId == currentCameraInfo.deviceId });
+        const newCameraIndex = (cameraIndex + 1) % (cameras.length);
+        alert(`Current camera: ${currentCameraInfo.label}.\nSwitching to: ${cameras[newCameraIndex].label}`)
+        scanner?.switchCamera(cameras[newCameraIndex].deviceId);
+      }
+    }
+  }
+
+  controller(scannerId: string, title: string, labelText: string, onCameraSwap?: Function, onCameraSwitch?: Function) {
     if (this.state.animation.type === AnimationType.None) {
       return null;
     }
@@ -52,6 +72,7 @@ export default class BaseScannerComponent extends React.Component<any, any> {
           onBack={() => {
             this.pop();
           }}
+          onCameraSwap={onCameraSwap}
           onCameraSwitch={onCameraSwitch}
         />
         <div

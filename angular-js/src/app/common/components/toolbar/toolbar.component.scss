@@ -1,0 +1,44 @@
+.toolbar {
+    position: absolute;
+    z-index: 500;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    background-color: #c8193c;
+    color: white;
+    font-weight: 600;
+}
+
+.toolbar img {
+    margin: 0 16px;
+}
+
+.toolbar-logo {
+    margin-left: 5px !important;
+    margin-right: 5px !important;
+}
+
+.back-button {
+    height: 50px;
+    width: 50px;
+    line-height: 50px;
+    font-size: 25px;
+    text-align: center;
+}
+
+
+.camera-swap-button,
+.camera-switch-button {
+    height: 50px;
+    width: 50px;
+    line-height: 50px;
+    font-size: 25px;
+    text-align: center;
+}
+
+.spacer {
+    flex-grow: 1;
+}

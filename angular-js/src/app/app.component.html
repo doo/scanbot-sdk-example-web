@@ -1,12 +1,5 @@
-<!-- Toolbar -->
-<div class="toolbar" role="banner">
-  <img class="toolbar-logo" width="40" alt="Angular Logo"
-    src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==" />
-  <div class="back-button" (click)="onBackButtonClick()">&#8249;</div>
-  <span>Scanbot Web SDK Example</span>
-  <div class="spacer"></div>
-  <div class="camera-swap-button" (click)="onCameraSwitch()">&#8646;</div>
-</div>
+<app-toolbar id="app-toolbar" (onBack)="onBackButtonClick()" (onCameraSwap)="onCameraSwapClick()" (onCameraSwitch)="onCameraSwitchClick()"
+  showBackButton="true"></app-toolbar>
 
 <input class="file-picker" type="file" accept="image/x-png,image/gif,image/jpeg" width="48" height="48"
   style="display: none" />
