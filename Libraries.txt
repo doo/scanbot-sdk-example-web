@@ -1266,7 +1266,7 @@ and users must comply to its license: https://github.com/fmtlib/fmt/blob/master/
 
 Tensorflow
 
-Version v2.6.1
+Version v2.10.0
 (https://github.com/tensorflow/tensorflow)
 
                                  Apache License
