@@ -416,14 +416,6 @@ export default class App extends React.Component<any, any> {
   async onTextDataDetected(textData: TextDataScannerResult) {
     if (!textData) return;
 
-    if (textData.text) {
-      var text = `Text: ${textData.text} | confidence: ${textData.confidence} | isValidated: ${textData.validated}`;
-
-      this.setState({
-        alert: { color: "success", text: text },
-      });
-    }
-
     if (textData.validated) {
       ScanbotSdkService.instance.textDataScanner?.pauseDetection();
 

@@ -62,7 +62,8 @@ export class DocumentScannerComponent implements OnInit {
           Error_Noise: "Please move the document to a clear surface.",
         },
       },
-      onError: this.documentScannerError.bind(this)
+      onError: this.documentScannerError.bind(this),
+      preferredCamera: 'camera2 0, facing back'
     };
 
     try {
