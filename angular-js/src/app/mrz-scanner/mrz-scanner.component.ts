@@ -45,7 +45,8 @@ export class MrzScannerComponent implements OnInit {
     const configuration = {
       containerId: ScanbotSdkService.MRZ_SCANNER_CONTAINER_ID,
       onMrzDetected: this.onMrzDetected.bind(this),
-      onError: this.mrzScannerError.bind(this)
+      onError: this.mrzScannerError.bind(this),
+      preferredCamera: 'camera2 0, facing back'
     };
 
     try {
