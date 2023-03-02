@@ -31,6 +31,7 @@ export class TextDataScannerComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     NavigationUtils.showBackButton(true);
     NavigationUtils.showCameraSwapButton(true);
+    NavigationUtils.showCameraSwitchButton(true);
     if (!this.sdk.isReady()) {
       this.sdk.onReady = () => {
         this.startScanner();
@@ -45,7 +46,8 @@ export class TextDataScannerComponent implements OnInit {
       containerId: ScanbotSdkService.TEXTDATA_SCANNER_CONTAINER_ID,
       onTextDetected: this.onTextDetected.bind(this),
       supportedLanguages: ['eng', 'deu'],
-      onError: this.textDataScannerError.bind(this)
+      onError: this.textDataScannerError.bind(this),
+      preferredCamera: 'camera2 0, facing back'
     };
 
     try {
@@ -63,12 +65,6 @@ export class TextDataScannerComponent implements OnInit {
 
   async onTextDetected(textData: TextDataScannerResult) {
     if (!textData) return;
-
-    if (textData.text) {
-      var text = `Text: ${textData.text} | confidence: ${textData.confidence} | isValidated: ${textData.validated}`;
-
-      this.toastr.success(text, "Detected Text!");
-    }
 
     if (textData.validated) {
       this.sdk.setTextDataScannerDetectionStatus(true);

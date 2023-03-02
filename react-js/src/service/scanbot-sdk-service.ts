@@ -19,6 +19,7 @@ import {
   Polygon,
   TextDataScannerConfiguration,
   ITextDataScannerHandle,
+  MrzScannerConfiguration,
 } from "scanbot-web-sdk/@types";
 
 import Pages from "../model/pages";
@@ -105,7 +106,8 @@ export class ScanbotSdkService {
           Error_Noise: "Please move the document to a clear surface.",
         },
       },
-      onError: errorCallback
+      onError: errorCallback,
+      preferredCamera: 'camera2 0, facing back'
     };
 
     this.documentScanner = await this.sdk!.createDocumentScanner(config);
@@ -142,7 +144,8 @@ export class ScanbotSdkService {
       captureDelay: 1000,
       onBarcodesDetected: callback,
       barcodeFormats: barcodeFormats,
-      onError: errorCallback
+      onError: errorCallback,
+      preferredCamera: 'camera2 0, facing back'
     };
 
     this.barcodeScanner = await this.sdk!.createBarcodeScanner(config);
@@ -153,10 +156,11 @@ export class ScanbotSdkService {
   }
 
   public async createMrzScanner(onMrzDetected: any, errorCallback: (e: Error) => void) {
-    const config = {
+    const config: MrzScannerConfiguration = {
       containerId: ScanbotSdkService.MRZ_SCANNER_CONTAINER,
       onMrzDetected: onMrzDetected,
-      onError: errorCallback
+      onError: errorCallback,
+      preferredCamera: 'camera2 0, facing back'
     };
 
     this.mrzScanner = await this.sdk!.createMrzScanner(config);
@@ -176,7 +180,8 @@ export class ScanbotSdkService {
       containerId: ScanbotSdkService.TEXTDATA_SCANNER_CONTAINER,
       onTextDetected: onTextDetected,
       supportedLanguages: ['eng', 'deu'],
-      onError: errorCallback
+      onError: errorCallback,
+      preferredCamera: 'camera2 0, facing back'
     };
 
     this.textDataScanner = await this.sdk!.createTextDataScanner(config);

@@ -35,6 +35,8 @@ export class BarcodeScannerComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     NavigationUtils.showBackButton(true);
     NavigationUtils.showCameraSwapButton(true);
+    NavigationUtils.showCameraSwitchButton(true);
+
     if (!this.sdk.isReady()) {
       this.sdk.onReady = () => {
         this.startScanner();
@@ -70,7 +72,8 @@ export class BarcodeScannerComponent implements OnInit {
       onBarcodesDetected: this.onBarcodesDetected.bind(this),
       containerId: ScanbotSdkService.BARCODE_SCANNER_CONTAINER_ID,
       barcodeFormats,
-      onError: this.barcodeScannerError.bind(this)
+      onError: this.barcodeScannerError.bind(this),
+      preferredCamera: 'camera2 0, facing back'
     };
 
     try {

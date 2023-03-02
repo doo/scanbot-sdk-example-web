@@ -29,6 +29,7 @@ import { IMrzScannerHandle } from "scanbot-web-sdk/@types/interfaces/i-mrz-scann
 import { MrzScannerConfiguration } from "scanbot-web-sdk/@types/model/configuration/mrz-scanner-configuration";
 import { BarcodeFormat } from "scanbot-web-sdk/@types/model/barcode/barcode-format";
 import { EngineMode } from "scanbot-web-sdk/@types/model/barcode/engine-mode";
+import { IScannerCommon } from "scanbot-web-sdk/@types/interfaces/i-scanner-common-handle";
 
 // eslint-disable-next-line import/no-webpack-loader-syntax
 require("!!file-loader?outputPath=tessdata&name=[name].[ext]!scanbot-web-sdk/bundle/bin/complete/tessdata/eng.traineddata");
@@ -230,5 +231,34 @@ export class ScanbotSdkService {
 
   public async createBlurDetector() {
     return this.instance?.createBlurDetector();
+  }
+
+  public switchBarcodeScannerCameraFacing() {
+    this.onCameraSwitch(this.barcodeScanner);
+  }
+
+  public switchDocumentScannerCameraFacing() {
+    this.onCameraSwitch(this.documentScanner);
+  }
+
+  public switchMrzScannerCameraFacing() {
+    this.onCameraSwitch(this.mrzScanner);
+  }
+
+  public switchTextDataScannerCameraFacing() {
+    this.onCameraSwitch(this.textDataScanner);
+  }
+
+  private async onCameraSwitch(scanner: IScannerCommon) {
+    const cameras = await scanner?.fetchAvailableCameras()
+    if (cameras) {
+      const currentCameraInfo = scanner?.getActiveCameraInfo();
+      if (currentCameraInfo) {
+        const cameraIndex = cameras.findIndex((cameraInfo) => { return cameraInfo.deviceId == currentCameraInfo.deviceId });
+        const newCameraIndex = (cameraIndex + 1) % (cameras.length);
+        alert(`Current camera: ${currentCameraInfo.label}.\nSwitching to: ${cameras[newCameraIndex].label}`)
+        scanner?.switchCamera(cameras[newCameraIndex].deviceId);
+      }
+    }
   }
 }

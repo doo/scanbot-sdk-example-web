@@ -63,4 +63,8 @@ export class ImageResultsComponent implements OnInit {
     this.repository.setActiveItem(document.index);
     await this.router.navigateByUrl(RoutePaths.ImageDetails);
   }
+
+  async onBack() {
+    await this.router.navigateByUrl('/');
+  }
 }

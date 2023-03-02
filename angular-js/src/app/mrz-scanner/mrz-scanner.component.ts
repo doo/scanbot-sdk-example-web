@@ -31,6 +31,7 @@ export class MrzScannerComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     NavigationUtils.showBackButton(true);
     NavigationUtils.showCameraSwapButton(true);
+    NavigationUtils.showCameraSwitchButton(true);
     if (!this.sdk.isReady()) {
       this.sdk.onReady = () => {
         this.startScanner();
@@ -44,7 +45,8 @@ export class MrzScannerComponent implements OnInit {
     const configuration = {
       containerId: ScanbotSdkService.MRZ_SCANNER_CONTAINER_ID,
       onMrzDetected: this.onMrzDetected.bind(this),
-      onError: this.mrzScannerError.bind(this)
+      onError: this.mrzScannerError.bind(this),
+      preferredCamera: 'camera2 0, facing back'
     };
 
     try {
