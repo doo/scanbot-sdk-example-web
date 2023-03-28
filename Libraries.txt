@@ -409,12 +409,12 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 JSON for Modern C++
 
-Version v3.10.2
+Version v3.11.2
 (https://github.com/nlohmann/json)
 
 MIT License 
 
-Copyright (c) 2013-2021 Niels Lohmann
+Copyright (c) 2013-2022 Niels Lohmann
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
