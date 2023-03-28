@@ -428,7 +428,9 @@ export default class App extends React.Component<any, any> {
 
   formatBarcodes(codes: Barcode[]): string {
     return JSON.stringify(
-      codes.map((code: Barcode) => code.text + " (" + code.format + ") ")
+      codes.map((code: Barcode) => {
+        return code.parsedText || `${code.text} (${code.format})`;
+      })
     );
   }
 

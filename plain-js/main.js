@@ -460,7 +460,11 @@ async function onCameraSwitch(scanner) {
 async function onBarcodesDetected(e) {
   let text = "";
   e.barcodes.forEach((barcode) => {
-    text += " " + barcode.text + " (" + barcode.format + "),";
+    if (barcode.parsedText) {
+      text += JSON.stringify(barcode.parsedText);
+    } else {
+      text += " " + barcode.text + " (" + barcode.format + "),";
+    }
   });
 
   let result;
