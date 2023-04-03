@@ -6,13 +6,19 @@ The [Scanbot Web Document Scanner SDK](https://scanbot.io/products/document-scan
 to integrate document scanning on your website or in your web application. It features real-time document detection
 with user guidance, auto-snapping, auto-cropping and perspective correction.
 
-## How does it work?
+### How does it work?
 
 The SDK is a native SDK built for the web via [Emscripten](https://emscripten.org/).
 It relies on [WebAssembly](https://webassembly.org) and Camera access via HTML Media Capture API.
 
 The react component is built with [React](https://reactjs.org/)
 and the plain JavaScript bundle with [Preact](https://preactjs.com/).
+
+## Free Developer Support
+
+We provide free "no-strings-attached" developer support for the implementation & testing of the Scanbot SDK.
+If you encounter technical issues with integrating the Scanbot SDK or need advice on choosing the appropriate
+framework or features, please visit our [Support Page](https://docs.scanbot.io/support/).
 
 ## How to run the example apps?
 
