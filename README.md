@@ -1,12 +1,12 @@
 # Scanbot Barcode & Document Scanner SDK Example App for the Web
 
-This example app shows how to integrate the [Scanbot Barcode Scanner SDK](https://scanbot.io/products/barcode-software/web-barcode-scanner/) & [Scanbot Document Scanner SDK](https://scanbot.io/products/document-scanning/web-document-scanner/) into your web applications.
+This example app shows how to integrate the [Scanbot Barcode Scanner SDK](https://scanbot.io/developer/javascript-barcode-scanner/) & [Scanbot Document Scanner SDK](https://scanbot.io/developer/javascript-document-scanner/) into your web applications.
 
 ## What is the Scanbot SDK?
 
-The [Scanbot Web Document Scanner SDK](https://scanbot.io/products/document-scanning/web-document-scanner/) makes it possible to integrate document scanning on your website or in your web application. It features real-time document detection with user guidance, auto-snapping, auto-cropping and perspective correction.
+The [Scanbot Web Document Scanner SDK](https://scanbot.io/developer/javascript-document-scanner/) makes it possible to integrate document scanning on your website or in your web application. It features real-time document detection with user guidance, auto-snapping, auto-cropping and perspective correction.
 
-The [Scanbot Web Barcode Scanner SDK](https://scanbot.io/products/barcode-software/web-barcode-scanner/) lets you integrate barcode scanning features into your website or web application. It is a simple to use high level API, providing a collection of classes and functions for scanning and parsing 1D and 2D barcodes from a mobile device's camera or other image sources like your photo library.
+The [Scanbot Web Barcode Scanner SDK](https://scanbot.io/developer/javascript-barcode-scanner/) lets you integrate barcode scanning features into your website or web application. It is a simple to use high level API, providing a collection of classes and functions for scanning and parsing 1D and 2D barcodes from a mobile device's camera or other image sources like your photo library.
 
 ## Trial License
 
