@@ -1,7 +1,6 @@
 # Scanbot Barcode & Document Scanner SDK Example App for the Web
 
 This example app shows how to integrate the [Scanbot Barcode Scanner SDK](https://scanbot.io/products/barcode-software/web-barcode-scanner/) & [Scanbot Document Scanner SDK](https://scanbot.io/products/document-scanning/web-document-scanner/) into your web applications.
-## What is the Scanbot SDK?
 
 ## What is the Scanbot SDK?
 
