@@ -15,7 +15,13 @@ export class Utils {
 
   static formatBarcodes(codes: Barcode[]): string {
     return JSON.stringify(
-      codes.map((code: Barcode) => code.text + " (" + code.format + ") ")
+      codes.map((code: Barcode) => {
+        if (code.parsedText) {
+          return code.parsedText;
+        } else {
+          return code.text + " (" + code.format + ") ";
+        }
+      })
     );
   }
 }
