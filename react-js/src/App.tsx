@@ -51,7 +51,9 @@ export default class App extends React.Component<any, any> {
     });
 
     await ScanbotSdkService.instance.setLicenseFailureHandler((error: any) => {
+
       RoutingService.instance.reset();
+
       this.setState({ error: { message: error } });
       if (this._documentScanner?.isVisible()) {
         this._documentScanner?.pop();
@@ -65,7 +67,11 @@ export default class App extends React.Component<any, any> {
       if (this._textDataScanner?.isVisible()) {
         this._textDataScanner?.pop();
       }
+      if (this._scanAndCounter?.isVisible()) {
+        this._scanAndCounter?.pop();
+      }
     });
+
   }
 
   onBackPress() {
@@ -92,6 +98,7 @@ export default class App extends React.Component<any, any> {
         {this.barcodeScanner()}
         {this.mrzScanner()}
         {this.textDataScanner()}
+        {this.scanAndCounter()}
 
         <Toast
           alert={this.state.alert}
@@ -183,6 +190,25 @@ export default class App extends React.Component<any, any> {
       );
     }
     return this._textDataScannerHtmlComponent;
+  }
+
+  _scanAndCounterHtmlComponent: any;
+  _scanAndCounter?: BarcodeScannerComponent | null;
+  scanAndCounter() {
+    if (!this._scanAndCounterHtmlComponent) {
+      this._scanAndCounterHtmlComponent = (
+        <BarcodeScannerComponent
+          ref={(ref) => (this._scanAndCounter = ref)}
+          sdk={this.state.sdk}
+          additionalConfig={{ manualDetection: true, showFinder: false }}
+          showBottomActionBar={false}
+          onBarcodesDetected={(barcodes: Barcode[]) => {
+            // Handle results as you please
+          }}
+        />
+      );
+    }
+    return this._scanAndCounterHtmlComponent;
   }
 
   decideContent() {
@@ -443,6 +469,8 @@ export default class App extends React.Component<any, any> {
       return;
     }
 
+    console.log("Clicked feature", feature);
+
     if (feature.id === RoutePath.DocumentScanner) {
       this._documentScanner?.push(AnimationType.PushRight);
       return;
@@ -459,6 +487,15 @@ export default class App extends React.Component<any, any> {
       this._textDataScanner?.push(AnimationType.PushRight);
       return;
     }
+    if (feature.id === RoutePath.TextDataScanner) {
+      this._textDataScanner?.push(AnimationType.PushRight);
+      return;
+    }
+    if (feature.id === RoutePath.ScanAndCount) {
+      this._scanAndCounter?.push(AnimationType.PushRight);
+      return;
+    }
+
     if (feature.route) {
       RoutingService.instance.route(feature.route);
       return;

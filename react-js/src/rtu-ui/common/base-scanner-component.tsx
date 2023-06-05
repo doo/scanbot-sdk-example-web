@@ -18,7 +18,8 @@ export default class BaseScannerComponent extends React.Component<any, any> {
   }
 
   containerHeight() {
-    return window.innerHeight - 2 * Constants.ACTION_BAR_HEIGHT ?? 0;
+    const barHeight = (this.props.showBottomActionBar ? 2 : 1) * Constants.ACTION_BAR_HEIGHT ?? 0;
+    return window.innerHeight - barHeight;
   }
 
   containerStyle(transform: string): CSSProperties {
@@ -45,7 +46,7 @@ export default class BaseScannerComponent extends React.Component<any, any> {
     if (cameras) {
       const currentCameraInfo = scanner?.getActiveCameraInfo();
       if (currentCameraInfo) {
-        const cameraIndex = cameras.findIndex((cameraInfo) => { return cameraInfo.deviceId == currentCameraInfo.deviceId });
+        const cameraIndex = cameras.findIndex((cameraInfo) => { return cameraInfo.deviceId === currentCameraInfo.deviceId });
         const newCameraIndex = (cameraIndex + 1) % (cameras.length);
         alert(`Current camera: ${currentCameraInfo.label}.\nSwitching to: ${cameras[newCameraIndex].label}`)
         scanner?.switchCamera(cameras[newCameraIndex].deviceId);
@@ -80,10 +81,10 @@ export default class BaseScannerComponent extends React.Component<any, any> {
         >
           <div id={scannerId} style={{ width: "100%", height: "100%" }} />
         </div>
-        <ActionBarBottom
+        {this.props.showBottomActionBar && <ActionBarBottom
           label={labelText}
           onDone={this.onDonePress.bind(this)}
-        />
+        />}
       </Animation>
     );
   }

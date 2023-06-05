@@ -9,6 +9,7 @@ export enum RoutePath {
   BarcodeOnPdf = "barcode-on-pdf",
   MrzScanner = "mrz-scanner",
   TextDataScanner = "text-data-scanner",
+  ScanAndCount = "scan-and-count",
   ImageResults = "image-results",
   ImageDetails = "image-details",
   LicenseInfo = "license-info",

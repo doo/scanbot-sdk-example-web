@@ -117,7 +117,7 @@ export class ScanbotSdkService {
     this.documentScanner?.dispose();
   }
 
-  public async createBarcodeScanner(callback: any, errorCallback: (e: Error) => void) {
+  public async createBarcodeScanner(callback: any, errorCallback: (e: Error) => void, additionalConfig: any = {}) {
     const barcodeFormats: BarcodeFormat[] = [
       "AZTEC",
       "CODABAR",
@@ -145,7 +145,8 @@ export class ScanbotSdkService {
       onBarcodesDetected: callback,
       barcodeFormats: barcodeFormats,
       onError: errorCallback,
-      preferredCamera: 'camera2 0, facing back'
+      preferredCamera: 'camera2 0, facing back',
+      ...additionalConfig
     };
 
     this.barcodeScanner = await this.sdk!.createBarcodeScanner(config);
