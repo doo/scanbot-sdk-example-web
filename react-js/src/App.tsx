@@ -200,7 +200,8 @@ export default class App extends React.Component<any, any> {
         <BarcodeScannerComponent
           ref={(ref) => (this._scanAndCounter = ref)}
           sdk={this.state.sdk}
-          additionalConfig={{ manualDetection: true, showFinder: false }}
+          // To enable scan-and-count feature, add the additional config of scanAndCount: {}
+          additionalConfig={{ scanAndCount: { enabled: true }, showFinder: false }}
           showBottomActionBar={false}
           onBarcodesDetected={(barcodes: Barcode[]) => {
             // Handle results as you please

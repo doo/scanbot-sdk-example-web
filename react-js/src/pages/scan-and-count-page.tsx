@@ -7,11 +7,6 @@ export default class ScanAndCountPage extends React.Component<any, any> {
         await ScanbotSdkService.instance.createBarcodeScanner(
             this.props.onBarcodesDetected,
             this.props.onBarcodeDetectionError,
-            /* 
-             * Setting manual detection mode to true 
-             * unveils the experimental scan & count feature with advnaced UI features 
-             */
-            { manualDetection: true }
         );
     }
 
