@@ -73,8 +73,8 @@ export default class BaseScannerComponent extends React.Component<any, any> {
           onBack={() => {
             this.pop();
           }}
-          onCameraSwap={onCameraSwap}
-          onCameraSwitch={onCameraSwitch}
+          onCameraSwap={this.props.hideCameraSwapButtons ? undefined : onCameraSwap}
+          onCameraSwitch={this.props.hideCameraSwapButtons ? undefined : onCameraSwitch}
         />
         <div
           style={{ height: this.containerHeight(), backgroundColor: "black" }}

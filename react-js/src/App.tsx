@@ -202,6 +202,7 @@ export default class App extends React.Component<any, any> {
           sdk={this.state.sdk}
           // To enable scan-and-count feature, add the additional config of scanAndCount: {}
           additionalConfig={{ scanAndCount: { enabled: true }, showFinder: false }}
+          hideCameraSwapButtons={true}
           showBottomActionBar={false}
           onBarcodesDetected={(barcodes: Barcode[]) => {
             // Handle results as you please
