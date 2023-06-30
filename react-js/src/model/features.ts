@@ -22,6 +22,11 @@ export class Features {
       name: "Text Data Scanner",
       route: RoutePath.TextDataScanner,
     },
+    {
+      id: RoutePath.ScanAndCount,
+      name: "Scan & Count",
+      route: RoutePath.ScanAndCount,
+    },
     { id: RoutePath.DocumentOnJpeg, name: "Detect document on .jpeg" },
     { id: RoutePath.BarcodeOnJpeg, name: "Detect barcodes on .jpeg" },
     { id: RoutePath.BarcodeOnPdf, name: "Detect barcodes on .pdf" },

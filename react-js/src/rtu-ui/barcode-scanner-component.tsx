@@ -5,6 +5,7 @@ import { AnimationType } from "./enum/animation-type";
 import Barcodes from "../model/barcodes";
 
 export default class BarcodeScannerComponent extends BaseScannerComponent {
+
   render() {
     return this.controller(
       ScanbotSdkService.BARCODE_SCANNER_CONTAINER,
@@ -21,7 +22,10 @@ export default class BarcodeScannerComponent extends BaseScannerComponent {
 
   onBarcodesDetected(result: BarcodeResult) {
     this.props.onBarcodesDetected(result);
-    document.getElementById("count-label")!.innerHTML = this.labelText();
+    const label = document.getElementById("count-label");
+    if (label) {
+      label.innerHTML = this.labelText();
+    }
   }
 
   onBarcodeScannerError(e: Error) {
@@ -41,8 +45,9 @@ export default class BarcodeScannerComponent extends BaseScannerComponent {
         await ScanbotSdkService.instance.createBarcodeScanner(
           this.onBarcodesDetected.bind(this),
           this.onBarcodeScannerError.bind(this),
+          this.props.additionalConfig ?? {}
         );
-      } catch (e) {
+      } catch (e: any) {
         this.onBarcodeScannerError(e);
         this.pop()
       }

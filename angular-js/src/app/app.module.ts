@@ -37,8 +37,8 @@ import { MatIconModule } from '@angular/material/icon'
     MatGridListModule,
     CommonModule,
     BrowserAnimationsModule,
+    MatIconModule,
     ToastrModule.forRoot(),
-    MatIconModule
   ],
   providers: [],
   bootstrap: [AppComponent],
