@@ -26,3 +26,5 @@ chrome-user-data
 
 # Publish script
 react-js/publish.sh
+
+.angular/
