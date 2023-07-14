@@ -150,9 +150,6 @@ export class ScanbotSdkService {
     };
 
     this.barcodeScanner = await this.sdk!.createBarcodeScanner(config);
-
-    this.barcodeScanner.setRecognitionResolution(1280);
-    this.barcodeScanner.setZoom(5);
   }
 
   public disposeBarcodeScanner() {

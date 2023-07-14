@@ -96,6 +96,7 @@ export default class App extends React.Component<any, any> {
       <div>
         {this.documentScanner()}
         {this.barcodeScanner()}
+        {this.barcodeScannerWithOverlay()}
         {this.mrzScanner()}
         {this.textDataScanner()}
         {this.scanAndCounter()}
@@ -160,6 +161,22 @@ export default class App extends React.Component<any, any> {
       );
     }
     return this._barcodeScannerHtmlComponent;
+  }
+
+  _barcodeScannerWithOverlayHtmlComponent: any;
+  _barcodeScannerWithOverlay?: BarcodeScannerComponent | null;
+  barcodeScannerWithOverlay() {
+    if (!this._barcodeScannerWithOverlayHtmlComponent) {
+      this._barcodeScannerWithOverlayHtmlComponent = (
+        <BarcodeScannerComponent
+          ref={(ref) => (this._barcodeScannerWithOverlay = ref)}
+          sdk={this.state.sdk}
+          additionalConfig={{ overlay: { visible: true }, showFinder: false }}
+          onBarcodesDetected={this.onBarcodesDetected.bind(this)}
+        />
+      );
+    }
+    return this._barcodeScannerWithOverlayHtmlComponent;
   }
 
   _mrzScannerHtmlComponent: any;
@@ -479,6 +496,10 @@ export default class App extends React.Component<any, any> {
     }
     if (feature.id === RoutePath.BarcodeScanner) {
       this._barcodeScanner?.push(AnimationType.PushBottom);
+      return;
+    }
+    if (feature.id === RoutePath.BarcodeScannerWithOverlay) {
+      this._barcodeScannerWithOverlay?.push(AnimationType.PushBottom);
       return;
     }
     if (feature.id === RoutePath.MrzScanner) {
