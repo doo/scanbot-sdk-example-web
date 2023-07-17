@@ -73,8 +73,6 @@ export class BarcodeScannerComponent implements OnInit {
 
     const isOverlyScanner = this.isOverlayScanner();
 
-    console.log("isOverlyScanner", isOverlyScanner);
-
     const configuration: BarcodeScannerConfiguration = {
       onBarcodesDetected: this.onBarcodesDetected.bind(this),
       containerId: ScanbotSdkService.BARCODE_SCANNER_CONTAINER_ID,
@@ -107,6 +105,7 @@ export class BarcodeScannerComponent implements OnInit {
   async onBarcodesDetected(result: BarcodeResult) {
 
     if (this.isOverlayScanner()) {
+      // TODO how to handle overlay barcode results?
       return;
     }
 

@@ -1,5 +1,5 @@
 
-VERSION=2.13.1
+VERSION=2.14.0-alpha.2
 
 BASE_URL=https://cdn.jsdelivr.net/npm/scanbot-web-sdk@${VERSION}/bundle/
 COMPLETE_WASM_BINARY_URL=${BASE_URL}bin/complete/

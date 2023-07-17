@@ -119,47 +119,12 @@ window.onload = async () => {
   };
 
   Utils.getElementByClassName("barcode-scanner-button").onclick = async (e) => {
-    Utils.getElementByClassName("barcode-scanner-controller").style.display =
-      "block";
+    Utils.getElementByClassName("barcode-scanner-controller").style.display = "block";
 
-    const barcodeFormats = [
-      "AZTEC",
-      "CODABAR",
-      "CODE_39",
-      "CODE_93",
-      "CODE_128",
-      "DATA_MATRIX",
-      "EAN_8",
-      "EAN_13",
-      "ITF",
-      "MAXICODE",
-      "PDF_417",
-      "QR_CODE",
-      "RSS_14",
-      "RSS_EXPANDED",
-      "UPC_A",
-      "UPC_E",
-      "UPC_EAN_EXTENSION",
-      "MSI_PLESSEY",
-    ];
-
-    const config = {
-      containerId: Config.barcodeScannerContainerId(),
-      // style: {
-      //     window: {
-      //         borderColor: "blue"
-      //     },
-      //     text: {
-      //         color: "red",
-      //         weight: 500
-      //     }
-      // },
-      onBarcodesDetected: onBarcodesDetected,
-      returnBarcodeImage: true,
-      onError: onScannerError,
-      barcodeFormats: barcodeFormats,
-      preferredCamera: 'camera2 0, facing back'
-    };
+    const config = Config.barcodeScannerConfig();
+    config.containerId = Config.barcodeScannerContainerId();
+    config.onBarcodesDetected = onBarcodesDetected;
+    config.onError = onScannerError;
 
     try {
       barcodeScanner = await scanbotSDK.createBarcodeScanner(config);
@@ -167,6 +132,27 @@ window.onload = async () => {
       console.log(e.name + ': ' + e.message);
       alert(e.name + ': ' + e.message);
       Utils.getElementByClassName("barcode-scanner-controller").style.display = "none";
+    }
+  };
+
+  Utils.getElementByClassName("barcode-scanner-overlay-button").onclick = async (e) => {
+    Utils.getElementByClassName("barcode-scanner-overlay-controller").style.display = "block";
+
+    const config = Config.barcodeScannerConfig();
+    config.containerId = Config.barcodeScannerOverlayContainerId();
+    config.onBarcodesDetected = () => {
+
+    };
+    config.onError = onScannerError;
+    config.overlay = { visible: true };
+    config.showFinder = false;
+
+    try {
+      barcodeScanner = await scanbotSDK.createBarcodeScanner(config);
+    } catch (e) {
+      console.log(e.name + ': ' + e.message);
+      alert(e.name + ': ' + e.message);
+      Utils.getElementByClassName("barcode-scanner-overlay-controller").style.display = "none";
     }
   };
 
@@ -380,7 +366,7 @@ window.onload = async () => {
       if (controller.includes("scanbot-camera-controller")) {
         documentScanner.dispose();
         documentScanner = undefined;
-      } else if (controller.includes("barcode-scanner-controller")) {
+      } else if (controller.includes("barcode-scanner-controller") || controller.includes("barcodecode-scanner-overlay-controller")) {
         barcodeScanner.dispose();
         barcodeScanner = undefined;
       } else if (controller.includes("mrz-scanner-controller")) {

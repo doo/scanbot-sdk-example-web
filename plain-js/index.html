@@ -30,6 +30,7 @@
   <div class="content-container">
     <div class="main-list-item document-scanner-button">Document Scanner</div>
     <div class="main-list-item barcode-scanner-button">Barcode Scanner</div>
+    <div class="main-list-item barcode-scanner-overlay-button">Barcode Scanner with AR Overlay</div>
     <div class="main-list-item mrz-scanner-button">MRZ Scanner</div>
     <div class="main-list-item text-data-scanner-button"> Text Data Scanner </div>
     <div class="main-list-item" id="pick-document-button">Pick Document Image</div>
@@ -74,6 +75,26 @@
       </div>
     </nav>
     <div id="barcode-scanner-container" class="view-controller-container">
+      <div class="web-sdk-progress-bar"></div>
+    </div>
+    <div class="action-bar">
+      <div class="barcode-result-container"></div>
+    </div>
+  </div>
+
+  <div class="controller barcode-scanner-overlay-controller">
+    <nav class="navbar navbar-dark">
+      <div class="navbar-brand mb-0 h3">
+        <span class="back-button">&#8249;</span>
+        Barcode Scanner with AR Overlay
+      </div>
+      <div class="spacer"></div>
+      <div class="camera-button-container h3">
+        <span class="camera-swap-button">&#8645;</span>
+        <span class="camera-switch-button">&#8646;</span>
+      </div>
+    </nav>
+    <div id="barcode-scanner-overlay-container" class="view-controller-container">
       <div class="web-sdk-progress-bar"></div>
     </div>
     <div class="action-bar">
