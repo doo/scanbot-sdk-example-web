@@ -26,6 +26,7 @@ export class HomeComponent implements OnInit {
   features: any = [
     { route: RoutePaths.DocumentScanner, name: "Scan Documents" },
     { route: RoutePaths.BarcodeScanner, name: "Scan Barcodes" },
+    { route: RoutePaths.BarcodeScannerWithOverlay, name: "Scan Barcodes with AR overlay" },
     { route: RoutePaths.MrzScanner, name: "Scan MRZ" },
     { route: RoutePaths.TextDataScanner, name: "Text Data Scanner" },
     { id: FeatureId.DocumentPicker, name: "Pick Document image" },

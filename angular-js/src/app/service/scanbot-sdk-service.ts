@@ -73,10 +73,12 @@ export class ScanbotSdkService {
     );
   }
 
-  async scanBarcodes(configuration: BarcodeScannerConfiguration) {
+  async scanBarcodes(configuration: BarcodeScannerConfiguration, finderVisible: boolean = true) {
     this.barcodeScanner = await this.instance.createBarcodeScanner(
       configuration
     );
+
+    this.barcodeScanner.setFinderVisible(finderVisible);
   }
 
   async scanMrz(configuration: MrzScannerConfiguration) {
@@ -160,6 +162,7 @@ export class ScanbotSdkService {
     }
     return await generator.complete();
   }
+  
   async generateTIFF(pages: any[]) {
     const options: TiffGenerationOptions = {
       binarizationFilter: "deepBinarization",
