@@ -28,6 +28,7 @@ import ErrorLabel from "./subviews/error-label";
 import MrzScannerComponent from "./rtu-ui/mrz-scanner-component";
 import { MrzResult } from "scanbot-web-sdk/@types/model/mrz/mrz-result";
 import TextDataScannerComponent from "./rtu-ui/text-data-scanner-component";
+import ResultParser from "./service/result-parser";
 
 export default class App extends React.Component<any, any> {
   constructor(props: any) {
@@ -64,7 +65,6 @@ export default class App extends React.Component<any, any> {
       if (this._barcodeScannerWithOverlay?.isVisible()) {
         this._barcodeScannerWithOverlay?.pop();
       }
-
       if (this._mrzScanner?.isVisible()) {
         this._mrzScanner?.pop();
       }
@@ -397,49 +397,7 @@ export default class App extends React.Component<any, any> {
 
   async onMrzDetected(mrz: MrzResult) {
     ScanbotSdkService.instance.mrzScanner?.pauseDetection();
-
-    let text = "";
-    text =
-      text +
-      "Document Type: " +
-      mrz.documentType?.value +
-      ` (${Number(mrz.documentType?.confidence).toFixed(3)})\n`;
-    text =
-      text +
-      "First Name: " +
-      mrz.givenNames?.value +
-      ` (${Number(mrz.givenNames?.confidence).toFixed(3)})\n`;
-    text =
-      text +
-      "Last Name: " +
-      mrz.surname?.value +
-      ` (${Number(mrz.surname?.confidence).toFixed(3)})\n`;
-    text =
-      text +
-      "Issuing Authority: " +
-      mrz.issuingAuthority?.value +
-      ` (${Number(mrz.issuingAuthority?.confidence).toFixed(3)})\n`;
-    text =
-      text +
-      "Nationality: " +
-      mrz.nationality?.value +
-      ` (${Number(mrz.nationality?.confidence).toFixed(3)})\n`;
-    text =
-      text +
-      "Birth Date: " +
-      mrz.birthDate?.value +
-      ` (${Number(mrz.birthDate?.confidence).toFixed(3)})\n`;
-    text =
-      text +
-      "Gender: " +
-      mrz.gender?.value +
-      ` (${Number(mrz.gender?.confidence).toFixed(3)})\n`;
-    text =
-      text +
-      "Date of Expiry: " +
-      mrz.expiryDate?.value +
-      ` (${Number(mrz.expiryDate?.confidence).toFixed(3)})\n`;
-
+    const text = ResultParser.MRZToString(mrz);
     alert(text);
 
     setTimeout(() => {
