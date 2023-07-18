@@ -103,12 +103,6 @@ export class BarcodeScannerComponent implements OnInit {
   }
 
   async onBarcodesDetected(result: BarcodeResult) {
-
-    if (this.isOverlayScanner()) {
-      // TODO how to handle overlay barcode results?
-      return;
-    }
-
     this.documents.addBarcodes(result.barcodes);
     this.toastr.success(Utils.formatBarcodes(result.barcodes), "Detected Barcodes!");
     const counter = NavigationUtils.getElementByClassName("barcode-counter");
