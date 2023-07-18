@@ -140,8 +140,8 @@ window.onload = async () => {
 
     const config = Config.barcodeScannerConfig();
     config.containerId = Config.barcodeScannerOverlayContainerId();
-    config.onBarcodesDetected = () => {
-
+    config.onBarcodesDetected = (result) => {
+      onBarcodesDetected(result);
     };
     config.onError = onScannerError;
     config.overlay = { visible: true };
@@ -366,7 +366,7 @@ window.onload = async () => {
       if (controller.includes("scanbot-camera-controller")) {
         documentScanner.dispose();
         documentScanner = undefined;
-      } else if (controller.includes("barcode-scanner-controller") || controller.includes("barcodecode-scanner-overlay-controller")) {
+      } else if (controller.includes("barcode-scanner-controller") || controller.includes("barcode-scanner-overlay-controller")) {
         barcodeScanner.dispose();
         barcodeScanner = undefined;
       } else if (controller.includes("mrz-scanner-controller")) {
