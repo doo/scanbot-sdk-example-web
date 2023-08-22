@@ -4,12 +4,14 @@ import { ScanbotSdkService } from "../service/scanbot-sdk-service";
 import { DocumentRepository } from "../service/document-repository";
 import { NavigationUtils } from "../service/navigation-utils";
 import {
+  Barcode,
   BarcodeResult,
   BarcodeScannerConfiguration,
 } from "scanbot-web-sdk/@types";
 import { ToastrService } from "ngx-toastr";
 import { BarcodeFormat } from "scanbot-web-sdk/@types/model/barcode/barcode-format";
 import { Utils } from "../service/utils";
+import { IBarcodePolygonHandle, IBarcodePolygonLabelHandle } from "scanbot-web-sdk/@types/model/configuration/selection-overlay-configuration";
 
 @Component({
   selector: "app-barcode-scanner",
@@ -81,6 +83,13 @@ export class BarcodeScannerComponent implements OnInit {
       preferredCamera: 'camera2 0, facing back',
       overlay: {
         visible: isOverlyScanner,
+        onBarcodeFound: (code: Barcode, polygon: IBarcodePolygonHandle, label: IBarcodePolygonLabelHandle) => {
+          // You can override onBarcodeFound and create your own implementation for custom styling, e.g.
+          // if you wish to only color in certain types of barcodes, you can find and pick them, as demonstrated below:
+          if (code.format === "QR_CODE") {
+            polygon.style({ fill: "rgba(255, 255, 0, 0.3)", stroke: "yellow" })
+          }
+        }
       },
       showFinder: !isOverlyScanner,
     };

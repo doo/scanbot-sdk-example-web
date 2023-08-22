@@ -29,8 +29,7 @@ import MrzScannerComponent from "./rtu-ui/mrz-scanner-component";
 import { MrzResult } from "scanbot-web-sdk/@types/model/mrz/mrz-result";
 import TextDataScannerComponent from "./rtu-ui/text-data-scanner-component";
 import ResultParser from "./service/result-parser";
-import BarcodePolygon from "scanbot-web-sdk/@types/view/barcode-polygon/barocode-polygon";
-import BarcodePolygonLabel from "scanbot-web-sdk/@types/view/barcode-polygon/barcode-polygon-label";
+import { IBarcodePolygonHandle, IBarcodePolygonLabelHandle } from "scanbot-web-sdk/@types/model/configuration/selection-overlay-configuration";
 
 export default class App extends React.Component<any, any> {
   constructor(props: any) {
@@ -165,7 +164,7 @@ export default class App extends React.Component<any, any> {
           additionalConfig={{
             overlay: {
               visible: true,
-              onBarcodeFound: (code: Barcode, polygon: BarcodePolygon, label: BarcodePolygonLabel) => {
+              onBarcodeFound: (code: Barcode, polygon: IBarcodePolygonHandle, label: IBarcodePolygonLabelHandle) => {
                 // You can override onBarcodeFound and create your own implementation for custom styling, e.g.
                 // if you wish to only color in certain types of barcodes, you can find and pick them, as demonstrated below:
                 if (code.format === "QR_CODE") {
