@@ -438,7 +438,7 @@ async function onCameraSwitch(scanner) {
       const cameraIndex = cameras.findIndex((cameraInfo) => { return cameraInfo.deviceId == currentCameraInfo.deviceId });
       const newCameraIndex = (cameraIndex + 1) % (cameras.length);
       alert(`Current camera: ${currentCameraInfo.label}.\nSwitching to: ${cameras[newCameraIndex].label}`)
-      scanner?.switchCamera(cameras[newCameraIndex].deviceId);
+      scanner?.switchCamera(cameras[newCameraIndex].deviceId, false);
     }
   }
 }
