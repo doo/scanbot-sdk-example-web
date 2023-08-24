@@ -73,10 +73,12 @@ export class ScanbotSdkService {
     );
   }
 
-  async scanBarcodes(configuration: BarcodeScannerConfiguration) {
+  async scanBarcodes(configuration: BarcodeScannerConfiguration, finderVisible: boolean = true) {
     this.barcodeScanner = await this.instance.createBarcodeScanner(
       configuration
     );
+
+    this.barcodeScanner.setFinderVisible(finderVisible);
   }
 
   async scanMrz(configuration: MrzScannerConfiguration) {
@@ -160,6 +162,7 @@ export class ScanbotSdkService {
     }
     return await generator.complete();
   }
+  
   async generateTIFF(pages: any[]) {
     const options: TiffGenerationOptions = {
       binarizationFilter: "deepBinarization",
@@ -257,7 +260,7 @@ export class ScanbotSdkService {
         const cameraIndex = cameras.findIndex((cameraInfo) => { return cameraInfo.deviceId == currentCameraInfo.deviceId });
         const newCameraIndex = (cameraIndex + 1) % (cameras.length);
         alert(`Current camera: ${currentCameraInfo.label}.\nSwitching to: ${cameras[newCameraIndex].label}`)
-        scanner?.switchCamera(cameras[newCameraIndex].deviceId);
+        scanner?.switchCamera(cameras[newCameraIndex].deviceId, false);
       }
     }
   }

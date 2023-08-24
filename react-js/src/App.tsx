@@ -28,6 +28,8 @@ import ErrorLabel from "./subviews/error-label";
 import MrzScannerComponent from "./rtu-ui/mrz-scanner-component";
 import { MrzResult } from "scanbot-web-sdk/@types/model/mrz/mrz-result";
 import TextDataScannerComponent from "./rtu-ui/text-data-scanner-component";
+import ResultParser from "./service/result-parser";
+import { IBarcodePolygonHandle, IBarcodePolygonLabelHandle } from "scanbot-web-sdk/@types/model/configuration/selection-overlay-configuration";
 
 export default class App extends React.Component<any, any> {
   constructor(props: any) {
@@ -60,6 +62,9 @@ export default class App extends React.Component<any, any> {
       }
       if (this._barcodeScanner?.isVisible()) {
         this._barcodeScanner?.pop();
+      }
+      if (this._barcodeScannerWithOverlay?.isVisible()) {
+        this._barcodeScannerWithOverlay?.pop();
       }
       if (this._mrzScanner?.isVisible()) {
         this._mrzScanner?.pop();
@@ -96,31 +101,17 @@ export default class App extends React.Component<any, any> {
       <div>
         {this.documentScanner()}
         {this.barcodeScanner()}
+        {this.barcodeScannerWithOverlay()}
         {this.mrzScanner()}
         {this.textDataScanner()}
         {this.scanAndCounter()}
 
-        <Toast
-          alert={this.state.alert}
-          onClose={() => this.setState({ alert: undefined })}
-        />
+        <Toast alert={this.state.alert} onClose={() => this.setState({ alert: undefined })} />
 
-        <AppBar
-          position="fixed"
-          ref={(ref) => (this.navigation = ref)}
-          style={{ zIndex: 19 }}
-        >
-          <NavigationContent
-            backVisible={!NavigationUtils.isAtRoot()}
-            onBackClick={() => this.onBackPress()}
-          />
+        <AppBar position="fixed" ref={(ref) => (this.navigation = ref)} style={{ zIndex: 19 }}>
+          <NavigationContent backVisible={!NavigationUtils.isAtRoot()} onBackClick={() => this.onBackPress()} />
         </AppBar>
-        <div
-          style={{
-            height: this.containerHeight(),
-            marginTop: this.toolbarHeight(),
-          }}
-        >
+        <div style={{ height: this.containerHeight(), marginTop: this.toolbarHeight() }}>
           {this.decideContent()}
         </div>
         <BottomBar
@@ -160,6 +151,35 @@ export default class App extends React.Component<any, any> {
       );
     }
     return this._barcodeScannerHtmlComponent;
+  }
+
+  _barcodeScannerWithOverlayHtmlComponent: any;
+  _barcodeScannerWithOverlay?: BarcodeScannerComponent | null;
+  barcodeScannerWithOverlay() {
+    if (!this._barcodeScannerWithOverlayHtmlComponent) {
+      this._barcodeScannerWithOverlayHtmlComponent = (
+        <BarcodeScannerComponent
+          ref={(ref) => (this._barcodeScannerWithOverlay = ref)}
+          sdk={this.state.sdk}
+          additionalConfig={{
+            overlay: {
+              visible: true,
+              onBarcodeFound: (code: Barcode, polygon: IBarcodePolygonHandle, label: IBarcodePolygonLabelHandle) => {
+                // You can override onBarcodeFound and create your own implementation for custom styling, e.g.
+                // if you wish to only color in certain types of barcodes, you can find and pick them, as demonstrated below:
+                if (code.format === "QR_CODE") {
+                  polygon.style({ fill: "rgba(255, 255, 0, 0.3)", stroke: "yellow" })
+                }
+              }
+            },
+            // When dealing with AR overlay, let's hide the finder and have the whole area be detectable
+            showFinder: false
+          }}
+          onBarcodesDetected={this.onBarcodesDetected.bind(this)}
+        />
+      );
+    }
+    return this._barcodeScannerWithOverlayHtmlComponent;
   }
 
   _mrzScannerHtmlComponent: any;
@@ -391,49 +411,7 @@ export default class App extends React.Component<any, any> {
 
   async onMrzDetected(mrz: MrzResult) {
     ScanbotSdkService.instance.mrzScanner?.pauseDetection();
-
-    let text = "";
-    text =
-      text +
-      "Document Type: " +
-      mrz.documentType?.value +
-      ` (${Number(mrz.documentType?.confidence).toFixed(3)})\n`;
-    text =
-      text +
-      "First Name: " +
-      mrz.givenNames?.value +
-      ` (${Number(mrz.givenNames?.confidence).toFixed(3)})\n`;
-    text =
-      text +
-      "Last Name: " +
-      mrz.surname?.value +
-      ` (${Number(mrz.surname?.confidence).toFixed(3)})\n`;
-    text =
-      text +
-      "Issuing Authority: " +
-      mrz.issuingAuthority?.value +
-      ` (${Number(mrz.issuingAuthority?.confidence).toFixed(3)})\n`;
-    text =
-      text +
-      "Nationality: " +
-      mrz.nationality?.value +
-      ` (${Number(mrz.nationality?.confidence).toFixed(3)})\n`;
-    text =
-      text +
-      "Birth Date: " +
-      mrz.birthDate?.value +
-      ` (${Number(mrz.birthDate?.confidence).toFixed(3)})\n`;
-    text =
-      text +
-      "Gender: " +
-      mrz.gender?.value +
-      ` (${Number(mrz.gender?.confidence).toFixed(3)})\n`;
-    text =
-      text +
-      "Date of Expiry: " +
-      mrz.expiryDate?.value +
-      ` (${Number(mrz.expiryDate?.confidence).toFixed(3)})\n`;
-
+    const text = ResultParser.MRZToString(mrz);
     alert(text);
 
     setTimeout(() => {
@@ -479,6 +457,10 @@ export default class App extends React.Component<any, any> {
     }
     if (feature.id === RoutePath.BarcodeScanner) {
       this._barcodeScanner?.push(AnimationType.PushBottom);
+      return;
+    }
+    if (feature.id === RoutePath.BarcodeScannerWithOverlay) {
+      this._barcodeScannerWithOverlay?.push(AnimationType.PushBottom);
       return;
     }
     if (feature.id === RoutePath.MrzScanner) {

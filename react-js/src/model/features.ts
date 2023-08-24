@@ -13,6 +13,11 @@ export class Features {
       route: RoutePath.BarcodeScanner,
     },
     {
+      id: RoutePath.BarcodeScannerWithOverlay,
+      name: "Barcode Scanner with Overlay",
+      route: RoutePath.BarcodeScannerWithOverlay,
+    },
+    {
       id: RoutePath.MrzScanner,
       name: "Mrz Scanner",
       route: RoutePath.MrzScanner,
