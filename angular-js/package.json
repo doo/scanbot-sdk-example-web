@@ -27,7 +27,7 @@
     "tslib": "1.14.1",
     "zone.js": "0.13.1",
     "@types/node": "^12.19.15",
-    "scanbot-web-sdk": "2.14.0-rc.1"
+    "scanbot-web-sdk": "2.14.0"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "16.1.3",
