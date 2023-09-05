@@ -1,5 +1,5 @@
 export enum RoutePaths {
-  Home = "home",
+  Home = "index.html",
   DocumentScanner = "document-scanner",
   ImageResults = "image-results",
   ImageDetails = "image-details",
