@@ -394,9 +394,10 @@ export default class App extends React.Component<any, any> {
     Pages.instance.add(result);
     ScanbotSdkService.instance.sdk?.utils.flash();
 
-    const blurDetector = await ScanbotSdkService.instance.createBlurDetector();
-    console.log('estimateBlurrinessOnBuffer', await blurDetector?.estimateBlurrinessOnBuffer(result.original));
-    await blurDetector?.release();
+    // console.log("Document detection result:", result);
+    // const blurDetector = await ScanbotSdkService.instance.createBlurDetector();
+    // console.log('estimateBlurrinessOnBuffer', await blurDetector?.estimateBlurrinessOnBuffer(result.original));
+    // await blurDetector?.release();
   }
 
   async onBarcodesDetected(result: BarcodeResult) {
