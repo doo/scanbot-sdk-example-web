@@ -56,6 +56,11 @@ export class ScanbotSdkService {
     this.sdk = await ScanbotSDK.initialize({
       licenseKey: this.license,
       engine: "/",
+
+
+
+      
+      allowThreads: true
     });
     return this.sdk;
   }
