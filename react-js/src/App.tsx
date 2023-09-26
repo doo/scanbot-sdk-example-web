@@ -450,8 +450,6 @@ export default class App extends React.Component<any, any> {
       return;
     }
 
-    console.log("Clicked feature", feature);
-
     if (feature.id === RoutePath.DocumentScanner) {
       this._documentScanner?.push(AnimationType.PushRight);
       return;
