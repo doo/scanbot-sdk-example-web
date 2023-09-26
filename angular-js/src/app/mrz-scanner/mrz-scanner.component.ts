@@ -78,16 +78,16 @@ export class MrzScannerComponent implements OnInit {
   async onMrzDetected(mrz: MrzResult) {
     let text = "";
 
-    text += "Document Type: " + this.parseMRZValue(mrz, 'documentType') + "\n";
-    text += "First Name: " + this.parseMRZValue(mrz, 'givenNames') + "\n";
-    text += "Last Name: " + this.parseMRZValue(mrz, 'surname') + "\n";
-    text += "Issuing Authority: " + this.parseMRZValue(mrz, 'issuingAuthority') + "\n";
-    text += "Nationality: " + this.parseMRZValue(mrz, "nationality") + "\n";
-    text += "Birth Date: " + this.parseMRZValue(mrz, "birthDate") + "\n";
-    text += "Gender: " + this.parseMRZValue(mrz, "gender") + "\n";
-    text += "Date of Expiry: " + this.parseMRZValue(mrz, "expiryDate") + "\n";
-    
-    this.toastr.success(text, "Detected Mrz!");
+    text += "Document Type: " + this.parseMRZValue(mrz, 'documentType') + "<br>";
+    text += "First Name: " + this.parseMRZValue(mrz, 'givenNames') + "<br>";
+    text += "Last Name: " + this.parseMRZValue(mrz, 'surname') + "<br>";
+    text += "Issuing Authority: " + this.parseMRZValue(mrz, 'issuingAuthority') + "<br>";
+    text += "Nationality: " + this.parseMRZValue(mrz, "nationality") + "<br>";
+    text += "Birth Date: " + this.parseMRZValue(mrz, "birthDate") + "<br>";
+    text += "Gender: " + this.parseMRZValue(mrz, "gender") + "<br>";
+    text += "Date of Expiry: " + this.parseMRZValue(mrz, "expiryDate") + "<br>";
+
+    this.toastr.success(text, "Detected Mrz!", { enableHtml: true });
   }
 
   async onScanningDone() {
