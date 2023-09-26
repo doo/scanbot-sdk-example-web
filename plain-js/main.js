@@ -461,19 +461,37 @@ async function onBarcodesDetected(e) {
   Toastify({ text: text.slice(0, -1), duration: 3000, avatar: result }).showToast();
 }
 
+function toConfidenceString(input, key) {
+
+  const confidence = input[key].confidence;
+
+  if (!confidence) {
+    return "";
+  }
+
+  return ` (${Number(confidence).toFixed(3)})`;
+}
+
+function parseMRZValue(input, key) {
+  return input[key] ? (input[key].value + toConfidenceString(input, key)) : ''
+}
+
 async function onMrzDetected(mrz) {
   mrzScanner.pauseDetection();
 
   let text = "";
   if (mrz) {
-    text = text + 'Document Type: ' + (mrz.documentType ? (mrz.documentType.value + ` (${Number(mrz.documentType.confidence).toFixed(3)})`) : '') + '\n';
-    text = text + 'First Name: ' + (mrz.givenNames ? (mrz.givenNames.value + ` (${Number(mrz.givenNames.confidence).toFixed(3)})`) : '') + '\n';
-    text = text + 'Last Name: ' + (mrz.surname ? (mrz.surname.value + ` (${Number(mrz.surname.confidence).toFixed(3)})`) : '') + '\n';
-    text = text + 'Issuing Authority: ' + (mrz.issuingAuthority ? (mrz.issuingAuthority.value + ` (${Number(mrz.issuingAuthority.confidence).toFixed(3)})`) : '') + '\n';
-    text = text + 'Nationality: ' + (mrz.nationality ? (mrz.nationality.value + ` (${Number(mrz.nationality.confidence).toFixed(3)})`) : '') + '\n';
-    text = text + 'Birth Date: ' + (mrz.birthDate ? (mrz.birthDate.value + ` (${Number(mrz.birthDate.confidence).toFixed(3)})`) : '') + '\n';
-    text = text + 'Gender: ' + (mrz.gender ? (mrz.gender.value + ` (${Number(mrz.gender.confidence).toFixed(3)})`) : '') + '\n';
-    text = text + 'Date of Expiry: ' + (mrz.expiryDate ? (mrz.expiryDate.value + ` (${Number(mrz.expiryDate.confidence).toFixed(3)})`) : '') + '\n';
+
+    text += "Document Type: " + parseMRZValue(mrz, "documentType") + "\n";
+    text += "First Name: " + parseMRZValue(mrz, "givenNames") + "\n";
+    text += "Last Name: " + parseMRZValue(mrz, "surname") + "\n";
+    text += "Issuing Authority: " + parseMRZValue(mrz, "issuingAuthority") + "\n";
+    text += "Nationality: " + parseMRZValue(mrz, "nationality") + "\n";
+    text += "Birth Date: " + parseMRZValue(mrz, "birthDate") + "\n";
+    text += "Gender: " + parseMRZValue(mrz, "gender") + "\n";
+    text += "Date of Expiry: " + parseMRZValue(mrz, "expiryDate") + "\n";
+  } else {
+    text = "No MRZ fields detected";
   }
 
   alert(text);
