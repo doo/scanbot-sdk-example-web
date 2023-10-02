@@ -21,6 +21,17 @@ window.onload = async () => {
       autoCaptureSensitivity: 0.66,
       autoCaptureEnabled: true,
       ignoreBadAspectRatio: false,
+      style: {
+        outline: {
+          polygon: {
+            strokeWidth: 40,
+            fillCapturing: "rgba(0, 255, 0, 0.2)",
+            strokeCapturing: "green",
+            fillSearching: "rgba(255, 0, 0, 0.2)",
+            strokeSearching: "red",
+          }
+        }
+      },
       onDocumentDetected: onDocumentDetected,
       onError: onScannerError,
       text: {
