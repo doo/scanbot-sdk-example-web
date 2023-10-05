@@ -3,9 +3,9 @@
 
 <script>
     import { onMount } from 'svelte';
+	import ScanbotSDKService from '../service/scanbot-sdk-service';
     onMount(async () => {
-		// const sdk = (await import('scanbot-web-sdk')).default;
-		// const scanbotSDK = await sdk.initialize({ licenseKey: '' });
-        console.log('Hello from onMount!');
+        ScanbotSDKService.instance.initialize();
+        
 	});
 </script>
