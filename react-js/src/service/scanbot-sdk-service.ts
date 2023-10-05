@@ -56,6 +56,11 @@ export class ScanbotSdkService {
     this.sdk = await ScanbotSDK.initialize({
       licenseKey: this.license,
       engine: "/",
+
+
+
+
+      allowThreads: true
     });
     return this.sdk;
   }
@@ -106,10 +111,19 @@ export class ScanbotSdkService {
           Error_Noise: "Please move the document to a clear surface.",
         },
       },
+      style: {
+        outline: {
+          polygon: {
+            fillCapturing: "rgba(0, 255, 0, 0.2)",
+            strokeCapturing: "green",
+            fillSearching: "rgba(255, 0, 0, 0.2)",
+            strokeSearching: "red",
+          }
+        }
+      },
       onError: errorCallback,
       preferredCamera: 'camera2 0, facing back'
     };
-
     this.documentScanner = await this.sdk!.createDocumentScanner(config);
   }
 
@@ -148,7 +162,7 @@ export class ScanbotSdkService {
       preferredCamera: 'camera2 0, facing back',
       ...additionalConfig
     };
-
+    
     this.barcodeScanner = await this.sdk!.createBarcodeScanner(config);
   }
 

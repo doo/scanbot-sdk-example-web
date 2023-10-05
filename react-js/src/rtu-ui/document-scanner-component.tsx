@@ -21,7 +21,12 @@ export default class DocumentScannerComponent extends BaseScannerComponent {
 
   onDocumentDetected(result: DocumentDetectionResult) {
     this.props.onDocumentDetected(result);
-    document.getElementById("count-label")!.innerHTML = this.labelText();
+    const label = document.getElementById("count-label");
+    
+    if (label) {
+      label.innerHTML = this.labelText();
+    }
+    
   }
 
   onDocumentScannerError(e: Error) {

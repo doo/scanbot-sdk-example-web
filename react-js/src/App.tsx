@@ -394,6 +394,7 @@ export default class App extends React.Component<any, any> {
     Pages.instance.add(result);
     ScanbotSdkService.instance.sdk?.utils.flash();
 
+    console.log("Document detection result:", result);
     const blurDetector = await ScanbotSdkService.instance.createBlurDetector();
     console.log('estimateBlurrinessOnBuffer', await blurDetector?.estimateBlurrinessOnBuffer(result.original));
     await blurDetector?.release();
@@ -448,8 +449,6 @@ export default class App extends React.Component<any, any> {
       );
       return;
     }
-
-    console.log("Clicked feature", feature);
 
     if (feature.id === RoutePath.DocumentScanner) {
       this._documentScanner?.push(AnimationType.PushRight);

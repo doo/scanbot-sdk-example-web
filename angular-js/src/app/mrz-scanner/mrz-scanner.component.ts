@@ -62,58 +62,32 @@ export class MrzScannerComponent implements OnInit {
     alert(e.name + ': ' + e.message);
   }
 
+  toConfidenceString(input: any, key: string): string {
+    const confidence = input[key].confidence;
+
+    if (!confidence) {
+      return "";
+    }
+    return ` (${Number(confidence).toFixed(3)})`
+  }
+
+  parseMRZValue(input: any, key: string) {
+    return input[key] ? (input[key].value + this.toConfidenceString(input, key)) : ''
+  }
+
   async onMrzDetected(mrz: MrzResult) {
     let text = "";
-    text =
-      text +
-      "Document Type: " +
-      mrz.documentType?.value +
-      ` (${Number(mrz.documentType?.confidence).toFixed(3)})` +
-      "\n";
-    text =
-      text +
-      "First Name: " +
-      mrz.givenNames?.value +
-      ` (${Number(mrz.givenNames?.confidence).toFixed(3)})` +
-      "\n";
-    text =
-      text +
-      "Last Name: " +
-      mrz.surname?.value +
-      ` (${Number(mrz.surname?.confidence).toFixed(3)})` +
-      "\n";
-    text =
-      text +
-      "Issuing Authority: " +
-      mrz.issuingAuthority?.value +
-      ` (${Number(mrz.issuingAuthority?.confidence).toFixed(3)})` +
-      "\n";
-    text =
-      text +
-      "Nationality: " +
-      mrz.nationality?.value +
-      ` (${Number(mrz.nationality?.confidence).toFixed(3)})` +
-      "\n";
-    text =
-      text +
-      "Birth Date: " +
-      mrz.birthDate?.value +
-      ` (${Number(mrz.birthDate?.confidence).toFixed(3)})` +
-      "\n";
-    text =
-      text +
-      "Gender: " +
-      mrz.gender?.value +
-      ` (${Number(mrz.gender?.confidence).toFixed(3)})` +
-      "\n";
-    text =
-      text +
-      "Date of Expiry: " +
-      mrz.expiryDate?.value +
-      ` (${Number(mrz.expiryDate?.confidence).toFixed(3)})` +
-      "\n";
 
-    this.toastr.success(text, "Detected Mrz!");
+    text += "Document Type: " + this.parseMRZValue(mrz, 'documentType') + "<br>";
+    text += "First Name: " + this.parseMRZValue(mrz, 'givenNames') + "<br>";
+    text += "Last Name: " + this.parseMRZValue(mrz, 'surname') + "<br>";
+    text += "Issuing Authority: " + this.parseMRZValue(mrz, 'issuingAuthority') + "<br>";
+    text += "Nationality: " + this.parseMRZValue(mrz, "nationality") + "<br>";
+    text += "Birth Date: " + this.parseMRZValue(mrz, "birthDate") + "<br>";
+    text += "Gender: " + this.parseMRZValue(mrz, "gender") + "<br>";
+    text += "Date of Expiry: " + this.parseMRZValue(mrz, "expiryDate") + "<br>";
+
+    this.toastr.success(text, "Detected Mrz!", { enableHtml: true });
   }
 
   async onScanningDone() {
