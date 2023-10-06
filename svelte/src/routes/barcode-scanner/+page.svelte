@@ -1,10 +1,15 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 	import ScanbotSDKService from '../../service/scanbot-sdk-service';
 	import Header from '../../subviews/Header.svelte';
 	onMount(async () => {
-		// ScanbotSDKService.instance.initialize();
+		ScanbotSDKService.instance.createBarcodeScanner("barcode-scanner");
+	});
+	onDestroy(() => {
+		ScanbotSDKService.instance.disposeBarcodeScanner();
 	});
 </script>
 
 <Header title="Barcode Scanner" isBackButtonVisible={true} />
+
+<div id="barcode-scanner" style="width: 100vw; height: 100vh; background-color: pink;"></div>
