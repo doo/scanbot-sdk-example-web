@@ -9,4 +9,4 @@
 	console.log('document-scanner +page.svelte');
 </script>
 
-<Header title="Document Scanner" />
+<Header title="Document Scanner" isBackButtonVisible={true} />

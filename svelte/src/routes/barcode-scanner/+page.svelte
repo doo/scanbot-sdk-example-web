@@ -5,7 +5,6 @@
 	onMount(async () => {
 		// ScanbotSDKService.instance.initialize();
 	});
-
 </script>
 
-<Header title="Barcode Scanner" />
+<Header title="Barcode Scanner" isBackButtonVisible={true} />
