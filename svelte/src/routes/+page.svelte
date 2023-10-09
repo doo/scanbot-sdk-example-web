@@ -5,15 +5,6 @@
 	onMount(async () => {
 		ScanbotSDKService.instance.initialize();
 	});
-
-	function onFeatureClick(sender: any) {
-		const text = (sender.target as HTMLButtonElement).innerText;
-		if (text === 'Document scanner') {
-			window.location.href = '/document-scanner';
-		} else if (text === 'Barcode scanner') {
-			window.location.href = '/barcode-scanner';
-		}
-	}
 </script>
 
 <svelte:head>
@@ -24,8 +15,8 @@
 <Header title="Svelte Example" />
 
 <div class="list">
-	<button on:click={onFeatureClick} class="no-style list-item">Document scanner</button>
-	<button on:click={onFeatureClick} class="no-style list-item">Barcode scanner</button>
+	<a class="no-style list-item" href="document-scanner"><div>Document scanner</div></a>
+	<a class="no-style list-item" href="barcode-scanner"><div>Barcode scanner</div></a>
 </div>
 
 <style>
