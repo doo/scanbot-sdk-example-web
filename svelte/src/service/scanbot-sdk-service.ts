@@ -8,16 +8,16 @@ import type { DocumentScannerConfiguration } from 'scanbot-web-sdk/@types/model/
 import type { DocumentDetectionResult } from 'scanbot-web-sdk/@types/model/document/document-detection-result';
 
 export default class ScanbotSDKService {
-    
+
     public static instance: ScanbotSDKService = new ScanbotSDKService();
-    
+
     private sdk?: ScanbotSDK;
 
     private documentScanner?: IDocumentScannerHandle;
     private barcodeScanner?: IBarcodeScannerHandle;
 
     public async initialize() {
-        // Use dyanic runtime imports to load the SDK else SvelteKit will try to load it before 'window' object is available
+        // Use dyanic inline imports to load the SDK else SvelteKit will try to load it before 'window' object is available
         // Also note that initialize is called after a svelte component is mounted
         const sdk = (await import('scanbot-web-sdk')).default;
         this.sdk = await sdk.initialize({ licenseKey: '' });
@@ -25,7 +25,7 @@ export default class ScanbotSDKService {
 
     public async createDocumentScanner(containerId: string) {
         const config: DocumentScannerConfiguration = {
-            containerId : containerId,
+            containerId: containerId,
             onDocumentDetected: (e: DocumentDetectionResult) => {
                 console.log("Found document: ", JSON.stringify(e));
             },
@@ -43,12 +43,8 @@ export default class ScanbotSDKService {
 
     public async createBarcodeScanner(containerId: string) {
         const config: BarcodeScannerConfiguration = {
-            containerId : containerId,
-            style: {
-                window: {
-                    widthProportion: 0.8,
-                }
-            },
+            containerId: containerId,
+            style: { window: { widthProportion: 0.8, } },
             onBarcodesDetected: (e: BarcodeResult) => {
                 console.log("Found barcode: ", JSON.stringify(e));
             },

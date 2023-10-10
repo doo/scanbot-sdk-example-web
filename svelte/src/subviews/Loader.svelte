@@ -1,9 +1,7 @@
-
 <script lang="ts">
 	export let loading = true;
 
-    import { Jumper } from 'svelte-loading-spinners';
-    
+	import { Jumper } from 'svelte-loading-spinners';
 </script>
 
 {#if loading}
