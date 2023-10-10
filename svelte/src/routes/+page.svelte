@@ -20,6 +20,7 @@
 </div>
 
 <style>
+	/** List styling */
 	.no-style {
 		background: none;
 		color: inherit;
@@ -29,6 +30,7 @@
 		cursor: pointer;
 		outline: inherit;
 		text-align: start;
+		text-decoration: none;
 	}
 	.list {
 		display: flex;
@@ -44,5 +46,10 @@
 		font-weight: 200;
 		font-size: 15px;
 		cursor: pointer;
+	}
+
+	/** Global styles */
+	:global(body) {
+		margin: 0;
 	}
 </style>

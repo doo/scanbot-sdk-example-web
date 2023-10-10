@@ -1,3 +1,4 @@
+
 import type ScanbotSDK from 'scanbot-web-sdk';
 import type { IBarcodeScannerHandle } from 'scanbot-web-sdk/@types/interfaces/i-barcode-scanner-handle';
 import type { BarcodeResult } from 'scanbot-web-sdk/@types/model/barcode/barcode-result';
@@ -11,6 +12,8 @@ export default class ScanbotSDKService {
     barcodeScanner?: IBarcodeScannerHandle;
 
     public async initialize() {
+        // Use dyanic runtime imports to load the SDK else SvelteKit will try to load it before 'window' object is available
+        // Also note that initialize is called after a svelte component is mounted
         const sdk = (await import('scanbot-web-sdk')).default;
         this.sdk = await sdk.initialize({ licenseKey: '' });
     }
@@ -18,6 +21,11 @@ export default class ScanbotSDKService {
     public async createBarcodeScanner(containerId: string) {
         const config: BarcodeScannerConfiguration = {
             containerId : containerId,
+            style: {
+                window: {
+                    widthProportion: 0.8,
+                }
+            },
             onError: (error: unknown) => {
                 console.log("Encountered error in BarcodeScanner: ", error);
             },
