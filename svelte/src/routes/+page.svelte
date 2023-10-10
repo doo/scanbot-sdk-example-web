@@ -1,15 +1,14 @@
 <script lang="ts">
-
 	let loading = true;
 
 	import { onMount } from 'svelte';
 	import ScanbotSDKService from '../service/scanbot-sdk-service';
 	import Header from '../subviews/Header.svelte';
-	import { Jumper } from 'svelte-loading-spinners';
+	import Loader from '../subviews/Loader.svelte';
 
 	onMount(async () => {
 		await ScanbotSDKService.instance.initialize();
-		loading = false
+		loading = false;
 	});
 </script>
 
@@ -19,13 +18,7 @@
 </svelte:head>
 
 <Header title="Svelte Example" />
-
-{#if loading}<div
-	style="width: 100vw; height: 100vh; position: fixed; display: flex; justify-content: center; padding-top: 30%"
->
-	<Jumper size="60" color="#c8193c" unit="px" duration="1s" />
-</div>
-{/if}
+<Loader {loading} />
 
 <div class="list">
 	<a class="no-style list-item" href="document-scanner"><div>Document scanner</div></a>
