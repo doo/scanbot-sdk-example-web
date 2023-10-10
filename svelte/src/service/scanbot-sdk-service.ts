@@ -41,13 +41,11 @@ export default class ScanbotSDKService {
         this.documentScanner?.dispose();
     }
 
-    public async createBarcodeScanner(containerId: string) {
+    public async createBarcodeScanner(containerId: string, onBarcodesDetected: (e: BarcodeResult) => void) {
         const config: BarcodeScannerConfiguration = {
             containerId: containerId,
             style: { window: { widthProportion: 0.8, } },
-            onBarcodesDetected: (e: BarcodeResult) => {
-                console.log("Found barcode: ", JSON.stringify(e));
-            },
+            onBarcodesDetected: onBarcodesDetected,
             onError: (error: Error) => {
                 console.log("Encountered error in BarcodeScanner: ", error);
             },
