@@ -9,11 +9,14 @@ import type { DocumentScannerConfiguration } from 'scanbot-web-sdk/@types/model/
 
 import type { DocumentDetectionResult } from 'scanbot-web-sdk/@types/model/document/document-detection-result';
 import type { BarcodeResult } from 'scanbot-web-sdk/@types/model/barcode/barcode-result';
+import type { CroppingViewConfiguration } from 'scanbot-web-sdk/@types/model/configuration/cropping-view-configuration';
 
 export class Document {
     id?: number;
     base64?: string;
     result?: DocumentDetectionResult;
+
+    rotations?: number;
 }
 
 export default class ScanbotSDKService {
@@ -70,8 +73,8 @@ export default class ScanbotSDKService {
     }
 
     getDocument(id: string | null): Document | undefined {
-		return this.documents.find((d) => d.id === Number(id));
-	}
+        return this.documents.find((d) => d.id === Number(id));
+    }
 
     public async toDataUrl(document: DocumentDetectionResult) {
         return await this.sdk?.toDataUrl(document.cropped ?? document.original);
@@ -93,4 +96,37 @@ export default class ScanbotSDKService {
     public disposeBarcodeScanner() {
         this.barcodeScanner?.dispose();
     }
+
+    async openCroppingView(containerId: string, id: string | null) {
+        const document = this.getDocument(id);
+        if (!document || !document.result) {
+            return;
+        }
+        const configuration: CroppingViewConfiguration = {
+            containerId: containerId,
+            image: document.result.original,
+            polygon: document.result.polygon,
+            disableScroll: true,
+            rotations: document.rotations ?? 0,
+            style: {
+                padding: 20,
+                polygon: {
+                    color: "green",
+                    width: 4,
+                    handles: {
+                        size: 14,
+                        color: "white",
+                        border: "1px solid lightgray",
+                    },
+                },
+                magneticLines: {
+                    // disabled: true,
+                    color: "red",
+                },
+            },
+        };
+
+        await this.sdk?.openCroppingView(configuration);
+    }
+
 }
