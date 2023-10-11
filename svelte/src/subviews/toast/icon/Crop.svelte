@@ -1,12 +1,17 @@
 <script lang="ts">
-    export let color = "white";
-    export let size = 32;
+	export let color = 'white';
+	export let size = 32;
 
-    const fullSize = 54;
-    const scale = size / fullSize;
-    console.log("scale", scale);
+	const fullSize = 54;
+	const scale = size / fullSize;
 </script>
-<svg xmlns="http://www.w3.org/2000/svg" height={fullSize} width={fullSize} style="transform: scale({scale})">
+
+<svg
+	xmlns="http://www.w3.org/2000/svg"
+	height={fullSize}
+	width={fullSize}
+	style="transform: scale({scale})"
+>
 	<path
 		stroke-linejoin="round"
 		stroke={color}

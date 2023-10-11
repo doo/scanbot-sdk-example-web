@@ -10,6 +10,7 @@ import type { DocumentScannerConfiguration } from 'scanbot-web-sdk/@types/model/
 import type { DocumentDetectionResult } from 'scanbot-web-sdk/@types/model/document/document-detection-result';
 import type { BarcodeResult } from 'scanbot-web-sdk/@types/model/barcode/barcode-result';
 import type { CroppingViewConfiguration } from 'scanbot-web-sdk/@types/model/configuration/cropping-view-configuration';
+import type { ICroppingViewHandle } from 'scanbot-web-sdk/@types/interfaces/i-cropping-view-handle';
 
 export class Document {
     id?: number;
@@ -27,6 +28,7 @@ export default class ScanbotSDKService {
 
     private documentScanner?: IDocumentScannerHandle;
     private barcodeScanner?: IBarcodeScannerHandle;
+    private croppingView?: ICroppingViewHandle;
 
     private documents: Document[] = [];
 
@@ -126,7 +128,7 @@ export default class ScanbotSDKService {
             },
         };
 
-        await this.sdk?.openCroppingView(configuration);
+        this.croppingView = await this.sdk?.openCroppingView(configuration);
     }
 
 }

@@ -14,7 +14,7 @@
 
 <div class="image-container">
 	{#if isCroppingViewVisible}
-		<div id="cropping-view" style="width: 100%; height: calc(100vh - 50px); border-radius: 5px" />
+		<div id="cropping-view" style="width: 100%; height: calc(100vh - 100px); border-radius: 5px" />
 	{/if}
 	{#if !isCroppingViewVisible}
 		<img class="document-image" src={document?.base64} alt="<document>" />
@@ -22,13 +22,7 @@
 </div>
 
 <div class="action-item-container">
-	<button
-		class="no-style crop-button"
-		on:click={() => {
-            isCroppingViewVisible = true;
-			ScanbotSDKService.instance.openCroppingView('cropping-view', id);
-		}}><Crop /></button
-	>
+	<a href="image-details/cropping?id={id}" class="no-style crop-button"><Crop /> </a>
 </div>
 
 <style>
