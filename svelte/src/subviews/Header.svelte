@@ -3,48 +3,41 @@
 	export let isBackButtonVisible = false;
 
 	import { ChevronLeftSolid } from 'svelte-awesome-icons';
+
+	function onBackPress() {
+		window.history.back();
+	}
 </script>
 
-<div class="navigation">
-	<button
-		class="no-style back-button"
-		style="display: {isBackButtonVisible ? 'block' : 'none'}; color: white;"
-		on:click={() => window.history.back()}><ChevronLeftSolid size={16} /></button
-	>
-	<div class="navigation-text {isBackButtonVisible && 'no-left-pad'}">Scanbot SDK | {title}</div>
+<div class="container">
+	<button class="no-style back-button {isBackButtonVisible && 'visible'}" on:click={onBackPress}>
+		<ChevronLeftSolid size={16} />
+	</button>
+	<div class="text {isBackButtonVisible && 'no-left-pad'}">Scanbot SDK | {title}</div>
 </div>
 
 <style>
-	.no-style {
-		background: none;
-		color: inherit;
-		border: none;
-		padding: 0;
-		font: inherit;
-		cursor: pointer;
-		outline: inherit;
-		text-align: start;
-	}
 	.back-button {
-		font-family: Inter, sans-serif;
-		font-weight: 200;
 		width: 40px;
 		text-align: center;
 		padding-top: 3px;
+		color: white;
+		display: none;
 	}
-	.navigation {
+	.container {
 		display: flex;
 		background-color: #c8193c;
 		height: 50px;
 	}
-	.navigation-text {
+	.text {
 		color: white;
 		font-size: 15x;
 		margin: auto 20px;
-		font-family: Inter, sans-serif;
-		font-weight: 200;
 	}
 	.no-left-pad {
 		margin-left: 0;
+	}
+	.visible {
+		display: block;
 	}
 </style>

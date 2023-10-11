@@ -1,11 +1,14 @@
 
 import type ScanbotSDK from 'scanbot-web-sdk';
+
 import type { IBarcodeScannerHandle } from 'scanbot-web-sdk/@types/interfaces/i-barcode-scanner-handle';
 import type { IDocumentScannerHandle } from 'scanbot-web-sdk/@types/interfaces/i-document-scanner-handle';
-import type { BarcodeResult } from 'scanbot-web-sdk/@types/model/barcode/barcode-result';
+
 import type { BarcodeScannerConfiguration } from 'scanbot-web-sdk/@types/model/configuration/barcode-scanner-configuration';
 import type { DocumentScannerConfiguration } from 'scanbot-web-sdk/@types/model/configuration/document-scanner-configuration';
+
 import type { DocumentDetectionResult } from 'scanbot-web-sdk/@types/model/document/document-detection-result';
+import type { BarcodeResult } from 'scanbot-web-sdk/@types/model/barcode/barcode-result';
 
 export class Document {
     base64?: string;
@@ -28,7 +31,7 @@ export default class ScanbotSDKService {
         if (this.sdk && this.sdk.initialized) {
             // The SDK needs to be initialized just once during the entire app's lifecycle
             return;
-        } 
+        }
         // Use dyanic inline imports to load the SDK else SvelteKit will try to load it before 'window' object is available
         // Also note that this initialize function is called after a svelte component is mounted
         const sdk = (await import('scanbot-web-sdk')).default;
@@ -40,7 +43,7 @@ export default class ScanbotSDKService {
             containerId: containerId,
             onDocumentDetected: async (e: DocumentDetectionResult) => {
                 console.log("Detected document!");
-                
+
                 // Make use of ScanbotSDK utility function flash to indicate that a document has been detected
                 this.sdk?.utils.flash();
 

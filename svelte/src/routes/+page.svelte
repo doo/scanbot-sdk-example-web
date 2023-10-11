@@ -58,4 +58,15 @@
 		font-family: Inter, sans-serif;
 		font-weight: 200;
 	}
+
+	:global(.no-style) {
+		background: none;
+		color: inherit;
+		border: none;
+		padding: 0;
+		font: inherit;
+		cursor: pointer;
+		outline: inherit;
+		text-align: start;
+	}
 </style>
