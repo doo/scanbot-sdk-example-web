@@ -30,6 +30,7 @@
 		font-weight: 200;
 		width: 40px;
 		text-align: center;
+		padding-top: 3px;
 	}
 	.navigation {
 		display: flex;

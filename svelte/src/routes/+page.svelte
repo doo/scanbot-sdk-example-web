@@ -23,6 +23,7 @@
 <div class="list">
 	<a class="no-style list-item" href="document-scanner"><div>Document scanner</div></a>
 	<a class="no-style list-item" href="barcode-scanner"><div>Barcode scanner</div></a>
+	<a class="no-style list-item" href="image-results"><div>Image Results</div></a>
 </div>
 
 <style>
@@ -47,9 +48,6 @@
 		margin: 10px;
 		padding-bottom: 10px;
 		border-bottom: 1px solid lightgray;
-
-		font-family: Inter, sans-serif;
-		font-weight: 200;
 		font-size: 15px;
 		cursor: pointer;
 	}
@@ -57,5 +55,7 @@
 	/** Global styles */
 	:global(body) {
 		margin: 0;
+		font-family: Inter, sans-serif;
+		font-weight: 200;
 	}
 </style>

@@ -17,6 +17,11 @@ export default class ScanbotSDKService {
     private barcodeScanner?: IBarcodeScannerHandle;
 
     public async initialize() {
+
+        if (this.sdk && this.sdk.initialized) {
+            // The SDK needs to be initialized just once during the entire app's lifecycle
+            return;
+        } 
         // Use dyanic inline imports to load the SDK else SvelteKit will try to load it before 'window' object is available
         // Also note that initialize is called after a svelte component is mounted
         const sdk = (await import('scanbot-web-sdk')).default;
