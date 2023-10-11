@@ -7,6 +7,11 @@ import type { BarcodeScannerConfiguration } from 'scanbot-web-sdk/@types/model/c
 import type { DocumentScannerConfiguration } from 'scanbot-web-sdk/@types/model/configuration/document-scanner-configuration';
 import type { DocumentDetectionResult } from 'scanbot-web-sdk/@types/model/document/document-detection-result';
 
+export class Document {
+    base64?: string;
+    result?: DocumentDetectionResult;
+}
+
 export default class ScanbotSDKService {
 
     public static instance: ScanbotSDKService = new ScanbotSDKService();
@@ -16,6 +21,8 @@ export default class ScanbotSDKService {
     private documentScanner?: IDocumentScannerHandle;
     private barcodeScanner?: IBarcodeScannerHandle;
 
+    private documents: Document[] = [];
+
     public async initialize() {
 
         if (this.sdk && this.sdk.initialized) {
@@ -23,7 +30,7 @@ export default class ScanbotSDKService {
             return;
         } 
         // Use dyanic inline imports to load the SDK else SvelteKit will try to load it before 'window' object is available
-        // Also note that initialize is called after a svelte component is mounted
+        // Also note that this initialize function is called after a svelte component is mounted
         const sdk = (await import('scanbot-web-sdk')).default;
         this.sdk = await sdk.initialize({ licenseKey: '' });
     }
@@ -31,11 +38,13 @@ export default class ScanbotSDKService {
     public async createDocumentScanner(containerId: string) {
         const config: DocumentScannerConfiguration = {
             containerId: containerId,
-            onDocumentDetected: (e: DocumentDetectionResult) => {
-                console.log("Found document: ", JSON.stringify(e));
+            onDocumentDetected: async (e: DocumentDetectionResult) => {
+                console.log("Detected document: ", JSON.stringify(e));
+                const base64 = await ScanbotSDKService.instance.toDataUrl(e)
+                this.documents.push({ base64: base64, result: e });
             },
             onError: (error: Error) => {
-                console.log("Encountered error in DocumentScanner: ", error);
+                console.log("Encountered error scanning documents: ", error);
             }
 
         };
@@ -46,13 +55,21 @@ export default class ScanbotSDKService {
         this.documentScanner?.dispose();
     }
 
+    public getDocuments() {
+        return this.documents;
+    }
+
+    public async toDataUrl(document: DocumentDetectionResult) {
+        return await this.sdk?.toDataUrl(document.cropped ?? document.original);
+    }
+
     public async createBarcodeScanner(containerId: string, onBarcodesDetected: (e: BarcodeResult) => void) {
         const config: BarcodeScannerConfiguration = {
             containerId: containerId,
             style: { window: { widthProportion: 0.8, } },
             onBarcodesDetected: onBarcodesDetected,
             onError: (error: Error) => {
-                console.log("Encountered error in BarcodeScanner: ", error);
+                console.log("Encountered error scanning barcodes: ", error);
             },
         };
 
