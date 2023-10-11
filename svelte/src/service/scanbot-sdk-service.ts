@@ -131,4 +131,19 @@ export default class ScanbotSDKService {
         this.croppingView = await this.sdk?.openCroppingView(configuration);
     }
 
+    async applyCrop(id: string | null) {
+        const result = await this.croppingView?.apply();
+
+        const document = this.getDocument(id);
+        if (!document || !document.result) {
+            return
+        }
+
+        document.result.cropped = result?.image;
+        document.result.polygon = result?.polygon;
+        document.rotations = result?.rotations;
+
+        document.base64 = await this.sdk?.toDataUrl(document.result.cropped ?? document.result.original);
+    }
+
 }

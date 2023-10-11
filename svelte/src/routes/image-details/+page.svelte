@@ -13,12 +13,7 @@
 <Header title="Image Details" isBackButtonVisible={true} />
 
 <div class="image-container">
-	{#if isCroppingViewVisible}
-		<div id="cropping-view" style="width: 100%; height: calc(100vh - 100px); border-radius: 5px" />
-	{/if}
-	{#if !isCroppingViewVisible}
-		<img class="document-image" src={document?.base64} alt="<document>" />
-	{/if}
+	<img class="document-image" src={document?.base64} alt="<document>" />
 </div>
 
 <div class="action-item-container">

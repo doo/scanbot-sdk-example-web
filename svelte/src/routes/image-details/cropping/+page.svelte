@@ -8,13 +8,13 @@
 
 	const id = $page.url.searchParams.get('id');
 	const document = ScanbotSDKService.instance.getDocument(id);
-    
-    onMount(async () => {
-        await ScanbotSDKService.instance.openCroppingView("cropping-view", id);
-    });
+
+	onMount(async () => {
+		await ScanbotSDKService.instance.openCroppingView('cropping-view', id);
+	});
 </script>
 
-<Header title="Image Details" isBackButtonVisible={true} />
+<Header title="Crop" isBackButtonVisible={true} />
 
 <div class="image-container">
 	<div id="cropping-view" />
@@ -24,13 +24,14 @@
 	<button
 		class="no-style crop-button"
 		on:click={() => {
-			console.log('asdf');
+			window.history.back();
 		}}><Cancel /></button
 	>
 	<button
 		class="no-style crop-button"
-		on:click={() => {
-			console.log('asdf');
+		on:click={async () => {
+			await ScanbotSDKService.instance.applyCrop(id);
+			window.history.back();
 		}}><Apply /></button
 	>
 </div>
