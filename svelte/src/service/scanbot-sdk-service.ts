@@ -11,6 +11,7 @@ import type { DocumentDetectionResult } from 'scanbot-web-sdk/@types/model/docum
 import type { BarcodeResult } from 'scanbot-web-sdk/@types/model/barcode/barcode-result';
 
 export class Document {
+    id?: number;
     base64?: string;
     result?: DocumentDetectionResult;
 }
@@ -50,7 +51,7 @@ export default class ScanbotSDKService {
                 // Pre-process the image to be displayed in the image result gallery.
                 const base64 = await ScanbotSDKService.instance.toDataUrl(e);
 
-                this.documents.push({ base64: base64, result: e });
+                this.documents.push({ id: Math.floor(Math.random() * 10000), base64: base64, result: e });
             },
             onError: (error: Error) => {
                 console.log("Encountered error scanning documents: ", error);
@@ -67,6 +68,10 @@ export default class ScanbotSDKService {
     public getDocuments() {
         return this.documents;
     }
+
+    getDocument(id: string | null): Document | undefined {
+		return this.documents.find((d) => d.id === Number(id));
+	}
 
     public async toDataUrl(document: DocumentDetectionResult) {
         return await this.sdk?.toDataUrl(document.cropped ?? document.original);

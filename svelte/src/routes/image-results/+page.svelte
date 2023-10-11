@@ -17,14 +17,16 @@
 <div class="document-gallery">
 	{#each documents as document}
 		<div class="image-container">
-			<img class="document-image" src={document.base64} alt="<document>" />
+			<a href="image-details?id={document.id}">
+				<img class="document-image" src={document.base64} alt="<document>" />
+			</a>
 		</div>
 	{/each}
 </div>
 
 <style>
 	.document-gallery {
-        margin-top: 10%;
+		margin-top: 10%;
 		display: flex;
 		flex-wrap: wrap;
 		justify-content: center;

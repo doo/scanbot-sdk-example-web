@@ -17,17 +17,17 @@
 </div>
 
 <style>
+	.container {
+		display: flex;
+		background-color: #c8193c;
+		height: 50px;
+	}
 	.back-button {
 		width: 40px;
 		text-align: center;
 		padding-top: 3px;
 		color: white;
 		display: none;
-	}
-	.container {
-		display: flex;
-		background-color: #c8193c;
-		height: 50px;
 	}
 	.text {
 		color: white;
