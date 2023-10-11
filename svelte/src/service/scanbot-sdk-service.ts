@@ -39,8 +39,14 @@ export default class ScanbotSDKService {
         const config: DocumentScannerConfiguration = {
             containerId: containerId,
             onDocumentDetected: async (e: DocumentDetectionResult) => {
-                console.log("Detected document: ", JSON.stringify(e));
-                const base64 = await ScanbotSDKService.instance.toDataUrl(e)
+                console.log("Detected document!");
+                
+                // Make use of ScanbotSDK utility function flash to indicate that a document has been detected
+                this.sdk?.utils.flash();
+
+                // Pre-process the image to be displayed in the image result gallery.
+                const base64 = await ScanbotSDKService.instance.toDataUrl(e);
+
                 this.documents.push({ base64: base64, result: e });
             },
             onError: (error: Error) => {
