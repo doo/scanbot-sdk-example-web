@@ -2,7 +2,7 @@
 	import { page } from '$app/stores';
 	import ScanbotSDKService from '../../service/scanbot-sdk-service';
 	import Header from '../../subviews/Header.svelte';
-	import Footer from '../../subviews/Footer.svelte';
+	import Crop from '../../subviews/toast/icon/Crop.svelte';
 
 	const id = $page.url.searchParams.get('id');
 	const document = ScanbotSDKService.instance.getDocument(id);
@@ -12,6 +12,15 @@
 
 <div class="image-container">
 	<img class="document-image" src={document?.base64} alt="<document>" />
+</div>
+
+<div class="action-item-container">
+	<button
+		class="no-style crop-button"
+		on:click={() => {
+			console.log('onclick');
+		}}><Crop /></button
+	>
 </div>
 
 <style>
@@ -25,5 +34,23 @@
 		border-radius: 5px;
 		max-width: 100%;
 		vertical-align: middle;
+	}
+    .action-item-container {
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+    }
+	.crop-button {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 60px;
+		height: 60px;
+		border-radius: 50%;
+		border: none;
+		outline: none;
+		cursor: pointer;
+		background-color: #c8193c;
+        box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 	}
 </style>
