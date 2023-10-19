@@ -1,4 +1,4 @@
-Open Source libraries used in Scanbot Web SDK v3.0.0
+Open Source libraries used in Scanbot Web SDK v3.0.1
 ----------------------------------------------------------------------------------------
 
 TensorFlow.js 4.10.0
