@@ -2,9 +2,9 @@
 	let isCroppingViewVisible = false;
 
 	import { page } from '$app/stores';
-	import ScanbotSDKService from '../../service/scanbot-sdk-service';
-	import Header from '../../subviews/Header.svelte';
-	import Crop from '../../subviews/toast/icon/Crop.svelte';
+	import ScanbotSDKService from '../../../service/scanbot-sdk-service';
+	import Header from '../../../subviews/Header.svelte';
+	import Crop from '../../../subviews/toast/icon/Crop.svelte';
 
 	const id = $page.url.searchParams.get('id');
 	const document = ScanbotSDKService.instance.getDocument(id);

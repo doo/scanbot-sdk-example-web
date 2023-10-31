@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import ScanbotSDKService from '../../../service/scanbot-sdk-service';
-	import Apply from '../../../subviews/toast/icon/Apply.svelte';
-	import Cancel from '../../../subviews/toast/icon/Cancel.svelte';
-	import Header from '../../../subviews/Header.svelte';
+	import ScanbotSDKService from '../../../../service/scanbot-sdk-service';
+	import Apply from '../../../../subviews/toast/icon/Apply.svelte';
+	import Cancel from '../../../../subviews/toast/icon/Cancel.svelte';
+	import Header from '../../../../subviews/Header.svelte';
 	import { onMount } from 'svelte';
 
 	const id = $page.url.searchParams.get('id');
