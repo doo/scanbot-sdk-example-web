@@ -38,8 +38,8 @@ export default class ScanbotSDKService {
             // The SDK needs to be initialized just once during the entire app's lifecycle
             return;
         }
-        // Use dyanic inline imports to load the SDK else SvelteKit will try to load it before 'window' object is available
-        // Also note that this initialize function is called after a svelte component is mounted
+        // Use dynamic inline imports to load the SDK, as SvelteKit may attempt to load it before the 'window' object becomes available.
+        // Please be aware that this initialization function is invoked after a Svelte component has been mounted.
         const sdk = (await import('scanbot-web-sdk')).default;
         this.sdk = await sdk.initialize({ licenseKey: '' });
     }
@@ -55,8 +55,7 @@ export default class ScanbotSDKService {
 
                 // Pre-process the image to be displayed in the image result gallery.
                 const base64 = await ScanbotSDKService.instance.toDataUrl(e);
-
-                this.documents.push({ id: Math.floor(Math.random() * 10000), base64: base64, result: e });
+                this.addDocument(base64, e);
             },
             onError: (error: Error) => {
                 console.log("Encountered error scanning documents: ", error);
@@ -64,6 +63,13 @@ export default class ScanbotSDKService {
 
         };
         this.documentScanner = await this.sdk?.createDocumentScanner(config);
+    }
+
+    private nextId: number = 0
+    addDocument(base64: string | undefined, result: DocumentDetectionResult) {
+        const document = { id: this.nextId, base64, result };
+        this.documents.push(document);
+        this.nextId++;
     }
 
     public async disposeDocumentScanner() {

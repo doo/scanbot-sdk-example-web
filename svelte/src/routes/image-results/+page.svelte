@@ -17,7 +17,7 @@
 <div class="document-gallery">
 	{#each documents as document}
 		<div class="image-container">
-			<a href="image-details?id={document.id}">
+			<a href="image-results/image-details?id={document.id}">
 				<img class="document-image" src={document.base64} alt="<document>" />
 			</a>
 		</div>

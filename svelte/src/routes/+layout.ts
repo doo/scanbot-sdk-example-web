@@ -1,4 +1,4 @@
 
 export const ssr = false;
-export const trailingSlash = 'always';
+export const trailingSlash = 'never';
 export const prerender = false;

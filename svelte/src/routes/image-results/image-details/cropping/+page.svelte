@@ -7,11 +7,11 @@
 	import { onMount } from 'svelte';
 
 	const id = $page.url.searchParams.get('id');
-	const document = ScanbotSDKService.instance.getDocument(id);
 
 	onMount(async () => {
 		await ScanbotSDKService.instance.openCroppingView('cropping-view', id);
 	});
+	
 </script>
 
 <Header title="Crop" isBackButtonVisible={true} />
@@ -32,8 +32,10 @@
 		on:click={async () => {
 			await ScanbotSDKService.instance.applyCrop(id);
 			window.history.back();
-		}}><Apply /></button
+		}}
 	>
+		<Apply />
+	</button>
 </div>
 
 <style>
