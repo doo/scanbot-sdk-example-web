@@ -41,7 +41,11 @@ export default class ScanbotSDKService {
         // Use dynamic inline imports to load the SDK, as SvelteKit may attempt to load it before the 'window' object becomes available.
         // Please be aware that this initialization function is invoked after a Svelte component has been mounted.
         const sdk = (await import('scanbot-web-sdk')).default;
-        this.sdk = await sdk.initialize({ licenseKey: '' });
+        this.sdk = await sdk.initialize({
+            licenseKey: '',
+            // You can also use CDN to load the correct SDK binary, but be sure to use the correct version number
+            // engine: "https://cdn.jsdelivr.net/npm/scanbot-web-sdk@latest/bundle/bin/barcode-scanner/"
+        });
     }
 
     public async createDocumentScanner(containerId: string) {
