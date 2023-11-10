@@ -1,13 +1,18 @@
 <script lang="ts">
-	let isCroppingViewVisible = false;
-
 	import { page } from '$app/stores';
+	import { onMount } from 'svelte';
 	import ScanbotSDKService from '../../../service/scanbot-sdk-service';
 	import Header from '../../../subviews/Header.svelte';
 	import Crop from '../../../subviews/toast/icon/Crop.svelte';
+	import type { Document } from '../../../service/scanbot-sdk-service';
 
-	const id = $page.url.searchParams.get('id');
-	const document = ScanbotSDKService.instance.getDocument(id);
+	let id: string | undefined;
+	let document: Document | undefined;
+
+	onMount(async () => {
+		id = $page.url.searchParams.get('id') ?? undefined;
+		document = ScanbotSDKService.instance.getDocument(id);
+	});
 </script>
 
 <Header title="Image Details" isBackButtonVisible={true} />

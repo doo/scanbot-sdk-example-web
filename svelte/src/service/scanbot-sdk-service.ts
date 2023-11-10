@@ -41,7 +41,10 @@ export default class ScanbotSDKService {
         // Use dynamic inline imports to load the SDK, as SvelteKit may attempt to load it before the 'window' object becomes available.
         // Please be aware that this initialization function is invoked after a Svelte component has been mounted.
         const sdk = (await import('scanbot-web-sdk')).default;
-        this.sdk = await sdk.initialize({ licenseKey: '' });
+        this.sdk = await sdk.initialize({ 
+            licenseKey: '',
+            engine: "https://cdn.jsdelivr.net/npm/scanbot-web-sdk@latest/bundle/bin/barcode-scanner/"
+         });
     }
 
     public async createDocumentScanner(containerId: string) {
@@ -80,7 +83,7 @@ export default class ScanbotSDKService {
         return this.documents;
     }
 
-    getDocument(id: string | null): Document | undefined {
+    getDocument(id: string | undefined): Document | undefined {
         return this.documents.find((d) => d.id === Number(id));
     }
 
@@ -89,8 +92,14 @@ export default class ScanbotSDKService {
     }
 
     public async createBarcodeScanner(containerId: string, onBarcodesDetected: (e: BarcodeResult) => void) {
+        
         const config: BarcodeScannerConfiguration = {
             containerId: containerId,
+            overlay: {visible : true, textFormat: 'TextAndFormat', automaticSelectionEnabled: false,
+             style: {highlightedTextColor: '#EC3D67', highlightedPolygonStrokeColor: '#3DEC4A'}
+            }, //red and green color
+            // engineMode: 'NEXT_GEN',
+            captureDelay: 10000,
             style: { window: { widthProportion: 0.8, } },
             onBarcodesDetected: onBarcodesDetected,
             onError: (error: Error) => {
@@ -105,7 +114,7 @@ export default class ScanbotSDKService {
         this.barcodeScanner?.dispose();
     }
 
-    async openCroppingView(containerId: string, id: string | null) {
+    async openCroppingView(containerId: string, id: string | undefined) {
         const document = this.getDocument(id);
         if (!document || !document.result) {
             return;
@@ -137,7 +146,7 @@ export default class ScanbotSDKService {
         this.croppingView = await this.sdk?.openCroppingView(configuration);
     }
 
-    async applyCrop(id: string | null) {
+    async applyCrop(id: string | undefined) {
         const result = await this.croppingView?.apply();
 
         const document = this.getDocument(id);

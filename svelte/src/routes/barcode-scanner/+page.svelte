@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onDestroy, onMount } from 'svelte';
-	import { addToast } from "../../subviews/toast/store";
+	import { addToast } from '../../subviews/toast/store';
 
 	import ScanbotSDKService from '../../service/scanbot-sdk-service';
 	import Header from '../../subviews/Header.svelte';
@@ -19,8 +19,8 @@
 				const message = `${code.format} - ${code.text}`;
 				const timeout = 3000;
 				const dismissible = false;
-				const type = "success";
-				
+				const type = 'success';
+
 				addToast({ message, type, dismissible, timeout });
 			}
 		});

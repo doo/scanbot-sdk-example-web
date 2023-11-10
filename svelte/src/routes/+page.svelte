@@ -1,6 +1,6 @@
 <script lang="ts">
 	let loading = true;
-
+    
 	import { onMount } from 'svelte';
 	import ScanbotSDKService from '../service/scanbot-sdk-service';
 	import Header from '../subviews/Header.svelte';

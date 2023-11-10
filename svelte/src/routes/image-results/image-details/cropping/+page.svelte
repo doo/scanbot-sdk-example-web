@@ -6,9 +6,10 @@
 	import Header from '../../../../subviews/Header.svelte';
 	import { onMount } from 'svelte';
 
-	const id = $page.url.searchParams.get('id');
-
+	let id: string | undefined;
+	
 	onMount(async () => {
+		id = $page.url.searchParams.get("id") ?? undefined;
 		await ScanbotSDKService.instance.openCroppingView('cropping-view', id);
 	});
 	
