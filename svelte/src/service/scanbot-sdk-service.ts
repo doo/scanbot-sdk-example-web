@@ -11,9 +11,11 @@ import type { DocumentDetectionResult } from 'scanbot-web-sdk/@types/model/docum
 import type { BarcodeResult } from 'scanbot-web-sdk/@types/model/barcode/barcode-result';
 import type { CroppingViewConfiguration } from 'scanbot-web-sdk/@types/model/configuration/cropping-view-configuration';
 import type { ICroppingViewHandle } from 'scanbot-web-sdk/@types/interfaces/i-cropping-view-handle';
+import StorageService from './storage-service';
+import Utils from '../utils/utils';
 
-export class Document {
-    id?: number;
+export class ScanbotDocument {
+    id?: string;
     base64?: string;
     result?: DocumentDetectionResult;
 
@@ -30,7 +32,7 @@ export default class ScanbotSDKService {
     private barcodeScanner?: IBarcodeScannerHandle;
     private croppingView?: ICroppingViewHandle;
 
-    private documents: Document[] = [];
+    private documents: ScanbotDocument[] = [];
 
     public async initialize() {
 
@@ -46,6 +48,8 @@ export default class ScanbotSDKService {
             // You can also use CDN to load the correct SDK binary, but be sure to use the correct version number
             // engine: "https://cdn.jsdelivr.net/npm/scanbot-web-sdk@latest/bundle/bin/barcode-scanner/"
         });
+
+        StorageService.INSTANCE.getDocuments().forEach((d) => this.documents.push(d));
     }
 
     public async createDocumentScanner(containerId: string) {
@@ -69,11 +73,10 @@ export default class ScanbotSDKService {
         this.documentScanner = await this.sdk?.createDocumentScanner(config);
     }
 
-    private nextId: number = 0
     addDocument(base64: string | undefined, result: DocumentDetectionResult) {
-        const document = { id: this.nextId, base64, result };
+        const document = { id: Utils.generateId(), base64, result };
         this.documents.push(document);
-        this.nextId++;
+        StorageService.INSTANCE.storeDocument(document);
     }
 
     public async disposeDocumentScanner() {
@@ -84,8 +87,8 @@ export default class ScanbotSDKService {
         return this.documents;
     }
 
-    getDocument(id: string | undefined): Document | undefined {
-        return this.documents.find((d) => d.id === Number(id));
+    getDocument(id: string | undefined): ScanbotDocument | undefined {
+        return this.documents.find((d) => d.id === id);
     }
 
     public async toDataUrl(document: DocumentDetectionResult) {

@@ -4,10 +4,10 @@
 	import ScanbotSDKService from '../../../service/scanbot-sdk-service';
 	import Header from '../../../subviews/Header.svelte';
 	import Crop from '../../../subviews/toast/icon/Crop.svelte';
-	import type { Document } from '../../../service/scanbot-sdk-service';
+	import type { ScanbotDocument } from '../../../service/scanbot-sdk-service';
 
 	let id: string | undefined;
-	let document: Document | undefined;
+	let document: ScanbotDocument | undefined;
 
 	onMount(async () => {
 		id = $page.url.searchParams.get('id') ?? undefined;
