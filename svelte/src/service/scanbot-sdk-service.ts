@@ -32,7 +32,7 @@ export default class ScanbotSDKService {
     private barcodeScanner?: IBarcodeScannerHandle;
     private croppingView?: ICroppingViewHandle;
 
-    private documents: ScanbotDocument[] = [];
+    private documents!: ScanbotDocument[];
 
     public async initialize() {
 
@@ -49,7 +49,13 @@ export default class ScanbotSDKService {
             // engine: "https://cdn.jsdelivr.net/npm/scanbot-web-sdk@latest/bundle/bin/barcode-scanner/"
         });
 
-        StorageService.INSTANCE.getDocuments().forEach((d) => this.documents.push(d));
+        ScanbotSDKService.instance.loadDocuments();
+    }
+
+    public loadDocuments() {
+        if (!this.documents) {
+            this.documents = StorageService.INSTANCE.getDocuments();
+        }
     }
 
     public async createDocumentScanner(containerId: string) {
@@ -84,10 +90,12 @@ export default class ScanbotSDKService {
     }
 
     public getDocuments() {
+        ScanbotSDKService.instance.loadDocuments();
         return this.documents;
     }
 
     getDocument(id: string | undefined): ScanbotDocument | undefined {
+        ScanbotSDKService.instance.loadDocuments();
         return this.documents.find((d) => d.id === id);
     }
 

@@ -1,9 +1,14 @@
 <script lang="ts">
-	import ScanbotSDKService from '../../service/scanbot-sdk-service';
+	import { onMount } from 'svelte';
+	import ScanbotSDKService, { ScanbotDocument } from '../../service/scanbot-sdk-service';
 	import Header from '../../subviews/Header.svelte';
 
-	let documents = ScanbotSDKService.instance.getDocuments();
-	console.log('Total documents:', documents.length);
+	let documents: ScanbotDocument[] = [];
+	
+	onMount(async () => {
+		documents = ScanbotSDKService.instance.getDocuments();
+		console.log('Total documents:', documents.length);
+	});
 </script>
 
 <Header title="Image Results" isBackButtonVisible={true} />
