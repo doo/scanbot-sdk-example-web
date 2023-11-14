@@ -6,7 +6,7 @@
 	let documents: ScanbotDocument[] = [];
 	
 	onMount(async () => {
-		documents = ScanbotSDKService.instance.getDocuments();
+		documents = await ScanbotSDKService.instance.getDocuments();
 		console.log('Total documents:', documents.length);
 	});
 </script>

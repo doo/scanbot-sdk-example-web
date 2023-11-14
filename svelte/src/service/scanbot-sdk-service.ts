@@ -13,12 +13,14 @@ import type { CroppingViewConfiguration } from 'scanbot-web-sdk/@types/model/con
 import type { ICroppingViewHandle } from 'scanbot-web-sdk/@types/interfaces/i-cropping-view-handle';
 import StorageService from './storage-service';
 import Utils from '../utils/utils';
+import type { Polygon } from 'scanbot-web-sdk/@types/utils/dto/Polygon';
 
 export class ScanbotDocument {
     id?: string;
     base64?: string;
-    result?: DocumentDetectionResult;
-
+    cropped?: Uint8Array | string; 
+    original!: Uint8Array | string;
+    polygon?: Polygon;
     rotations?: number;
 }
 
@@ -52,9 +54,9 @@ export default class ScanbotSDKService {
         ScanbotSDKService.instance.loadDocuments();
     }
 
-    public loadDocuments() {
+    public async loadDocuments() {
         if (!this.documents) {
-            this.documents = StorageService.INSTANCE.getDocuments();
+            this.documents = await StorageService.INSTANCE.getDocuments();
         }
     }
 
@@ -69,7 +71,7 @@ export default class ScanbotSDKService {
 
                 // Pre-process the image to be displayed in the image result gallery.
                 const base64 = await ScanbotSDKService.instance.toDataUrl(e);
-                this.addDocument(base64, e);
+                await this.addDocument(base64, e);
             },
             onError: (error: Error) => {
                 console.log("Encountered error scanning documents: ", error);
@@ -79,23 +81,32 @@ export default class ScanbotSDKService {
         this.documentScanner = await this.sdk?.createDocumentScanner(config);
     }
 
-    addDocument(base64: string | undefined, result: DocumentDetectionResult) {
-        const document = { id: Utils.generateId(), base64, result };
+    async addDocument(base64: string | undefined, result: DocumentDetectionResult) {
+        const document = {
+            id: Utils.generateId(),
+            base64: base64,
+            original: result.original,
+            cropped: result.cropped,
+            polygon: result.polygon
+        };
+
         this.documents.push(document);
-        StorageService.INSTANCE.storeDocument(document);
+        console.log("adding document", document);
+
+        await StorageService.INSTANCE.storeDocument(document);
     }
 
     public async disposeDocumentScanner() {
         this.documentScanner?.dispose();
     }
 
-    public getDocuments() {
-        ScanbotSDKService.instance.loadDocuments();
+    public async getDocuments() {
+        await ScanbotSDKService.instance.loadDocuments();
         return this.documents;
     }
 
-    getDocument(id: string | undefined): ScanbotDocument | undefined {
-        ScanbotSDKService.instance.loadDocuments();
+    async getDocument(id: string | undefined): Promise<ScanbotDocument | undefined> {
+        await ScanbotSDKService.instance.loadDocuments();
         return this.documents.find((d) => d.id === id);
     }
 
@@ -109,12 +120,13 @@ export default class ScanbotSDKService {
             containerId: containerId,
             overlay: {
                 visible: true,
+                
                 textFormat: 'TextAndFormat',
                 automaticSelectionEnabled: false,
                 style: {
                     highlightedTextColor: '#EC3D67',
                     highlightedPolygonStrokeColor: '#3DEC4A'
-                }
+                },
             },
             style: { window: { widthProportion: 0.8, } },
             onBarcodesDetected: onBarcodesDetected,
@@ -131,14 +143,18 @@ export default class ScanbotSDKService {
     }
 
     async openCroppingView(containerId: string, id: string | undefined) {
-        const document = this.getDocument(id);
-        if (!document || !document.result) {
+        const document = await this.getDocument(id);
+        if (!document) {
             return;
         }
+
+        console.log("Opening cropping view for document: ", document);
+        console.log(document.original.length, document.original.slice(0, 10));
+
         const configuration: CroppingViewConfiguration = {
             containerId: containerId,
-            image: document.result.original,
-            polygon: document.result.polygon,
+            image: document.original as Uint8Array,
+            polygon: document.polygon,
             disableScroll: true,
             rotations: document.rotations ?? 0,
             style: {
@@ -165,16 +181,18 @@ export default class ScanbotSDKService {
     async applyCrop(id: string | undefined) {
         const result = await this.croppingView?.apply();
 
-        const document = this.getDocument(id);
-        if (!document || !document.result) {
+        const document = await this.getDocument(id);
+        if (!document) {
             return
         }
 
-        document.result.cropped = result?.image;
-        document.result.polygon = result?.polygon;
+        document.cropped = result?.image;
+        document.polygon = result?.polygon;
         document.rotations = result?.rotations;
 
-        document.base64 = await this.sdk?.toDataUrl(document.result.cropped ?? document.result.original);
+        document.base64 = await this.sdk?.toDataUrl((document.cropped ?? document.original) as Uint8Array);
+
+        StorageService.INSTANCE.storeDocument(document);
     }
 
 }

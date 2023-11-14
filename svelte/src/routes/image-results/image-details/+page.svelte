@@ -11,7 +11,7 @@
 
 	onMount(async () => {
 		id = $page.url.searchParams.get('id') ?? undefined;
-		document = ScanbotSDKService.instance.getDocument(id);
+		document = await ScanbotSDKService.instance.getDocument(id);
 	});
 </script>
 
