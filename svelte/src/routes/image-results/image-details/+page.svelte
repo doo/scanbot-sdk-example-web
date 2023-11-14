@@ -38,9 +38,12 @@
 		vertical-align: middle;
 	}
 	.action-item-container {
-		margin-top: 20px;
+		
 		display: flex;
 		justify-content: center;
+		position: fixed;
+		bottom: 20px;
+		width: 100%;
 	}
 	.crop-button {
 		display: flex;
