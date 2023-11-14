@@ -2,10 +2,13 @@ import type { ScanbotDocument } from "./scanbot-sdk-service";
 
 export default class StorageService {
 
+    private static readonly TYPE_PREFIX = "data:image/jpeg;base64,";
     private static readonly DOCUMENT_PREFIX = "scanbot-document-";
+
     public static readonly INSTANCE = new StorageService();
 
     public async storeDocument(document: ScanbotDocument) {
+        /** Do not modify original document, create a copy to store. We don't want to encode bytes on items already in memory */
         this.set(StorageService.DOCUMENT_PREFIX + document.id, JSON.stringify({
             id: document.id,
             base64: document.base64,
@@ -37,21 +40,13 @@ export default class StorageService {
         return list;
     }
 
-    tryParseByteArray(str: string): Uint8Array | undefined {
-        try {
-            return new Uint8Array(JSON.parse(str));
-        } catch (error) {
-            return undefined;
-        }
-    }
-
     async encodeBytes(bytes: Uint8Array | string | undefined): Promise<string> {
 
         if (!bytes) {
             return "";
         }
 
-        const base64url: string | null = await new Promise((r) => {
+        const base64url = await new Promise<string | ArrayBuffer | null>((r) => {
             const reader = new FileReader()
             reader.onload = () => r(reader.result)
             // const blob = new Blob([buffer], {type:'application/octet-binary'});    
@@ -59,42 +54,21 @@ export default class StorageService {
             reader.readAsDataURL(new Blob([bytes], { type: 'image/jpeg' }));
         })
 
-        /*
-        The result looks like "data:application/octet-stream;base64,<your base64 data>", split off the beginning:
-        */
-        if (!base64url) {
+        if (!base64url || typeof base64url !== "string") {
             return "";
         }
 
-        return base64url.split(",", 2)[1];
+        return base64url.replace(StorageService.TYPE_PREFIX, "");
     }
 
     async decodeBytes(bytes: string): Promise<Uint8Array> {
 
-        const dataUrl = "data:image/jpeg;base64," + bytes;
+        const dataUrl = StorageService.TYPE_PREFIX + bytes;
 
         const response = await fetch(dataUrl);
         const buffer = await response.arrayBuffer();
-        console.log("buffer", buffer);
+
         return new Uint8Array(buffer);
-
-        //   .then(res => res.arrayBuffer())
-        //   .then(buffer => {
-        //     console.log("base64 to buffer: " + new Uint8Array(buffer));
-        //   });
-
-        // const padding = '='.repeat((4 - bytes.length % 4) % 4);
-        // const base64 = (bytes + padding)
-        //     .replace(/\-/g, '+')
-        //     .replace(/_/g, '/');
-
-        const rawData = window.atob(bytes);
-        const outputArray = new Uint8Array(rawData.length);
-
-        for (let i = 0; i < rawData.length; ++i) {
-            outputArray[i] = rawData.charCodeAt(i);
-        }
-        return outputArray;
     }
 
     private set(key: string, value: string): void {
