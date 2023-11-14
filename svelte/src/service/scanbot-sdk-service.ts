@@ -61,6 +61,13 @@ export default class ScanbotSDKService {
     }
 
     public async createDocumentScanner(containerId: string) {
+
+        /* 
+        * Ensure the SDK is initialized. If it's initialized, this function does nothing,
+        * but is necessary e.g. when opening the document url scanner directly. 
+        */
+        await this.initialize();
+
         const config: DocumentScannerConfiguration = {
             containerId: containerId,
             onDocumentDetected: async (e: DocumentDetectionResult) => {
@@ -81,40 +88,13 @@ export default class ScanbotSDKService {
         this.documentScanner = await this.sdk?.createDocumentScanner(config);
     }
 
-    async addDocument(base64: string | undefined, result: DocumentDetectionResult) {
-        const document = {
-            id: Utils.generateId(),
-            base64: base64,
-            original: result.original,
-            cropped: result.cropped,
-            polygon: result.polygon
-        };
-
-        this.documents.push(document);
-        console.log("adding document", document);
-
-        await StorageService.INSTANCE.storeDocument(document);
-    }
-
-    public async disposeDocumentScanner() {
-        this.documentScanner?.dispose();
-    }
-
-    public async getDocuments() {
-        await ScanbotSDKService.instance.loadDocuments();
-        return this.documents;
-    }
-
-    async getDocument(id: string | undefined): Promise<ScanbotDocument | undefined> {
-        await ScanbotSDKService.instance.loadDocuments();
-        return this.documents.find((d) => d.id === id);
-    }
-
-    public async toDataUrl(document: DocumentDetectionResult) {
-        return await this.sdk?.toDataUrl(document.cropped ?? document.original);
-    }
-
     public async createBarcodeScanner(containerId: string, onBarcodesDetected: (e: BarcodeResult) => void) {
+
+        /* 
+        * Ensure the SDK is initialized. If it's initialized, this function does nothing,
+        * but is necessary e.g. when opening the document url scanner directly. 
+        */
+        await this.initialize();
 
         const config: BarcodeScannerConfiguration = {
             containerId: containerId,
@@ -138,8 +118,41 @@ export default class ScanbotSDKService {
         this.barcodeScanner = await this.sdk?.createBarcodeScanner(config);
     }
 
+    public async disposeDocumentScanner() {
+        this.documentScanner?.dispose();
+    }
+
     public disposeBarcodeScanner() {
         this.barcodeScanner?.dispose();
+    }
+
+    async addDocument(base64: string | undefined, result: DocumentDetectionResult) {
+        const document = {
+            id: Utils.generateId(),
+            base64: base64,
+            original: result.original,
+            cropped: result.cropped,
+            polygon: result.polygon
+        };
+
+        this.documents.push(document);
+        console.log("adding document", document);
+
+        await StorageService.INSTANCE.storeDocument(document);
+    }
+
+    public async getDocuments() {
+        await ScanbotSDKService.instance.loadDocuments();
+        return this.documents;
+    }
+
+    async getDocument(id: string | undefined): Promise<ScanbotDocument | undefined> {
+        await ScanbotSDKService.instance.loadDocuments();
+        return this.documents.find((d) => d.id === id);
+    }
+
+    public async toDataUrl(document: DocumentDetectionResult) {
+        return await this.sdk?.toDataUrl(document.cropped ?? document.original);
     }
 
     async openCroppingView(containerId: string, id: string | undefined) {
