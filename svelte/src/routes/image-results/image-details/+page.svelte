@@ -10,6 +10,7 @@
 	let document: ScanbotDocument | undefined;
 
 	onMount(async () => {
+		await ScanbotSDKService.instance.initialize();
 		id = $page.url.searchParams.get('id') ?? undefined;
 		document = await ScanbotSDKService.instance.getDocument(id);
 	});

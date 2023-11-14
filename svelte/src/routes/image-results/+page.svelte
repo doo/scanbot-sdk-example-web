@@ -8,6 +8,7 @@
 	onMount(async () => {
 		documents = await ScanbotSDKService.instance.getDocuments();
 		console.log('Total documents:', documents.length);
+		await ScanbotSDKService.instance.initialize();
 	});
 </script>
 
