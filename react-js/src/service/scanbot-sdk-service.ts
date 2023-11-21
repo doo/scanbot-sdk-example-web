@@ -28,11 +28,6 @@ import { BarcodeFormat } from "scanbot-web-sdk/@types/model/barcode/barcode-form
 import { IMrzScannerHandle } from "scanbot-web-sdk/@types/interfaces/i-mrz-scanner-handle";
 import { ContourDetectionResult } from "scanbot-web-sdk/@types/model/document/contour-detection-result";
 
-// eslint-disable-next-line import/no-webpack-loader-syntax
-require("!!file-loader?outputPath=tessdata&name=[name].[ext]!scanbot-web-sdk/bundle/bin/complete/tessdata/eng.traineddata");
-// eslint-disable-next-line import/no-webpack-loader-syntax
-require("!!file-loader?outputPath=tessdata&name=[name].[ext]!scanbot-web-sdk/bundle/bin/complete/tessdata/deu.traineddata");
-
 export class ScanbotSdkService {
   static DOCUMENT_SCANNER_CONTAINER = "document-scanner-view";
   static CROPPING_VIEW_CONTAINER = "cropping-view";
@@ -88,8 +83,8 @@ export class ScanbotSdkService {
     return info.isValid();
   }
 
-  public async createBlurDetector() {
-    return this.sdk?.createBlurDetector();
+  public async createDocumentQualityAnalyzer() {
+    return this.sdk?.createDocumentQualityAnalyzer();
   }
 
   public async createDocumentScanner(detectionCallback: any, errorCallback: (e: Error) => void) {
