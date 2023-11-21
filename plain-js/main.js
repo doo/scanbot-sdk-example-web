@@ -212,7 +212,6 @@ window.onload = async () => {
     picker.click();
 
     picker.onchange = (e) => {
-      console.log("change");
       e.preventDefault();
       let reader = new FileReader();
       let file = e.target.files[0];
@@ -220,14 +219,15 @@ window.onload = async () => {
 
       reader.onload = async (e) => {
         const result = await scanbotSDK.detectDocument(reader.result);
+
+        const analyzer = await scanbotSDK.createDocumentQualityAnalyzer();
+        console.log('Document Analysis:', await analyzer.analyze(reader.result));
+        await analyzer.release();
+
         if (result.success === true) {
           const cropped = await scanbotSDK.cropAndRotateImageCcw(reader.result, result.polygon, 0);
           result.original = reader.result;
           result.cropped = cropped;
-
-          const blurDetector = await scanbotSDK.createBlurDetector();
-          console.log('estimateBlurrinessOnBuffer', await blurDetector.estimateBlurrinessOnBuffer(result.original));
-          await blurDetector.release();
 
           results.push(result);
           Utils.getElementByClassName(
@@ -316,7 +316,6 @@ window.onload = async () => {
     const generator = await scanbotSDK.beginPdf({
       standardPaperSize: "A4",
       landscape: true,
-      dpi: 100,
     });
     await addAllPagesTo(generator);
     const bytes = await generator.complete();

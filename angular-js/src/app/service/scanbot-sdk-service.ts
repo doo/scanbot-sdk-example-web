@@ -31,11 +31,6 @@ import { BarcodeFormat } from "scanbot-web-sdk/@types/model/barcode/barcode-form
 import { EngineMode } from "scanbot-web-sdk/@types/model/barcode/engine-mode";
 import { IScannerCommon } from "scanbot-web-sdk/@types/interfaces/i-scanner-common-handle";
 
-// eslint-disable-next-line import/no-webpack-loader-syntax
-require("!!file-loader?outputPath=tessdata&name=[name].[ext]!scanbot-web-sdk/bundle/bin/complete/tessdata/eng.traineddata");
-// eslint-disable-next-line import/no-webpack-loader-syntax
-require("!!file-loader?outputPath=tessdata&name=[name].[ext]!scanbot-web-sdk/bundle/bin/complete/tessdata/deu.traineddata");
-
 @Injectable()
 export class ScanbotSdkService {
   static CONTAINER_ID = "scanbot-camera-container";
@@ -154,7 +149,6 @@ export class ScanbotSdkService {
     const options: PdfGenerationOptions = {
       standardPaperSize: "A4",
       landscape: true,
-      dpi: 100,
     };
     const generator: PdfGenerator = await this.instance.beginPdf(options);
     for (const page of pages) {
@@ -162,7 +156,7 @@ export class ScanbotSdkService {
     }
     return await generator.complete();
   }
-  
+
   async generateTIFF(pages: any[]) {
     const options: TiffGenerationOptions = {
       binarizationFilter: "deepBinarization",
@@ -232,8 +226,8 @@ export class ScanbotSdkService {
     this.textDataScanner?.swapCameraFacing(true);
   }
 
-  public async createBlurDetector() {
-    return this.instance?.createBlurDetector();
+  public async createDocumentQualityAnalyzer() {
+    return this.instance?.createDocumentQualityAnalyzer();
   }
 
   public switchBarcodeScannerCameraFacing() {
