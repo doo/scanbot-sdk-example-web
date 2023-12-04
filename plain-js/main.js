@@ -4,7 +4,6 @@ let croppingViewController = new CroppingViewController(results);
 let documentDetailsController = new DocumentDetailsController(results, croppingViewController);
 let documentScannerController = new DocumentScannerController(results);
 let barcodeScannerController = new BarcodeScannerController();
-let barcodeOverlayScannerController = new BarcodeOverlayScannerController();
 
 window.onresize = () => {
   this.resizeContent();
@@ -180,10 +179,8 @@ window.onload = async () => {
 
       if (controller.includes("scanbot-camera-controller")) {
         documentScannerController.close();
-      } else if (controller.includes("barcode-scanner-controller")) {
+      } else if (controller.includes("barcode-scanner-controller") || controller.includes("barcode-scanner-overlay-controller")) {
         barcodeScannerController.close();
-      } else if (controller.includes("barcode-scanner-overlay-controller")) {
-        barcodeOverlayScannerController.close();
       } else if (controller.includes("mrz-scanner-controller")) {
         mrzScanner.dispose();
         mrzScanner = undefined;
@@ -209,8 +206,6 @@ window.onload = async () => {
         documentScannerController.documentScanner.swapCameraFacing(true);
       } else if (barcodeScannerController.barcodeScanner) {
         barcodeScannerController.barcodeScanner.swapCameraFacing(true);
-      } else if (barcodeOverlayScannerController.barcodeScanner) {
-        barcodeOverlayScannerController.barcodeScanner.swapCameraFacing(true);
       } else if (mrzScanner) {
         mrzScanner.swapCameraFacing(true);
       } else if (textDataScanner) {
@@ -228,8 +223,6 @@ window.onload = async () => {
         switchCamera(documentScannerController.documentScanner);
       } else if (barcodeScannerController.barcodeScanner) {
         switchCamera(barcodeScannerController.barcodeScanner);
-      } else if (barcodeOverlayScannerController.barcodeScanner) {
-        switchCamera(barcodeOverlayScannerController.barcodeScanner);
       } else if (mrzScanner) {
         switchCamera(mrzScanner);
       } else if (textDataScanner) {
@@ -253,24 +246,6 @@ async function switchCamera(scanner) {
       scanner?.switchCamera(cameras[newCameraIndex].deviceId, false);
     }
   }
-}
-
-async function onBarcodesDetected(e) {
-  let text = "";
-  e.barcodes.forEach((barcode) => {
-    if (barcode.parsedText) {
-      text += JSON.stringify(barcode.parsedText);
-    } else {
-      text += " " + barcode.text + " (" + barcode.format + "),";
-    }
-  });
-
-  let result;
-  if (e.barcodes[0].barcodeImage) {
-    result = await scanbotSDK.toDataUrl(e.barcodes[0].barcodeImage);
-  }
-
-  Toastify({ text: text.slice(0, -1), duration: 3000, avatar: result }).showToast();
 }
 
 function toConfidenceString(input, key) {
