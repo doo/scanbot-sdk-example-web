@@ -1,7 +1,7 @@
 const results = [];
 let scanbotSDK, documentScanner, barcodeScanner, mrzScanner;
 let croppingViewController = new CroppingViewController(results);
-let documentDetailsController = new DocumentDetailsController(results);
+let documentDetailsController = new DocumentDetailsController(results, croppingViewController);
 
 window.onresize = () => {
   this.resizeContent();
@@ -71,43 +71,6 @@ window.onload = async () => {
       "block";
 
     await reloadDetectionResults();
-  };
-
-  Utils.getElementByClassName("crop-button").onclick = async (e) => {
-    const index = Utils.getElementByClassName(
-      "detection-result-image"
-    ).getAttribute("index");
-
-    let rotations = results[index].rotations;
-    if (!rotations) {
-      rotations = 0;
-    }
-
-    const options = {
-      containerId: Config.croppingViewContainerId(),
-      image: results[index].original,
-      polygon: results[index].polygon,
-      rotations: rotations,
-      disableScroll: true,
-      style: {
-        padding: 20,
-        polygon: {
-          color: "green",
-          width: 4,
-          handles: {
-            size: 14,
-            color: "white",
-            border: "1px solid lightgray",
-          },
-        },
-        magneticLines: {
-          // disabled: true,
-          color: "red",
-        },
-      },
-    };
-
-    await croppingViewController.show(options);
   };
 
   Utils.getElementByClassName("delete-button").onclick = async (e) => {

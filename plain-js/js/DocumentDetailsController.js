@@ -1,12 +1,13 @@
 class DocumentDetailsController{
 
-    constructor(results) {
+    constructor(results, croppingViewController) {
         this.results = results;
+        this.croppingViewController = croppingViewController;
         this.container = Utils.getElementByClassName("detection-result-controller");
         this.parentControllerContainter = Utils.getElementByClassName("detection-results-controller");
         this.actionBarFilterSelect = Utils.getElementByClassName("action-bar-filter-select");
 
-        Utils.getElementByClassName("action-bar-filter-select").onchange = async (
+        this.actionBarFilterSelect.onchange = async (
             e
         ) => {
             const index = Utils.getElementByClassName(
@@ -31,14 +32,20 @@ class DocumentDetailsController{
             ViewUtils.hideLoading();
         };
 
+        Utils.getElementByClassName("crop-button").onclick = async (e) => {
+            const resultIndex = Utils.getElementByClassName(
+                "detection-result-image"
+            ).getAttribute("index");
+
+            await this.croppingViewController.show(resultIndex);
+        };
     }
 
     async show(resultIndex, currentFilter){
         this.parentControllerContainter.style.display = "none";
         this.container.style.display = "block";
 
-        Utils.getElementByClassName("action-bar-filter-select").selectedIndex =
-            findFilterIndex(currentFilter);
+        this.actionBarFilterSelect.selectedIndex = findFilterIndex(currentFilter);
         await updateResultImage(resultIndex);
     }
 

@@ -39,10 +39,40 @@ class CroppingViewController {
         };
     }
 
-    async show(options) {
+    async show(resultIndex) {
+        let rotations = this.results[resultIndex].rotations;
+        if (!rotations) {
+            rotations = 0;
+        }
+
+        const options = {
+            containerId: Config.croppingViewContainerId(),
+            image: this.results[resultIndex].original,
+            polygon: this.results[resultIndex].polygon,
+            rotations: rotations,
+            disableScroll: true,
+            style: {
+                padding: 20,
+                polygon: {
+                    color: "green",
+                    width: 4,
+                    handles: {
+                        size: 14,
+                        color: "white",
+                        border: "1px solid lightgray",
+                    },
+                },
+                magneticLines: {
+                    // disabled: true,
+                    color: "red",
+                },
+            },
+        };
+
+        this.croppingView = await scanbotSDK.openCroppingView(options);
+
         this.parentControllerContainer.style.display = "none";
         this.container.style.display = "block";
-        this.croppingView = await scanbotSDK.openCroppingView(options);
     }
 
     close() {
