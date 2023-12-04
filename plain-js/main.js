@@ -1,15 +1,17 @@
 const results = [];
 let scanbotSDK, mrzScanner;
-let croppingViewController = new CroppingViewController(results);
-let documentDetailsController = new DocumentDetailsController(results, croppingViewController);
-let documentScannerController = new DocumentScannerController(results);
-let barcodeScannerController = new BarcodeScannerController();
+let croppingViewController, documentDetailsController, documentScannerController, barcodeScannerController;
 
 window.onresize = () => {
   this.resizeContent();
 };
 
 window.onload = async () => {
+  croppingViewController = new CroppingViewController(results);
+  documentDetailsController = new DocumentDetailsController(results, croppingViewController);
+  documentScannerController = new DocumentScannerController(results);
+  barcodeScannerController = new BarcodeScannerController();
+
   this.resizeContent();
 
   Utils.getElementByClassName("delete-button").onclick = async (e) => {
