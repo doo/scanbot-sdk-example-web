@@ -1,5 +1,6 @@
 const results = [];
-let scanbotSDK, documentScanner, barcodeScanner, mrzScanner, croppingView;
+let scanbotSDK, documentScanner, barcodeScanner, mrzScanner;
+let croppingViewController = new CroppingViewController(results);
 
 window.onresize = () => {
   this.resizeContent();
@@ -72,10 +73,6 @@ window.onload = async () => {
   };
 
   Utils.getElementByClassName("crop-button").onclick = async (e) => {
-    Utils.getElementByClassName("detection-result-controller").style.display =
-      "none";
-    Utils.getElementByClassName("cropping-controller").style.display = "block";
-
     const index = Utils.getElementByClassName(
       "detection-result-image"
     ).getAttribute("index");
@@ -108,7 +105,8 @@ window.onload = async () => {
         },
       },
     };
-    croppingView = await scanbotSDK.openCroppingView(options);
+
+    await croppingViewController.show(options);
   };
 
   Utils.getElementByClassName("delete-button").onclick = async (e) => {
@@ -272,40 +270,6 @@ window.onload = async () => {
     alert(JSON.stringify(info));
   };
 
-  Utils.getElementByClassName("detect-button").onclick = async (e) => {
-    await croppingView.detect();
-  };
-
-  Utils.getElementByClassName("rotate-button").onclick = async (e) => {
-    await croppingView.rotate(1);
-  };
-
-  Utils.getElementByClassName("apply-button").onclick = async (e) => {
-    ViewUtils.showLoading();
-    const result = await croppingView.apply();
-    croppingView.dispose();
-    const index = Utils.getElementByClassName(
-      "detection-result-image"
-    ).getAttribute("index");
-    results[index].filtered = undefined;
-    results[index].cropped = result.image;
-    results[index].polygon = result.polygon;
-    results[index].rotations = result.rotations;
-
-    if (results[index].filter) {
-      results[index].filtered = await scanbotSDK.applyFilter(
-        results[index].cropped,
-        results[index].filter
-      );
-    }
-
-    Utils.getElementByClassName("cropping-controller").style.display = "none";
-    Utils.getElementByClassName("detection-result-controller").style.display =
-      "block";
-
-    await updateResultImage(index);
-    ViewUtils.hideLoading();
-  };
 
   Utils.getElementByClassName("pdf-button").onclick = async (e) => {
     if (results.length === 0) {
@@ -392,11 +356,7 @@ window.onload = async () => {
         ).style.display = "block";
         await reloadDetectionResults();
       } else if (controller.includes("cropping-controller")) {
-        Utils.getElementByClassName(
-          "detection-result-controller"
-        ).style.display = "block";
-        croppingView.dispose();
-        croppingView = undefined;
+        croppingViewController.close();
       }
     };
   }
