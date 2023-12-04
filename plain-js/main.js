@@ -1,6 +1,7 @@
 const results = [];
 let scanbotSDK, documentScanner, barcodeScanner, mrzScanner;
 let croppingViewController = new CroppingViewController(results);
+let documentDetailsController = new DocumentDetailsController(results);
 
 window.onresize = () => {
   this.resizeContent();
@@ -303,31 +304,6 @@ window.onload = async () => {
     ViewUtils.hideLoading();
   };
 
-  Utils.getElementByClassName("action-bar-filter-select").onchange = async (
-    e
-  ) => {
-    const index = Utils.getElementByClassName(
-      "detection-result-image"
-    ).getAttribute("index");
-    const filter = e.target.value;
-
-    ViewUtils.showLoading();
-    if (filter === "none") {
-      results[index].filtered = undefined;
-    } else {
-      let toFilter = results[index].cropped;
-      if (!toFilter) {
-        toFilter = results[index].original;
-      }
-
-      results[index].filter = filter;
-      results[index].filtered = await scanbotSDK.applyFilter(toFilter, filter);
-    }
-
-    await updateResultImage(index);
-    ViewUtils.hideLoading();
-  };
-
   const backButtons = document.getElementsByClassName("back-button");
 
   for (let i = 0; i < backButtons.length; i++) {
@@ -351,9 +327,7 @@ window.onload = async () => {
         textDataScanner = undefined;
       } else if (controller.includes("detection-results-controller")) {
       } else if (controller.includes("detection-result-controller")) {
-        Utils.getElementByClassName(
-          "detection-results-controller"
-        ).style.display = "block";
+        documentDetailsController.close();
         await reloadDetectionResults();
       } else if (controller.includes("cropping-controller")) {
         croppingViewController.close();
@@ -515,15 +489,9 @@ async function reloadDetectionResults() {
 }
 
 async function onDetectionResultClick(e) {
-  Utils.getElementByClassName("detection-results-controller").style.display =
-    "none";
-  Utils.getElementByClassName("detection-result-controller").style.display =
-    "block";
-
   const index = e.target.getAttribute("index");
-  Utils.getElementByClassName("action-bar-filter-select").selectedIndex =
-    findFilterIndex(results[index].filter);
-  await updateResultImage(index);
+  const currentFilter = results[index].filter;
+  await documentDetailsController.show(index, currentFilter);
 }
 
 function findFilterIndex(filter) {
