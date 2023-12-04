@@ -1,7 +1,8 @@
 const results = [];
-let scanbotSDK, documentScanner, barcodeScanner, mrzScanner;
+let scanbotSDK, barcodeScanner, mrzScanner;
 let croppingViewController = new CroppingViewController(results);
 let documentDetailsController = new DocumentDetailsController(results, croppingViewController);
+let documentScannerController = new DocumentScannerController(results);
 
 window.onresize = () => {
   this.resizeContent();
@@ -9,69 +10,6 @@ window.onresize = () => {
 
 window.onload = async () => {
   this.resizeContent();
-
-  Utils.getElementByClassName("document-scanner-button").onclick = async (
-    e
-  ) => {
-    Utils.getElementByClassName("scanbot-camera-controller").style.display =
-      "block";
-
-    const config = {
-      containerId: Config.scannerContainerId(),
-      acceptedAngleScore: 60,
-      acceptedSizeScore: 60,
-      autoCaptureSensitivity: 0.66,
-      autoCaptureEnabled: true,
-      ignoreBadAspectRatio: false,
-      style: {
-        outline: {
-          polygon: {
-            strokeWidth: 40,
-            fillCapturing: "rgba(0, 255, 0, 0.2)",
-            strokeCapturing: "green",
-            fillSearching: "rgba(255, 0, 0, 0.2)",
-            strokeSearching: "red",
-          }
-        }
-      },
-      onDocumentDetected: onDocumentDetected,
-      onError: onScannerError,
-      text: {
-        hint: {
-          OK: "Capturing your document...",
-          OK_SmallSize: "The document is too small. Try moving closer.",
-          OK_BadAngles:
-            "This is a bad camera angle. Hold the device straight over the document.",
-          OK_BadAspectRatio:
-            "Rotate the device sideways, so that the document fits better into the screen.",
-          OK_OffCenter: "Try holding the device at the center of the document.",
-          Error_NothingDetected:
-            "Please hold the device over a document to start scanning.",
-          Error_Brightness: "It is too dark. Try turning on a light.",
-          Error_Noise: "Please move the document to a clear surface.",
-        },
-      },
-      preferredCamera: 'camera2 0, facing back'
-    };
-
-    try {
-      documentScanner = await scanbotSDK.createDocumentScanner(config);
-    } catch (e) {
-      console.log(e.name + ': ' + e.message);
-      alert(e.name + ': ' + e.message);
-      Utils.getElementByClassName("scanbot-camera-controller").style.display = "none";
-    }
-  };
-
-  Utils.getElementByClassName("detection-done-button").onclick = async (e) => {
-    documentScanner.dispose();
-    Utils.getElementByClassName("scanbot-camera-controller").style.display =
-      "none";
-    Utils.getElementByClassName("detection-results-controller").style.display =
-      "block";
-
-    await reloadDetectionResults();
-  };
 
   Utils.getElementByClassName("delete-button").onclick = async (e) => {
     const index = Utils.getElementByClassName(
@@ -277,8 +215,7 @@ window.onload = async () => {
       Utils.getElementByClassName(controller).style.display = "none";
 
       if (controller.includes("scanbot-camera-controller")) {
-        documentScanner.dispose();
-        documentScanner = undefined;
+        documentScannerController.close();
       } else if (controller.includes("barcode-scanner-controller") || controller.includes("barcode-scanner-overlay-controller")) {
         barcodeScanner.dispose();
         barcodeScanner = undefined;
@@ -303,9 +240,8 @@ window.onload = async () => {
   for (let i = 0; i < cameraSwapButtons.length; i++) {
     const button = cameraSwapButtons[i];
     button.onclick = async (e) => {
-
-      if (documentScanner) {
-        documentScanner.swapCameraFacing(true);
+      if (documentScannerController.documentScanner) {
+        documentScannerController.documentScanner.swapCameraFacing(true);
       } else if (barcodeScanner) {
         barcodeScanner.swapCameraFacing(true);
       } else if (mrzScanner) {
@@ -321,8 +257,8 @@ window.onload = async () => {
   for (let i = 0; i < cameraSwitchButtons.length; i++) {
     const button = cameraSwitchButtons[i];
     button.onclick = async (e) => {
-      if (documentScanner) {
-        switchCamera(documentScanner);
+      if (documentScannerController.documentScanner) {
+        switchCamera(documentScannerController.documentScanner);
       } else if (barcodeScanner) {
         switchCamera(barcodeScanner);
       } else if (mrzScanner) {
@@ -423,13 +359,6 @@ async function onTextDataDetected(textData) {
     }
   }
 
-}
-
-async function onDocumentDetected(e) {
-  results.push(e);
-  ViewUtils.flash();
-  Utils.getElementByClassName("page-count-indicator").innerHTML =
-    results.length + " PAGES";
 }
 
 async function onScannerError(e) {
