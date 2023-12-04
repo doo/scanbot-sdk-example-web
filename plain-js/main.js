@@ -1,8 +1,10 @@
 const results = [];
-let scanbotSDK, barcodeScanner, mrzScanner;
+let scanbotSDK, mrzScanner;
 let croppingViewController = new CroppingViewController(results);
 let documentDetailsController = new DocumentDetailsController(results, croppingViewController);
 let documentScannerController = new DocumentScannerController(results);
+let barcodeScannerController = new BarcodeScannerController();
+let barcodeOverlayScannerController = new BarcodeOverlayScannerController();
 
 window.onresize = () => {
   this.resizeContent();
@@ -27,44 +29,6 @@ window.onload = async () => {
     ).style.display = "block";
 
     await reloadDetectionResults();
-  };
-
-  Utils.getElementByClassName("barcode-scanner-button").onclick = async (e) => {
-    Utils.getElementByClassName("barcode-scanner-controller").style.display = "block";
-
-    const config = Config.barcodeScannerConfig();
-    config.containerId = Config.barcodeScannerContainerId();
-    config.onBarcodesDetected = onBarcodesDetected;
-    config.onError = onScannerError;
-
-    try {
-      barcodeScanner = await scanbotSDK.createBarcodeScanner(config);
-    } catch (e) {
-      console.log(e.name + ': ' + e.message);
-      alert(e.name + ': ' + e.message);
-      Utils.getElementByClassName("barcode-scanner-controller").style.display = "none";
-    }
-  };
-
-  Utils.getElementByClassName("barcode-scanner-overlay-button").onclick = async (e) => {
-    Utils.getElementByClassName("barcode-scanner-overlay-controller").style.display = "block";
-
-    const config = Config.barcodeScannerConfig();
-    config.containerId = Config.barcodeScannerOverlayContainerId();
-    config.onBarcodesDetected = (result) => {
-      onBarcodesDetected(result);
-    };
-    config.onError = onScannerError;
-    config.overlay = { visible: true };
-    config.showFinder = false;
-
-    try {
-      barcodeScanner = await scanbotSDK.createBarcodeScanner(config);
-    } catch (e) {
-      console.log(e.name + ': ' + e.message);
-      alert(e.name + ': ' + e.message);
-      Utils.getElementByClassName("barcode-scanner-overlay-controller").style.display = "none";
-    }
   };
 
   Utils.getElementByClassName("mrz-scanner-button").onclick = async (e) => {
@@ -216,9 +180,10 @@ window.onload = async () => {
 
       if (controller.includes("scanbot-camera-controller")) {
         documentScannerController.close();
-      } else if (controller.includes("barcode-scanner-controller") || controller.includes("barcode-scanner-overlay-controller")) {
-        barcodeScanner.dispose();
-        barcodeScanner = undefined;
+      } else if (controller.includes("barcode-scanner-controller")) {
+        barcodeScannerController.close();
+      } else if (controller.includes("barcode-scanner-overlay-controller")) {
+        barcodeOverlayScannerController.close();
       } else if (controller.includes("mrz-scanner-controller")) {
         mrzScanner.dispose();
         mrzScanner = undefined;
@@ -242,8 +207,10 @@ window.onload = async () => {
     button.onclick = async (e) => {
       if (documentScannerController.documentScanner) {
         documentScannerController.documentScanner.swapCameraFacing(true);
-      } else if (barcodeScanner) {
-        barcodeScanner.swapCameraFacing(true);
+      } else if (barcodeScannerController.barcodeScanner) {
+        barcodeScannerController.barcodeScanner.swapCameraFacing(true);
+      } else if (barcodeOverlayScannerController.barcodeScanner) {
+        barcodeOverlayScannerController.barcodeScanner.swapCameraFacing(true);
       } else if (mrzScanner) {
         mrzScanner.swapCameraFacing(true);
       } else if (textDataScanner) {
@@ -259,8 +226,10 @@ window.onload = async () => {
     button.onclick = async (e) => {
       if (documentScannerController.documentScanner) {
         switchCamera(documentScannerController.documentScanner);
-      } else if (barcodeScanner) {
-        switchCamera(barcodeScanner);
+      } else if (barcodeScannerController.barcodeScanner) {
+        switchCamera(barcodeScannerController.barcodeScanner);
+      } else if (barcodeOverlayScannerController.barcodeScanner) {
+        switchCamera(barcodeOverlayScannerController.barcodeScanner);
       } else if (mrzScanner) {
         switchCamera(mrzScanner);
       } else if (textDataScanner) {
