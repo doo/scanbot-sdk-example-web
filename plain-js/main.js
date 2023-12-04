@@ -425,13 +425,13 @@ window.onload = async () => {
     const button = cameraSwitchButtons[i];
     button.onclick = async (e) => {
       if (documentScanner) {
-        onCameraSwitch(documentScanner);
+        switchCamera(documentScanner);
       } else if (barcodeScanner) {
-        onCameraSwitch(barcodeScanner);
+        switchCamera(barcodeScanner);
       } else if (mrzScanner) {
-        onCameraSwitch(mrzScanner);
+        switchCamera(mrzScanner);
       } else if (textDataScanner) {
-        onCameraSwitch(textDataScanner);
+        switchCamera(textDataScanner);
       }
     };
   }
@@ -440,7 +440,7 @@ window.onload = async () => {
   ViewUtils.hideLoading();
 };
 
-async function onCameraSwitch(scanner) {
+async function switchCamera(scanner) {
   const cameras = await scanner?.fetchAvailableCameras()
   if (cameras) {
     const currentCameraInfo = scanner?.getActiveCameraInfo();
