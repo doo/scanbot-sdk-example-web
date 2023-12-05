@@ -1,7 +1,7 @@
 const results = [];
 let scanbotSDK;
 let croppingViewController, documentDetailsController, documentScannerController, barcodeScannerController,
-    mrzScannerController;
+    mrzScannerController, textDataScannerController;
 
 window.onresize = () => {
   this.resizeContent();
@@ -13,6 +13,7 @@ window.onload = async () => {
   documentScannerController = new DocumentScannerController(results);
   barcodeScannerController = new BarcodeScannerController();
   mrzScannerController = new MrzScannerController();
+  textDataScannerController = new TextDataScannerController();
 
   this.resizeContent();
 
@@ -32,20 +33,6 @@ window.onload = async () => {
     ).style.display = "block";
 
     await reloadDetectionResults();
-  };
-
-  Utils.getElementByClassName("text-data-scanner-button").onclick = async (e) => {
-    Utils.getElementByClassName("text-data-scanner-controller").style.display = "block";
-    const config = {
-      containerId: Config.textDataScannerContainerId(),
-      onTextDetected: onTextDataDetected,
-      onError: onScannerError,
-      ocrResolutionLimit: 400,
-      supportedLanguages: ['eng', 'deu'],
-      preferredCamera: 'camera2 0, facing back'
-    };
-
-    textDataScanner = await scanbotSDK.createTextDataScanner(config);
   };
 
   Utils.getElementByClassName("scanner-results-button").onclick = async (e) => {
@@ -168,8 +155,7 @@ window.onload = async () => {
       } else if (controller.includes("mrz-scanner-controller")) {
         mrzScannerController.close();
       } else if (controller.includes("text-data-scanner-controller")) {
-        textDataScanner.dispose();
-        textDataScanner = undefined;
+        textDataScannerController.close();
       } else if (controller.includes("detection-results-controller")) {
       } else if (controller.includes("detection-result-controller")) {
         documentDetailsController.close();
@@ -191,8 +177,8 @@ window.onload = async () => {
         barcodeScannerController.barcodeScanner.swapCameraFacing(true);
       } else if (mrzScannerController.mrzScanner) {
         mrzScannerController.mrzScanner.swapCameraFacing(true);
-      } else if (textDataScanner) {
-        textDataScanner.swapCameraFacing(true);
+      } else if (textDataScannerController.textDataScanner) {
+        textDataScannerController.textDataScanner.swapCameraFacing(true);
       }
     };
   }
@@ -208,8 +194,8 @@ window.onload = async () => {
         switchCamera(barcodeScannerController.barcodeScanner);
       } else if (mrzScannerController.mrzScanner) {
         switchCamera(mrzScannerController.mrzScanner);
-      } else if (textDataScanner) {
-        switchCamera(textDataScanner);
+      } else if (textDataScannerController.textDataScanner) {
+        switchCamera(textDataScannerController.textDataScanner);
       }
     };
   }
@@ -229,23 +215,6 @@ async function switchCamera(scanner) {
       scanner?.switchCamera(cameras[newCameraIndex].deviceId, false);
     }
   }
-}
-
-async function onTextDataDetected(textData) {
-  if (!textData) return;
-
-  if (textData.validated) {
-    if (typeof textDataScanner !== 'undefined') {
-      textDataScanner.pauseDetection();
-    }
-
-    alert(textData.text);
-
-    if (typeof textDataScanner !== 'undefined') {
-      setTimeout(() => { textDataScanner.resumeDetection() }, 500);
-    }
-  }
-
 }
 
 async function onScannerError(e) {
