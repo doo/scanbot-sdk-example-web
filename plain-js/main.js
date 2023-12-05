@@ -1,6 +1,7 @@
 const results = [];
-let scanbotSDK, mrzScanner;
-let croppingViewController, documentDetailsController, documentScannerController, barcodeScannerController;
+let scanbotSDK;
+let croppingViewController, documentDetailsController, documentScannerController, barcodeScannerController,
+    mrzScannerController;
 
 window.onresize = () => {
   this.resizeContent();
@@ -11,6 +12,7 @@ window.onload = async () => {
   documentDetailsController = new DocumentDetailsController(results, croppingViewController);
   documentScannerController = new DocumentScannerController(results);
   barcodeScannerController = new BarcodeScannerController();
+  mrzScannerController = new MrzScannerController();
 
   this.resizeContent();
 
@@ -30,26 +32,6 @@ window.onload = async () => {
     ).style.display = "block";
 
     await reloadDetectionResults();
-  };
-
-  Utils.getElementByClassName("mrz-scanner-button").onclick = async (e) => {
-    Utils.getElementByClassName("mrz-scanner-controller").style.display =
-      "block";
-
-    const config = {
-      containerId: Config.mrzScannerContainerId(),
-      onMrzDetected: onMrzDetected,
-      onError: onScannerError,
-      preferredCamera: 'camera2 0, facing back'
-    };
-
-    try {
-      mrzScanner = await scanbotSDK.createMrzScanner(config);
-    } catch (e) {
-      console.log(e.name + ': ' + e.message);
-      alert(e.name + ': ' + e.message);
-      Utils.getElementByClassName("mrz-scanner-controller").style.display = "none";
-    }
   };
 
   Utils.getElementByClassName("text-data-scanner-button").onclick = async (e) => {
@@ -184,8 +166,7 @@ window.onload = async () => {
       } else if (controller.includes("barcode-scanner-controller") || controller.includes("barcode-scanner-overlay-controller")) {
         barcodeScannerController.close();
       } else if (controller.includes("mrz-scanner-controller")) {
-        mrzScanner.dispose();
-        mrzScanner = undefined;
+        mrzScannerController.close();
       } else if (controller.includes("text-data-scanner-controller")) {
         textDataScanner.dispose();
         textDataScanner = undefined;
@@ -208,8 +189,8 @@ window.onload = async () => {
         documentScannerController.documentScanner.swapCameraFacing(true);
       } else if (barcodeScannerController.barcodeScanner) {
         barcodeScannerController.barcodeScanner.swapCameraFacing(true);
-      } else if (mrzScanner) {
-        mrzScanner.swapCameraFacing(true);
+      } else if (mrzScannerController.mrzScanner) {
+        mrzScannerController.mrzScanner.swapCameraFacing(true);
       } else if (textDataScanner) {
         textDataScanner.swapCameraFacing(true);
       }
@@ -225,8 +206,8 @@ window.onload = async () => {
         switchCamera(documentScannerController.documentScanner);
       } else if (barcodeScannerController.barcodeScanner) {
         switchCamera(barcodeScannerController.barcodeScanner);
-      } else if (mrzScanner) {
-        switchCamera(mrzScanner);
+      } else if (mrzScannerController.mrzScanner) {
+        switchCamera(mrzScannerController.mrzScanner);
       } else if (textDataScanner) {
         switchCamera(textDataScanner);
       }
@@ -248,46 +229,6 @@ async function switchCamera(scanner) {
       scanner?.switchCamera(cameras[newCameraIndex].deviceId, false);
     }
   }
-}
-
-function toConfidenceString(input, key) {
-
-  const confidence = input[key].confidence;
-
-  if (!confidence) {
-    return "";
-  }
-
-  return ` (${Number(confidence).toFixed(3)})`;
-}
-
-function parseMRZValue(input, key) {
-  return input[key] ? (input[key].value + toConfidenceString(input, key)) : ''
-}
-
-async function onMrzDetected(mrz) {
-  mrzScanner.pauseDetection();
-
-  let text = "";
-  if (mrz) {
-
-    text += "Document Type: " + parseMRZValue(mrz, "documentType") + "\n";
-    text += "First Name: " + parseMRZValue(mrz, "givenNames") + "\n";
-    text += "Last Name: " + parseMRZValue(mrz, "surname") + "\n";
-    text += "Issuing Authority: " + parseMRZValue(mrz, "issuingAuthority") + "\n";
-    text += "Nationality: " + parseMRZValue(mrz, "nationality") + "\n";
-    text += "Birth Date: " + parseMRZValue(mrz, "birthDate") + "\n";
-    text += "Gender: " + parseMRZValue(mrz, "gender") + "\n";
-    text += "Date of Expiry: " + parseMRZValue(mrz, "expiryDate") + "\n";
-  } else {
-    text = "No MRZ fields detected";
-  }
-
-  alert(text);
-
-  setTimeout(() => {
-    mrzScanner.resumeDetection();
-  }, 1000);
 }
 
 async function onTextDataDetected(textData) {
