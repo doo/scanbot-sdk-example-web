@@ -1,7 +1,8 @@
 class DocumentScannerController {
 
-    constructor(results) {
+    constructor(results, documentListController) {
         this.results = results;
+        this.documentListController = documentListController;
         this.container = Utils.getElementByClassName("scanbot-camera-controller");
         this.documentScanner = undefined;
 
@@ -67,8 +68,7 @@ class DocumentScannerController {
     async done() {
         this.close();
 
-        Utils.getElementByClassName("detection-results-controller").style.display = "block";
-        await reloadDetectionResults();
+        this.documentListController.show();
     }
 
     close() {

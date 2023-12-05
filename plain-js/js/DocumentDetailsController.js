@@ -45,12 +45,25 @@ class DocumentDetailsController{
         this.parentControllerContainter.style.display = "none";
         this.container.style.display = "block";
 
-        this.actionBarFilterSelect.selectedIndex = findFilterIndex(currentFilter);
+        this.actionBarFilterSelect.selectedIndex = this.findFilterIndex(currentFilter);
         await updateResultImage(resultIndex);
     }
 
     close() {
         this.container.style.display = "none";
         this.parentControllerContainter.style.display = "block";
+    }
+
+    findFilterIndex(filter) {
+        const options = Utils.getElementByClassName(
+            "action-bar-filter-select"
+        ).options;
+        for (let i = 0; i < options.length; i++) {
+            if (options[i].value === filter) {
+                return i;
+            }
+        }
+
+        return 0;
     }
 }

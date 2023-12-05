@@ -1,6 +1,7 @@
 const results = [];
 let scanbotSDK;
-let croppingViewController, documentDetailsController, documentScannerController, barcodeScannerController,
+let croppingViewController, documentDetailsController, documentListController,
+    documentScannerController, barcodeScannerController,
     mrzScannerController, textDataScannerController;
 
 window.onresize = () => {
@@ -10,36 +11,13 @@ window.onresize = () => {
 window.onload = async () => {
   croppingViewController = new CroppingViewController(results);
   documentDetailsController = new DocumentDetailsController(results, croppingViewController);
-  documentScannerController = new DocumentScannerController(results);
+  documentListController = new DocumentListController(results);
+  documentScannerController = new DocumentScannerController(results, documentListController);
   barcodeScannerController = new BarcodeScannerController();
   mrzScannerController = new MrzScannerController();
   textDataScannerController = new TextDataScannerController();
 
   this.resizeContent();
-
-  Utils.getElementByClassName("delete-button").onclick = async (e) => {
-    const index = Utils.getElementByClassName(
-      "detection-result-image"
-    ).getAttribute("index");
-
-    results.splice(index, 1);
-
-    const controller =
-      e.target.parentElement.parentElement.parentElement.className;
-    Utils.getElementByClassName(controller).style.display = "none";
-
-    Utils.getElementByClassName(
-      "detection-results-controller"
-    ).style.display = "block";
-
-    await reloadDetectionResults();
-  };
-
-  Utils.getElementByClassName("scanner-results-button").onclick = async (e) => {
-    Utils.getElementByClassName("detection-results-controller").style.display =
-      "block";
-    await reloadDetectionResults();
-  };
 
   Utils.getElementById("pick-document-button").onclick = (e) => {
     const picker = Utils.getElementByClassName("file-picker");
@@ -64,11 +42,7 @@ window.onload = async () => {
           result.cropped = cropped;
 
           results.push(result);
-          Utils.getElementByClassName(
-            "detection-results-controller"
-          ).style.display = "block";
-          await reloadDetectionResults();
-
+          await documentListController.show();
         } else {
           alert("Detection failed");
         }
@@ -106,39 +80,6 @@ window.onload = async () => {
     alert(JSON.stringify(info));
   };
 
-
-  Utils.getElementByClassName("pdf-button").onclick = async (e) => {
-    if (results.length === 0) {
-      console.log("No image results to save");
-      return;
-    }
-    ViewUtils.showLoading();
-    const generator = await scanbotSDK.beginPdf({
-      standardPaperSize: "A4",
-      landscape: true,
-    });
-    await addAllPagesTo(generator);
-    const bytes = await generator.complete();
-    Utils.saveBytes(bytes, Utils.generateName() + ".pdf");
-    ViewUtils.hideLoading();
-  };
-
-  Utils.getElementByClassName("tiff-button").onclick = async (e) => {
-    if (results.length === 0) {
-      console.log("No image results to save");
-      return;
-    }
-    ViewUtils.showLoading();
-    const generator = await scanbotSDK.beginTiff({
-      binarizationFilter: "deepBinarization",
-      dpi: 123,
-    });
-    await addAllPagesTo(generator);
-    const bytes = await generator.complete();
-    Utils.saveBytes(bytes, Utils.generateName() + ".tiff");
-    ViewUtils.hideLoading();
-  };
-
   const backButtons = document.getElementsByClassName("back-button");
 
   for (let i = 0; i < backButtons.length; i++) {
@@ -146,7 +87,6 @@ window.onload = async () => {
     button.onclick = async (e) => {
       const controller =
         e.target.parentElement.parentElement.parentElement.className;
-      Utils.getElementByClassName(controller).style.display = "none";
 
       if (controller.includes("scanbot-camera-controller")) {
         documentScannerController.close();
@@ -157,9 +97,10 @@ window.onload = async () => {
       } else if (controller.includes("text-data-scanner-controller")) {
         textDataScannerController.close();
       } else if (controller.includes("detection-results-controller")) {
+        documentListController.close();
       } else if (controller.includes("detection-result-controller")) {
         documentDetailsController.close();
-        await reloadDetectionResults();
+        await documentListController.show();
       } else if (controller.includes("cropping-controller")) {
         croppingViewController.close();
       }
@@ -220,39 +161,6 @@ async function switchCamera(scanner) {
 async function onScannerError(e) {
   console.log("Error:", e);
   alert(e.name + ': ' + e.message);
-}
-
-async function reloadDetectionResults() {
-  const container = Utils.getElementByClassName("detection-results-container");
-  container.innerHTML = await Utils.renderDetectionResults();
-  const size = container.offsetWidth / 3;
-
-  const items = document.getElementsByClassName("detection-result-list-image");
-  for (let i = 0; i < items.length; i++) {
-    const item = items[i];
-    item.style.width = size;
-    item.style.height = size;
-    item.onclick = onDetectionResultClick;
-  }
-}
-
-async function onDetectionResultClick(e) {
-  const index = e.target.getAttribute("index");
-  const currentFilter = results[index].filter;
-  await documentDetailsController.show(index, currentFilter);
-}
-
-function findFilterIndex(filter) {
-  const options = Utils.getElementByClassName(
-    "action-bar-filter-select"
-  ).options;
-  for (let i = 0; i < options.length; i++) {
-    if (options[i].value === filter) {
-      return i;
-    }
-  }
-
-  return 0;
 }
 
 async function updateResultImage(index) {
