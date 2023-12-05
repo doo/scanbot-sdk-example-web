@@ -36,7 +36,9 @@ class DocumentScannerController {
                     }
                 }
             },
-            onDocumentDetected: (e) => { this.onDocumentDetected(e); },
+            onDocumentDetected: (e) => {
+                this.onDocumentDetected(e);
+            },
             onError: onScannerError,
             text: {
                 hint: {

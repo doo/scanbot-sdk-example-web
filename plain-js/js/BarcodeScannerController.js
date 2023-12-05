@@ -17,7 +17,9 @@ class BarcodeScannerController {
 
         const config = Config.barcodeScannerConfig();
         config.containerId = Config.barcodeScannerContainerId();
-        config.onBarcodesDetected = (e) => { this.onBarcodesDetected(e); };
+        config.onBarcodesDetected = (e) => {
+            this.onBarcodesDetected(e);
+        };
         config.onError = onScannerError;
 
         try {
@@ -39,7 +41,7 @@ class BarcodeScannerController {
             this.onBarcodesDetected(result);
         };
         config.onError = onScannerError;
-        config.overlay = { visible: true };
+        config.overlay = {visible: true};
         config.showFinder = false;
 
         try {
@@ -72,6 +74,6 @@ class BarcodeScannerController {
             result = await scanbotSDK.toDataUrl(e.barcodes[0].barcodeImage);
         }
 
-        Toastify({ text: text.slice(0, -1), duration: 3000, avatar: result }).showToast();
+        Toastify({text: text.slice(0, -1), duration: 3000, avatar: result}).showToast();
     }
 }

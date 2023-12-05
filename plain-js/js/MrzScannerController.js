@@ -1,4 +1,4 @@
-class MrzScannerController{
+class MrzScannerController {
 
     constructor() {
         this.container = Utils.getElementByClassName("mrz-scanner-controller");
@@ -14,7 +14,9 @@ class MrzScannerController{
 
         const config = {
             containerId: Config.mrzScannerContainerId(),
-            onMrzDetected: (mrz) => { this.onMrzDetected(mrz); },
+            onMrzDetected: (mrz) => {
+                this.onMrzDetected(mrz);
+            },
             onError: onScannerError,
             preferredCamera: 'camera2 0, facing back'
         };

@@ -1,4 +1,4 @@
-class DocumentDetailsController{
+class DocumentDetailsController {
 
     constructor(results, croppingViewController) {
         this.results = results;
@@ -7,9 +7,7 @@ class DocumentDetailsController{
         this.parentControllerContainter = Utils.getElementByClassName("detection-results-controller");
         this.actionBarFilterSelect = Utils.getElementByClassName("action-bar-filter-select");
 
-        this.actionBarFilterSelect.onchange = async (
-            e
-        ) => {
+        this.actionBarFilterSelect.onchange = async (e) => {
             const index = Utils.getElementByClassName(
                 "detection-result-image"
             ).getAttribute("index");
@@ -41,7 +39,7 @@ class DocumentDetailsController{
         };
     }
 
-    async show(resultIndex, currentFilter){
+    async show(resultIndex, currentFilter) {
         this.parentControllerContainter.style.display = "none";
         this.container.style.display = "block";
 

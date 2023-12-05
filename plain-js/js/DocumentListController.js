@@ -90,7 +90,9 @@ class DocumentListController {
             const item = items[i];
             item.style.width = size;
             item.style.height = size;
-            item.onclick = (e) => { this.onDetectionResultClick(e); }
+            item.onclick = (e) => {
+                this.onDetectionResultClick(e);
+            }
         }
     }
 
