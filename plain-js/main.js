@@ -1,211 +1,23 @@
 const results = [];
-let scanbotSDK, documentScanner, barcodeScanner, mrzScanner, croppingView;
+let scanbotSDK;
+let croppingViewController, documentDetailsController, documentListController,
+    documentScannerController, barcodeScannerController,
+    mrzScannerController, textDataScannerController;
 
 window.onresize = () => {
   this.resizeContent();
 };
 
 window.onload = async () => {
+  croppingViewController = new CroppingViewController(results);
+  documentDetailsController = new DocumentDetailsController(results, croppingViewController);
+  documentListController = new DocumentListController(results);
+  documentScannerController = new DocumentScannerController(results, documentListController);
+  barcodeScannerController = new BarcodeScannerController();
+  mrzScannerController = new MrzScannerController();
+  textDataScannerController = new TextDataScannerController();
+
   this.resizeContent();
-
-  Utils.getElementByClassName("document-scanner-button").onclick = async (
-    e
-  ) => {
-    Utils.getElementByClassName("scanbot-camera-controller").style.display =
-      "block";
-
-    const config = {
-      containerId: Config.scannerContainerId(),
-      acceptedAngleScore: 60,
-      acceptedSizeScore: 60,
-      autoCaptureSensitivity: 0.66,
-      autoCaptureEnabled: true,
-      ignoreBadAspectRatio: false,
-      style: {
-        outline: {
-          polygon: {
-            strokeWidth: 40,
-            fillCapturing: "rgba(0, 255, 0, 0.2)",
-            strokeCapturing: "green",
-            fillSearching: "rgba(255, 0, 0, 0.2)",
-            strokeSearching: "red",
-          }
-        }
-      },
-      onDocumentDetected: onDocumentDetected,
-      onError: onScannerError,
-      text: {
-        hint: {
-          OK: "Capturing your document...",
-          OK_SmallSize: "The document is too small. Try moving closer.",
-          OK_BadAngles:
-            "This is a bad camera angle. Hold the device straight over the document.",
-          OK_BadAspectRatio:
-            "Rotate the device sideways, so that the document fits better into the screen.",
-          OK_OffCenter: "Try holding the device at the center of the document.",
-          Error_NothingDetected:
-            "Please hold the device over a document to start scanning.",
-          Error_Brightness: "It is too dark. Try turning on a light.",
-          Error_Noise: "Please move the document to a clear surface.",
-        },
-      },
-      preferredCamera: 'camera2 0, facing back'
-    };
-
-    try {
-      documentScanner = await scanbotSDK.createDocumentScanner(config);
-    } catch (e) {
-      console.log(e.name + ': ' + e.message);
-      alert(e.name + ': ' + e.message);
-      Utils.getElementByClassName("scanbot-camera-controller").style.display = "none";
-    }
-  };
-
-  Utils.getElementByClassName("detection-done-button").onclick = async (e) => {
-    documentScanner.dispose();
-    Utils.getElementByClassName("scanbot-camera-controller").style.display =
-      "none";
-    Utils.getElementByClassName("detection-results-controller").style.display =
-      "block";
-
-    await reloadDetectionResults();
-  };
-
-  Utils.getElementByClassName("crop-button").onclick = async (e) => {
-    Utils.getElementByClassName("detection-result-controller").style.display =
-      "none";
-    Utils.getElementByClassName("cropping-controller").style.display = "block";
-
-    const index = Utils.getElementByClassName(
-      "detection-result-image"
-    ).getAttribute("index");
-
-    let rotations = results[index].rotations;
-    if (!rotations) {
-      rotations = 0;
-    }
-
-    const options = {
-      containerId: Config.croppingViewContainerId(),
-      image: results[index].original,
-      polygon: results[index].polygon,
-      rotations: rotations,
-      disableScroll: true,
-      style: {
-        padding: 20,
-        polygon: {
-          color: "green",
-          width: 4,
-          handles: {
-            size: 14,
-            color: "white",
-            border: "1px solid lightgray",
-          },
-        },
-        magneticLines: {
-          // disabled: true,
-          color: "red",
-        },
-      },
-    };
-    croppingView = await scanbotSDK.openCroppingView(options);
-  };
-
-  Utils.getElementByClassName("delete-button").onclick = async (e) => {
-    const index = Utils.getElementByClassName(
-      "detection-result-image"
-    ).getAttribute("index");
-
-    results.splice(index, 1);
-
-    const controller =
-      e.target.parentElement.parentElement.parentElement.className;
-    Utils.getElementByClassName(controller).style.display = "none";
-
-    Utils.getElementByClassName(
-      "detection-results-controller"
-    ).style.display = "block";
-
-    await reloadDetectionResults();
-  };
-
-  Utils.getElementByClassName("barcode-scanner-button").onclick = async (e) => {
-    Utils.getElementByClassName("barcode-scanner-controller").style.display = "block";
-
-    const config = Config.barcodeScannerConfig();
-    config.containerId = Config.barcodeScannerContainerId();
-    config.onBarcodesDetected = onBarcodesDetected;
-    config.onError = onScannerError;
-
-    try {
-      barcodeScanner = await scanbotSDK.createBarcodeScanner(config);
-    } catch (e) {
-      console.log(e.name + ': ' + e.message);
-      alert(e.name + ': ' + e.message);
-      Utils.getElementByClassName("barcode-scanner-controller").style.display = "none";
-    }
-  };
-
-  Utils.getElementByClassName("barcode-scanner-overlay-button").onclick = async (e) => {
-    Utils.getElementByClassName("barcode-scanner-overlay-controller").style.display = "block";
-
-    const config = Config.barcodeScannerConfig();
-    config.containerId = Config.barcodeScannerOverlayContainerId();
-    config.onBarcodesDetected = (result) => {
-      onBarcodesDetected(result);
-    };
-    config.onError = onScannerError;
-    config.overlay = { visible: true };
-    config.showFinder = false;
-
-    try {
-      barcodeScanner = await scanbotSDK.createBarcodeScanner(config);
-    } catch (e) {
-      console.log(e.name + ': ' + e.message);
-      alert(e.name + ': ' + e.message);
-      Utils.getElementByClassName("barcode-scanner-overlay-controller").style.display = "none";
-    }
-  };
-
-  Utils.getElementByClassName("mrz-scanner-button").onclick = async (e) => {
-    Utils.getElementByClassName("mrz-scanner-controller").style.display =
-      "block";
-
-    const config = {
-      containerId: Config.mrzScannerContainerId(),
-      onMrzDetected: onMrzDetected,
-      onError: onScannerError,
-      preferredCamera: 'camera2 0, facing back'
-    };
-
-    try {
-      mrzScanner = await scanbotSDK.createMrzScanner(config);
-    } catch (e) {
-      console.log(e.name + ': ' + e.message);
-      alert(e.name + ': ' + e.message);
-      Utils.getElementByClassName("mrz-scanner-controller").style.display = "none";
-    }
-  };
-
-  Utils.getElementByClassName("text-data-scanner-button").onclick = async (e) => {
-    Utils.getElementByClassName("text-data-scanner-controller").style.display = "block";
-    const config = {
-      containerId: Config.textDataScannerContainerId(),
-      onTextDetected: onTextDataDetected,
-      onError: onScannerError,
-      ocrResolutionLimit: 400,
-      supportedLanguages: ['eng', 'deu'],
-      preferredCamera: 'camera2 0, facing back'
-    };
-
-    textDataScanner = await scanbotSDK.createTextDataScanner(config);
-  };
-
-  Utils.getElementByClassName("scanner-results-button").onclick = async (e) => {
-    Utils.getElementByClassName("detection-results-controller").style.display =
-      "block";
-    await reloadDetectionResults();
-  };
 
   Utils.getElementById("pick-document-button").onclick = (e) => {
     const picker = Utils.getElementByClassName("file-picker");
@@ -230,11 +42,7 @@ window.onload = async () => {
           result.cropped = cropped;
 
           results.push(result);
-          Utils.getElementByClassName(
-            "detection-results-controller"
-          ).style.display = "block";
-          await reloadDetectionResults();
-
+          await documentListController.show();
         } else {
           alert("Detection failed");
         }
@@ -272,98 +80,6 @@ window.onload = async () => {
     alert(JSON.stringify(info));
   };
 
-  Utils.getElementByClassName("detect-button").onclick = async (e) => {
-    await croppingView.detect();
-  };
-
-  Utils.getElementByClassName("rotate-button").onclick = async (e) => {
-    await croppingView.rotate(1);
-  };
-
-  Utils.getElementByClassName("apply-button").onclick = async (e) => {
-    ViewUtils.showLoading();
-    const result = await croppingView.apply();
-    croppingView.dispose();
-    const index = Utils.getElementByClassName(
-      "detection-result-image"
-    ).getAttribute("index");
-    results[index].filtered = undefined;
-    results[index].cropped = result.image;
-    results[index].polygon = result.polygon;
-    results[index].rotations = result.rotations;
-
-    if (results[index].filter) {
-      results[index].filtered = await scanbotSDK.applyFilter(
-        results[index].cropped,
-        results[index].filter
-      );
-    }
-
-    Utils.getElementByClassName("cropping-controller").style.display = "none";
-    Utils.getElementByClassName("detection-result-controller").style.display =
-      "block";
-
-    await updateResultImage(index);
-    ViewUtils.hideLoading();
-  };
-
-  Utils.getElementByClassName("pdf-button").onclick = async (e) => {
-    if (results.length === 0) {
-      console.log("No image results to save");
-      return;
-    }
-    ViewUtils.showLoading();
-    const generator = await scanbotSDK.beginPdf({
-      standardPaperSize: "A4",
-      landscape: true,
-    });
-    await addAllPagesTo(generator);
-    const bytes = await generator.complete();
-    Utils.saveBytes(bytes, Utils.generateName() + ".pdf");
-    ViewUtils.hideLoading();
-  };
-
-  Utils.getElementByClassName("tiff-button").onclick = async (e) => {
-    if (results.length === 0) {
-      console.log("No image results to save");
-      return;
-    }
-    ViewUtils.showLoading();
-    const generator = await scanbotSDK.beginTiff({
-      binarizationFilter: "deepBinarization",
-      dpi: 123,
-    });
-    await addAllPagesTo(generator);
-    const bytes = await generator.complete();
-    Utils.saveBytes(bytes, Utils.generateName() + ".tiff");
-    ViewUtils.hideLoading();
-  };
-
-  Utils.getElementByClassName("action-bar-filter-select").onchange = async (
-    e
-  ) => {
-    const index = Utils.getElementByClassName(
-      "detection-result-image"
-    ).getAttribute("index");
-    const filter = e.target.value;
-
-    ViewUtils.showLoading();
-    if (filter === "none") {
-      results[index].filtered = undefined;
-    } else {
-      let toFilter = results[index].cropped;
-      if (!toFilter) {
-        toFilter = results[index].original;
-      }
-
-      results[index].filter = filter;
-      results[index].filtered = await scanbotSDK.applyFilter(toFilter, filter);
-    }
-
-    await updateResultImage(index);
-    ViewUtils.hideLoading();
-  };
-
   const backButtons = document.getElementsByClassName("back-button");
 
   for (let i = 0; i < backButtons.length; i++) {
@@ -371,32 +87,22 @@ window.onload = async () => {
     button.onclick = async (e) => {
       const controller =
         e.target.parentElement.parentElement.parentElement.className;
-      Utils.getElementByClassName(controller).style.display = "none";
 
       if (controller.includes("scanbot-camera-controller")) {
-        documentScanner.dispose();
-        documentScanner = undefined;
+        documentScannerController.close();
       } else if (controller.includes("barcode-scanner-controller") || controller.includes("barcode-scanner-overlay-controller")) {
-        barcodeScanner.dispose();
-        barcodeScanner = undefined;
+        barcodeScannerController.close();
       } else if (controller.includes("mrz-scanner-controller")) {
-        mrzScanner.dispose();
-        mrzScanner = undefined;
+        mrzScannerController.close();
       } else if (controller.includes("text-data-scanner-controller")) {
-        textDataScanner.dispose();
-        textDataScanner = undefined;
+        textDataScannerController.close();
       } else if (controller.includes("detection-results-controller")) {
+        documentListController.close();
       } else if (controller.includes("detection-result-controller")) {
-        Utils.getElementByClassName(
-          "detection-results-controller"
-        ).style.display = "block";
-        await reloadDetectionResults();
+        documentDetailsController.close();
+        await documentListController.show();
       } else if (controller.includes("cropping-controller")) {
-        Utils.getElementByClassName(
-          "detection-result-controller"
-        ).style.display = "block";
-        croppingView.dispose();
-        croppingView = undefined;
+        croppingViewController.close();
       }
     };
   }
@@ -406,15 +112,14 @@ window.onload = async () => {
   for (let i = 0; i < cameraSwapButtons.length; i++) {
     const button = cameraSwapButtons[i];
     button.onclick = async (e) => {
-
-      if (documentScanner) {
-        documentScanner.swapCameraFacing(true);
-      } else if (barcodeScanner) {
-        barcodeScanner.swapCameraFacing(true);
-      } else if (mrzScanner) {
-        mrzScanner.swapCameraFacing(true);
-      } else if (textDataScanner) {
-        textDataScanner.swapCameraFacing(true);
+      if (documentScannerController.documentScanner) {
+        documentScannerController.documentScanner.swapCameraFacing(true);
+      } else if (barcodeScannerController.barcodeScanner) {
+        barcodeScannerController.barcodeScanner.swapCameraFacing(true);
+      } else if (mrzScannerController.mrzScanner) {
+        mrzScannerController.mrzScanner.swapCameraFacing(true);
+      } else if (textDataScannerController.textDataScanner) {
+        textDataScannerController.textDataScanner.swapCameraFacing(true);
       }
     };
   }
@@ -424,14 +129,14 @@ window.onload = async () => {
   for (let i = 0; i < cameraSwitchButtons.length; i++) {
     const button = cameraSwitchButtons[i];
     button.onclick = async (e) => {
-      if (documentScanner) {
-        onCameraSwitch(documentScanner);
-      } else if (barcodeScanner) {
-        onCameraSwitch(barcodeScanner);
-      } else if (mrzScanner) {
-        onCameraSwitch(mrzScanner);
-      } else if (textDataScanner) {
-        onCameraSwitch(textDataScanner);
+      if (documentScannerController.documentScanner) {
+        switchCamera(documentScannerController.documentScanner);
+      } else if (barcodeScannerController.barcodeScanner) {
+        switchCamera(barcodeScannerController.barcodeScanner);
+      } else if (mrzScannerController.mrzScanner) {
+        switchCamera(mrzScannerController.mrzScanner);
+      } else if (textDataScannerController.textDataScanner) {
+        switchCamera(textDataScannerController.textDataScanner);
       }
     };
   }
@@ -440,7 +145,7 @@ window.onload = async () => {
   ViewUtils.hideLoading();
 };
 
-async function onCameraSwitch(scanner) {
+async function switchCamera(scanner) {
   const cameras = await scanner?.fetchAvailableCameras()
   if (cameras) {
     const currentCameraInfo = scanner?.getActiveCameraInfo();
@@ -453,130 +158,9 @@ async function onCameraSwitch(scanner) {
   }
 }
 
-async function onBarcodesDetected(e) {
-  let text = "";
-  e.barcodes.forEach((barcode) => {
-    if (barcode.parsedText) {
-      text += JSON.stringify(barcode.parsedText);
-    } else {
-      text += " " + barcode.text + " (" + barcode.format + "),";
-    }
-  });
-
-  let result;
-  if (e.barcodes[0].barcodeImage) {
-    result = await scanbotSDK.toDataUrl(e.barcodes[0].barcodeImage);
-  }
-
-  Toastify({ text: text.slice(0, -1), duration: 3000, avatar: result }).showToast();
-}
-
-function toConfidenceString(input, key) {
-
-  const confidence = input[key].confidence;
-
-  if (!confidence) {
-    return "";
-  }
-
-  return ` (${Number(confidence).toFixed(3)})`;
-}
-
-function parseMRZValue(input, key) {
-  return input[key] ? (input[key].value + toConfidenceString(input, key)) : ''
-}
-
-async function onMrzDetected(mrz) {
-  mrzScanner.pauseDetection();
-
-  let text = "";
-  if (mrz) {
-
-    text += "Document Type: " + parseMRZValue(mrz, "documentType") + "\n";
-    text += "First Name: " + parseMRZValue(mrz, "givenNames") + "\n";
-    text += "Last Name: " + parseMRZValue(mrz, "surname") + "\n";
-    text += "Issuing Authority: " + parseMRZValue(mrz, "issuingAuthority") + "\n";
-    text += "Nationality: " + parseMRZValue(mrz, "nationality") + "\n";
-    text += "Birth Date: " + parseMRZValue(mrz, "birthDate") + "\n";
-    text += "Gender: " + parseMRZValue(mrz, "gender") + "\n";
-    text += "Date of Expiry: " + parseMRZValue(mrz, "expiryDate") + "\n";
-  } else {
-    text = "No MRZ fields detected";
-  }
-
-  alert(text);
-
-  setTimeout(() => {
-    mrzScanner.resumeDetection();
-  }, 1000);
-}
-
-async function onTextDataDetected(textData) {
-  if (!textData) return;
-
-  if (textData.validated) {
-    if (typeof textDataScanner !== 'undefined') {
-      textDataScanner.pauseDetection();
-    }
-
-    alert(textData.text);
-
-    if (typeof textDataScanner !== 'undefined') {
-      setTimeout(() => { textDataScanner.resumeDetection() }, 500);
-    }
-  }
-
-}
-
-async function onDocumentDetected(e) {
-  results.push(e);
-  ViewUtils.flash();
-  Utils.getElementByClassName("page-count-indicator").innerHTML =
-    results.length + " PAGES";
-}
-
 async function onScannerError(e) {
   console.log("Error:", e);
   alert(e.name + ': ' + e.message);
-}
-
-async function reloadDetectionResults() {
-  const container = Utils.getElementByClassName("detection-results-container");
-  container.innerHTML = await Utils.renderDetectionResults();
-  const size = container.offsetWidth / 3;
-
-  const items = document.getElementsByClassName("detection-result-list-image");
-  for (let i = 0; i < items.length; i++) {
-    const item = items[i];
-    item.style.width = size;
-    item.style.height = size;
-    item.onclick = onDetectionResultClick;
-  }
-}
-
-async function onDetectionResultClick(e) {
-  Utils.getElementByClassName("detection-results-controller").style.display =
-    "none";
-  Utils.getElementByClassName("detection-result-controller").style.display =
-    "block";
-
-  const index = e.target.getAttribute("index");
-  Utils.getElementByClassName("action-bar-filter-select").selectedIndex =
-    findFilterIndex(results[index].filter);
-  await updateResultImage(index);
-}
-
-function findFilterIndex(filter) {
-  const options = Utils.getElementByClassName(
-    "action-bar-filter-select"
-  ).options;
-  for (let i = 0; i < options.length; i++) {
-    if (options[i].value === filter) {
-      return i;
-    }
-  }
-
-  return 0;
 }
 
 async function updateResultImage(index) {
