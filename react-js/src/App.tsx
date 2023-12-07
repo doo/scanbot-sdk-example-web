@@ -30,6 +30,7 @@ import { MrzResult } from "scanbot-web-sdk/@types/model/mrz/mrz-result";
 import TextDataScannerComponent from "./rtu-ui/text-data-scanner-component";
 import ResultParser from "./service/result-parser";
 import { IBarcodePolygonHandle, IBarcodePolygonLabelHandle } from "scanbot-web-sdk/@types/model/configuration/selection-overlay-configuration";
+import VINScannerComponent from "./rtu-ui/vin-scanner-component";
 
 export default class App extends React.Component<any, any> {
   constructor(props: any) {
@@ -104,6 +105,7 @@ export default class App extends React.Component<any, any> {
         {this.barcodeScannerWithOverlay()}
         {this.mrzScanner()}
         {this.textDataScanner()}
+        {this.vinScanner()}
         {this.scanAndCounter()}
 
         <Toast alert={this.state.alert} onClose={() => this.setState({ alert: undefined })} />
@@ -210,6 +212,21 @@ export default class App extends React.Component<any, any> {
       );
     }
     return this._textDataScannerHtmlComponent;
+  }
+
+  _vinScannerHtmlComponent: any;
+  _vinScanner?: VINScannerComponent | null;
+  vinScanner() {
+    if (!this._vinScannerHtmlComponent) {
+      this._vinScannerHtmlComponent = (
+        <VINScannerComponent
+          ref={(ref) => (this._vinScanner = ref)}
+          sdk={this.state.sdk}
+          onTextDataDetected={this.onVINDetected.bind(this)}
+        />
+      );
+    }
+    return this._vinScannerHtmlComponent;
   }
 
   _scanAndCounterHtmlComponent: any;
@@ -425,13 +442,20 @@ export default class App extends React.Component<any, any> {
 
     if (textData.validated) {
       ScanbotSdkService.instance.textDataScanner?.pauseDetection();
-
       alert(textData.text);
-
       setTimeout(() => { ScanbotSdkService.instance.textDataScanner?.resumeDetection() }, 500);
     }
   }
 
+  async onVINDetected(textData: TextDataScannerResult) {
+    if (!textData) return;
+    
+    // The VIN scanner does not return empty results, so we can skip 'validated' check here
+    // However, validated will still be true if several frames detected the same number
+    ScanbotSdkService.instance.vinScanner?.pauseDetection();
+    alert(textData.text);
+    setTimeout(() => { ScanbotSdkService.instance.vinScanner?.resumeDetection() }, 500);
+  }
 
   formatBarcodes(codes: Barcode[]): string {
     return JSON.stringify(
@@ -472,6 +496,10 @@ export default class App extends React.Component<any, any> {
     }
     if (feature.id === RoutePath.TextDataScanner) {
       this._textDataScanner?.push(AnimationType.PushRight);
+      return;
+    }
+    if (feature.id === RoutePath.VINScanner) {
+      this._vinScanner?.push(AnimationType.PushRight);
       return;
     }
     if (feature.id === RoutePath.ScanAndCount) {

@@ -28,6 +28,11 @@ export class Features {
       route: RoutePath.TextDataScanner,
     },
     {
+      id: RoutePath.VINScanner,
+      name: "VIN Scanner",
+      route: RoutePath.VINScanner,
+    },
+    {
       id: RoutePath.ScanAndCount,
       name: "Scan & Count",
       route: RoutePath.ScanAndCount,

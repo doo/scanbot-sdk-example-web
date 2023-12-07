@@ -20,6 +20,7 @@ import {
   TextDataScannerConfiguration,
   ITextDataScannerHandle,
   MrzScannerConfiguration,
+  TextDataScannerResult,
 } from "scanbot-web-sdk/@types";
 
 import Pages from "../model/pages";
@@ -27,13 +28,17 @@ import { ImageUtils } from "../utils/image-utils";
 import { BarcodeFormat } from "scanbot-web-sdk/@types/model/barcode/barcode-format";
 import { IMrzScannerHandle } from "scanbot-web-sdk/@types/interfaces/i-mrz-scanner-handle";
 import { ContourDetectionResult } from "scanbot-web-sdk/@types/model/document/contour-detection-result";
+import { VINScannerConfiguration } from "scanbot-web-sdk/@types/model/configuration/vin-scanner-configuration";
+import { TextDetectionCallback } from "scanbot-web-sdk/@types/model/configuration/text-data-scanner-configuration";
 
 export class ScanbotSdkService {
+
   static DOCUMENT_SCANNER_CONTAINER = "document-scanner-view";
   static CROPPING_VIEW_CONTAINER = "cropping-view";
   static BARCODE_SCANNER_CONTAINER = "barcode-scanner-view";
   static MRZ_SCANNER_CONTAINER = "mrz-scanner-view";
   static TEXTDATA_SCANNER_CONTAINER = "text-data-scanner-view";
+  static VIN_SCANNER_CONTAINER = "vin-scanner-view";
 
   public static instance = new ScanbotSdkService();
 
@@ -45,16 +50,13 @@ export class ScanbotSdkService {
   barcodeScanner?: IBarcodeScannerHandle;
   mrzScanner?: IMrzScannerHandle;
   textDataScanner?: ITextDataScannerHandle;
+  vinScanner?: ITextDataScannerHandle;
   croppingView?: ICroppingViewHandle;
 
   public async initialize() {
     this.sdk = await ScanbotSDK.initialize({
       licenseKey: this.license,
       engine: "/",
-
-
-
-
       allowThreads: true
     });
     return this.sdk;
@@ -157,7 +159,7 @@ export class ScanbotSdkService {
       preferredCamera: 'camera2 0, facing back',
       ...additionalConfig
     };
-    
+
     this.barcodeScanner = await this.sdk!.createBarcodeScanner(config);
   }
 
@@ -197,6 +199,18 @@ export class ScanbotSdkService {
     this.textDataScanner = await this.sdk!.createTextDataScanner(config);
   }
 
+  public async createVINScanner(onVINDetected: any, errorCallback: (e: Error) => void) {
+
+    const config: VINScannerConfiguration = {
+      containerId: ScanbotSdkService.VIN_SCANNER_CONTAINER,
+      onTextDetected: (e: TextDataScannerResult) => {
+        onVINDetected(e);
+      },
+      onError: errorCallback,
+    }
+
+    this.vinScanner = await this.sdk!.createVINScanner(config);
+  }
 
   public async openCroppingView(page: any) {
     const configuration: CroppingViewConfiguration = {
