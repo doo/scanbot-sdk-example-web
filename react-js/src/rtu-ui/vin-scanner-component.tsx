@@ -18,11 +18,11 @@ export default class VINScannerComponent extends BaseScannerComponent {
     );
   }
 
-  onTextDataDetected(result: TextDataScannerResult) {
-    this.props.onTextDataDetected(result);
+  onVINDetected(result: TextDataScannerResult) {
+    this.props.onVINDetected(result);
   }
 
-  onTextDataScannerError(e: Error) {
+  onVINScannerError(e: Error) {
     console.log(e.name + ': ' + e.message);
     alert(e.name + ': ' + e.message);
   }
@@ -33,11 +33,11 @@ export default class VINScannerComponent extends BaseScannerComponent {
     this.updateAnimationType(type, async () => {
       try {
         await ScanbotSdkService.instance.createVINScanner(
-          this.onTextDataDetected.bind(this),
-          this.onTextDataScannerError.bind(this)
+          this.onVINDetected.bind(this),
+          this.onVINScannerError.bind(this)
         );
       } catch (e: any) {
-        this.onTextDataScannerError(e);
+        this.onVINScannerError(e);
         this.pop()
       }
     });
@@ -46,7 +46,7 @@ export default class VINScannerComponent extends BaseScannerComponent {
   pop() {
     super.pop();
     this.updateAnimationType(AnimationType.Pop, () => {
-      ScanbotSdkService.instance.disposeTextDataScanner();
+      ScanbotSdkService.instance.disposeVINScanner();
     });
   }
 }

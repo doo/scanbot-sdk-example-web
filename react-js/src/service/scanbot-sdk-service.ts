@@ -29,7 +29,6 @@ import { BarcodeFormat } from "scanbot-web-sdk/@types/model/barcode/barcode-form
 import { IMrzScannerHandle } from "scanbot-web-sdk/@types/interfaces/i-mrz-scanner-handle";
 import { ContourDetectionResult } from "scanbot-web-sdk/@types/model/document/contour-detection-result";
 import { VINScannerConfiguration } from "scanbot-web-sdk/@types/model/configuration/vin-scanner-configuration";
-import { TextDetectionCallback } from "scanbot-web-sdk/@types/model/configuration/text-data-scanner-configuration";
 
 export class ScanbotSdkService {
 
@@ -182,9 +181,12 @@ export class ScanbotSdkService {
     this.mrzScanner?.dispose();
   }
 
-
   public disposeTextDataScanner() {
     this.textDataScanner?.dispose();
+  }
+
+  public disposeVINScanner() {
+    this.vinScanner?.dispose();
   }
 
   public async createTextDataScanner(onTextDetected: any, errorCallback: (e: Error) => void) {
@@ -204,6 +206,7 @@ export class ScanbotSdkService {
     const config: VINScannerConfiguration = {
       containerId: ScanbotSdkService.VIN_SCANNER_CONTAINER,
       onTextDetected: (e: TextDataScannerResult) => {
+        console.log("VIN detected: ", e);
         onVINDetected(e);
       },
       onError: errorCallback,

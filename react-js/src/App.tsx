@@ -222,7 +222,7 @@ export default class App extends React.Component<any, any> {
         <VINScannerComponent
           ref={(ref) => (this._vinScanner = ref)}
           sdk={this.state.sdk}
-          onTextDataDetected={this.onVINDetected.bind(this)}
+          onVINDetected={this.onVINDetected.bind(this)}
         />
       );
     }
