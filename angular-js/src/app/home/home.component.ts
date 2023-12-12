@@ -65,10 +65,6 @@ export class HomeComponent implements OnInit {
         const cropped = await this.sdk.cropAndRotateImageCcw(image.original, contourDetectionResult.polygon, 0);
         const documentDetectionResult = { ...contourDetectionResult, original: image.original, cropped: cropped };
 
-        const analyzer = await this.sdk.createDocumentQualityAnalyzer();
-        console.log('Document Analysis:', await analyzer.analyze(documentDetectionResult.original));
-        await analyzer.release();
-
         this.documents.add(documentDetectionResult);
         alert("Detection successful");
       } else {

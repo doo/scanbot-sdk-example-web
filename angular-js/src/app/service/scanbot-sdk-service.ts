@@ -226,10 +226,6 @@ export class ScanbotSdkService {
     this.textDataScanner?.swapCameraFacing(true);
   }
 
-  public async createDocumentQualityAnalyzer() {
-    return this.instance?.createDocumentQualityAnalyzer();
-  }
-
   public switchBarcodeScannerCameraFacing() {
     this.onCameraSwitch(this.barcodeScanner);
   }

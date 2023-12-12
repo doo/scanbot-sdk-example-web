@@ -32,10 +32,6 @@ window.onload = async () => {
       reader.onload = async (e) => {
         const result = await scanbotSDK.detectDocument(reader.result);
 
-        const analyzer = await scanbotSDK.createDocumentQualityAnalyzer();
-        console.log('Document Analysis:', await analyzer.analyze(reader.result));
-        await analyzer.release();
-
         if (result.success === true) {
           const cropped = await scanbotSDK.cropAndRotateImageCcw(reader.result, result.polygon, 0);
           result.original = reader.result;
