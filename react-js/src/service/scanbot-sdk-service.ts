@@ -290,7 +290,7 @@ export class ScanbotSdkService {
   async generatePDF(pages: any[]) {
     const options: PdfGenerationOptions = {
       standardPaperSize: "A4",
-      landscape: true,
+      pageDirection: "PORTRAIT"
     };
     const generator: PdfGenerator = await this.sdk!.beginPdf(options);
     for (const page of pages) {
