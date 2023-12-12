@@ -412,9 +412,6 @@ export default class App extends React.Component<any, any> {
     ScanbotSdkService.instance.sdk?.utils.flash();
 
     console.log("Document detection result:", result);
-    const analyzer = await ScanbotSdkService.instance.createDocumentQualityAnalyzer();
-    console.log('Document quality analysis:', await analyzer?.analyze(result.original));
-    await analyzer?.release();
   }
 
   async onBarcodesDetected(result: BarcodeResult) {

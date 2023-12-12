@@ -21,6 +21,7 @@ import {
   ITextDataScannerHandle,
   MrzScannerConfiguration,
   TextDataScannerResult,
+  DocumentDetectionResult,
 } from "scanbot-web-sdk/@types";
 
 import Pages from "../model/pages";
@@ -86,6 +87,16 @@ export class ScanbotSdkService {
 
   public async createDocumentQualityAnalyzer() {
     return this.sdk?.createDocumentQualityAnalyzer();
+  }
+
+  public async analyzeDocumentQuality(result: DocumentDetectionResult) {
+    /** 
+     * Initialization of the analyzer can cause a strain on your user interface,
+     * In a real-life scenario, consider creating the analyzer once on app/scanner startup, not for every scan.
+     */
+    const analyzer = await ScanbotSdkService.instance.createDocumentQualityAnalyzer();
+    console.log('Document quality analysis:', await analyzer?.analyze(result.original));
+    await analyzer?.release();
   }
 
   public async createDocumentScanner(detectionCallback: any, errorCallback: (e: Error) => void) {
