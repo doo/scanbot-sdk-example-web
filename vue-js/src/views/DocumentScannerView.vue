@@ -1,5 +1,11 @@
 <template>
-  <PageLayout title="Document Scanner" :is-loading=isLoading>
+  <PageLayout
+      title="Document Scanner"
+      :is-loading=isLoading
+      :hasCameraControls="true"
+      @on-camera-swap="onCameraSwap"
+      @on-camera-switch="onCameraSwitch"
+  >
     <div id="scanbot-document-scanner-ui-container" class="scanbot-camera-container"></div>
     <div class="bottom-bar">
       <div class="bottom-bar-button scanner-page-counter" v-html="numPages()"></div>
@@ -22,6 +28,7 @@ import type {IDocumentScannerHandle, DocumentDetectionResult} from "scanbot-web-
 import {RouterLink, useRouter} from "vue-router";
 import {useDocumentsStore} from "@/stores/documents.js";
 import {onError} from "@/misc/onError";
+import {switchCamera} from "@/misc/switchCamera";
 
 let isLoading = ref(true);
 let documentScanner = ref<IDocumentScannerHandle | null>(null);
@@ -95,8 +102,22 @@ onMounted(async () => {
 onBeforeUnmount(async () => {
   if (documentScanner.value) {
     documentScanner.value.dispose();
+    documentScanner.value = null;
   }
 });
+
+function onCameraSwap() {
+  console.log("onCameraSwap")
+  if (documentScanner.value) {
+    documentScanner.value.swapCameraFacing();
+  }
+}
+
+function onCameraSwitch() {
+  if (documentScanner.value) {
+    switchCamera(documentScanner.value);
+  }
+}
 </script>
 
 <style>

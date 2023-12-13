@@ -9,8 +9,8 @@
       </div>
       <div class="spacer"></div>
       <div v-if="hasCameraControls" class="camera-button-container h3">
-        <span class="camera-swap-button">&#8645;</span>
-        <span class="camera-switch-button">&#8646;</span>
+        <span class="camera-swap-button mr-3" @click="$emit('on-camera-swap')" >&#8645;</span>
+        <span class="camera-switch-button mr-3" @click="$emit('on-camera-switch')">&#8646;</span>
       </div>
     </div>
     <div id="barcode-scanner-container" class="content" role="main" :style="isLoading ? {display:'none'} : {}">

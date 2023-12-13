@@ -1,5 +1,11 @@
 <template>
-  <PageLayout :is-loading="isLoading" title="Barcode Scanner">
+  <PageLayout
+      :is-loading="isLoading"
+      title="Barcode Scanner"
+      :hasCameraControls="true"
+      @on-camera-swap="onCameraSwap"
+      @on-camera-switch="onCameraSwitch"
+  >
     <div id="barcode-scanner-container"></div>
   </PageLayout>
 </template>
@@ -7,20 +13,22 @@
 
 <script setup lang="ts">
 import {useRouter} from "vue-router";
-import {inject, onBeforeMount, onMounted, ref} from "vue";
+import {inject, onBeforeMount, onMounted, onBeforeUnmount, ref} from "vue";
 import PageLayout from "@/components/PageLayout.vue";
 import type {BarcodeFormat} from "scanbot-web-sdk/@types/model/barcode/barcode-format";
-import type {Barcode, BarcodeResult, BarcodeScannerConfiguration} from "scanbot-web-sdk/@types";
+import type {Barcode, BarcodeResult, BarcodeScannerConfiguration, IBarcodeScannerHandle} from "scanbot-web-sdk/@types";
 import {onError} from "@/misc/onError";
 import type {IBarcodePolygonHandle} from "scanbot-web-sdk/@types/model/configuration/selection-overlay-configuration";
 import type ScanbotSDK from "scanbot-web-sdk";
 import * as toastr from "toastr";
 import "toastr/build/toastr.min.css";
+import {switchCamera} from "@/misc/switchCamera";
 
 const isLoading = ref(true);
 const isOverlayScanner = ref(false);
 const router = useRouter();
 const scanbotSDK: Promise<ScanbotSDK> = inject("scanbotSDK")!;
+let barcodeScanner = ref<IBarcodeScannerHandle | null>(null);
 
 onBeforeMount(() => {
   isLoading.value = true;
@@ -69,7 +77,7 @@ onMounted(async () => {
   };
 
   try {
-    await (await scanbotSDK).createBarcodeScanner(configuration);
+    barcodeScanner.value = await (await scanbotSDK).createBarcodeScanner(configuration);
   } catch (e) {
     onError(e);
     await router.push({name: "home"});
@@ -77,6 +85,25 @@ onMounted(async () => {
 
   isLoading.value = false;
 });
+
+onBeforeUnmount(async () => {
+  if (barcodeScanner.value) {
+    barcodeScanner.value.dispose();
+    barcodeScanner.value = null;
+  }
+});
+
+function onCameraSwap() {
+  if (barcodeScanner.value) {
+    barcodeScanner.value.swapCameraFacing();
+  }
+}
+
+function onCameraSwitch() {
+  if (barcodeScanner.value) {
+    switchCamera(barcodeScanner.value);
+  }
+}
 
 async function onBarcodesDetected(result: BarcodeResult) {
   toastr.success(formatBarcodes(result.barcodes), "Detected Barcodes!");
