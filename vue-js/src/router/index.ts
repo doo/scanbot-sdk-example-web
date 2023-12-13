@@ -4,9 +4,8 @@ import HomeView from '../views/HomeView.vue'
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [
-    { path: '/', redirect: '/index.html' },
     {
-      path: '/index.html',
+      path: '/',
       name: 'home',
       component: HomeView
     },
