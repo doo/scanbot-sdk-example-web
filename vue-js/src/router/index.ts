@@ -33,6 +33,11 @@ const router = createRouter({
       path: '/document_cropping/:id',
       name: 'document_cropping',
       component: () => import('../views/DocumentCroppingView.vue')
+    },
+    {
+      path: '/barcode_scanner/:overlay',
+      name: 'barcode_scanner',
+      component: () => import('../views/BarcodeScannerView.vue')
     }
   ]
 })
