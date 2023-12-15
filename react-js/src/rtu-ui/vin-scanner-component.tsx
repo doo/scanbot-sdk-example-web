@@ -3,26 +3,26 @@ import { ScanbotSdkService } from "../service/scanbot-sdk-service";
 import BaseScannerComponent from "./common/base-scanner-component";
 import { AnimationType } from "./enum/animation-type";
 
-export default class TextDataScannerComponent extends BaseScannerComponent {
+export default class VINScannerComponent extends BaseScannerComponent {
   render() {
     return this.controller(
-      ScanbotSdkService.TEXTDATA_SCANNER_CONTAINER,
-      "Text Data Scanner",
+      ScanbotSdkService.VIN_SCANNER_CONTAINER,
+      "VIN Scanner",
       "",
       () => {
-        this.onCameraSwap(ScanbotSdkService.instance.textDataScanner!, true);
+        this.onCameraSwap(ScanbotSdkService.instance.vinScanner!, true);
       },
       () => {
-        this.onCameraSwitch(ScanbotSdkService.instance.textDataScanner!);
+        this.onCameraSwitch(ScanbotSdkService.instance.vinScanner!);
       }
     );
   }
 
-  onTextDataDetected(result: TextDataScannerResult) {
-    this.props.onTextDataDetected(result);
+  onVINDetected(result: TextDataScannerResult) {
+    this.props.onVINDetected(result);
   }
 
-  onTextDataScannerError(e: Error) {
+  onVINScannerError(e: Error) {
     console.log(e.name + ': ' + e.message);
     alert(e.name + ': ' + e.message);
   }
@@ -32,12 +32,12 @@ export default class TextDataScannerComponent extends BaseScannerComponent {
     this.pushType = type;
     this.updateAnimationType(type, async () => {
       try {
-        await ScanbotSdkService.instance.createTextDataScanner(
-          this.onTextDataDetected.bind(this),
-          this.onTextDataScannerError.bind(this)
+        await ScanbotSdkService.instance.createVINScanner(
+          this.onVINDetected.bind(this),
+          this.onVINScannerError.bind(this)
         );
       } catch (e: any) {
-        this.onTextDataScannerError(e);
+        this.onVINScannerError(e);
         this.pop()
       }
     });
@@ -46,7 +46,7 @@ export default class TextDataScannerComponent extends BaseScannerComponent {
   pop() {
     super.pop();
     this.updateAnimationType(AnimationType.Pop, () => {
-      ScanbotSdkService.instance.disposeTextDataScanner();
+      ScanbotSdkService.instance.disposeVINScanner();
     });
   }
 }

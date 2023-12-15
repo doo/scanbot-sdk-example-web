@@ -20,6 +20,8 @@ import {
   TextDataScannerConfiguration,
   ITextDataScannerHandle,
   MrzScannerConfiguration,
+  TextDataScannerResult,
+  DocumentDetectionResult,
 } from "scanbot-web-sdk/@types";
 
 import Pages from "../model/pages";
@@ -27,18 +29,16 @@ import { ImageUtils } from "../utils/image-utils";
 import { BarcodeFormat } from "scanbot-web-sdk/@types/model/barcode/barcode-format";
 import { IMrzScannerHandle } from "scanbot-web-sdk/@types/interfaces/i-mrz-scanner-handle";
 import { ContourDetectionResult } from "scanbot-web-sdk/@types/model/document/contour-detection-result";
-
-// eslint-disable-next-line import/no-webpack-loader-syntax
-require("!!file-loader?outputPath=tessdata&name=[name].[ext]!scanbot-web-sdk/bundle/bin/complete/tessdata/eng.traineddata");
-// eslint-disable-next-line import/no-webpack-loader-syntax
-require("!!file-loader?outputPath=tessdata&name=[name].[ext]!scanbot-web-sdk/bundle/bin/complete/tessdata/deu.traineddata");
+import { VINScannerConfiguration } from "scanbot-web-sdk/@types/model/configuration/vin-scanner-configuration";
 
 export class ScanbotSdkService {
+
   static DOCUMENT_SCANNER_CONTAINER = "document-scanner-view";
   static CROPPING_VIEW_CONTAINER = "cropping-view";
   static BARCODE_SCANNER_CONTAINER = "barcode-scanner-view";
   static MRZ_SCANNER_CONTAINER = "mrz-scanner-view";
   static TEXTDATA_SCANNER_CONTAINER = "text-data-scanner-view";
+  static VIN_SCANNER_CONTAINER = "vin-scanner-view";
 
   public static instance = new ScanbotSdkService();
 
@@ -50,16 +50,13 @@ export class ScanbotSdkService {
   barcodeScanner?: IBarcodeScannerHandle;
   mrzScanner?: IMrzScannerHandle;
   textDataScanner?: ITextDataScannerHandle;
+  vinScanner?: ITextDataScannerHandle;
   croppingView?: ICroppingViewHandle;
 
   public async initialize() {
     this.sdk = await ScanbotSDK.initialize({
       licenseKey: this.license,
       engine: "/",
-
-
-
-
       allowThreads: true
     });
     return this.sdk;
@@ -88,8 +85,18 @@ export class ScanbotSdkService {
     return info.isValid();
   }
 
-  public async createBlurDetector() {
-    return this.sdk?.createBlurDetector();
+  public async createDocumentQualityAnalyzer() {
+    return this.sdk?.createDocumentQualityAnalyzer();
+  }
+
+  public async analyzeDocumentQuality(result: DocumentDetectionResult) {
+    /** 
+     * Initialization of the analyzer can cause a strain on your user interface,
+     * In a real-life scenario, consider creating the analyzer once on app/scanner startup, not for every scan.
+     */
+    const analyzer = await ScanbotSdkService.instance.createDocumentQualityAnalyzer();
+    console.log('Document quality analysis:', await analyzer?.analyze(result.original));
+    await analyzer?.release();
   }
 
   public async createDocumentScanner(detectionCallback: any, errorCallback: (e: Error) => void) {
@@ -162,7 +169,7 @@ export class ScanbotSdkService {
       preferredCamera: 'camera2 0, facing back',
       ...additionalConfig
     };
-    
+
     this.barcodeScanner = await this.sdk!.createBarcodeScanner(config);
   }
 
@@ -185,9 +192,12 @@ export class ScanbotSdkService {
     this.mrzScanner?.dispose();
   }
 
-
   public disposeTextDataScanner() {
     this.textDataScanner?.dispose();
+  }
+
+  public disposeVINScanner() {
+    this.vinScanner?.dispose();
   }
 
   public async createTextDataScanner(onTextDetected: any, errorCallback: (e: Error) => void) {
@@ -202,6 +212,19 @@ export class ScanbotSdkService {
     this.textDataScanner = await this.sdk!.createTextDataScanner(config);
   }
 
+  public async createVINScanner(onVINDetected: any, errorCallback: (e: Error) => void) {
+
+    const config: VINScannerConfiguration = {
+      containerId: ScanbotSdkService.VIN_SCANNER_CONTAINER,
+      onTextDetected: (e: TextDataScannerResult) => {
+        console.log("VIN detected: ", e);
+        onVINDetected(e);
+      },
+      onError: errorCallback,
+    }
+
+    this.vinScanner = await this.sdk!.createVINScanner(config);
+  }
 
   public async openCroppingView(page: any) {
     const configuration: CroppingViewConfiguration = {
@@ -267,7 +290,7 @@ export class ScanbotSdkService {
   async generatePDF(pages: any[]) {
     const options: PdfGenerationOptions = {
       standardPaperSize: "A4",
-      landscape: true,
+      pageDirection: "PORTRAIT"
     };
     const generator: PdfGenerator = await this.sdk!.beginPdf(options);
     for (const page of pages) {
