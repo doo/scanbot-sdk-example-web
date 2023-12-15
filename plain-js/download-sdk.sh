@@ -1,5 +1,5 @@
 
-VERSION=4.0.0-alpha.1
+VERSION=4.0.0
 
 rm -rf wasm/
 
