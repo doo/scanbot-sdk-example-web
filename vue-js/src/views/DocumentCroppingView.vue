@@ -21,11 +21,11 @@
 
 <script setup lang="ts">
 import PageLayout from "@/components/PageLayout.vue";
-import {inject, onBeforeMount, onMounted, ref} from "vue";
-import {useRouter} from "vue-router";
-import {type Document, useDocumentsStore} from "@/stores/documents";
+import { inject, onBeforeMount, onMounted, ref } from "vue";
+import { useRouter } from "vue-router";
+import { type Document, useDocumentsStore } from "@/stores/documents";
 import ScanbotSDK from "scanbot-web-sdk";
-import type {ICroppingViewHandle} from "scanbot-web-sdk/@types";
+import type { ICroppingViewHandle } from "scanbot-web-sdk/@types";
 
 const router = useRouter();
 const documents = useDocumentsStore();
@@ -34,7 +34,7 @@ const scanbotSDK: Promise<ScanbotSDK> = inject("scanbotSDK")!;
 const document = ref<Document>();
 const isLoading = ref(true);
 const croppingView = ref<ICroppingViewHandle>();
-const detailViewRouteTarget = ref({name: 'document_detail', params: {id: router.currentRoute.value.params.id}});
+const detailViewRouteTarget = ref({ name: 'document_detail', params: { id: router.currentRoute.value.params.id } });
 
 onBeforeMount(() => {
   isLoading.value = true;
@@ -45,7 +45,7 @@ onMounted(async () => {
 
   if (!document.value) {
     alert("Document not found!");
-    await router.push({name: 'home'});
+    await router.push({ name: 'home' });
     return;
   }
 

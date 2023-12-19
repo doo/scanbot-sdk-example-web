@@ -1,7 +1,7 @@
 <template>
-  <PageLayout title="Scanned Page" :back-button-target="{name: 'document_list'}">
+  <PageLayout title="Scanned Page" :back-button-target="{ name: 'document_list' }">
     <div class="content-container">
-      <img class="detail-image" :src="document?.dataUrl" alt="Scanned Page"/>
+      <img class="detail-image" :src="document?.dataUrl" alt="Scanned Page" />
     </div>
 
     <div class="bottom-bar">
@@ -22,15 +22,15 @@
 </template>
 
 <script setup lang="ts">
-import {type Document, useDocumentsStore} from "@/stores/documents";
-import {inject, onBeforeMount, ref} from "vue";
+import { type Document, useDocumentsStore } from "@/stores/documents";
+import { inject, onBeforeMount, ref } from "vue";
 import type ScanbotSDK from "scanbot-web-sdk";
 import PageLayout from "@/components/PageLayout.vue";
-import {useRouter} from "vue-router";
+import { useRouter } from "vue-router";
 import Swal from 'sweetalert2'
 import 'sweetalert2/dist/sweetalert2.css'
-import {Filters} from "@/misc/Filters";
-import type {ImageFilter} from "scanbot-web-sdk/@types";
+import { Filters } from "@/misc/Filters";
+import type { ImageFilter } from "scanbot-web-sdk/@types";
 
 const router = useRouter();
 const documents = useDocumentsStore();
@@ -42,7 +42,7 @@ onBeforeMount(async () => {
   document.value = documents.getDocumentById(Number(router.currentRoute.value.params.id));
   if (!document.value) {
     alert("Document not found!");
-    await router.push({name: 'home'});
+    await router.push({ name: 'home' });
     return;
   }
   await documents.updateDataUrl(document.value, await scanbotSDK);
@@ -50,11 +50,11 @@ onBeforeMount(async () => {
 
 function deleteActiveItem() {
   documents.removeDocument(document.value!);
-  router.push({name: 'document_list'});
+  router.push({ name: 'document_list' });
 }
 
 function openCroppingView() {
-  router.push({name: 'document_cropping', params: {id: document.value!.id}});
+  router.push({ name: 'document_cropping', params: { id: document.value!.id } });
 }
 
 async function onFilterClick() {
@@ -74,8 +74,8 @@ async function onFilterClick() {
   } else {
     document.value!.content.filter = filter;
     document.value!.content.filtered = await (await scanbotSDK).applyFilter(
-        document.value!.content.cropped ?? document.value!.content.original,
-        filter as ImageFilter
+      document.value!.content.cropped ?? document.value!.content.original,
+      filter as ImageFilter
     );
   }
 

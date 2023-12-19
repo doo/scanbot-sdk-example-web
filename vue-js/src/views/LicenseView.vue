@@ -9,7 +9,7 @@
 
 <script setup lang="ts">
 
-import {inject, ref, onBeforeMount} from "vue";
+import { inject, ref, onBeforeMount } from "vue";
 import PageLayout from "@/components/PageLayout.vue";
 import type ScanbotSDK from "scanbot-web-sdk";
 
