@@ -3,8 +3,8 @@
     <div class="content-container">
       <ul>
         <li class="document p-1" v-for="doc in documentsStore.documents" :key="doc.id">
-          <RouterLink :to="{name: 'document_detail', params: {id: doc.id}}">
-            <img :src="doc.dataUrl" alt="Captured Document"/>
+          <RouterLink :to="{ name: 'document_detail', params: { id: doc.id } }">
+            <img :src="doc.dataUrl" alt="Captured Document" />
           </RouterLink>
         </li>
       </ul>
@@ -28,12 +28,12 @@
 
 <script setup lang="ts">
 
-import {useDocumentsStore} from "@/stores/documents";
+import { useDocumentsStore } from "@/stores/documents";
 import PageLayout from "@/components/PageLayout.vue";
-import {inject, onBeforeMount, ref} from "vue";
+import { inject, onBeforeMount, ref } from "vue";
 import type ScanbotSDK from "scanbot-web-sdk";
 import fileDownload from "js-file-download";
-import {RouterLink} from "vue-router";
+import { RouterLink } from "vue-router";
 
 const documentsStore = useDocumentsStore();
 const scanbotSDK: Promise<ScanbotSDK> = inject("scanbotSDK")!;
@@ -57,7 +57,7 @@ async function download(type: "pdf" | "tiff") {
     pdf: async () => {
       return (await scanbotSDK).beginPdf({
         standardPaperSize: "A4",
-        landscape: true
+        pageDirection: "PORTRAIT"
       });
     },
     tiff: async () => {

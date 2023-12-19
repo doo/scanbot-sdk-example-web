@@ -1,16 +1,11 @@
 <template>
-  <PageLayout
-      title="Document Scanner"
-      :is-loading=isLoading
-      :hasCameraControls="true"
-      @on-camera-swap="onCameraSwap"
-      @on-camera-switch="onCameraSwitch"
-  >
+  <PageLayout title="Document Scanner" :is-loading=isLoading :hasCameraControls="true" @on-camera-swap="onCameraSwap"
+    @on-camera-switch="onCameraSwitch">
     <div id="scanbot-document-scanner-ui-container" class="scanbot-camera-container"></div>
     <div class="bottom-bar">
       <div class="bottom-bar-button scanner-page-counter" v-html="numPages()"></div>
       <div class="align-right-bottom-bar-button">
-        <RouterLink :to="{name: 'document_list'}">
+        <RouterLink :to="{ name: 'document_list' }">
           <button class="bottom-bar-button scanner-done">
             DONE
           </button>
@@ -22,13 +17,13 @@
 
 <script setup lang="ts">
 import PageLayout from "@/components/PageLayout.vue";
-import {inject, onBeforeMount, onBeforeUnmount, onMounted, ref} from "vue";
+import { inject, onBeforeMount, onBeforeUnmount, onMounted, ref } from "vue";
 import type ScanbotSDK from "scanbot-web-sdk";
-import type {IDocumentScannerHandle, DocumentDetectionResult} from "scanbot-web-sdk/@types";
-import {RouterLink, useRouter} from "vue-router";
-import {useDocumentsStore} from "@/stores/documents.js";
-import {onError} from "@/misc/onError";
-import {switchCamera} from "@/misc/switchCamera";
+import type { IDocumentScannerHandle, DocumentDetectionResult } from "scanbot-web-sdk/@types";
+import { RouterLink, useRouter } from "vue-router";
+import { useDocumentsStore } from "@/stores/documents.js";
+import { onError } from "@/misc/onError";
+import { switchCamera } from "@/misc/switchCamera";
 
 let isLoading = ref(true);
 let documentScanner = ref<IDocumentScannerHandle | null>(null);
@@ -56,7 +51,7 @@ onMounted(async () => {
     style: {
       outline: {
         polygon: {
-          strokeWidth: 40,
+          strokeWidth: 5,
           fillCapturing: "rgba(0, 255, 0, 0.2)",
           strokeCapturing: "green",
           fillSearching: "rgba(255, 0, 0, 0.2)",
@@ -74,12 +69,12 @@ onMounted(async () => {
         OK: "Capturing your document...",
         OK_SmallSize: "The document is too small. Try moving closer.",
         OK_BadAngles:
-            "This is a bad camera angle. Hold the device straight over the document.",
+          "This is a bad camera angle. Hold the device straight over the document.",
         OK_BadAspectRatio:
-            "Rotate the device sideways, so that the document fits better into the screen.",
+          "Rotate the device sideways, so that the document fits better into the screen.",
         OK_OffCenter: "Try holding the device at the center of the document.",
         Error_NothingDetected:
-            "Please hold the device over a document to start scanning.",
+          "Please hold the device over a document to start scanning.",
         Error_Brightness: "It is too dark. Try turning on a light.",
         Error_Noise: "Please move the document to a clear surface.",
       },
@@ -91,7 +86,7 @@ onMounted(async () => {
     documentScanner.value = await scanbotSDK.createDocumentScanner(config);
   } catch (e: any) {
     alert(e.name + ': ' + e.message);
-    await router.push({name: 'home'});
+    await router.push({ name: 'home' });
   }
   isLoading.value = false;
 });
@@ -117,5 +112,4 @@ function onCameraSwitch() {
 }
 </script>
 
-<style>
-</style>
+<style></style>

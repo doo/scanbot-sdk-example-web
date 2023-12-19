@@ -68,6 +68,7 @@ defineProps({
   margin-top: calc(8px + 60px);
   height: calc(100vh - (2 * 8px + 60px));
   width: calc(100vw - 16px);
+  margin-left: 8px;
 }
 
 .back-button {
