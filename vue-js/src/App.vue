@@ -1,10 +1,5 @@
 <script setup lang="ts">
 import {RouterView} from 'vue-router'
-import {provide} from "vue";
-import {Flash} from "./misc/Flash";
-
-let flash = new Flash();
-provide("flash", flash);
 </script>
 
 
@@ -26,7 +21,6 @@ provide("flash", flash);
     0,0,0,120,0c47,94,178,113,251,33C2446.709,1093.793,2554.709,922.793,2379.709,863.793Z"
           transform="translate(142.69 -634.312)" fill="#eee"/>
   </svg>
-  <div id="flash"></div>
 </template>
 
 <style>

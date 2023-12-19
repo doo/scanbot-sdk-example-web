@@ -33,13 +33,7 @@ import {switchCamera} from "@/misc/switchCamera";
 let isLoading = ref(true);
 let documentScanner = ref<IDocumentScannerHandle | null>(null);
 const router = useRouter();
-const flash: any = inject("flash");
 const documentsStore = useDocumentsStore();
-
-async function onDocumentDetected(result: DocumentDetectionResult) {
-  flash.flash();
-  documentsStore.addDocument(result);
-}
 
 function numPages() {
   return documentsStore.documents.length + ' pages';
@@ -70,7 +64,10 @@ onMounted(async () => {
         }
       }
     },
-    onDocumentDetected: onDocumentDetected,
+    onDocumentDetected: (result: DocumentDetectionResult) => {
+      scanbotSDK.utils.flash();
+      documentsStore.addDocument(result);
+    },
     onError: onError,
     text: {
       hint: {
