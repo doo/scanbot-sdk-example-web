@@ -8,7 +8,7 @@
         <span class="main-title">{{ title }}</span>
       </div>
       <div class="spacer"></div>
-      <div v-if="hasCameraControls" class="camera-button-container h3">
+      <div v-if="hasCameraControls" class="camera-button-container pt-1 h3">
         <span class="camera-swap-button mr-3" @click="$emit('on-camera-swap')">&#8645;</span>
         <span class="camera-switch-button mr-3" @click="$emit('on-camera-switch')">&#8646;</span>
       </div>
@@ -65,9 +65,9 @@ defineProps({
 }
 
 .content {
-  margin-top: calc(8px + 60px);
-  height: calc(100vh - (2 * 8px + 60px));
-  width: calc(100vw - 16px);
+  margin-top: calc(60px);
+  height: calc(100vh - (60px));
+  width: calc(100vw);
 }
 
 .back-button {
@@ -90,9 +90,6 @@ defineProps({
 }
 
 .camera-swap-button {
-  height: 50px;
-  width: 50px;
-  line-height: 50px;
   font-size: 25px;
   text-align: center;
 }

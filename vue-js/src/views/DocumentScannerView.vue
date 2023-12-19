@@ -118,4 +118,8 @@ function onCameraSwitch() {
 </script>
 
 <style>
+.scanbot-camera-container {
+  width: 100%;
+  height: calc(100% - 50px);
+}
 </style>
