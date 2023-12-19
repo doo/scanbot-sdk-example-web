@@ -11,6 +11,7 @@ export default defineConfig({
     vue(),
     vueJsx(),
     viteStaticCopy({
+      // Make the files necessary for running the Scanbot SDK WebAssembly modules available as static files
       targets: [
         {
           src: 'node_modules/scanbot-web-sdk/bundle/bin/complete/*',
