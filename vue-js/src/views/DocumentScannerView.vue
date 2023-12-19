@@ -51,7 +51,7 @@ onMounted(async () => {
     style: {
       outline: {
         polygon: {
-          strokeWidth: 40,
+          strokeWidth: 5,
           fillCapturing: "rgba(0, 255, 0, 0.2)",
           strokeCapturing: "green",
           fillSearching: "rgba(255, 0, 0, 0.2)",
