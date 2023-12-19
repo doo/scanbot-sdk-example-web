@@ -17,7 +17,7 @@ const licenseText = ref();
 
 onBeforeMount(async () => {
   licenseText.value = "Loading...";
-  const scanbotSDK:ScanbotSDK = await inject("scanbotSDK")!;
+  const scanbotSDK: ScanbotSDK = await inject("scanbotSDK")!;
   const info = await scanbotSDK.getLicenseInfo();
   licenseText.value = JSON.stringify(info, null, " ");
   licenseText.value = licenseText.value.replace(/\n/g, "<br/>");

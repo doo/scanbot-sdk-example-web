@@ -1,6 +1,6 @@
 import type {BinarizationFilter, ColorFilter, ImageFilter} from "scanbot-web-sdk/@types";
 
-export class Filters{
+export class Filters {
     public static binarizationFilters(): BinarizationFilter[] {
         return [
             "binarized",

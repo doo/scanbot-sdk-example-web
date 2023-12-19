@@ -73,7 +73,7 @@ async function onFilterClick() {
     document.value!.content.filtered = undefined;
   } else {
     document.value!.content.filter = filter;
-    document.value!.content.filtered = await(await scanbotSDK).applyFilter(
+    document.value!.content.filtered = await (await scanbotSDK).applyFilter(
         document.value!.content.cropped ?? document.value!.content.original,
         filter as ImageFilter
     );

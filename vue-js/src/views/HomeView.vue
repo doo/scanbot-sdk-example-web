@@ -30,7 +30,7 @@ li {
   padding-left: 10px;
 }
 
-.main-list-item{
+.main-list-item {
   text-decoration: none;
   color: black;
 }
