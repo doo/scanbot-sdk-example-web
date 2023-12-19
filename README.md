@@ -48,6 +48,23 @@ npm install
 npm start
 ```
 
+
+
+### Vue.js App
+
+Like the React example app, the Vue.js example app relies on the `npm` [package](https://www.npmjs.com/package/scanbot-web-sdk)
+of the Scanbot Web Document Scanner SDK.
+
+To run the Vue.js example app:
+
+```
+cd vue-js/
+npm install
+npm run dev
+```
+
+
+
 ### Plain JavaScript App
 
 The vanilla JavaScript app downloads the Scanbot Web SDK from an unofficial CDN:
@@ -62,15 +79,3 @@ To run the JavaScript example:
 cd plain-js/
 php -S localhost:8000
 ```
-
-### Vue.js App
-
-The React example app relies on the `npm` [package](https://www.npmjs.com/package/scanbot-web-sdk)
-of the Scanbot Web Document Scanner SDK.
-
-To run the React example app:
-
-```
-cd react-js/
-npm install
-npm start
