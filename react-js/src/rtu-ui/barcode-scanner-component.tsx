@@ -3,6 +3,7 @@ import { BarcodeResult } from "scanbot-web-sdk/@types";
 import BaseScannerComponent from "./common/base-scanner-component";
 import { AnimationType } from "./enum/animation-type";
 import Barcodes from "../model/barcodes";
+import Swal from "sweetalert2";
 
 export default class BarcodeScannerComponent extends BaseScannerComponent {
 
@@ -30,7 +31,7 @@ export default class BarcodeScannerComponent extends BaseScannerComponent {
 
   onBarcodeScannerError(e: Error) {
     console.log(e.name + ': ' + e.message);
-    alert(e.name + ': ' + e.message);
+    Swal.fire({text: e.name + ': ' + e.message});
   }
 
   labelText() {

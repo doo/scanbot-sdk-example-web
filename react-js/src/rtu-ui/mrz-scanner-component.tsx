@@ -2,6 +2,7 @@ import { MrzResult } from "scanbot-web-sdk/@types/model/mrz/mrz-result";
 import { ScanbotSdkService } from "../service/scanbot-sdk-service";
 import BaseScannerComponent from "./common/base-scanner-component";
 import { AnimationType } from "./enum/animation-type";
+import Swal from "sweetalert2";
 
 export default class MrzScannerComponent extends BaseScannerComponent {
   render() {
@@ -24,7 +25,7 @@ export default class MrzScannerComponent extends BaseScannerComponent {
 
   onMrzScannerError(e: Error) {
     console.log(e.name + ': ' + e.message);
-    alert(e.name + ': ' + e.message);
+    Swal.fire({text: e.name + ': ' + e.message});
   }
 
   async push(type: AnimationType) {
