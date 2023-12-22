@@ -28,15 +28,15 @@ class TextDataScannerController {
         if (!textData) return;
 
         if (textData.validated) {
-            if (typeof textDataScanner !== 'undefined') {
-                textDataScanner.pauseDetection();
+            if (typeof this.textDataScanner !== 'undefined') {
+                await this.textDataScanner.pauseDetection();
             }
 
             alert(textData.text);
 
-            if (typeof textDataScanner !== 'undefined') {
+            if (typeof this.textDataScanner !== 'undefined') {
                 setTimeout(() => {
-                    textDataScanner.resumeDetection()
+                    this.textDataScanner.resumeDetection()
                 }, 500);
             }
         }
