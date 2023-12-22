@@ -32,7 +32,7 @@ class TextDataScannerController {
                 await this.textDataScanner.pauseDetection();
             }
 
-            alert(textData.text);
+            await Swal.fire({ text: textData.text });
 
             if (typeof this.textDataScanner !== 'undefined') {
                 setTimeout(() => {

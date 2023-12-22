@@ -26,7 +26,7 @@ class BarcodeScannerController {
             this.barcodeScanner = await scanbotSDK.createBarcodeScanner(config);
         } catch (e) {
             console.log(e.name + ': ' + e.message);
-            alert(e.name + ': ' + e.message);
+            await Swal.fire({ text: e.name + ': ' + e.message });
             this.container.style.display = "none";
         }
     }
@@ -48,7 +48,7 @@ class BarcodeScannerController {
             this.barcodeScanner = await scanbotSDK.createBarcodeScanner(config);
         } catch (e) {
             console.log(e.name + ': ' + e.message);
-            alert(e.name + ': ' + e.message);
+            await Swal.fire({ text: e.name + ': ' + e.message });
             this.container.style.display = "none";
         }
     }
