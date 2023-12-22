@@ -5,6 +5,7 @@ import { DocumentRepository } from "../service/document-repository";
 import { NavigationUtils } from "../service/navigation-utils";
 import { ToastrService } from "ngx-toastr";
 import { MrzResult } from "scanbot-web-sdk/@types/model/mrz/mrz-result";
+import Swal from "sweetalert2";
 
 @Component({
   selector: "app-mrz-scanner",
@@ -59,7 +60,9 @@ export class MrzScannerComponent implements OnInit {
 
   mrzScannerError(e: Error) {
     console.log(e.name + ': ' + e.message);
-    alert(e.name + ': ' + e.message);
+    Swal.fire({
+      text: e.name + ': ' + e.message
+    });
   }
 
   toConfidenceString(input: any, key: string): string {

@@ -66,9 +66,13 @@ export class HomeComponent implements OnInit {
         const documentDetectionResult = { ...contourDetectionResult, original: image.original, cropped: cropped };
 
         this.documents.add(documentDetectionResult);
-        alert("Detection successful");
+        await Swal.fire({
+          text: "Detection successful"
+        });
       } else {
-        alert("Detection failed");
+        await Swal.fire({
+          text: "Detection failed"
+        });
       }
     }
 
@@ -79,7 +83,9 @@ export class HomeComponent implements OnInit {
         result.data
       );
       if (detection !== undefined) {
-        alert(Utils.formatBarcodes(detection.barcodes));
+        await Swal.fire({
+          text: Utils.formatBarcodes(detection.barcodes)
+        });
       }
     }
 

@@ -5,6 +5,7 @@ import { DocumentRepository } from "../service/document-repository";
 import { NavigationUtils } from "../service/navigation-utils";
 import { ToastrService } from "ngx-toastr";
 import { TextDataScannerConfiguration, TextDataScannerResult } from "scanbot-web-sdk/@types";
+import Swal from "sweetalert2";
 
 @Component({
   selector: "app-text-data-scanner",
@@ -69,7 +70,9 @@ export class TextDataScannerComponent implements OnInit {
     if (textData.validated) {
       this.sdk.setTextDataScannerDetectionStatus(true);
 
-      alert(textData.text);
+      await Swal.fire({
+        text: textData.text
+      });
 
       setTimeout(() => {
         this.sdk.setTextDataScannerDetectionStatus(false);
