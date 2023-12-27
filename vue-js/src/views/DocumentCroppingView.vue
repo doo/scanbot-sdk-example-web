@@ -26,6 +26,7 @@ import { useRouter } from "vue-router";
 import { type Document, useDocumentsStore } from "@/stores/documents";
 import ScanbotSDK from "scanbot-web-sdk";
 import type { ICroppingViewHandle } from "scanbot-web-sdk/@types";
+import Swal from "sweetalert2";
 
 const router = useRouter();
 const documents = useDocumentsStore();
@@ -44,7 +45,7 @@ onMounted(async () => {
   document.value = documents.getDocumentById(Number(router.currentRoute.value.params.id));
 
   if (!document.value) {
-    alert("Document not found!");
+    await Swal.fire({ text: "Document not found!" });
     await router.push({ name: 'home' });
     return;
   }

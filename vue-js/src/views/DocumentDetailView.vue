@@ -41,7 +41,7 @@ const document = ref<Document>();
 onBeforeMount(async () => {
   document.value = documents.getDocumentById(Number(router.currentRoute.value.params.id));
   if (!document.value) {
-    alert("Document not found!");
+    await Swal.fire({ text: "Document not found!" });
     await router.push({ name: 'home' });
     return;
   }
