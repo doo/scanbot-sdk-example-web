@@ -21,7 +21,6 @@ import { ImageUtils } from "./utils/image-utils";
 import { NavigationUtils } from "./utils/navigation-utils";
 import { MiscUtils } from "./utils/misc-utils";
 import DocumentScannerComponent from "./rtu-ui/document-scanner-component";
-import { AnimationType } from "./rtu-ui/enum/animation-type";
 import BarcodeScannerComponent from "./rtu-ui/barcode-scanner-component";
 import Barcodes from "./model/barcodes";
 import ErrorLabel from "./subviews/error-label";
@@ -33,15 +32,6 @@ import { IBarcodePolygonHandle, IBarcodePolygonLabelHandle } from "scanbot-web-s
 import VINScannerComponent from "./rtu-ui/vin-scanner-component";
 
 export default class App extends React.Component<any, any> {
-    private scannerComponents = {
-        [RoutePath.DocumentScanner]: React.createRef<DocumentScannerComponent>(),
-        [RoutePath.BarcodeScanner]: React.createRef<BarcodeScannerComponent>(),
-        [RoutePath.BarcodeScannerWithOverlay]: React.createRef<BarcodeScannerComponent>(),
-        [RoutePath.MrzScanner]: React.createRef<MrzScannerComponent>(),
-        [RoutePath.TextDataScanner]: React.createRef<TextDataScannerComponent>(),
-        [RoutePath.VINScanner]: React.createRef<VINScannerComponent>(),
-        [RoutePath.ScanAndCount]: React.createRef<BarcodeScannerComponent>(),
-    }
 
   constructor(props: any) {
     super(props);
@@ -51,69 +41,82 @@ export default class App extends React.Component<any, any> {
       sdk: undefined,
       error: {
         message: undefined,
-      },
-        renderedScannerComponents: undefined
+      }
     };
   }
 
-    renderScannerComponents() {
-        return <>
-            <DocumentScannerComponent
-                ref={this.scannerComponents[RoutePath.DocumentScanner]}
-                onDocumentDetected={this.onDocumentDetected.bind(this)}
-            />
-            <BarcodeScannerComponent
-                ref={this.scannerComponents[RoutePath.BarcodeScanner]}
-                onBarcodesDetected={this.onBarcodesDetected.bind(this)}
-            />
-            <BarcodeScannerComponent
-                ref={this.scannerComponents[RoutePath.BarcodeScannerWithOverlay]}
-                additionalConfig={{
-                    overlay: {
-                        visible: true,
-                        onBarcodeFound: (code: Barcode, polygon: IBarcodePolygonHandle, label: IBarcodePolygonLabelHandle) => {
-                            // You can override onBarcodeFound and create your own implementation for custom styling, e.g.
-                            // if you wish to only color in certain types of barcodes, you can find and pick them, as demonstrated below:
-                            if (code.format === "QR_CODE") {
-                                polygon.style({fill: "rgba(255, 255, 0, 0.3)", stroke: "yellow"})
-                            }
-                        }
-                    },
-                    // When dealing with AR overlay, let's hide the finder and have the whole area be detectable
-                    showFinder: false
-                }}
-                onBarcodesDetected={this.onBarcodesDetected.bind(this)}
-            />
-            <MrzScannerComponent
-                ref={this.scannerComponents[RoutePath.MrzScanner]}
-                onMrzsDetected={this.onMrzDetected.bind(this)}
-            />
-            <TextDataScannerComponent
-                ref={this.scannerComponents[RoutePath.TextDataScanner]}
-                onTextDataDetected={this.onTextDataDetected.bind(this)}
-            />
-            <VINScannerComponent
-                ref={this.scannerComponents[RoutePath.VINScanner]}
-                onVINDetected={this.onVINDetected.bind(this)}
-            />
-            <BarcodeScannerComponent
-                ref={this.scannerComponents[RoutePath.ScanAndCount]}
-                // To enable scan-and-count feature, add the additional config of scanAndCount: {}
-                additionalConfig={{scanAndCount: {enabled: true}, showFinder: false}}
-                hideCameraSwapButtons={true}
-                showBottomActionBar={false}
-                onBarcodesDetected={(barcodes: Barcode[]) => {
-                    // Handle results as you please
-                }}
-            />
-        </>;
+  renderScannerComponents() {
+    if (!this.state.sdk) {
+      return null;
     }
+
+    return this.scannerComponentFromRoute(NavigationUtils.findRoute() ?? '');
+  }
+
+  scannerComponentFromRoute(route: string) {
+    const onClose = () => {
+      RoutingService.instance.reset();
+    }
+
+    switch (route) {
+      case RoutePath.DocumentScanner:
+        return <DocumentScannerComponent onClose={onClose} onDocumentDetected={this.onDocumentDetected.bind(this)}/>;
+      case RoutePath.BarcodeScanner:
+        return <BarcodeScannerComponent onClose={onClose} onBarcodesDetected={this.onBarcodesDetected.bind(this)}/>;
+      case RoutePath.BarcodeScannerWithOverlay:
+        return <BarcodeScannerComponent
+          onClose={onClose}
+          additionalConfig={{
+            overlay: {
+              visible: true,
+              onBarcodeFound: (code: Barcode, polygon: IBarcodePolygonHandle, label: IBarcodePolygonLabelHandle) => {
+                // You can override onBarcodeFound and create your own implementation for custom styling, e.g.
+                // if you wish to only color in certain types of barcodes, you can find and pick them, as demonstrated below:
+                if (code.format === "QR_CODE") {
+                  polygon.style({fill: "rgba(255, 255, 0, 0.3)", stroke: "yellow"})
+                }
+              }
+            },
+            // When dealing with AR overlay, let's hide the finder and have the whole area be detectable
+            showFinder: false
+          }}
+          onBarcodesDetected={this.onBarcodesDetected.bind(this)}
+        />
+      case RoutePath.MrzScanner:
+        return <MrzScannerComponent
+          onClose={onClose}
+          onMrzsDetected={this.onMrzDetected.bind(this)}
+        />;
+      case RoutePath.TextDataScanner:
+        return <TextDataScannerComponent
+          onClose={onClose}
+          onTextDataDetected={this.onTextDataDetected.bind(this)}
+        />;
+      case RoutePath.VINScanner:
+        return <VINScannerComponent
+          onClose={onClose}
+          onVINDetected={this.onVINDetected.bind(this)}
+        />;
+      case RoutePath.ScanAndCount:
+        return <BarcodeScannerComponent
+          onClose={onClose}
+          // To enable scan-and-count feature, add the additional config of scanAndCount: {}
+          additionalConfig={{scanAndCount: {enabled: true}, showFinder: false}}
+          hideCameraSwapButtons={true}
+          showBottomActionBar={false}
+          onBarcodesDetected={(barcodes: Barcode[]) => {
+            // Handle results as you please
+          }}
+        />;
+      default:
+        return null;
+    }
+  }
 
   async componentDidMount() {
     const sdk = await ScanbotSdkService.instance.initialize();
       this.setState({
-          sdk: sdk,
-          renderedScannerComponents: this.renderScannerComponents()
+        sdk: sdk
       });
 
     RoutingService.instance.observeChanges(() => {
@@ -121,15 +124,8 @@ export default class App extends React.Component<any, any> {
     });
 
     await ScanbotSdkService.instance.setLicenseFailureHandler((error: any) => {
-
       RoutingService.instance.reset();
-
-        this.setState({error: {message: error}});
-        for (const componentRef of Object.values(this.scannerComponents)) {
-            if (componentRef.current?.isVisible()) {
-                componentRef.current?.pop();
-            }
-      }
+      this.setState({error: {message: error}});
     });
   }
 
@@ -153,14 +149,15 @@ export default class App extends React.Component<any, any> {
   render() {
     return (
       <div>
-          {this.state.renderedScannerComponents}
+        {this.renderScannerComponents()}
 
-          <Toast alert={this.state.alert} onClose={() => this.setState({alert: undefined})}/>
+        <Toast alert={this.state.alert} onClose={() => this.setState({alert: undefined})}/>
 
-          <AppBar position="fixed" ref={(ref) => (this.navigation = ref)} style={{zIndex: 19}}>
-              <NavigationContent backVisible={!NavigationUtils.isAtRoot()} onBackClick={() => this.onBackPress()}/>
+        <AppBar position="fixed" ref={(ref) => (this.navigation = ref)} style={{zIndex: 19}}>
+          <NavigationContent backVisible={!NavigationUtils.isAtRoot() && !this.isRouteAtScannerComponent()}
+                             onBackClick={() => this.onBackPress()}/>
         </AppBar>
-          <div style={{height: this.containerHeight(), marginTop: this.toolbarHeight()}}>
+        <div style={{height: this.containerHeight(), marginTop: this.toolbarHeight()}}>
           {this.decideContent()}
         </div>
         <BottomBar
@@ -175,11 +172,7 @@ export default class App extends React.Component<any, any> {
   decideContent() {
     const route = NavigationUtils.findRoute();
 
-    if (
-      NavigationUtils.isAtRoot() ||
-      route === RoutePath.DocumentScanner ||
-      route === RoutePath.BarcodeScanner
-    ) {
+    if (NavigationUtils.isAtRoot() || this.isRouteAtScannerComponent()) {
       return (
         <div>
           <ErrorLabel message={this.state.error.message} />
@@ -399,12 +392,6 @@ export default class App extends React.Component<any, any> {
       return;
     }
 
-      if (Object.keys(this.scannerComponents).includes(feature.id)) {
-          const feature_id = feature.id as keyof typeof App.prototype.scannerComponents;
-          this.scannerComponents[feature_id].current?.push(AnimationType.PushRight);
-      return;
-    }
-
     if (feature.route) {
       RoutingService.instance.route(feature.route);
       return;
@@ -460,5 +447,9 @@ export default class App extends React.Component<any, any> {
         }
       }
     }
+  }
+
+  private isRouteAtScannerComponent() {
+    return !!this.scannerComponentFromRoute(NavigationUtils.findRoute() ?? '');
   }
 }

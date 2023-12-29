@@ -7,14 +7,34 @@ import { Constants } from "../model/constants";
 import { IScannerCommon } from "scanbot-web-sdk/@types/interfaces/i-scanner-common-handle";
 
 export default class BaseScannerComponent extends React.Component<any, any> {
-  constructor(props: any) {
+  // We need to make sure that the DOM element in which the scanner is rendered stays the same, even after re-rendering.
+  // We do this by manually appending the scannerDiv to the current version of the scannerDivContainer after every render.
+  private scannerDiv = (() => {
+    const div = document.createElement("div");
+    div.style.width = "100%";
+    div.style.height = "100%";
+    return div;
+  })();
+
+  private scannerDivContainer = React.createRef<HTMLDivElement>();
+
+  constructor(props: any, scannerId: string) {
     super(props);
 
     this.state = {
       animation: {
-        type: AnimationType.None,
-      },
+        type: AnimationType.PushRight,
+      }
     };
+    this.scannerDiv.id = scannerId;
+  }
+
+  componentDidMount() {
+    this.scannerDivContainer.current?.appendChild(this.scannerDiv);
+  }
+
+  componentDidUpdate() {
+    this.scannerDivContainer.current?.appendChild(this.scannerDiv);
   }
 
   containerHeight() {
@@ -54,10 +74,7 @@ export default class BaseScannerComponent extends React.Component<any, any> {
     }
   }
 
-  controller(scannerId: string, title: string, labelText: string, onCameraSwap?: Function, onCameraSwitch?: Function) {
-    if (this.state.animation.type === AnimationType.None) {
-      return null;
-    }
+  controller(title: string, labelText: string, onCameraSwap?: Function, onCameraSwitch?: Function) {
     const Animation = this.animation(this.state.animation.type);
     const destination = this.to(this.state.animation.type);
     this.previousDestination = destination;
@@ -65,51 +82,45 @@ export default class BaseScannerComponent extends React.Component<any, any> {
     return (
       <Animation
         style={this.containerStyle(`${destination}`)}
-        onAnimationStart={this.onAnimationStart.bind(this)}
         onAnimationEnd={this.onAnimationEnd.bind(this)}
       >
         <ActionBarTop
           title={title}
           onBack={() => {
-            this.pop();
+            this.close();
           }}
           onCameraSwap={this.props.hideCameraSwapButtons ? undefined : onCameraSwap}
           onCameraSwitch={this.props.hideCameraSwapButtons ? undefined : onCameraSwitch}
         />
         <div
-          style={{ height: this.containerHeight(), backgroundColor: "black" }}
-        >
-          <div id={scannerId} style={{ width: "100%", height: "100%" }} />
-        </div>
+          style={{height: this.containerHeight(), backgroundColor: "black"}}
+          ref={this.scannerDivContainer}
+        />
         {this.props.showBottomActionBar && <ActionBarBottom
-          label={labelText}
-          onDone={this.onDonePress.bind(this)}
+            label={labelText}
+            onDone={this.onDonePress.bind(this)}
         />}
       </Animation>
     );
   }
 
   onDonePress() {
-    this.pop();
+    this.close();
   }
 
-  private _isVisible: boolean = false;
-  isVisible() {
-    return this._isVisible;
-  }
-  push(type: AnimationType) {
-    this._isVisible = true;
+  onScannerError(e: Error) {
+    console.log(e.name + ': ' + e.message);
+    alert(e.name + ': ' + e.message);
+    this.close();
   }
 
-  pop() {
-    this._isVisible = false;
+  close() {
+    this.updateAnimationType(AnimationType.Pop);
   }
-
-  onAnimationStart() { }
 
   onAnimationEnd() {
     if (this.state.animation.type === AnimationType.Pop) {
-      this.updateAnimationType(AnimationType.None);
+      this.props.onClose();
     }
   }
 

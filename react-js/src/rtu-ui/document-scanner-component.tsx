@@ -1,13 +1,15 @@
 import { ScanbotSdkService } from "../service/scanbot-sdk-service";
 import { DocumentDetectionResult } from "scanbot-web-sdk/@types";
 import BaseScannerComponent from "./common/base-scanner-component";
-import { AnimationType } from "./enum/animation-type";
 import Pages from "../model/pages";
 
 export default class DocumentScannerComponent extends BaseScannerComponent {
+  constructor(props: any) {
+    super(props, ScanbotSdkService.DOCUMENT_SCANNER_CONTAINER);
+  }
+
   render() {
     return this.controller(
-      ScanbotSdkService.DOCUMENT_SCANNER_CONTAINER,
       "Document Scanner",
       this.labelText(),
       () => {
@@ -29,35 +31,23 @@ export default class DocumentScannerComponent extends BaseScannerComponent {
     
   }
 
-  onDocumentScannerError(e: Error) {
-    console.log(e.name + ': ' + e.message);
-    alert(e.name + ': ' + e.message);
-  }
-
   labelText() {
     return Pages.instance.count() + " Pages";
   }
 
-  async push(type: AnimationType) {
-    super.push(type);
-    this.pushType = type;
-    this.updateAnimationType(type, async () => {
-      try {
-        await ScanbotSdkService.instance.createDocumentScanner(
-          this.onDocumentDetected.bind(this),
-          this.onDocumentScannerError.bind(this),
-        );
-      } catch (e) {
-        this.onDocumentScannerError(e);
-        this.pop()
-      }
-    });
+  async componentDidMount() {
+    super.componentDidMount();
+    try {
+      await ScanbotSdkService.instance.createDocumentScanner(
+        this.onDocumentDetected.bind(this),
+        this.onScannerError.bind(this),
+      );
+    } catch (e: any) {
+      this.onScannerError(e);
+    }
   }
 
-  pop() {
-    super.pop();
-    this.updateAnimationType(AnimationType.Pop, () => {
-      ScanbotSdkService.instance.disposeDocumentScanner();
-    });
+  componentWillUnmount() {
+    ScanbotSdkService.instance.disposeDocumentScanner();
   }
 }

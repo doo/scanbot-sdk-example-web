@@ -3,7 +3,7 @@ import { Styles } from "../model/styles";
 
 export class BottomBar extends React.Component<any, any> {
   render() {
-    if (this.props.hidden) {
+    if (this.props.hidden || !this.props.buttons) {
       return null;
     }
     return (
