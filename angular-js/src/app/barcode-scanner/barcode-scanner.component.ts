@@ -12,7 +12,6 @@ import { ToastrService } from "ngx-toastr";
 import { BarcodeFormat } from "scanbot-web-sdk/@types/model/barcode/barcode-format";
 import { Utils } from "../service/utils";
 import { IBarcodePolygonHandle, IBarcodePolygonLabelHandle } from "scanbot-web-sdk/@types/model/configuration/selection-overlay-configuration";
-import Swal from "sweetalert2";
 
 @Component({
   selector: "app-barcode-scanner",
@@ -109,9 +108,7 @@ export class BarcodeScannerComponent implements OnInit {
 
   barcodeScannerError(e: Error) {
     console.log(e.name + ': ' + e.message);
-    Swal.fire({
-      text: e.name + ': ' + e.message
-    });
+    Utils.alert(e.name + ': ' + e.message);
   }
 
   async onBarcodesDetected(result: BarcodeResult) {

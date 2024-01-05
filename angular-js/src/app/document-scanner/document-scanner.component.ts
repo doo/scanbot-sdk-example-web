@@ -8,7 +8,7 @@ import { Router } from "@angular/router";
 import { NavigationUtils } from "../service/navigation-utils";
 import { DocumentRepository } from "../service/document-repository";
 import ViewUtils from "../service/view-utils";
-import Swal from "sweetalert2";
+import { Utils } from "../service/utils";
 
 @Component({
   selector: "app-document-scanner",
@@ -77,9 +77,7 @@ export class DocumentScannerComponent implements OnInit {
 
   documentScannerError(e: Error) {
     console.log(e.name + ': ' + e.message);
-    Swal.fire({
-      text: e.name + ': ' + e.message
-    });
+    Utils.alert(e.name + ': ' + e.message);
   }
 
   async onDocumentDetected(result: DocumentDetectionResult) {

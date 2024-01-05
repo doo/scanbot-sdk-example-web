@@ -30,7 +30,7 @@ import { MrzScannerConfiguration } from "scanbot-web-sdk/@types/model/configurat
 import { BarcodeFormat } from "scanbot-web-sdk/@types/model/barcode/barcode-format";
 import { EngineMode } from "scanbot-web-sdk/@types/model/barcode/engine-mode";
 import { IScannerCommon } from "scanbot-web-sdk/@types/interfaces/i-scanner-common-handle";
-import Swal from "sweetalert2";
+import { Utils } from "./utils";
 
 @Injectable()
 export class ScanbotSdkService {
@@ -250,9 +250,9 @@ export class ScanbotSdkService {
       if (currentCameraInfo) {
         const cameraIndex = cameras.findIndex((cameraInfo) => { return cameraInfo.deviceId == currentCameraInfo.deviceId });
         const newCameraIndex = (cameraIndex + 1) % (cameras.length);
-        await Swal.fire({
-          html: `Current camera: ${currentCameraInfo.label}.<br/>Switching to: ${cameras[newCameraIndex].label}`
-        });
+        await Utils.alertHtml(
+          `Current camera: ${currentCameraInfo.label}.<br/>Switching to: ${cameras[newCameraIndex].label}`
+        );
         scanner?.switchCamera(cameras[newCameraIndex].deviceId, false);
       }
     }

@@ -1,4 +1,5 @@
 import { Barcode } from "scanbot-web-sdk/@types";
+import Swal from "sweetalert2";
 
 export class Utils {
   static generateUUID() {
@@ -23,5 +24,13 @@ export class Utils {
         }
       })
     );
+  }
+
+  static async alert(message: string) {
+    await Swal.fire({text: message});
+  }
+
+  static async alertHtml(html: string) {
+    await Swal.fire({html: html});
   }
 }
