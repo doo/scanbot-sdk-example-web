@@ -25,7 +25,7 @@ class MrzScannerController {
             this.mrzScanner = await scanbotSDK.createMrzScanner(config);
         } catch (e) {
             console.log(e.name + ': ' + e.message);
-            await Swal.fire({ text: e.name + ': ' + e.message });
+            await Utils.alert(e.name + ': ' + e.message);
             Utils.getElementByClassName("mrz-scanner-controller").style.display = "none";
         }
     }
@@ -47,7 +47,7 @@ class MrzScannerController {
             text = "No MRZ fields detected";
         }
 
-        await Swal.fire({ text: text });
+        await Utils.alert(text);
 
         setTimeout(() => {
             this.mrzScanner.resumeDetection();

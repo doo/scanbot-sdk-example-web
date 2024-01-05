@@ -62,7 +62,7 @@ class DocumentScannerController {
             this.documentScanner = await scanbotSDK.createDocumentScanner(config);
         } catch (e) {
             console.log(e.name + ': ' + e.message);
-            await Swal.fire({ text: e.name + ': ' + e.message });
+            await Utils.alert(e.name + ': ' + e.message);
             this.container.style.display = "none";
         }
     }

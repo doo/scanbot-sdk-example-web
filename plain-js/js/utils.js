@@ -73,4 +73,9 @@ class Utils {
     }
     return result;
   }
+
+  static async alert(message) {
+    await Swal.fire({ text: message });
+  }
+  
 }
