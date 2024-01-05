@@ -24,7 +24,7 @@ import { RouterLink, useRouter } from "vue-router";
 import { useDocumentsStore } from "@/stores/documents.js";
 import { onError } from "@/misc/onError";
 import { switchCamera } from "@/misc/switchCamera";
-import Swal from "sweetalert2";
+import { swalAlert } from "@/misc/swalAlert";
 
 let isLoading = ref(true);
 let documentScanner = ref<IDocumentScannerHandle | null>(null);
@@ -86,7 +86,7 @@ onMounted(async () => {
   try {
     documentScanner.value = await scanbotSDK.createDocumentScanner(config);
   } catch (e: any) {
-    await Swal.fire({ text: e.name + ': ' + e.message });
+    await swalAlert(e.name + ': ' + e.message);
     await router.push({ name: 'home' });
   }
   isLoading.value = false;
