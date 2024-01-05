@@ -3,7 +3,7 @@ import { DocumentDetectionResult } from "scanbot-web-sdk/@types";
 import BaseScannerComponent from "./common/base-scanner-component";
 import { AnimationType } from "./enum/animation-type";
 import Pages from "../model/pages";
-import Swal from "sweetalert2";
+import { MiscUtils } from "../utils/misc-utils";
 
 export default class DocumentScannerComponent extends BaseScannerComponent {
   render() {
@@ -32,7 +32,7 @@ export default class DocumentScannerComponent extends BaseScannerComponent {
 
   onDocumentScannerError(e: Error) {
     console.log(e.name + ': ' + e.message);
-    Swal.fire({text: e.name + ': ' + e.message});
+    MiscUtils.alert(e.name + ': ' + e.message);
   }
 
   labelText() {

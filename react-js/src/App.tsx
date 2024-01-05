@@ -427,7 +427,7 @@ export default class App extends React.Component<any, any> {
   async onMrzDetected(mrz: MrzResult) {
     ScanbotSdkService.instance.mrzScanner?.pauseDetection();
     const text = ResultParser.MRZToString(mrz);
-    await Swal.fire({text: text});
+    await MiscUtils.alert(text);
 
     setTimeout(() => {
       ScanbotSdkService.instance.mrzScanner?.resumeDetection();
@@ -439,7 +439,7 @@ export default class App extends React.Component<any, any> {
 
     if (textData.validated) {
       ScanbotSdkService.instance.textDataScanner?.pauseDetection();
-      await Swal.fire({text: textData.text});
+      await MiscUtils.alert(textData.text!);
       setTimeout(() => { ScanbotSdkService.instance.textDataScanner?.resumeDetection() }, 500);
     }
   }
@@ -450,7 +450,7 @@ export default class App extends React.Component<any, any> {
     // The VIN scanner does not return empty results, so we can skip 'validated' check here
     // However, validated will still be true if several frames detected the same number
     ScanbotSdkService.instance.vinScanner?.pauseDetection();
-    await Swal.fire({text: textData.text});
+    await MiscUtils.alert(textData.text!);
     setTimeout(() => { ScanbotSdkService.instance.vinScanner?.resumeDetection() }, 500);
     this.createOcrEngine({ mode: "VIN" });
     this.createOcrEngine();
@@ -528,9 +528,9 @@ export default class App extends React.Component<any, any> {
         const documentDetectionResult = { ...contourDetectionResult, original: image.original, cropped: cropped };
 
         Pages.instance.add(documentDetectionResult);
-        await Swal.fire({text: "Detection successful"});
+        await MiscUtils.alert("Detection successful");
       } else {
-        await Swal.fire({text: "Detection failed"});
+        await MiscUtils.alert("Detection failed");
       }
     } else if (feature.id === RoutePath.BarcodeOnJpeg) {
       const result = await ImageUtils.pick(ImageUtils.MIME_TYPE_JPEG, document.getElementById(feature.id) as any, true);

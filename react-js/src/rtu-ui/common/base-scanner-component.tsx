@@ -5,7 +5,7 @@ import ActionBarBottom from "./action-bar-bottom";
 import ActionBarTop from "./action-bar-top";
 import { Constants } from "../model/constants";
 import { IScannerCommon } from "scanbot-web-sdk/@types/interfaces/i-scanner-common-handle";
-import Swal from "sweetalert2";
+import { MiscUtils } from "../../utils/misc-utils";
 
 export default class BaseScannerComponent extends React.Component<any, any> {
   constructor(props: any) {
@@ -38,7 +38,7 @@ export default class BaseScannerComponent extends React.Component<any, any> {
   previousDestination?: string;
 
   protected async onCameraSwap(scanner: IScannerCommon, force: boolean) {
-    await Swal.fire({text: `Swapping front/rear camera`});
+    await MiscUtils.alert(`Swapping front/rear camera`);
     scanner?.swapCameraFacing(true);
   }
 
@@ -49,7 +49,7 @@ export default class BaseScannerComponent extends React.Component<any, any> {
       if (currentCameraInfo) {
         const cameraIndex = cameras.findIndex((cameraInfo) => { return cameraInfo.deviceId === currentCameraInfo.deviceId });
         const newCameraIndex = (cameraIndex + 1) % (cameras.length);
-        await Swal.fire({text: `Current camera: ${currentCameraInfo.label}.\nSwitching to: ${cameras[newCameraIndex].label}`});
+        await MiscUtils.alert(`Current camera: ${currentCameraInfo.label}.\nSwitching to: ${cameras[newCameraIndex].label}`);
         scanner?.switchCamera(cameras[newCameraIndex].deviceId, false);
       }
     }
