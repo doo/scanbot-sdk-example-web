@@ -1,12 +1,14 @@
 import { TextDataScannerResult } from "scanbot-web-sdk/@types";
 import { ScanbotSdkService } from "../service/scanbot-sdk-service";
 import BaseScannerComponent from "./common/base-scanner-component";
-import { AnimationType } from "./enum/animation-type";
 
 export default class VINScannerComponent extends BaseScannerComponent {
+  constructor(props: any) {
+    super(props, ScanbotSdkService.VIN_SCANNER_CONTAINER);
+  }
+
   render() {
     return this.controller(
-      ScanbotSdkService.VIN_SCANNER_CONTAINER,
       "VIN Scanner",
       "",
       () => {
@@ -27,26 +29,19 @@ export default class VINScannerComponent extends BaseScannerComponent {
     alert(e.name + ': ' + e.message);
   }
 
-  async push(type: AnimationType) {
-    super.push(type);
-    this.pushType = type;
-    this.updateAnimationType(type, async () => {
-      try {
-        await ScanbotSdkService.instance.createVINScanner(
-          this.onVINDetected.bind(this),
-          this.onVINScannerError.bind(this)
-        );
-      } catch (e: any) {
-        this.onVINScannerError(e);
-        this.pop()
-      }
-    });
+  async componentDidMount() {
+    super.componentDidMount();
+    try {
+      await ScanbotSdkService.instance.createVINScanner(
+        this.onVINDetected.bind(this),
+        this.onScannerError.bind(this)
+      );
+    } catch (e: any) {
+      this.onScannerError(e);
+    }
   }
 
-  pop() {
-    super.pop();
-    this.updateAnimationType(AnimationType.Pop, () => {
-      ScanbotSdkService.instance.disposeVINScanner();
-    });
+  componentWillUnmount() {
+    ScanbotSdkService.instance.disposeVINScanner();
   }
 }
