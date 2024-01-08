@@ -73,7 +73,7 @@ export default class App extends React.Component<any, any> {
                 // You can override onBarcodeFound and create your own implementation for custom styling, e.g.
                 // if you wish to only color in certain types of barcodes, you can find and pick them, as demonstrated below:
                 if (code.format === "QR_CODE") {
-                  polygon.style({fill: "rgba(255, 255, 0, 0.3)", stroke: "yellow"})
+                  polygon.style({ fill: "rgba(255, 255, 0, 0.3)", stroke: "yellow" })
                 }
               }
             },
@@ -101,7 +101,7 @@ export default class App extends React.Component<any, any> {
         return <BarcodeScannerComponent
           onClose={onClose}
           // To enable scan-and-count feature, add the additional config of scanAndCount: {}
-          additionalConfig={{scanAndCount: {enabled: true}, showFinder: false}}
+          additionalConfig={{ scanAndCount: { enabled: true }, showFinder: false }}
           hideCameraSwapButtons={true}
           showBottomActionBar={false}
           onBarcodesDetected={(barcodes: Barcode[]) => {
@@ -125,7 +125,7 @@ export default class App extends React.Component<any, any> {
 
     await ScanbotSdkService.instance.setLicenseFailureHandler((error: any) => {
       RoutingService.instance.reset();
-      this.setState({error: {message: error}});
+      this.setState({ error: { message: error } });
     });
   }
 
@@ -151,13 +151,13 @@ export default class App extends React.Component<any, any> {
       <div>
         {this.renderScannerComponents()}
 
-        <Toast alert={this.state.alert} onClose={() => this.setState({alert: undefined})}/>
+        <Toast alert={this.state.alert} onClose={() => this.setState({ alert: undefined })}/>
 
-        <AppBar position="fixed" ref={(ref) => (this.navigation = ref)} style={{zIndex: 19}}>
+        <AppBar position="fixed" ref={(ref) => (this.navigation = ref)} style={{ zIndex: 19 }}>
           <NavigationContent backVisible={!NavigationUtils.isAtRoot() && !this.isRouteAtScannerComponent()}
                              onBackClick={() => this.onBackPress()}/>
         </AppBar>
-        <div style={{height: this.containerHeight(), marginTop: this.toolbarHeight()}}>
+        <div style={{ height: this.containerHeight(), marginTop: this.toolbarHeight() }}>
           {this.decideContent()}
         </div>
         <BottomBar
