@@ -31,6 +31,7 @@ import Swal from 'sweetalert2'
 import 'sweetalert2/dist/sweetalert2.css'
 import { Filters } from "@/misc/Filters";
 import type { ImageFilter } from "scanbot-web-sdk/@types";
+import { swalAlert } from "@/misc/swalAlert";
 
 const router = useRouter();
 const documents = useDocumentsStore();
@@ -41,7 +42,7 @@ const document = ref<Document>();
 onBeforeMount(async () => {
   document.value = documents.getDocumentById(Number(router.currentRoute.value.params.id));
   if (!document.value) {
-    alert("Document not found!");
+    await swalAlert("Document not found!");
     await router.push({ name: 'home' });
     return;
   }

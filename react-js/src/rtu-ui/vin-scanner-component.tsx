@@ -2,6 +2,7 @@ import { TextDataScannerResult } from "scanbot-web-sdk/@types";
 import { ScanbotSdkService } from "../service/scanbot-sdk-service";
 import BaseScannerComponent from "./common/base-scanner-component";
 import { AnimationType } from "./enum/animation-type";
+import { MiscUtils } from "../utils/misc-utils";
 
 export default class VINScannerComponent extends BaseScannerComponent {
   render() {
@@ -24,7 +25,7 @@ export default class VINScannerComponent extends BaseScannerComponent {
 
   onVINScannerError(e: Error) {
     console.log(e.name + ': ' + e.message);
-    alert(e.name + ': ' + e.message);
+    MiscUtils.alert(e.name + ': ' + e.message);
   }
 
   async push(type: AnimationType) {

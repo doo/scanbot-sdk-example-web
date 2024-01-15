@@ -40,7 +40,7 @@ window.onload = async () => {
           results.push(result);
           await documentListController.show();
         } else {
-          alert("Detection failed");
+          await Utils.alert("Detection failed");
         }
       };
 
@@ -63,7 +63,7 @@ window.onload = async () => {
         if (result.barcodes && result.barcodes.length > 0) {
           onBarcodesDetected(result);
         } else {
-          alert("Detection failed");
+          await Utils.alert("Detection failed");
         }
 
         console.log("barcode detection result", result);
@@ -73,7 +73,7 @@ window.onload = async () => {
 
   Utils.getElementByClassName("license-info-button").onclick = async (e) => {
     const info = await scanbotSDK.getLicenseInfo();
-    alert(JSON.stringify(info));
+    await Utils.alert(JSON.stringify(info));
   };
 
   const backButtons = document.getElementsByClassName("back-button");
@@ -156,7 +156,7 @@ async function switchCamera(scanner) {
 
 async function onScannerError(e) {
   console.log("Error:", e);
-  alert(e.name + ': ' + e.message);
+  await Utils.alert(e.name + ': ' + e.message);
 }
 
 async function updateResultImage(index) {

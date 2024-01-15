@@ -34,6 +34,7 @@ import { inject, onBeforeMount, ref } from "vue";
 import type ScanbotSDK from "scanbot-web-sdk";
 import fileDownload from "js-file-download";
 import { RouterLink } from "vue-router";
+import { swalAlert } from "@/misc/swalAlert";
 
 const documentsStore = useDocumentsStore();
 const scanbotSDK: Promise<ScanbotSDK> = inject("scanbotSDK")!;
@@ -48,7 +49,7 @@ onBeforeMount(async () => {
 
 async function download(type: "pdf" | "tiff") {
   if (documentsStore.documents.length === 0) {
-    alert("Please scan or import some documents first!");
+    await swalAlert("Please scan or import some documents first!");
     return;
   }
 

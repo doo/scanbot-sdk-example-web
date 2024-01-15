@@ -1,3 +1,5 @@
+import Swal from "sweetalert2";
+
 export class MiscUtils {
   static generateUUID() {
     const length = 5;
@@ -9,5 +11,9 @@ export class MiscUtils {
       result += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
     return result;
+  }
+
+  static async alert(message: string) {
+    await Swal.fire({text: message});
   }
 }

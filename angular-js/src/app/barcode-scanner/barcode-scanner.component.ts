@@ -108,7 +108,7 @@ export class BarcodeScannerComponent implements OnInit {
 
   barcodeScannerError(e: Error) {
     console.log(e.name + ': ' + e.message);
-    alert(e.name + ': ' + e.message);
+    Utils.alert(e.name + ': ' + e.message);
   }
 
   async onBarcodesDetected(result: BarcodeResult) {

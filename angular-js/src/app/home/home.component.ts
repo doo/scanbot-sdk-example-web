@@ -4,7 +4,6 @@ import { ScanbotSdkService } from "../service/scanbot-sdk-service";
 import { NavigationUtils } from "../service/navigation-utils";
 import { ImageUtils } from "../service/image-utils";
 import { DocumentRepository } from "../service/document-repository";
-import Swal from "sweetalert2";
 import { RoutePaths } from "../model/RoutePaths";
 import { Utils } from "../service/utils";
 
@@ -66,9 +65,9 @@ export class HomeComponent implements OnInit {
         const documentDetectionResult = { ...contourDetectionResult, original: image.original, cropped: cropped };
 
         this.documents.add(documentDetectionResult);
-        alert("Detection successful");
+        await Utils.alert("Detection successful");
       } else {
-        alert("Detection failed");
+        await Utils.alert("Detection failed");
       }
     }
 
@@ -79,15 +78,12 @@ export class HomeComponent implements OnInit {
         result.data
       );
       if (detection !== undefined) {
-        alert(Utils.formatBarcodes(detection.barcodes));
+        await Utils.alert(Utils.formatBarcodes(detection.barcodes));
       }
     }
 
     if (e.id === FeatureId.License) {
-      await Swal.fire({
-        title: "License Info",
-        text: await this.sdk.licenseInfoString(),
-      });
+      await Utils.alertHtml(`<h3>License Info</h3><p>${await this.sdk.licenseInfoString()}</p>`);
     }
   }
 }
