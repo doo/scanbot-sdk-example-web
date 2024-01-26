@@ -119,6 +119,8 @@ export class ScanbotSdkService {
         },
       },
       style: {
+        // Note that alternatively, styling the document scanner is also possible using CSS classes.
+        // For details see https://docs.scanbot.io/document-scanner-sdk/web/features/document-scanner/document-scanner-ui/
         outline: {
           polygon: {
             fillCapturing: "rgba(0, 255, 0, 0.2)",

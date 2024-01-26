@@ -63,6 +63,16 @@ export class DocumentScannerComponent implements OnInit {
           Error_Noise: "Please move the document to a clear surface.",
         },
       },
+      style: {
+        // Note that alternatively, styling the document scanner is also possible using CSS classes.
+        // For details see https://docs.scanbot.io/document-scanner-sdk/web/features/document-scanner/document-scanner-ui/
+        outline: {
+          polygon: {
+            strokeCapturing: "green",
+            strokeWidth: 4
+          }
+        }
+      },
       onError: this.documentScannerError.bind(this),
       preferredCamera: 'camera2 0, facing back'
     };

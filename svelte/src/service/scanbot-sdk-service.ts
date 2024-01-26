@@ -82,8 +82,17 @@ export default class ScanbotSDKService {
             },
             onError: (error: Error) => {
                 console.log("Encountered error scanning documents: ", error);
-            }
-
+            },
+            style: {
+                // Note that alternatively, styling the document scanner is also possible using CSS classes.
+                // For details see https://docs.scanbot.io/document-scanner-sdk/web/features/document-scanner/document-scanner-ui/
+                outline: {
+                    polygon: {
+                        strokeCapturing: "green",
+                        strokeWidth: 4,
+                    },
+                },
+            },
         };
         this.documentScanner = await this.sdk?.createDocumentScanner(config);
     }
