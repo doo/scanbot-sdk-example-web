@@ -14,7 +14,7 @@
   "dependencies": {
     "js-file-download": "^0.4.12",
     "pinia": "^2.1.7",
-    "scanbot-web-sdk": "4.0.0",
+    "scanbot-web-sdk": "4.0.1",
     "sweetalert2": "^11.10.1",
     "toastr": "^2.1.4",
     "vue": "^3.3.4",

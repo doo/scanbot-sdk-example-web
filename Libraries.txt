@@ -1,4 +1,4 @@
-Open Source libraries used in Scanbot Web SDK v4.0.0
+Open Source libraries used in Scanbot Web SDK v4.0.1
 
 ----------------------------------------------------------------------------------------
 
