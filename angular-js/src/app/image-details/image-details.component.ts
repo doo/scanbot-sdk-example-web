@@ -81,7 +81,7 @@ export class ImageDetailsComponent implements OnInit {
       page.filter = filter;
       page.filtered = await this.sdk.applyFilter(
         page.cropped ?? page.original,
-        filter as ImageFilter
+        filter
       );
     }
 
