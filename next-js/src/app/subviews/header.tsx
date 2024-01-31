@@ -3,14 +3,12 @@
 import Link from 'next/link';
 import Image from 'next/image'
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect } from 'react';
 
 export default function Header(props: any) {
 
 
-    useEffect(() => {
-        console.log("backPath", props.backPath);
-    }, [props, props.backPath]);
+    useEffect(() => { }, [props, props.backPath]);
 
     return (
         <div style={{

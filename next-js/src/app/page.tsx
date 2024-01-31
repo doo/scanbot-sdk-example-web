@@ -8,9 +8,7 @@ import ScanbotSDKService from "./services/scanbot-sdk-service";
 export default function Home() {
 
 	useEffect(() => {
-		
-		ScanbotSDKService.instance.counter += 1;
-		console.log("I have been mounted. Counter: " + ScanbotSDKService.instance.counter);
+		ScanbotSDKService.instance.initialize()
 	  }, [])
 	
 	return (
