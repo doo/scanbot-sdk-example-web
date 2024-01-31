@@ -53,10 +53,16 @@ class DocumentListController {
         }
         ViewUtils.showLoading();
         const generator = await scanbotSDK.beginTiff({
-            binarizationFilter: "deepBinarization",
             dpi: 123,
         });
-        await addAllPagesTo(generator);
+        const binarizeImage = async (page) => {
+            const imageProcessor = await scanbotSDK.createImageProcessor(page);
+            await imageProcessor.applyFilter(new ScanbotSDK.imageFilters.ScanbotBinarizationFilter());
+            const result = await imageProcessor.processedImage();
+            await imageProcessor.release();
+            return result;
+        }
+        await addAllPagesTo(generator, binarizeImage);
         const bytes = await generator.complete();
         Utils.saveBytes(bytes, Utils.generateName() + ".tiff");
         ViewUtils.hideLoading();

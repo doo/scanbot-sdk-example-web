@@ -164,10 +164,10 @@ async function updateResultImage(index) {
   Utils.getElementByClassName("detection-result-container").innerHTML = image;
 }
 
-async function addAllPagesTo(generator) {
+async function addAllPagesTo(generator, pageTransformer = async page => page) {
   for (let i = 0; i < results.length; i++) {
     const result = results[i];
-    await generator.addPage(Utils.imageToDisplay(result));
+    await generator.addPage(await pageTransformer(Utils.imageToDisplay(result)));
   }
 }
 
