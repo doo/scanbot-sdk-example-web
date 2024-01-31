@@ -35,6 +35,7 @@ import ScanbotSDK from "scanbot-web-sdk";
 import fileDownload from "js-file-download";
 import { RouterLink } from "vue-router";
 import { swalAlert } from "@/misc/swalAlert";
+import { Filters } from "@/misc/Filters";
 
 const documentsStore = useDocumentsStore();
 const scanbotSDK: Promise<ScanbotSDK> = inject("scanbotSDK")!;
@@ -72,10 +73,7 @@ async function download(type: "pdf" | "tiff") {
   for (const doc of documentsStore.documents) {
     let page = doc.content.filtered ?? doc.content.cropped ?? doc.content.original;
     if (type === "tiff") {
-      const imageProcessor = await (await scanbotSDK).createImageProcessor(page);
-      await imageProcessor.applyFilter(new ScanbotSDK.imageFilters.ScanbotBinarizationFilter());
-      page = await imageProcessor.processedImage();
-      await imageProcessor.release();
+      page = await Filters.applyFilter(await scanbotSDK, page, "ScanbotBinarizationFilter");
     }
     await generator.addPage(page);
   }

@@ -24,7 +24,7 @@
 <script setup lang="ts">
 import { type Document, useDocumentsStore } from "@/stores/documents";
 import { inject, onBeforeMount, ref } from "vue";
-import type ScanbotSDK from "scanbot-web-sdk";
+import ScanbotSDK from "scanbot-web-sdk";
 import PageLayout from "@/components/PageLayout.vue";
 import { useRouter } from "vue-router";
 import Swal from 'sweetalert2'
@@ -74,9 +74,10 @@ async function onFilterClick() {
     document.value!.content.filtered = undefined;
   } else {
     document.value!.content.filter = filter;
-    document.value!.content.filtered = await (await scanbotSDK).applyFilter(
+    document.value!.content.filtered = await Filters.applyFilter(
+      await scanbotSDK,
       document.value!.content.cropped ?? document.value!.content.original,
-      filter as ImageFilter
+      filter
     );
   }
 
