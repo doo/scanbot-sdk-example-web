@@ -317,12 +317,15 @@ export class ScanbotSdkService {
 
   async generateTIFF(pages: any[]) {
     const options: TiffGenerationOptions = {
-      binarizationFilter: "deepBinarization",
       dpi: 72,
     };
     const generator: TiffGenerator = await this.sdk!.beginTiff(options);
     for (const page of pages) {
-      await generator.addPage(page.cropped ?? page.original);
+      const image = page.cropped ?? page.original;
+      const imageProcessor = await this.sdk!.createImageProcessor(image);
+      await imageProcessor.applyFilter(new ScanbotSDK.imageFilters.ScanbotBinarizationFilter());
+      await generator.addPage(await imageProcessor.processedImage());
+      await imageProcessor.release();
     }
     return await generator.complete();
   }
