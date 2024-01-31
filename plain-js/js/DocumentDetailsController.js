@@ -23,7 +23,7 @@ class DocumentDetailsController {
                 }
 
                 this.results[index].filter = filter;
-                this.results[index].filtered = await scanbotSDK.applyFilter(toFilter, filter);
+                this.results[index].filtered = await Utils.applyFilter(toFilter, filter);
             }
 
             await updateResultImage(index);
