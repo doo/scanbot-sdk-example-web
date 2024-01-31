@@ -1,6 +1,11 @@
 
-export default function BarocodeScanner() {
+import Header from "../subviews/header";
+
+export default function BarcodeScanner() {
     return (
-        <div>Barcode Scanner</div>
+        <div>
+            <Header backPath={"/"} />
+            <div>Barcode Scanner</div>
+        </div>
     )
 }

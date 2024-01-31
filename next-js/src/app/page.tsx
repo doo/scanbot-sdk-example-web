@@ -1,9 +1,18 @@
+"use client";
 
-import Link from "next/link";
+import { useEffect } from "react";
 import Header from "./subviews/header";
 import ListItem from "./subviews/list-item";
+import ScanbotSDKService from "./services/scanbot-sdk-service";
 
 export default function Home() {
+
+	useEffect(() => {
+		
+		ScanbotSDKService.instance.counter += 1;
+		console.log("I have been mounted. Counter: " + ScanbotSDKService.instance.counter);
+	  }, [])
+	
 	return (
 		<div style={{ backgroundColor: "#f5f5f5", width: "100%", height: "100vh" }}>
 			<Header />

@@ -1,6 +1,10 @@
+import Header from "../subviews/header";
 
 export default function DocumentScanner() {
     return (
-        <div>Document Scanner</div>
+        <div>
+            <Header backPath={"/"} />
+            <div>Document Scanner</div>
+        </div>
     )
 }
