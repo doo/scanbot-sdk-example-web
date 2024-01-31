@@ -142,6 +142,7 @@ export class ScanbotSdkService {
 
   public async createBarcodeScanner(callback: any, errorCallback: (e: Error) => void, additionalConfig: any = {}) {
     const barcodeFormats: BarcodeFormat[] = [
+      "ONE_D",
       "AZTEC",
       "CODABAR",
       "CODE_39",
@@ -154,12 +155,23 @@ export class ScanbotSdkService {
       "MAXICODE",
       "PDF_417",
       "QR_CODE",
-      "RSS_14",
-      "RSS_EXPANDED",
       "UPC_A",
       "UPC_E",
       "UPC_EAN_EXTENSION",
       "MSI_PLESSEY",
+      "IATA_2_OF_5",
+      "INDUSTRIAL_2_OF_5",
+      "CODE_25",
+      "MICRO_QR_CODE",
+      "USPS_INTELLIGENT_MAIL",
+      "ROYAL_MAIL",
+      "JAPAN_POST",
+      "ROYAL_TNT_POST",
+      "AUSTRALIA_POST",
+      "DATABAR",
+      "DATABAR_EXPANDED",
+      "DATABAR_LIMITED",
+      "GS1_COMPOSITE"
     ];
 
     const config: BarcodeScannerConfiguration = {
