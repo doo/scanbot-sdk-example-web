@@ -27,6 +27,7 @@ import { type Document, useDocumentsStore } from "@/stores/documents";
 import ScanbotSDK from "scanbot-web-sdk";
 import type { ICroppingViewHandle } from "scanbot-web-sdk/@types";
 import { swalAlert } from "@/misc/swalAlert";
+import { Filters } from "@/misc/Filters";
 
 const router = useRouter();
 const documents = useDocumentsStore();
@@ -93,6 +94,13 @@ async function onApplyClick() {
   const croppingResult = await croppingView.value?.apply();
   document.value!.content.cropped = croppingResult?.image;
   document.value!.content.polygon = croppingResult?.polygon;
+  if (document.value!.content.filter && document.value!.content.filter != "none") {
+    document.value!.content.filtered = await Filters.applyFilter(
+      await scanbotSDK,
+      document.value!.content.cropped,
+      document.value!.content.filter
+    );
+  }
   await router.push(detailViewRouteTarget.value);
 }
 </script>
