@@ -7,18 +7,17 @@ import ScanbotSDKService from "../services/scanbot-sdk-service";
 export default function BarcodeScanner() {
 
     useEffect(() => {
-		ScanbotSDKService.instance.createBarcodeScanner("barcode-scanner");
+        ScanbotSDKService.instance.createBarcodeScanner("barcode-scanner");
 
         return () => {
             ScanbotSDKService.instance.disposeBarcodeScanner();
         };
-	  }, [])
-      
+    }, [])
+
     return (
         <div>
             <Header backPath={"/"} />
-            <div id="barcode-scanner" style={{width: "100%", height: "calc(100vh - 50px)"}} />
-
+            <div id="barcode-scanner" style={{ width: "100%", height: "calc(100vh - 50px)" }} />
         </div>
     )
 }

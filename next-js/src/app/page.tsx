@@ -8,7 +8,7 @@ import ScanbotSDKService from "./services/scanbot-sdk-service";
 export default function Home() {
 
 	useEffect(() => {
-		ScanbotSDKService.instance.initialize()
+		ScanbotSDKService.instance.initialize();
 	  }, [])
 	
 	return (
