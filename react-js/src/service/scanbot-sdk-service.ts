@@ -31,6 +31,13 @@ import { IMrzScannerHandle } from "scanbot-web-sdk/@types/interfaces/i-mrz-scann
 import { ContourDetectionResult } from "scanbot-web-sdk/@types/model/document/contour-detection-result";
 import { VINScannerConfiguration } from "scanbot-web-sdk/@types/model/configuration/vin-scanner-configuration";
 
+const filters = {
+  "ScanbotBinarizationFilter": ScanbotSDK.imageFilters.ScanbotBinarizationFilter,
+  "GrayscaleFilter": ScanbotSDK.imageFilters.GrayscaleFilter,
+  "ContrastFilter": ScanbotSDK.imageFilters.ContrastFilter,
+  "ColorDocumentFilter": ScanbotSDK.imageFilters.ColorDocumentFilter,
+}
+
 export class ScanbotSdkService {
 
   static DOCUMENT_SCANNER_CONTAINER = "document-scanner-view";
@@ -255,32 +262,21 @@ export class ScanbotSdkService {
     this.croppingView?.dispose();
   }
 
-  public binarizationFilters(): BinarizationFilter[] {
-    return [
-      "binarized",
-      "otsuBinarization",
-      "pureBinarized",
-      "lowLightBinarization",
-      "lowLightBinarization2",
-      "deepBinarization",
-    ];
+  public availableFilters() {
+    return ["none"].concat(Object.keys(filters)) as ("none" | keyof typeof filters)[];
   }
 
-  public colorFilters(): ColorFilter[] {
-    return ["color", "gray", "colorDocument", "blackAndWhite", "edgeHighlight"];
-  }
-
-  public availableFilters(): string[] {
-    return ["none"]
-      .concat(this.binarizationFilters())
-      .concat(this.colorFilters());
-  }
-  filterByIndex(value: string) {
+  public filterNameByIndex(value: string) {
     return this.availableFilters()[parseInt(value)];
   }
 
-  public async applyFilter(image: ArrayBuffer, filter: ImageFilter) {
-    return await this.sdk!.applyFilter(image, filter);
+  public async applyFilter(image: ArrayBuffer, filterName: keyof typeof filters) {
+    const filter = new filters[filterName]();
+    const imageProcessor = await this.sdk!.createImageProcessor(image);
+    await imageProcessor.applyFilter(filter);
+    const result = await imageProcessor.processedImage();
+    await imageProcessor.release();
+    return result;
   }
 
   async documentImageAsBase64(index: number) {
