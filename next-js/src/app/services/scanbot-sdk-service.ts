@@ -55,8 +55,11 @@ export default class ScanbotSDKService {
             containerId: containerId,
             onDocumentDetected: async (e: DocumentDetectionResult) => {
 
-                // Process the result as you see fit
-                console.log("Detected document!");
+                // Assign each document resul an identifier to access its details later
+                // and pre-process the image into a base64 string for display
+                const id = (Math.random() + 1).toString(36).substring(7);
+                const base64 = await ScanbotSDKService.instance.sdk!.toDataUrl(e.original ?? e.cropped);
+                this.documents.push({ id: id, image: base64, result: e });
 
                 // Make use of ScanbotSDK utility function flash to indicate that a document has been detected
                 this.sdk?.utils.flash();
@@ -124,4 +127,23 @@ export default class ScanbotSDKService {
     public disposeBarcodeScanner() {
         this.barcodeScanner?.dispose();
     }
+
+
+    private documents: Document[] = [];
+    public getDocuments() {
+        return this.documents;
+    }
+    public hasDocuments() {
+        return this.documents.length > 0;
+    }
+}
+
+/**
+ * Wrapper object to conveniently display the image of a detection result
+ * the 'image' object is pre-processed into a base64 string for display
+ */
+export class Document {
+    id?: string;
+    image?: string;
+    result?: DocumentDetectionResult;
 }

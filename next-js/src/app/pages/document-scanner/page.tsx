@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect } from "react";
-import Header from "../subviews/header";
-import ScanbotSDKService from "../services/scanbot-sdk-service";
+import Header from "../../subviews/header";
+import ScanbotSDKService from "../../services/scanbot-sdk-service";
 
 export default function DocumentScanner() {
     
