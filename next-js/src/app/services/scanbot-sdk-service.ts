@@ -1,6 +1,7 @@
 import ScanbotSDK from "scanbot-web-sdk";
 import { IBarcodeScannerHandle } from "scanbot-web-sdk/@types/interfaces/i-barcode-scanner-handle";
 import { IDocumentScannerHandle } from "scanbot-web-sdk/@types/interfaces/i-document-scanner-handle";
+import { Barcode } from "scanbot-web-sdk/@types/model/barcode/barcode";
 import { BarcodeResult } from "scanbot-web-sdk/@types/model/barcode/barcode-result";
 import { BarcodeScannerConfiguration } from "scanbot-web-sdk/@types/model/configuration/barcode-scanner-configuration";
 import { DocumentScannerConfiguration } from "scanbot-web-sdk/@types/model/configuration/document-scanner-configuration";
@@ -29,8 +30,9 @@ export default class ScanbotSDKService {
             // The SDK needs to be initialized just once during the entire app's lifecycle
             return;
         }
-        // Use dynamic inline imports to load the SDK, 
-        // as Next.js may attempt to load it before the 'window' object becomes available.
+
+        // Use dynamic inline imports to load the SDK, else Next will load it into the server bundle
+        // and attempt to load it before the 'window' object becomes available.
         // https://nextjs.org/docs/pages/building-your-application/optimizing/lazy-loading
         const sdk = (await import('scanbot-web-sdk')).default;
 
@@ -76,10 +78,10 @@ export default class ScanbotSDKService {
         this.documentScanner = await this.sdk?.createDocumentScanner(config);
     }
 
-    async createBarcodeScanner(containerId: string) {
+    async createBarcodeScanner(containerId: string, onBarcodeFound: (code: Barcode) => void) {
         /* 
         * Ensure the SDK is initialized. If it's initialized, this function does nothing,
-        * but is necessary e.g. when opening the document url scanner directly. 
+        * but is necessary e.g. when opening the barcode url scanner directly. 
         */
         await this.initialize();
 
@@ -96,9 +98,12 @@ export default class ScanbotSDKService {
                 },
                 onBarcodeFound(code, polygon, label) {
                     // If overlay is visible and automatic selection is disabled, this callback will be called.
-                    console.log('Found barcode:', code);
+                    // The found overlay can be styled via the 'polygon' and 'label' parameters.
+                    // However, in this case we just return the code to the view and show a toast
+                    onBarcodeFound(code);
                 },
             },
+            returnBarcodeImage: true,
             style: { window: { widthProportion: 0.8, } },
             onBarcodesDetected: (e: BarcodeResult) => {
                 // Process the result as you see fit
