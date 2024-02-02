@@ -11,14 +11,14 @@ export default function BarcodeScanner() {
 
     useEffect(() => {
         ScanbotSDKService.instance.createBarcodeScanner("barcode-scanner", async (barcode) => {
-            // barcode.barcodeImage
             const base64Image = await ScanbotSDKService.instance.sdk?.toDataUrl(barcode.barcodeImage);
-            toast.success(`Detected code: ${barcode.text} (${barcode.format})`, {
+            toast(`Detected code: ${barcode.text} (${barcode.format})`, {
                 icon: ({theme, type}) =>  <Image width={25} height={25} src={base64Image!} alt="X"/>
               });
         });
 
         return () => {
+            // To avoid memory leaks, always dispose the scanner when the component is unmounted
             ScanbotSDKService.instance.disposeBarcodeScanner();
         };
     }, [])
@@ -27,7 +27,7 @@ export default function BarcodeScanner() {
         <div>
             <Header backPath={"/"} />
             <div id="barcode-scanner" style={{ width: "100%", height: "calc(100vh - 50px)" }} />
-            <ToastContainer />
+            <ToastContainer autoClose={2000} />
         </div>
     )
 }
