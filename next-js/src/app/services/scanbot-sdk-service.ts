@@ -58,7 +58,7 @@ export default class ScanbotSDKService {
                 // Assign each document resul an identifier to access its details later
                 // and pre-process the image into a base64 string for display
                 const id = (Math.random() + 1).toString(36).substring(7);
-                const base64 = await ScanbotSDKService.instance.sdk!.toDataUrl(e.original ?? e.cropped);
+                const base64 = await ScanbotSDKService.instance.sdk!.toDataUrl(e.cropped ?? e.original);
                 this.documents.push({ id: id, image: base64, result: e });
 
                 // Make use of ScanbotSDK utility function flash to indicate that a document has been detected

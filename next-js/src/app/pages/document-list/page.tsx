@@ -22,9 +22,10 @@ export default function DocumentList() {
                 display: "flex",
                 backgroundColor: "white",
                 justifyContent: "center",
-                alignItems: "center",
                 flexWrap: "wrap",
                 gap: 10,
+                paddingTop: 10,
+                alignContent: "flex-start"
             }}>
                 {!ScanbotSDKService.instance.hasDocuments() && <div style={{ color: "rgb(100, 100, 100)", marginTop: -100 }}>No documents</div>}
                 {ScanbotSDKService.instance.getDocuments().map((document) => {
