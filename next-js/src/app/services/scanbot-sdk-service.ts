@@ -157,7 +157,7 @@ export default class ScanbotSDKService {
         }
 
         console.log("Opening cropping view for document: ", document);
-        
+
         const configuration: CroppingViewConfiguration = {
             containerId: containerId,
             image: document.original as Uint8Array,
@@ -184,7 +184,26 @@ export default class ScanbotSDKService {
 
         this.croppingView = await this.sdk?.openCroppingView(configuration);
     }
-    
+
+    /**
+     * Callback for when the user has applied a crop to a document.
+     * <Link> redirects the user back before async operations have completed,
+     * so we need to call this function to update the view after crop operation has been completed
+     */
+    onCropApplied: () => void = () => { };
+
+    async applyCrop(id: string) {
+        const result = await this.croppingView?.apply();
+        const document = this.findDocument(id);
+        if (!document) {
+            return;
+        }
+        document.result!.cropped = result?.image;
+        document.result!.polygon = result?.polygon;
+
+        document.image = await ScanbotSDKService.instance.sdk!.toDataUrl(result?.image!);
+        this.onCropApplied();
+    }
 }
 
 /**
