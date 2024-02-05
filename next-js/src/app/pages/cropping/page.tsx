@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 
 import Header from "../../subviews/header";
 import ScanbotSDKService, { ScanbotDocument } from "@/app/services/scanbot-sdk-service";
@@ -9,16 +10,23 @@ import FloatingActionButton from "@/app/subviews/floating-action-button";
 
 export default function Cropping() {
 
+    const router = useRouter()
     const params = useSearchParams()
 
     const [document, setDocument] = useState<ScanbotDocument>();
 
     useEffect(() => {
         const document = ScanbotSDKService.instance.findDocument(params.get("id") as string);
+
+        if (!document) {
+            router.push('/', { scroll: false });
+            return;
+        }
+
         setDocument(document!);
         async function open() { await ScanbotSDKService.instance.openCroppingView('cropping-view', document?.id) };
         open();
-    }, [params, document])
+    }, [router, params, document])
 
     return (
         <div>

@@ -2,26 +2,32 @@
 
 import { useEffect, useState } from "react";
 import { useSearchParams } from 'next/navigation'
-import Image from 'next/image';
+import { useRouter } from 'next/navigation'
 
 import Header from "../../subviews/header";
 import ScanbotSDKService from "@/app/services/scanbot-sdk-service";
-import Link from "next/link";
 import FloatingActionButton from "@/app/subviews/floating-action-button";
 
 export default function Document() {
 
+    const router = useRouter()
     const params = useSearchParams()
 
     const [image, setImage] = useState<string>("");
 
     useEffect(() => {
         const document = ScanbotSDKService.instance.findDocument(params.get("id") as string);
+
+        if (!document) {
+            router.push('/', { scroll: false });
+            return;
+        }
+
         setImage(document?.image!);
         ScanbotSDKService.instance.onCropApplied = () => {
             setImage(document?.image!);
         }
-    }, [params, image])
+    }, [router, params, image])
 
     return (
         <div>
