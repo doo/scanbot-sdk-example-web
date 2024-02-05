@@ -27,11 +27,13 @@ export default function DocumentList() {
                 paddingTop: 10,
                 alignContent: "flex-start"
             }}>
-                {!ScanbotSDKService.instance.hasDocuments() && <div style={{ color: "rgb(100, 100, 100)", marginTop: -100 }}>No documents</div>}
+                {!ScanbotSDKService.instance.hasDocuments() && <div style={{ color: "rgb(100, 100, 100)", marginTop: -100 }}>
+                    No documents
+                </div>}
                 {ScanbotSDKService.instance.getDocuments().map((document) => {
                     return (
                         <div key={document.id} style={{ flexBasis: "30%" }}>
-                            <Link href={`/pages/document?id=${document.id}`}>
+                            <Link href={{ pathname: `/pages/document`, query: { id: document.id } }}>
                                 {/* Next.js attempts to optimize image loading by using the next/image component,
                                     but these images are fundamentally dynamic, revert to native html component */}
                                 {/* eslint-disable-next-line @next/next/no-img-element */}

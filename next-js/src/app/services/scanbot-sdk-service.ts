@@ -8,7 +8,7 @@ import { DocumentScannerConfiguration } from "scanbot-web-sdk/@types/model/confi
 import { DocumentDetectionResult } from "scanbot-web-sdk/@types/model/document/document-detection-result";
 
 export default class ScanbotSDKService {
-
+    
     public static instance: ScanbotSDKService = new ScanbotSDKService();
 
     sdk?: ScanbotSDK;
@@ -135,6 +135,9 @@ export default class ScanbotSDKService {
     }
     public hasDocuments() {
         return this.documents.length > 0;
+    }
+    findDocument(id: string) {
+        return this.getDocuments().find(d => d.id === id);
     }
 }
 
