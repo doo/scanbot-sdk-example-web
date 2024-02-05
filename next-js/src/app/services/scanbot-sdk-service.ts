@@ -1,14 +1,16 @@
 import ScanbotSDK from "scanbot-web-sdk";
 import { IBarcodeScannerHandle } from "scanbot-web-sdk/@types/interfaces/i-barcode-scanner-handle";
+import { ICroppingViewHandle } from "scanbot-web-sdk/@types/interfaces/i-cropping-view-handle";
 import { IDocumentScannerHandle } from "scanbot-web-sdk/@types/interfaces/i-document-scanner-handle";
 import { Barcode } from "scanbot-web-sdk/@types/model/barcode/barcode";
 import { BarcodeResult } from "scanbot-web-sdk/@types/model/barcode/barcode-result";
 import { BarcodeScannerConfiguration } from "scanbot-web-sdk/@types/model/configuration/barcode-scanner-configuration";
+import { CroppingViewConfiguration } from "scanbot-web-sdk/@types/model/configuration/cropping-view-configuration";
 import { DocumentScannerConfiguration } from "scanbot-web-sdk/@types/model/configuration/document-scanner-configuration";
 import { DocumentDetectionResult } from "scanbot-web-sdk/@types/model/document/document-detection-result";
 
 export default class ScanbotSDKService {
-    
+
     public static instance: ScanbotSDKService = new ScanbotSDKService();
 
     sdk?: ScanbotSDK;
@@ -43,6 +45,7 @@ export default class ScanbotSDKService {
 
     private documentScanner?: IDocumentScannerHandle;
     private barcodeScanner?: IBarcodeScannerHandle;
+    private croppingView?: ICroppingViewHandle;
 
     public async createDocumentScanner(containerId: string) {
         /* 
@@ -129,7 +132,7 @@ export default class ScanbotSDKService {
     }
 
 
-    private documents: Document[] = [];
+    private documents: ScanbotDocument[] = [];
     public getDocuments() {
         return this.documents;
     }
@@ -139,13 +142,56 @@ export default class ScanbotSDKService {
     findDocument(id: string) {
         return this.getDocuments().find(d => d.id === id);
     }
+
+    async openCroppingView(containerId: string, id: string | undefined) {
+
+        if (!id) {
+            console.log("No document id provided");
+            return;
+        }
+
+        const document = this.findDocument(id)?.result;
+        if (!document) {
+            console.log("No document found for id: ", id);
+            return;
+        }
+
+        console.log("Opening cropping view for document: ", document);
+        
+        const configuration: CroppingViewConfiguration = {
+            containerId: containerId,
+            image: document.original as Uint8Array,
+            polygon: document.polygon,
+            disableScroll: true,
+            // rotations: document.rotations ?? 0,
+            style: {
+                padding: 20,
+                polygon: {
+                    color: "green",
+                    width: 4,
+                    handles: {
+                        size: 14,
+                        color: "white",
+                        border: "1px solid lightgray",
+                    },
+                },
+                magneticLines: {
+                    // disabled: true,
+                    color: "red",
+                },
+            },
+        };
+
+        this.croppingView = await this.sdk?.openCroppingView(configuration);
+    }
+    
 }
 
 /**
  * Wrapper object to conveniently display the image of a detection result
  * the 'image' object is pre-processed into a base64 string for display
  */
-export class Document {
+export class ScanbotDocument {
     id?: string;
     image?: string;
     result?: DocumentDetectionResult;
