@@ -1,7 +1,6 @@
 "use client";
 
 import { Suspense, useEffect, useState } from "react";
-import { useSearchParams } from 'next/navigation'
 import { useRouter } from 'next/navigation'
 
 import Header from "../../subviews/header";
@@ -11,14 +10,16 @@ import DocumentFetch from "@/app/services/DocumentFetch";
 
 export default function Document() {
 
+    const router = useRouter()
     const [document, setDocument] = useState<ScanbotDocument>();
 
     useEffect(() => {
         
         ScanbotSDKService.instance.onCropApplied = () => {
             setDocument(document);
+            router.refresh();
         }
-    }, [document])
+    }, [router, document])
 
     return (
         <div>
