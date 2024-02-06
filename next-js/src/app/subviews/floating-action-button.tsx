@@ -22,7 +22,8 @@ export default function FloatingActionButton(props: any) {
             }}
             onClick={props.onClick}
         >
-            <Image color="white" width={30} height={30} src={`/${props.icon}`} alt="crop" />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img color="white" width={30} height={30} src={`/${props.icon}`} alt="crop" />
         </Link>
     )
 }
