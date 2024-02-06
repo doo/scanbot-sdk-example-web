@@ -1,32 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from 'next/navigation'
 import { useRouter } from 'next/navigation'
 
 import Header from "../../subviews/header";
 import ScanbotSDKService, { ScanbotDocument } from "@/app/services/scanbot-sdk-service";
 import FloatingActionButton from "@/app/subviews/floating-action-button";
+import DocumentFetch from "@/app/services/DocumentFetch";
 
 export default function Cropping() {
 
     const router = useRouter()
-    const params = useSearchParams()
-
     const [document, setDocument] = useState<ScanbotDocument>();
-
-    useEffect(() => {
-        const document = ScanbotSDKService.instance.findDocument(params.get("id") as string);
-
-        if (!document) {
-            router.push('/', { scroll: false });
-            return;
-        }
-
-        setDocument(document!);
-        async function open() { await ScanbotSDKService.instance.openCroppingView('cropping-view', document?.id) };
-        open();
-    }, [router, params, document])
 
     return (
         <div>
@@ -37,6 +23,12 @@ export default function Cropping() {
                 backgroundColor: "white",
                 height: "calc(100vh - 60px)",
             }}>
+                <Suspense fallback={<div>Loading...</div>}>
+                    <DocumentFetch onDocumentFound={async (document: ScanbotDocument) => {
+                        setDocument(document)
+                        await ScanbotSDKService.instance.openCroppingView('cropping-view', document?.id)
+                    }} />
+                </Suspense>
                 <div id="cropping-view" style={{
                     backgroundColor: "rgb(230, 230, 230)",
                     width: "100%",
@@ -44,9 +36,12 @@ export default function Cropping() {
                     borderRadius: 5
                 }} />
                 <FloatingActionButton
-                    href={{ pathname: `/pages/document`, query: { id: params.get("id") } }}
+                    href={{ pathname: `/pages/document`, query: { id: document?.id } }}
                     icon={'icon_check.png'}
-                    onClick={() => ScanbotSDKService.instance.applyCrop(document?.id!)}
+                    onClick={() => {
+                        ScanbotSDKService.instance.applyCrop(document?.id!);
+                        router.back();
+                    }}
                 />
             </div>
 

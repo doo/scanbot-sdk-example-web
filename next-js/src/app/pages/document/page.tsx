@@ -1,33 +1,24 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from 'next/navigation'
 import { useRouter } from 'next/navigation'
 
 import Header from "../../subviews/header";
-import ScanbotSDKService from "@/app/services/scanbot-sdk-service";
+import ScanbotSDKService, { ScanbotDocument } from "@/app/services/scanbot-sdk-service";
 import FloatingActionButton from "@/app/subviews/floating-action-button";
+import DocumentFetch from "@/app/services/DocumentFetch";
 
 export default function Document() {
 
-    const router = useRouter()
-    const params = useSearchParams()
-
-    const [image, setImage] = useState<string>("");
+    const [document, setDocument] = useState<ScanbotDocument>();
 
     useEffect(() => {
-        const document = ScanbotSDKService.instance.findDocument(params.get("id") as string);
-
-        if (!document) {
-            router.push('/', { scroll: false });
-            return;
-        }
-
-        setImage(document?.image!);
+        
         ScanbotSDKService.instance.onCropApplied = () => {
-            setImage(document?.image!);
+            setDocument(document);
         }
-    }, [router, params, image])
+    }, [document])
 
     return (
         <div>
@@ -43,13 +34,18 @@ export default function Document() {
                 padding: 10,
                 alignContent: "flex-start"
             }}>
+                <Suspense fallback={<div>Loading...</div>}>
+                    <DocumentFetch onDocumentFound={async (document: ScanbotDocument) => {
+                        setDocument(document!);
+                    }} />
+                </Suspense>
                 {/* Next.js attempts to optimize image loading by using the next/image component,
                   * but these images are fundamentally dynamic, revert to native html component 
                   */}
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={image!} alt="X" style={{ maxWidth: "100%", height: "auto" }} />
+                <img src={document?.image!} alt="X" style={{ maxWidth: "100%", height: "auto" }} />
                 <FloatingActionButton
-                    href={{ pathname: `/pages/cropping`, query: { id: params.get("id") } }}
+                    href={{ pathname: `/pages/cropping`, query: { id: document?.id } }}
                     icon={'icon_crop.png'}
                 />
             </div>

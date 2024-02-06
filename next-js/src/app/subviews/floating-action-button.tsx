@@ -6,7 +6,7 @@ export default function FloatingActionButton(props: any) {
 
     return (
         <Link
-            href={props.href}
+            href={props.onClick ? "" : props.href}
             style={{
                 position: "absolute",
                 bottom: 15,
