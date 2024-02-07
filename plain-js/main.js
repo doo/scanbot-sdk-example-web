@@ -1,8 +1,8 @@
 const results = [];
 let scanbotSDK;
 let croppingViewController, documentDetailsController, documentListController,
-    documentScannerController, barcodeScannerController,
-    mrzScannerController, textDataScannerController;
+  documentScannerController, barcodeScannerController,
+  mrzScannerController, textDataScannerController;
 
 window.onresize = () => {
   this.resizeContent();
@@ -137,7 +137,12 @@ window.onload = async () => {
     };
   }
 
-  scanbotSDK = await ScanbotSDK.initialize({ licenseKey: Config.license(), engine: '/wasm/' });
+  scanbotSDK = await ScanbotSDK.initialize({
+    licenseKey: Config.license(),
+    // If you have downloaded the SDK, you can use the following folder to specify engine path:
+    // engine: '/wasm/'
+  });
+
   ViewUtils.hideLoading();
 };
 
