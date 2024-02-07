@@ -9,9 +9,6 @@ import {
   ICroppingViewHandle,
   BarcodeScannerConfiguration,
   IBarcodeScannerHandle,
-  BinarizationFilter,
-  ColorFilter,
-  ImageFilter,
   TiffGenerationOptions,
   PdfGenerationOptions,
   TiffGenerator,
@@ -188,6 +185,7 @@ export class ScanbotSdkService {
       barcodeFormats: barcodeFormats,
       onError: errorCallback,
       preferredCamera: 'camera2 0, facing back',
+      style: { window: { widthProportion: 0.8, } },
       ...additionalConfig
     };
 

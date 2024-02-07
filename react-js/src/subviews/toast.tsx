@@ -15,7 +15,7 @@ export class Toast extends React.Component<any, any> {
         onClose={this.props.onClose}
       >
         <Alert onClose={this.props.onClose} severity={this.props.alert?.color}>
-          {this.props.alert?.text}
+          <div style={{ wordWrap: "break-word", maxWidth: "70vw" }}>{this.props.alert?.text}</div>
         </Alert>
       </Snackbar>
     );
