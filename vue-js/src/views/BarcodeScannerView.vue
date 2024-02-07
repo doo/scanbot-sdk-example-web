@@ -81,6 +81,7 @@ onMounted(async () => {
       }
     },
     showFinder: !isOverlayScanner.value,
+    style: { window: { widthProportion: 0.8, } },
   };
 
   try {
