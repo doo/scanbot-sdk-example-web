@@ -103,6 +103,7 @@ export class BarcodeScannerComponent implements OnInit {
           }
         }
       },
+      style: { window: { widthProportion: 0.8, } },
       showFinder: !isOverlyScanner,
     };
 

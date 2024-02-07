@@ -2,7 +2,7 @@ import React from "react";
 import { AppBar } from "@material-ui/core";
 import Swal from "sweetalert2";
 
-import { Barcode, BarcodeResult, ImageFilter, TextDataScannerResult } from "scanbot-web-sdk/@types";
+import { Barcode, BarcodeResult, TextDataScannerResult } from "scanbot-web-sdk/@types";
 
 import { NavigationContent } from "./subviews/navigation-content";
 import { Toast } from "./subviews/toast";
