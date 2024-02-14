@@ -28,7 +28,7 @@ export default class ScanbotSDKService {
     LICENSE_KEY = "";
 
     public async initialize() {
-        if (this.sdk && this.sdk.initialized) {
+        if (this.sdk) {
             // The SDK needs to be initialized just once during the entire app's lifecycle
             return;
         }
