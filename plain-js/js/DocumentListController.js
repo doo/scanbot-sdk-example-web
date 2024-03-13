@@ -56,7 +56,7 @@ class DocumentListController {
             dpi: 123,
         });
         const binarizeImage = async (page) => {
-            return await Utils.applyFilter(page, new ScanbotSDK.imageFilters.ScanbotBinarizationFilter());
+            return await Utils.applyFilter(page, "ScanbotBinarizationFilter");
         }
         await addAllPagesTo(generator, binarizeImage);
         const bytes = await generator.complete();
