@@ -61,7 +61,8 @@ window.onload = async () => {
       reader.onload = async (e) => {
         const result = await scanbotSDK.detectBarcodes(reader.result);
         if (result.barcodes && result.barcodes.length > 0) {
-          onBarcodesDetected(result);
+          const detectedBarcodes = result.barcodes.map((barcode) => barcode.text);
+          await Utils.alert("Detection successful: " + detectedBarcodes.join(", "));
         } else {
           await Utils.alert("Detection failed");
         }
