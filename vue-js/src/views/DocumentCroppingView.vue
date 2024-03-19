@@ -21,7 +21,7 @@
 
 <script setup lang="ts">
 import PageLayout from "@/components/PageLayout.vue";
-import { inject, onBeforeMount, onMounted, ref } from "vue";
+import { inject, onBeforeMount, onBeforeUnmount, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import { type Document, useDocumentsStore } from "@/stores/documents";
 import ScanbotSDK from "scanbot-web-sdk";
@@ -76,6 +76,10 @@ onMounted(async () => {
   croppingView.value = await (await scanbotSDK).openCroppingView(options);
 
   isLoading.value = false;
+});
+
+onBeforeUnmount(() => {
+  croppingView.value?.dispose();
 });
 
 async function onCroppingClick() {
