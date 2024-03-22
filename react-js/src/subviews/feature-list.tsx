@@ -5,7 +5,7 @@ import { Features } from "../model/features";
 export default class FeatureList extends React.Component<any, any> {
   render() {
     return (
-      <div>
+      <div style={{ marginTop: "65px" }}>
         {Features.LIST.map((feature) => (
           <FeatureListItem
             id={feature.id}

@@ -31,10 +31,11 @@
 import { useDocumentsStore } from "@/stores/documents";
 import PageLayout from "@/components/PageLayout.vue";
 import { inject, onBeforeMount, ref } from "vue";
-import type ScanbotSDK from "scanbot-web-sdk";
+import ScanbotSDK from "scanbot-web-sdk";
 import fileDownload from "js-file-download";
 import { RouterLink } from "vue-router";
 import { swalAlert } from "@/misc/swalAlert";
+import { Filters } from "@/misc/Filters";
 
 const documentsStore = useDocumentsStore();
 const scanbotSDK: Promise<ScanbotSDK> = inject("scanbotSDK")!;
@@ -64,14 +65,16 @@ async function download(type: "pdf" | "tiff") {
     tiff: async () => {
       return (await scanbotSDK).beginTiff({
         dpi: 123,
-        binarizationFilter: "deepBinarization"
       });
     }
   };
   const generator = await createGenerator[type]();
 
   for (const doc of documentsStore.documents) {
-    const page = doc.content.filtered ?? doc.content.cropped ?? doc.content.original;
+    let page = doc.content.filtered ?? doc.content.cropped ?? doc.content.original;
+    if (type === "tiff") {
+      page = await Filters.applyFilter(await scanbotSDK, page, "ScanbotBinarizationFilter");
+    }
     await generator.addPage(page);
   }
   const result: ArrayBuffer = await generator.complete();

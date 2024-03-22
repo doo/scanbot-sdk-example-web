@@ -9,9 +9,6 @@ import {
   ICroppingViewHandle,
   BarcodeScannerConfiguration,
   IBarcodeScannerHandle,
-  BinarizationFilter,
-  ColorFilter,
-  ImageFilter,
   TiffGenerationOptions,
   PdfGenerationOptions,
   TiffGenerator,
@@ -30,6 +27,13 @@ import { BarcodeFormat } from "scanbot-web-sdk/@types/model/barcode/barcode-form
 import { IMrzScannerHandle } from "scanbot-web-sdk/@types/interfaces/i-mrz-scanner-handle";
 import { ContourDetectionResult } from "scanbot-web-sdk/@types/model/document/contour-detection-result";
 import { VINScannerConfiguration } from "scanbot-web-sdk/@types/model/configuration/vin-scanner-configuration";
+
+const filters = {
+  "ScanbotBinarizationFilter": ScanbotSDK.imageFilters.ScanbotBinarizationFilter,
+  "GrayscaleFilter": ScanbotSDK.imageFilters.GrayscaleFilter,
+  "ContrastFilter": ScanbotSDK.imageFilters.ContrastFilter,
+  "ColorDocumentFilter": ScanbotSDK.imageFilters.ColorDocumentFilter,
+}
 
 export class ScanbotSdkService {
 
@@ -142,6 +146,7 @@ export class ScanbotSdkService {
 
   public async createBarcodeScanner(callback: any, errorCallback: (e: Error) => void, additionalConfig: any = {}) {
     const barcodeFormats: BarcodeFormat[] = [
+      "ONE_D",
       "AZTEC",
       "CODABAR",
       "CODE_39",
@@ -154,12 +159,23 @@ export class ScanbotSdkService {
       "MAXICODE",
       "PDF_417",
       "QR_CODE",
-      "RSS_14",
-      "RSS_EXPANDED",
       "UPC_A",
       "UPC_E",
       "UPC_EAN_EXTENSION",
       "MSI_PLESSEY",
+      "IATA_2_OF_5",
+      "INDUSTRIAL_2_OF_5",
+      "CODE_25",
+      "MICRO_QR_CODE",
+      "USPS_INTELLIGENT_MAIL",
+      "ROYAL_MAIL",
+      "JAPAN_POST",
+      "ROYAL_TNT_POST",
+      "AUSTRALIA_POST",
+      "DATABAR",
+      "DATABAR_EXPANDED",
+      "DATABAR_LIMITED",
+      "GS1_COMPOSITE"
     ];
 
     const config: BarcodeScannerConfiguration = {
@@ -169,6 +185,7 @@ export class ScanbotSdkService {
       barcodeFormats: barcodeFormats,
       onError: errorCallback,
       preferredCamera: 'camera2 0, facing back',
+      style: { window: { widthProportion: 0.8, } },
       ...additionalConfig
     };
 
@@ -243,32 +260,21 @@ export class ScanbotSdkService {
     this.croppingView?.dispose();
   }
 
-  public binarizationFilters(): BinarizationFilter[] {
-    return [
-      "binarized",
-      "otsuBinarization",
-      "pureBinarized",
-      "lowLightBinarization",
-      "lowLightBinarization2",
-      "deepBinarization",
-    ];
+  public availableFilters() {
+    return ["none"].concat(Object.keys(filters)) as ("none" | keyof typeof filters)[];
   }
 
-  public colorFilters(): ColorFilter[] {
-    return ["color", "gray", "colorDocument", "blackAndWhite", "edgeHighlight"];
-  }
-
-  public availableFilters(): string[] {
-    return ["none"]
-      .concat(this.binarizationFilters())
-      .concat(this.colorFilters());
-  }
-  filterByIndex(value: string) {
+  public filterNameByIndex(value: string) {
     return this.availableFilters()[parseInt(value)];
   }
 
-  public async applyFilter(image: ArrayBuffer, filter: ImageFilter) {
-    return await this.sdk!.applyFilter(image, filter);
+  public async applyFilter(image: ArrayBuffer, filterName: keyof typeof filters) {
+    const filter = new filters[filterName]();
+    const imageProcessor = await this.sdk!.createImageProcessor(image);
+    await imageProcessor.applyFilter(filter);
+    const result = await imageProcessor.processedImage();
+    await imageProcessor.release();
+    return result;
   }
 
   async documentImageAsBase64(index: number) {
@@ -305,12 +311,15 @@ export class ScanbotSdkService {
 
   async generateTIFF(pages: any[]) {
     const options: TiffGenerationOptions = {
-      binarizationFilter: "deepBinarization",
       dpi: 72,
     };
     const generator: TiffGenerator = await this.sdk!.beginTiff(options);
     for (const page of pages) {
-      await generator.addPage(page.cropped ?? page.original);
+      const image = page.cropped ?? page.original;
+      const imageProcessor = await this.sdk!.createImageProcessor(image);
+      await imageProcessor.applyFilter(new ScanbotSDK.imageFilters.ScanbotBinarizationFilter());
+      await generator.addPage(await imageProcessor.processedImage());
+      await imageProcessor.release();
     }
     return await generator.complete();
   }

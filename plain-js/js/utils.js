@@ -77,5 +77,12 @@ class Utils {
   static async alert(message) {
     await Swal.fire({ text: message });
   }
-  
+
+  static async applyFilter(image, filterName) {
+    const imageProcessor = await scanbotSDK.createImageProcessor(image);
+    await imageProcessor.applyFilter(new ScanbotSDK.imageFilters[filterName]());
+    const result = await imageProcessor.processedImage();
+    await imageProcessor.release();
+    return result;
+  }
 }

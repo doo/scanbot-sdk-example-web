@@ -1,8 +1,8 @@
 const results = [];
 let scanbotSDK;
 let croppingViewController, documentDetailsController, documentListController,
-    documentScannerController, barcodeScannerController,
-    mrzScannerController, textDataScannerController;
+  documentScannerController, barcodeScannerController,
+  mrzScannerController, textDataScannerController;
 
 window.onresize = () => {
   this.resizeContent();
@@ -61,7 +61,8 @@ window.onload = async () => {
       reader.onload = async (e) => {
         const result = await scanbotSDK.detectBarcodes(reader.result);
         if (result.barcodes && result.barcodes.length > 0) {
-          onBarcodesDetected(result);
+          const detectedBarcodes = result.barcodes.map((barcode) => barcode.text);
+          await Utils.alert("Detection successful: " + detectedBarcodes.join(", "));
         } else {
           await Utils.alert("Detection failed");
         }
@@ -137,7 +138,12 @@ window.onload = async () => {
     };
   }
 
-  scanbotSDK = await ScanbotSDK.initialize({ licenseKey: Config.license(), engine: '/wasm/' });
+  scanbotSDK = await ScanbotSDK.initialize({
+    licenseKey: Config.license(),
+    // If you have downloaded the SDK, you can use the following folder to specify engine path:
+    // engine: '/wasm/'
+  });
+
   ViewUtils.hideLoading();
 };
 
@@ -164,10 +170,10 @@ async function updateResultImage(index) {
   Utils.getElementByClassName("detection-result-container").innerHTML = image;
 }
 
-async function addAllPagesTo(generator) {
+async function addAllPagesTo(generator, pageTransformer = async page => page) {
   for (let i = 0; i < results.length; i++) {
     const result = results[i];
-    await generator.addPage(Utils.imageToDisplay(result));
+    await generator.addPage(await pageTransformer(Utils.imageToDisplay(result)));
   }
 }
 

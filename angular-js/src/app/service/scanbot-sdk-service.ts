@@ -160,42 +160,35 @@ export class ScanbotSdkService {
 
   async generateTIFF(pages: any[]) {
     const options: TiffGenerationOptions = {
-      binarizationFilter: "deepBinarization",
       dpi: 123,
     };
     const generator: TiffGenerator = await this.instance.beginTiff(options);
     for (const page of pages) {
-      await generator.addPage(page.cropped ?? page.original);
+      const image = page.cropped ?? page.original;
+      await generator.addPage(await this.applyFilter(image, "ScanbotBinarizationFilter"));
     }
     return await generator.complete();
   }
 
-  public async applyFilter(image: ArrayBuffer, filter: ImageFilter) {
-    return await this.instance.applyFilter(image, filter);
+  public async applyFilter(image: ArrayBuffer, filter: keyof typeof ScanbotSDK.imageFilters) {
+    const imageProcessor = await this.instance.createImageProcessor(image);
+    await imageProcessor.applyFilter(new ScanbotSDK.imageFilters[filter]());
+    const result = await imageProcessor.processedImage();
+    await imageProcessor.release();
+    return result;
   }
 
-  public binarizationFilters(): BinarizationFilter[] {
+  public availableFilters(): ("none" | keyof typeof ScanbotSDK.imageFilters)[] {
     return [
-      "binarized",
-      "otsuBinarization",
-      "pureBinarized",
-      "lowLightBinarization",
-      "lowLightBinarization2",
-      "deepBinarization",
+      "none",
+      "ScanbotBinarizationFilter",
+      "GrayscaleFilter",
+      "ContrastFilter",
+      "ColorDocumentFilter",
     ];
   }
 
-  public colorFilters(): ColorFilter[] {
-    return ["color", "gray", "colorDocument", "blackAndWhite", "edgeHighlight"];
-  }
-
-  public availableFilters(): string[] {
-    return ["none"]
-      .concat(this.binarizationFilters())
-      .concat(this.colorFilters());
-  }
-
-  filterByIndex(value: string) {
+  filterByIndex(value: string): "none" | keyof typeof ScanbotSDK.imageFilters {
     return this.availableFilters()[parseInt(value, 10)];
   }
 

@@ -26,7 +26,7 @@ class CroppingViewController {
             this.results[index].rotations = result.rotations;
 
             if (this.results[index].filter) {
-                this.results[index].filtered = await scanbotSDK.applyFilter(
+                this.results[index].filtered = await Utils.applyFilter(
                     this.results[index].cropped,
                     this.results[index].filter
                 );

@@ -21,12 +21,13 @@
 
 <script setup lang="ts">
 import PageLayout from "@/components/PageLayout.vue";
-import { inject, onBeforeMount, onMounted, ref } from "vue";
+import { inject, onBeforeMount, onBeforeUnmount, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import { type Document, useDocumentsStore } from "@/stores/documents";
 import ScanbotSDK from "scanbot-web-sdk";
 import type { ICroppingViewHandle } from "scanbot-web-sdk/@types";
 import { swalAlert } from "@/misc/swalAlert";
+import { Filters } from "@/misc/Filters";
 
 const router = useRouter();
 const documents = useDocumentsStore();
@@ -77,6 +78,10 @@ onMounted(async () => {
   isLoading.value = false;
 });
 
+onBeforeUnmount(() => {
+  croppingView.value?.dispose();
+});
+
 async function onCroppingClick() {
   isLoading.value = true;
   await croppingView.value?.detect();
@@ -93,6 +98,13 @@ async function onApplyClick() {
   const croppingResult = await croppingView.value?.apply();
   document.value!.content.cropped = croppingResult?.image;
   document.value!.content.polygon = croppingResult?.polygon;
+  if (document.value!.content.filter && document.value!.content.filter != "none") {
+    document.value!.content.filtered = await Filters.applyFilter(
+      await scanbotSDK,
+      document.value!.content.cropped,
+      document.value!.content.filter
+    );
+  }
   await router.push(detailViewRouteTarget.value);
 }
 </script>

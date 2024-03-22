@@ -179,17 +179,10 @@
         <div class="filter-selector-label">FILTER</div>
         <select class="action-bar-filter-select">
           <option>none</option>
-          <option>color</option>
-          <option>gray</option>
-          <option>binarized</option>
-          <option>otsuBinarization</option>
-          <option>pureBinarized</option>
-          <option>lowLightBinarization</option>
-          <option>lowLightBinarization2</option>
-          <option>deepBinarization</option>
-          <option>colorDocument</option>
-          <option>blackAndWhite</option>
-          <option>edgeHighlight</option>
+          <option>ScanbotBinarizationFilter</option>
+          <option>GrayscaleFilter</option>
+          <option>ContrastFilter</option>
+          <option>ColorDocumentFilter</option>
         </select>
       </div>
       <div class="align-right-button">
@@ -205,7 +198,8 @@
     integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/"
     crossorigin="anonymous"></script>
 
-  <script src="wasm/ScanbotSDK.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/scanbot-web-sdk@5.0.0/bundle/ScanbotSDK.min.js"></script>
+
   <!-- After, initialize the Scanbot SDK in your own script -->
   <script src="js/lib/toastify.js"></script>
   <script src="js/config.js"></script>

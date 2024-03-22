@@ -2,7 +2,7 @@ import React from "react";
 import { AppBar } from "@material-ui/core";
 import Swal from "sweetalert2";
 
-import { Barcode, BarcodeResult, ImageFilter, TextDataScannerResult } from "scanbot-web-sdk/@types";
+import { Barcode, BarcodeResult, TextDataScannerResult } from "scanbot-web-sdk/@types";
 
 import { NavigationContent } from "./subviews/navigation-content";
 import { Toast } from "./subviews/toast";
@@ -380,7 +380,7 @@ export default class App extends React.Component<any, any> {
       inputPlaceholder: page.filter ?? "none",
     });
 
-    const filter = ScanbotSdkService.instance.filterByIndex(result.value);
+    const filter = ScanbotSdkService.instance.filterNameByIndex(result.value);
 
     // "None" is not an actual filter, only used in this example app
     if (filter === "none") {
@@ -390,7 +390,7 @@ export default class App extends React.Component<any, any> {
       page.filter = filter;
       page.filtered = await ScanbotSdkService.instance.applyFilter(
         page.cropped ?? page.original,
-        filter as ImageFilter
+        filter
       );
     }
 
