@@ -8,6 +8,9 @@ import ScanbotSDK from 'scanbot-web-sdk/ui';
 // import ScanbotSDK from 'scanbot-web-sdk';
 
 import BarcodeFormat from 'scanbot-web-sdk/@types/model/barcode/BarcodeFormat';
+import { createActionBarConfig } from './config/ActionBarConfig';
+import { createAROverlayUseCaseConfig } from './config/AROverlayConfig';
+import { createMultipleScanningUseCaseConfig } from './config/MultipleScanningUseCaseConfig';
 // import { SingleScanningMode } from 'scanbot-web-sdk/@types/ui2/configuration/SingleScanningModeUseCase';
 // import { BarcodeScannerConfiguration } from 'scanbot-web-sdk/@types/ui2/configuration/BarcodeScannerConfiguration';
 // import { BarcodeScannerConfiguration, SingleScanningMode } from 'scanbot-web-sdk/@types/ui2/configuration';
@@ -32,8 +35,8 @@ function App() {
 					<ListItemButton onClick={async () => {
 
 						const config = new ScanbotSDK.UI.Config.BarcodeScannerConfiguration();
-						const useCase = new ScanbotSDK.UI.Config.SingleScanningMode();
-						config.useCase = useCase;
+						config.actionBar = createActionBarConfig();
+						config.useCase = createMultipleScanningUseCaseConfig();
 
 						const scanResult = await ScanbotSDK.UI.createBarcodeScanner(config);
 						console.log("Result: ", scanResult);

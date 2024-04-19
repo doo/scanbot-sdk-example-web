@@ -8,7 +8,7 @@
 
 import ScanbotSDK from "scanbot-web-sdk";
 
-export function ActionBarConfig() {
+export function createActionBarConfig() {
 
 	const config = new ScanbotSDK.UI.Config.ActionBarConfiguration();
 

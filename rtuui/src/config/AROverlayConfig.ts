@@ -8,17 +8,13 @@
 
 import ScanbotSDK from "scanbot-web-sdk";
 
-export function AROverlayUseCaseConfig() {
+export function createAROverlayUseCaseConfig() {
 
-	const config = new ScanbotSDK.UI.Config.MultipleScanningMode();
+	const config = new ScanbotSDK.UI.Config.ArOverlayGeneralConfiguration();
 
-    config.mode = "UNIQUE";
-    config.sheet.mode = "COLLAPSED_SHEET";
-    config.sheet.collapsedVisibleHeight = "SMALL";
-    
     // Configure AR Overlay.
-    config.arOverlay.visible = true;
-    config.arOverlay.automaticSelectionEnabled = false;
+    config.visible = true;
+    config.automaticSelectionEnabled = false;
 
     // Configure other parameters, pertaining to use case as needed.
 	return config;
