@@ -11,6 +11,7 @@ import BarcodeFormat from 'scanbot-web-sdk/@types/model/barcode/BarcodeFormat';
 import { createActionBarConfig } from './config/ActionBarConfig';
 import { createAROverlayUseCaseConfig } from './config/AROverlayConfig';
 import { createMultipleScanningUseCaseConfig } from './config/MultipleScanningUseCaseConfig';
+import FeatureListItem from './subviews/FeatureListItem';
 // import { SingleScanningMode } from 'scanbot-web-sdk/@types/ui2/configuration/SingleScanningModeUseCase';
 // import { BarcodeScannerConfiguration } from 'scanbot-web-sdk/@types/ui2/configuration/BarcodeScannerConfiguration';
 // import { BarcodeScannerConfiguration, SingleScanningMode } from 'scanbot-web-sdk/@types/ui2/configuration';
@@ -31,31 +32,22 @@ function App() {
 	return (
 		<Box sx={{ width: '100%', bgcolor: 'background.paper' }}>
 			<List>
-				<ListItem disablePadding>
-					<ListItemButton onClick={async () => {
+				<FeatureListItem text="Single-Barcode Scanner" icon={<QrCode />} onClick={async () => {
+					const scanner = await sdk?.createBarcodeScanner({containerId: "classic-scanner-container"});
+					// @ts-ignore
+					console.log(scanner["finder"].holeRect);
+				}} />
+				<FeatureListItem text="Multi-Barcode Scanner" icon={<QrCode2 />} onClick={async () => {
+					const config = new ScanbotSDK.UI.Config.BarcodeScannerConfiguration();
+					config.actionBar = createActionBarConfig();
+					config.useCase = createMultipleScanningUseCaseConfig();
 
-						const config = new ScanbotSDK.UI.Config.BarcodeScannerConfiguration();
-						config.actionBar = createActionBarConfig();
-						config.useCase = createMultipleScanningUseCaseConfig();
+					const scanResult = await ScanbotSDK.UI.createBarcodeScanner(config);
+					console.log("Result: ", scanResult);
+				}} />
 
-						const scanResult = await ScanbotSDK.UI.createBarcodeScanner(config);
-						console.log("Result: ", scanResult);
-					}}>
-						<ListItemIcon>
-							<QrCode />
-						</ListItemIcon>
-						<ListItemText primary="Single-Barcode Scanner" />
-					</ListItemButton>
-				</ListItem>
-				<ListItem disablePadding>
-					<ListItemButton>
-						<ListItemIcon>
-							<QrCode2 />
-						</ListItemIcon>
-						<ListItemText primary="Multi-Barcode Scanner" />
-					</ListItemButton>
-				</ListItem>
 			</List>
+			<div id="classic-scanner-container" style={{width: 100, height: 100, bottom: 5}}></div>
 		</Box>
 	)
 }
