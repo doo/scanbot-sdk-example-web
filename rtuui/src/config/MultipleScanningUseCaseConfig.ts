@@ -6,7 +6,7 @@
  * For maintainers: whenever changing this code, ensure that links using it are still pointing to valid lines!
  */
 
-import ScanbotSDK from "scanbot-web-sdk";
+import ScanbotSDK from "scanbot-web-sdk/ui";
 
 export function createMultipleScanningUseCaseConfig() {
 
