@@ -6,27 +6,24 @@
  * For maintainers: whenever changing this code, ensure that links using it are still pointing to valid lines!
  */
 
-import ScanbotSDK from "scanbot-web-sdk";
-export function createPaletteConfig() {
+import { BarcodeScannerConfiguration } from "scanbot-web-sdk/@types/ui2/configuration";
 
-    const config = new ScanbotSDK.UI.Config.Palette();
+export function applyPaletteConfig(config: BarcodeScannerConfiguration) {
 
-    config.sbColorPrimary = "#C8193C";
-    config.sbColorPrimaryDisabled = "#F5F5F5";
-    config.sbColorNegative = "#FF3737";
-    config.sbColorPositive = "#4EFFB4";
-    config.sbColorWarning = "#FFCE5C";
-    config.sbColorSecondary = "#FFEDEE";
-    config.sbColorSecondaryDisabled = "#F5F5F5";
-    config.sbColorOnPrimary = "#FFFFFF";
-    config.sbColorOnSecondary = "#C8193C";
-    config.sbColorSurface = "#FFFFFF";
-    config.sbColorOutline = "#EFEFEF";
-    config.sbColorOnSurfaceVariant = "#707070";
-    config.sbColorOnSurface = "#000000";
-    config.sbColorSurfaceLow = "#2600000";
-    config.sbColorSurfaceHigh = "#7A00000";
-    config.sbColorModalOverlay = "#A300000";
-
-    return config;
+    config.palette.sbColorPrimary = "#C8193C";
+    config.palette.sbColorPrimaryDisabled = "#F5F5F5";
+    config.palette.sbColorNegative = "#FF3737";
+    config.palette.sbColorPositive = "#4EFFB4";
+    config.palette.sbColorWarning = "#FFCE5C";
+    config.palette.sbColorSecondary = "#FFEDEE";
+    config.palette.sbColorSecondaryDisabled = "#F5F5F5";
+    config.palette.sbColorOnPrimary = "#FFFFFF";
+    config.palette.sbColorOnSecondary = "#C8193C";
+    config.palette.sbColorSurface = "#FFFFFF";
+    config.palette.sbColorOutline = "#EFEFEF";
+    config.palette.sbColorOnSurfaceVariant = "#707070";
+    config.palette.sbColorOnSurface = "#000000";
+    config.palette.sbColorSurfaceLow = "#2600000";
+    config.palette.sbColorSurfaceHigh = "#7A00000";
+    config.palette.sbColorModalOverlay = "#A300000";
 }

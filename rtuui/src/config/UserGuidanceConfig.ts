@@ -6,21 +6,17 @@
  * For maintainers: whenever changing this code, ensure that links using it are still pointing to valid lines!
  */
 
-import ScanbotSDK from "scanbot-web-sdk";
+import { BarcodeScannerConfiguration } from "scanbot-web-sdk/@types/ui2/configuration";
 
-export function createPaletteConfig() {
+export function applyUserGuidanceConfig(config: BarcodeScannerConfiguration) {
 
-    const config = new ScanbotSDK.UI.Config.UserGuidanceConfiguration();
-    
     // Hide/unhide the user guidance.
-    config.visible = true;
+    config.userGuidance.visible = true;
 
     // Configure the title.
-    config.title.text = "Move the finder over a barcode";
-    config.title.color = "#FFFFFF";
+    config.userGuidance.title.text = "Move the finder over a barcode";
+    config.userGuidance.title.color = "#FFFFFF";
 
     // Configure the background.
-    config.background.fillColor = "#7A000000";
-
-    return config;
+    config.userGuidance.background.fillColor = "#7A000000";
 }
