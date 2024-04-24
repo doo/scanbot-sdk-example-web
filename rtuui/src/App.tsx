@@ -10,7 +10,7 @@ import FeatureListItem from './subviews/FeatureListItem';
 
 import { createMultipleScanningUseCaseConfig } from './config/MultipleScanningUseCaseConfig';
 import { createBarcodeItemMapperConfig } from './config/BarcodeItemMapperConfig';
-import startScanner from './launcher.ts/StartScanner';
+import startScanner from './launcher/StartScanner';
 
 function App() {
 
@@ -19,6 +19,7 @@ function App() {
 	useEffect(() => {
 		async function init() {
 			const sdk = await ScanbotSDK.initialize({ licenseKey: '' });
+			console.log('Initialized with License:', await sdk.getLicenseInfo());
 			setSdk(sdk);
 		}
 		init();

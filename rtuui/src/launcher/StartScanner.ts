@@ -6,7 +6,7 @@
  * For maintainers: whenever changing this code, ensure that links using it are still pointing to valid lines!
  */
 
-import ScanbotSDK from "scanbot-web-sdk";
+import ScanbotSDK from "scanbot-web-sdk/ui";
 import { BarcodeScannerConfiguration } from "scanbot-web-sdk/@types/ui2/configuration";
 
 export default function startScanner(config: BarcodeScannerConfiguration) {
