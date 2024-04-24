@@ -7,6 +7,7 @@
  */
 
 import ScanbotSDK from "scanbot-web-sdk";
+
 export function createPaletteConfig() {
 
     const config = new ScanbotSDK.UI.Config.UserGuidanceConfiguration();

@@ -10,6 +10,7 @@ import FeatureListItem from './subviews/FeatureListItem';
 
 import { createMultipleScanningUseCaseConfig } from './config/MultipleScanningUseCaseConfig';
 import { createBarcodeItemMapperConfig } from './config/BarcodeItemMapperConfig';
+import startScanner from './launcher.ts/StartScanner';
 
 function App() {
 
@@ -17,7 +18,6 @@ function App() {
 
 	useEffect(() => {
 		async function init() {
-			console.log("Initializing Scanbot SDK");
 			const sdk = await ScanbotSDK.initialize({ licenseKey: '' });
 			setSdk(sdk);
 		}
@@ -28,19 +28,20 @@ function App() {
 		<Box sx={{ width: '100%', bgcolor: 'background.paper' }}>
 			<List>
 				<FeatureListItem text="Single-Barcode Scanner" icon={<QrCode />} onClick={async () => {
-					const scanner = await sdk?.createBarcodeScanner({ containerId: "classic-scanner-container" });
+					const config = new ScanbotSDK.UI.Config.BarcodeScannerConfiguration();
+					const result = await startScanner(config);
+					console.log(result);
 				}} />
 				<FeatureListItem text="Multi-Barcode Scanner" icon={<QrCode2 />} onClick={async () => {
 					const config = new ScanbotSDK.UI.Config.BarcodeScannerConfiguration();
 					config.useCase = createMultipleScanningUseCaseConfig();
 					(config.useCase as MultipleScanningMode).barcodeInfoMapping = createBarcodeItemMapperConfig();
 
-					const scanResult = await ScanbotSDK.UI.createBarcodeScanner(config);
-					console.log("Result: ", scanResult);
+					const result = await startScanner(config);
+					console.log(result);
 				}} />
 
 			</List>
-			<div id="classic-scanner-container" style={{ width: 100, height: 100, bottom: 5 }}></div>
 		</Box>
 	)
 }
