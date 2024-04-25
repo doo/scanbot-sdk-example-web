@@ -6,23 +6,17 @@
  * For maintainers: whenever changing this code, ensure that links using it are still pointing to valid lines!
  */
 
-import ScanbotSDK from "scanbot-web-sdk";
-export function createTopBarConfig() {
+import { BarcodeScannerConfiguration } from "scanbot-web-sdk/@types/ui2/configuration";
 
-    const config = new ScanbotSDK.UI.Config.TopBarConfiguration();
+export function applyTopBarConfig(config: BarcodeScannerConfiguration) {
     
     // Set the top bar mode.
-    config.mode = "GRADIENT";
+    config.topBar.mode = "GRADIENT";
 
     // Set the background color which will be used as a gradient.
-    config.backgroundColor = "#C8193C";
-
-    // Configure the status bar look. If visible - select DARK or LIGHT according to your app's theme color.
-    config.statusBarMode = "HIDDEN";
+    config.topBar.backgroundColor = "#C8193C";
 
     // Configure the Cancel button.
-    config.cancelButton.text = "Cancel";
-    config.cancelButton.foreground.color = "#FFFFFF";
-
-    return config;
+    config.topBar.cancelButton.text = "Cancel";
+    config.topBar.cancelButton.foreground.color = "#FFFFFF";
 }

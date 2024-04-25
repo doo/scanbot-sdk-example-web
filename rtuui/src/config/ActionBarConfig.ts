@@ -6,37 +6,33 @@
  * For maintainers: whenever changing this code, ensure that links using it are still pointing to valid lines!
  */
 
-import ScanbotSDK from "scanbot-web-sdk";
+import { BarcodeScannerConfiguration } from "scanbot-web-sdk/@types/ui2/configuration";
 
-export function createActionBarConfig() {
+export function applyActionBarConfig(config: BarcodeScannerConfiguration) {
 
-	const config = new ScanbotSDK.UI.Config.ActionBarConfiguration();
-
-	config.flashButton.visible = true;
+	config.actionBar.flashButton.visible = true;
 
 	// Configure the inactive state of the flash button.
-	config.flashButton.backgroundColor = "#7A000000";
-	config.flashButton.foregroundColor = "#FFFFFF";
+	config.actionBar.flashButton.backgroundColor = "#7A000000";
+	config.actionBar.flashButton.foregroundColor = "#FFFFFF";
 
 	// Configure the active state of the flash button.
-	config.flashButton.activeBackgroundColor = "#FFCE5C";
-	config.flashButton.activeForegroundColor = "#000000";
+	config.actionBar.flashButton.activeBackgroundColor = "#FFCE5C";
+	config.actionBar.flashButton.activeForegroundColor = "#000000";
 
 	// Hide/unhide the zoom button.
-	config.zoomButton.visible = true
+	config.actionBar.zoomButton.visible = true
 
 	// Configure the inactive state of the zoom button.
 	// The zoom button has no active state - it only switches between zoom levels. 
 	// For configuring those please refer to camera configuring
-	config.zoomButton.backgroundColor = "#7A000000";
-	config.zoomButton.foregroundColor = "#FFFFFF";
+	config.actionBar.zoomButton.backgroundColor = "#7A000000";
+	config.actionBar.zoomButton.foregroundColor = "#FFFFFF";
 
 	// Hide/unhide the flip camera button.
-	config.flipCameraButton.visible = true
+	config.actionBar.flipCameraButton.visible = true
 
 	// Configure the inactive state of the flip camera button.
-	config.flipCameraButton.backgroundColor = "#7A000000";
-	config.flipCameraButton.foregroundColor = "#FFFFFF";
-	
-	return config;
+	config.actionBar.flipCameraButton.backgroundColor = "#7A000000";
+	config.actionBar.flipCameraButton.foregroundColor = "#FFFFFF";
 }
