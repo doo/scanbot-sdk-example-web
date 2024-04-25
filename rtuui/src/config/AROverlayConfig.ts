@@ -6,16 +6,10 @@
  * For maintainers: whenever changing this code, ensure that links using it are still pointing to valid lines!
  */
 
-import ScanbotSDK from "scanbot-web-sdk";
+import { BarcodeScannerConfiguration } from "scanbot-web-sdk/@types/ui2/configuration";
 
-export function createAROverlayUseCaseConfig() {
-
-	const config = new ScanbotSDK.UI.Config.ArOverlayGeneralConfiguration();
-
+export function applyAROverlayUseCaseConfig(config: BarcodeScannerConfiguration) {
     // Configure AR Overlay.
-    config.visible = true;
-    config.automaticSelectionEnabled = false;
-
-    // Configure other parameters, pertaining to use case as needed.
-	return config;
+    config.useCase.arOverlay.visible = true;
+    config.useCase.arOverlay.automaticSelectionEnabled = false;
 }

@@ -6,14 +6,11 @@
  * For maintainers: whenever changing this code, ensure that links using it are still pointing to valid lines!
  */
 
-import ScanbotSDK from "scanbot-web-sdk/ui";
-import { BarcodeMappedData } from "scanbot-web-sdk/@types/ui2/configuration";
+import { BarcodeMappedData, BarcodeScannerConfiguration } from "scanbot-web-sdk/@types/ui2/configuration";
 
-export function createBarcodeItemMapperConfig() {
+export function applyBarcodeItemMapperConfig(config: BarcodeScannerConfiguration) {
 
-    const config = new ScanbotSDK.UI.Config.BarcodeInfoMapping();
-    
-    config.barcodeItemMapper = (): Promise<BarcodeMappedData> => {
+    config.useCase.barcodeInfoMapping.barcodeItemMapper = (): Promise<BarcodeMappedData> => {
         return new Promise((resolve) => {
             resolve({
                 title: "Title",
@@ -22,5 +19,4 @@ export function createBarcodeItemMapperConfig() {
             })
         });
     }
-    return config;
 }
