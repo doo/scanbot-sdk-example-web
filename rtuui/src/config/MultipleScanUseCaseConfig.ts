@@ -7,29 +7,30 @@
  */
 
 import ScanbotSDK from "scanbot-web-sdk/ui";
+import { BarcodeScannerConfiguration } from "scanbot-web-sdk/@types/ui2/configuration";
 
-export function createMultipleScanningUseCaseConfig() {
+export function applyMultipleScanUseCase(config: BarcodeScannerConfiguration) {
 
-    const config = new ScanbotSDK.UI.Config.MultipleScanningMode();
+    const useCase = new ScanbotSDK.UI.Config.MultipleScanningMode();
 
     // Set the counting mode.
-    config.mode = "COUNTING";
+    useCase.mode = "COUNTING";
 
     // Set the sheet mode for the barcodes preview.
-    config.sheet.mode = "COLLAPSED_SHEET";
+    useCase.sheet.mode = "COLLAPSED_SHEET";
 
     // Set the height for the collapsed sheet.
-    config.sheet.collapsedVisibleHeight = "LARGE";
+    useCase.sheet.collapsedVisibleHeight = "LARGE";
 
     // Enable manual count change.
-    config.sheetContent.manualCountChangeEnabled = true;
+    useCase.sheetContent.manualCountChangeEnabled = true;
 
     // Set the delay before same barcode counting repeat.
-    config.countingRepeatDelay = 1000;
+    useCase.countingRepeatDelay = 1000;
 
     // Configure the submit button
-    config.sheetContent.submitButton.text = "Submit";
-    config.sheetContent.submitButton.foreground.color = "#000000";
+    useCase.sheetContent.submitButton.text = "Submit";
+    useCase.sheetContent.submitButton.foreground.color = "#000000";
 
-    return config;
+    config.useCase = useCase;
 }

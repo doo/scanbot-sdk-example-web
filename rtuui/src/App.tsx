@@ -8,7 +8,7 @@ import { MultipleScanningMode } from 'scanbot-web-sdk/@types/ui2/configuration';
 
 import FeatureListItem from './subviews/FeatureListItem';
 
-import { createMultipleScanningUseCaseConfig } from './config/MultipleScanningUseCaseConfig';
+import { applyMultipleScanUseCase } from './config/MultipleScanUseCaseConfig';
 import { createBarcodeItemMapperConfig } from './config/BarcodeItemMapperConfig';
 import startScanner from './launcher/StartScanner';
 
@@ -35,7 +35,7 @@ function App() {
 				}} />
 				<FeatureListItem text="Multi-Barcode Scanner" icon={<QrCode2 />} onClick={async () => {
 					const config = new ScanbotSDK.UI.Config.BarcodeScannerConfiguration();
-					config.useCase = createMultipleScanningUseCaseConfig();
+					config.useCase = applyMultipleScanUseCase();
 					(config.useCase as MultipleScanningMode).barcodeInfoMapping = createBarcodeItemMapperConfig();
 
 					const result = await startScanner(config);
