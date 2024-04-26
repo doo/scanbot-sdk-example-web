@@ -23,7 +23,25 @@ function App() {
 
 	useEffect(() => {
 		async function init() {
-			const sdk = await ScanbotSDK.initialize({ licenseKey: '' });
+			const sdk = await ScanbotSDK.initialize({
+				/*
+				* TODO add the license key here.
+				* Please note: The Scanbot Web SDK will run without a license key for one minute per session!
+				* After the trial period has expired, all SDK functions and UI components will stop working.
+				* You can get a free "no-strings-attached" trial license.
+				* Please submit the trial license form (https://scanbot.io/trial/) on our website using
+				* "Web SDK" as the license type and a corresponding domain name of your test environment 
+				* (e.g. myapp.example.com or www.mywebsite.com). Every trial license automatically 
+				* includes "localhost" as a domain name for local development purposes.
+				*/
+				licenseKey: '',
+				/**
+				 * We have designated a custom path for the wasm file in the public folder.
+				 * This also means wasm binaries are copied from ScanbotSDK's node_modules to the wasm folder.
+				 * cf. 'copy-wasm' script in package.json
+				 */
+				engine: "wasm"
+			});
 			console.log('Initialized with License:', await sdk.getLicenseInfo());
 		}
 		init();
