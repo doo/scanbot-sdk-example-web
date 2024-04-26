@@ -9,8 +9,8 @@ export default function NavigationBar() {
                 flexDirection: "row",
                 paddingLeft: 15
             }}>
-                <p style={{ fontWeight: 500, paddingRight: 6 }}>RTU UI</p>
-                <p style={{ fontWeight: 300 }}>Example</p>
+                <span style={{ fontWeight: 500, paddingRight: 6, fontSize: 20, lineHeight: "52px" }}>RTU UI</span>
+                <span style={{ fontWeight: 300, lineHeight: "55px" }}>Example</span>
             </Typography>
         </AppBar>
     )
