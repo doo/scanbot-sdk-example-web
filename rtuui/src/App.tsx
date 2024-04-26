@@ -38,7 +38,8 @@ function App() {
 				/**
 				 * We have designated a custom path for the wasm file in the public folder.
 				 * This also means wasm binaries are copied from ScanbotSDK's node_modules to the wasm folder.
-				 * cf. 'copy-wasm' script in package.json
+				 * Simply run 'npm run copy-wasm' to copy the wasm files to the public folder.
+				 * cf the bash script in the package.json file.
 				 */
 				engine: "wasm"
 			});
