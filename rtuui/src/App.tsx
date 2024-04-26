@@ -1,47 +1,65 @@
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Box, List } from '@mui/material'
-import { QrCode, QrCode2 } from '@mui/icons-material';
+import { QrCode, QrCode2, QrCodeScanner } from '@mui/icons-material';
 
 import ScanbotSDK from 'scanbot-web-sdk/ui';
-import { MultipleScanningMode } from 'scanbot-web-sdk/@types/ui2/configuration';
 
-import FeatureListItem from './subviews/FeatureListItem';
-
+import startScanner from './launcher/StartScanner';
 import { applyMultipleScanUseCase } from './config/MultipleScanUseCaseConfig';
 import { applyBarcodeItemMapperConfig } from './config/BarcodeItemMapperConfig';
-import startScanner from './launcher/StartScanner';
+import { applySingleScanningUseCase } from './config/SingleScanUseCaseConfig';
+import { applySheetMode } from './config/MultipleScanSheetConfig';
+import { applyPaletteConfig } from './config/PaletteConfig';
+import { applyActionBarConfig } from './config/ActionBarConfig';
+import { applyAROverlayUseCaseConfig } from './config/AROverlayConfig';
+import { applyTopBarConfig } from './config/TopBarConfig';
+import { applyUserGuidanceConfig } from './config/UserGuidanceConfig';
+
+import FeatureListItem from './subviews/FeatureListItem';
+import NavigationBar from './subviews/NavigationBar';
 
 function App() {
-
-	const [sdk, setSdk] = useState<ScanbotSDK | null>(null);
 
 	useEffect(() => {
 		async function init() {
 			const sdk = await ScanbotSDK.initialize({ licenseKey: '' });
 			console.log('Initialized with License:', await sdk.getLicenseInfo());
-			setSdk(sdk);
 		}
 		init();
 	}, []);
 
 	return (
 		<Box sx={{ width: '100%', bgcolor: 'background.paper' }}>
+			<NavigationBar />
 			<List>
 				<FeatureListItem text="Single-Barcode Scanner" icon={<QrCode />} onClick={async () => {
 					const config = new ScanbotSDK.UI.Config.BarcodeScannerConfiguration();
+					applySingleScanningUseCase(config);
+					applyPaletteConfig(config);
+					applyActionBarConfig(config);
 					const result = await startScanner(config);
 					console.log(result);
 				}} />
 				<FeatureListItem text="Multi-Barcode Scanner" icon={<QrCode2 />} onClick={async () => {
 					const config = new ScanbotSDK.UI.Config.BarcodeScannerConfiguration();
-					config.useCase = applyMultipleScanUseCase();
-					(config.useCase as MultipleScanningMode).barcodeInfoMapping = applyBarcodeItemMapperConfig();
+					applyMultipleScanUseCase(config);
+					applySheetMode(config);
+					applyBarcodeItemMapperConfig(config);
 
 					const result = await startScanner(config);
 					console.log(result);
 				}} />
+				<FeatureListItem text="Multi-Scanner with AR Overlay" icon={<QrCodeScanner />} onClick={async () => {
+					const config = new ScanbotSDK.UI.Config.BarcodeScannerConfiguration();
+					applyTopBarConfig(config);
+					applyUserGuidanceConfig(config);
+					applyMultipleScanUseCase(config);
+					applyAROverlayUseCaseConfig(config);
 
+					const result = await startScanner(config);
+					console.log(result);
+				}} />
 			</List>
 		</Box>
 	)
