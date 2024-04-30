@@ -1,5 +1,5 @@
 
-VERSION=5.0.0
+VERSION=5.0.1
 
 rm -rf wasm/
 
