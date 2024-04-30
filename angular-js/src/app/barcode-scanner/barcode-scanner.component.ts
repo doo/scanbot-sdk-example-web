@@ -1,17 +1,23 @@
+
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
-import { ScanbotSdkService } from "../service/scanbot-sdk-service";
-import { DocumentRepository } from "../service/document-repository";
-import { NavigationUtils } from "../service/navigation-utils";
+import { ToastrService } from "ngx-toastr";
+
 import {
   Barcode,
   BarcodeResult,
   BarcodeScannerConfiguration,
 } from "scanbot-web-sdk/@types";
-import { ToastrService } from "ngx-toastr";
+import {
+  IBarcodePolygonHandle,
+  IBarcodePolygonLabelHandle
+} from "scanbot-web-sdk/@types/model/configuration/selection-overlay-configuration";
 import { BarcodeFormat } from "scanbot-web-sdk/@types/model/barcode/barcode-format";
+
+import { ScanbotSdkService } from "../service/scanbot-sdk-service";
+import { DocumentRepository } from "../service/document-repository";
+import { NavigationUtils } from "../service/navigation-utils";
 import { Utils } from "../service/utils";
-import { IBarcodePolygonHandle, IBarcodePolygonLabelHandle } from "scanbot-web-sdk/@types/model/configuration/selection-overlay-configuration";
 
 @Component({
   selector: "app-barcode-scanner",
@@ -103,8 +109,20 @@ export class BarcodeScannerComponent implements OnInit {
           }
         }
       },
-      style: { window: { widthProportion: 0.8, } },
-      showFinder: !isOverlyScanner,
+      finder: {
+        visible: !isOverlyScanner,
+        style: {
+          _type: "FinderCorneredStyle",
+          strokeColor: "#FF0000",
+          strokeWidth: 2.0,
+          cornerRadius: 10.0
+        },
+        overlayColor: "rgb(0, 0, 0, 0.5)",
+        aspectRatio: {
+          width: 1.0,
+          height: 1.0
+        }
+      }
     };
 
     try {
