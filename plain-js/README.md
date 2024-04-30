@@ -5,7 +5,7 @@
 If you want to integrate Scanbot SDK as a plain javascript library in your project, add the following script tag to your `ìndex.html`
 
 ```
-<script src="https://cdn.jsdelivr.net/npm/scanbot-web-sdk@5.0.0/bundle/ScanbotSDK.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/scanbot-web-sdk@5.0.1/bundle/ScanbotSDK.min.js"></script>
 ```
 
 ### Downloading SDK
