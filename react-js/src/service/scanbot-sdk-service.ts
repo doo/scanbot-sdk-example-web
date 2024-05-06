@@ -1,5 +1,5 @@
 // Import SDK from webpack directory to ensure web assembly binary and worker and bundled with webpack
-import ScanbotSDK from "scanbot-web-sdk/webpack";
+import ScanbotSDK from "scanbot-web-sdk";
 
 // Other typings should be imported from @types
 import {
@@ -61,6 +61,8 @@ export class ScanbotSdkService {
 	public async initialize() {
 		this.sdk = await ScanbotSDK.initialize({
 			licenseKey: this.license,
+			// WASM files are copied to this directory by the npm postinstall script
+			engine: 'wasm'
 		});
 		return this.sdk;
 	}
@@ -93,7 +95,7 @@ export class ScanbotSdkService {
 	}
 
 	public async analyzeDocumentQuality(result: DocumentDetectionResult) {
-		/** 
+		/**
 		 * Initialization of the analyzer can cause a strain on your user interface,
 		 * In a real-life scenario, consider creating the analyzer once on app/scanner startup, not for every scan.
 		 */

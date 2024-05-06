@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postinstall": "cp -R node_modules/scanbot-web-sdk/bundle/bin/complete public/wasm"
   },
   "dependencies": {
     "next": "14.1.0",
@@ -14,7 +15,7 @@
     "react-dom": "^18",
     "react-loading-skeleton": "^3.4.0",
     "react-toastify": "^10.0.4",
-    "scanbot-web-sdk": "5.1.0-rc.1"
+    "scanbot-web-sdk": "5.1.0-rc.2"
   },
   "devDependencies": {
     "@types/node": "^20",

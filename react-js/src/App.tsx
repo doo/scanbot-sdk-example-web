@@ -446,7 +446,7 @@ export default class App extends React.Component<any, any> {
 
   async onVINDetected(textData: TextDataScannerResult) {
     if (!textData) return;
-    
+
     // The VIN scanner does not return empty results, so we can skip 'validated' check here
     // However, validated will still be true if several frames detected the same number
     ScanbotSdkService.instance.vinScanner?.pauseDetection();
@@ -463,7 +463,7 @@ export default class App extends React.Component<any, any> {
   formatBarcodes(codes: Barcode[]): string {
     return JSON.stringify(
       codes.map((code: Barcode) => {
-        return code.parsedText || `${code.text} (${code.format})`;
+        return code.parsedDocument || `${code.text} (${code.format})`;
       })
     );
   }

@@ -140,8 +140,8 @@ window.onload = async () => {
 
   scanbotSDK = await ScanbotSDK.initialize({
     licenseKey: Config.license(),
-    // If you have downloaded the SDK, you can use the following folder to specify engine path:
-    // engine: '/wasm/'
+    // Use the provided download-sdk.sh script to download the SDK locally and make the following path available.
+    engine: './scanbot-web-sdk/bin/complete/'
   });
 
   ViewUtils.hideLoading();

@@ -22,7 +22,7 @@ class BarcodeScannerController {
         };
         config.onError = onScannerError;
         config.style = { window: { widthProportion: 0.8, } };
-        
+
         try {
             this.barcodeScanner = await scanbotSDK.createBarcodeScanner(config);
         } catch (e) {
@@ -63,8 +63,8 @@ class BarcodeScannerController {
     async onBarcodesDetected(e) {
         let text = "";
         e.barcodes.forEach((barcode) => {
-            if (barcode.parsedText) {
-                text += JSON.stringify(barcode.parsedText);
+            if (barcode.parsedDocument) {
+                text += JSON.stringify(barcode.parsedDocument);
             } else {
                 text += " " + barcode.text + " (" + barcode.format + "),";
             }
