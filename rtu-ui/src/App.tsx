@@ -1,7 +1,8 @@
 
 import { useEffect } from 'react';
-import { Box, List } from '@mui/material'
-import { QrCode, QrCode2, QrCodeScanner } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
+import { Box, Divider, List } from '@mui/material'
+import { ListAlt, QrCode, QrCode2, QrCodeScanner } from '@mui/icons-material';
 
 import ScanbotSDK from 'scanbot-web-sdk/ui';
 
@@ -18,12 +19,15 @@ import { applyUserGuidanceConfig } from './config/UserGuidanceConfig';
 
 import FeatureListItem from './subviews/FeatureListItem';
 import NavigationBar from './subviews/NavigationBar';
+import SBStorage from './service/SBStorage';
 
 function App() {
 
+	const navigate = useNavigate();
+	
 	useEffect(() => {
 		async function init() {
-			const sdk = await ScanbotSDK.initialize({
+			await ScanbotSDK.initialize({
 				/*
 				* TODO add the license key here.
 				* Please note: The Scanbot Web SDK will run without a license key for one minute per session!
@@ -43,7 +47,6 @@ function App() {
 				 */
 				engine: "wasm"
 			});
-			console.log('Initialized with License:', await sdk.getLicenseInfo());
 		}
 		init();
 	}, []);
@@ -57,8 +60,11 @@ function App() {
 					applySingleScanningUseCase(config);
 					applyPaletteConfig(config);
 					applyActionBarConfig(config);
+
 					const result = await startScanner(config);
-					console.log(result);
+					if (result?.items) {
+						SBStorage.instance.addBarcodes(result.items);
+					}
 				}} />
 				<FeatureListItem text="Multi-Barcode Scanner" icon={<QrCode2 />} onClick={async () => {
 					const config = new ScanbotSDK.UI.Config.BarcodeScannerConfiguration();
@@ -67,7 +73,9 @@ function App() {
 					applyBarcodeItemMapperConfig(config);
 
 					const result = await startScanner(config);
-					console.log(result);
+					if (result?.items) {
+						SBStorage.instance.addBarcodes(result.items);
+					}
 				}} />
 				<FeatureListItem text="Multi-Scanner with AR Overlay" icon={<QrCodeScanner />} onClick={async () => {
 					const config = new ScanbotSDK.UI.Config.BarcodeScannerConfiguration();
@@ -77,7 +85,14 @@ function App() {
 					applyAROverlayUseCaseConfig(config);
 
 					const result = await startScanner(config);
-					console.log(result);
+					if (result?.items) {
+						SBStorage.instance.addBarcodes(result.items);
+					}
+
+				}} />
+				<Divider style={{ paddingTop: 10 }} />
+				<FeatureListItem text="Scan Results" icon={<ListAlt />} onClick={async () => { 
+					navigate('scan-results');
 				}} />
 			</List>
 		</Box>

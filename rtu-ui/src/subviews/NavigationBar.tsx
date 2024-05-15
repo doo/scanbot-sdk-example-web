@@ -1,8 +1,30 @@
-import { AppBar, Typography } from "@mui/material";
+import { ArrowBack } from "@mui/icons-material";
+import { AppBar, IconButton, Typography } from "@mui/material";
 
-export default function NavigationBar() {
+class Props {
+    isBackButtonVisible?: boolean;
+}
+
+export function BackButton(props: { isVisible: boolean }) {
+
+    if (!props.isVisible) {
+        return null;
+    }
     return (
-        <AppBar position="static" style={{ height: 52, backgroundColor: "rgb(200, 25, 60)" }}>
+        <IconButton aria-label="delete" size="small" style={{ width: 50, height: 50 }} onClick={() => {
+            window.history.back();
+        }}>
+            <ArrowBack fontSize="inherit" style={{ color: "white", fontSize: 25 }} />
+        </IconButton>
+    )
+
+}
+export default function NavigationBar(props: Props) {
+    return (
+        <AppBar position="static" style={{ height: 52, backgroundColor: "rgb(200, 25, 60)", display: "flex", flexDirection: "row" }}>
+
+            <BackButton isVisible={props.isBackButtonVisible ?? false} />
+
             <Typography style={{
                 height: "100%",
                 display: "flex",
