@@ -6,16 +6,20 @@
  * For maintainers: whenever changing this code, ensure that links using it are still pointing to valid lines!
  */
 
-import { BarcodeMappedData, BarcodeScannerConfiguration } from "scanbot-web-sdk/@types/ui2/configuration";
+import { BarcodeItem, BarcodeMappedData, BarcodeScannerConfiguration } from "scanbot-web-sdk/@types/ui2/configuration";
 
 export function applyBarcodeItemMapperConfig(config: BarcodeScannerConfiguration) {
 
-    config.useCase.barcodeInfoMapping.barcodeItemMapper = (): Promise<BarcodeMappedData> => {
+    config.useCase.barcodeInfoMapping.barcodeItemMapper = (barcode: BarcodeItem): Promise<BarcodeMappedData> => {
         return new Promise((resolve) => {
             resolve({
-                title: "Title",
-                subtitle: "Subtitle",
-                barcodeImage: "https://placehold.co/68"
+                /** 
+                 * TODO: process scan result as needed to get your mapped data,
+                 * e.g. query your server to get product image, title and subtitle.
+                 */
+                title: `Some product ${barcode.text}`,
+                subtitle: barcode.type,
+                barcodeImage: "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png"
             })
         });
     }
