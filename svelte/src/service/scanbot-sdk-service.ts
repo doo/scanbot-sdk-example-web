@@ -38,7 +38,7 @@ export default class ScanbotSDKService {
 
     public async initialize() {
 
-        if (this.sdk && this.sdk.initialized) {
+        if (this.sdk) {
             // The SDK needs to be initialized just once during the entire app's lifecycle
             return;
         }
@@ -117,7 +117,6 @@ export default class ScanbotSDKService {
                     highlightedPolygonStrokeColor: '#3DEC4A'
                 },
             },
-            style: { window: { widthProportion: 0.8, } },
             onBarcodesDetected: onBarcodesDetected,
             onError: (error: Error) => {
                 console.log("Encountered error scanning barcodes: ", error);
