@@ -18,7 +18,7 @@ import type { Polygon } from 'scanbot-web-sdk/@types/utils/dto/Polygon';
 export class ScanbotDocument {
     id?: string;
     base64?: string;
-    cropped?: Uint8Array | string; 
+    cropped?: Uint8Array | string;
     original!: Uint8Array | string;
     polygon?: Polygon;
     rotations?: number;
@@ -38,7 +38,7 @@ export default class ScanbotSDKService {
 
     public async initialize() {
 
-        if (this.sdk && this.sdk.initialized) {
+        if (this.sdk) {
             // The SDK needs to be initialized just once during the entire app's lifecycle
             return;
         }
@@ -47,8 +47,8 @@ export default class ScanbotSDKService {
         const sdk = (await import('scanbot-web-sdk')).default;
         this.sdk = await sdk.initialize({
             licenseKey: '',
-            // You can also use CDN to load the correct SDK binary, but be sure to use the correct version number
-            // engine: "https://cdn.jsdelivr.net/npm/scanbot-web-sdk@latest/bundle/bin/barcode-scanner/"
+            // WASM files are copied to this directory by the npm postinstall script
+            engine: '/wasm',
         });
 
         ScanbotSDKService.instance.loadDocuments();
@@ -62,9 +62,9 @@ export default class ScanbotSDKService {
 
     public async createDocumentScanner(containerId: string) {
 
-        /* 
+        /*
         * Ensure the SDK is initialized. If it's initialized, this function does nothing,
-        * but is necessary e.g. when opening the document url scanner directly. 
+        * but is necessary e.g. when opening the document url scanner directly.
         */
         await this.initialize();
 
@@ -99,9 +99,9 @@ export default class ScanbotSDKService {
 
     public async createBarcodeScanner(containerId: string, onBarcodesDetected: (e: BarcodeResult) => void) {
 
-        /* 
+        /*
         * Ensure the SDK is initialized. If it's initialized, this function does nothing,
-        * but is necessary e.g. when opening the document url scanner directly. 
+        * but is necessary e.g. when opening the document url scanner directly.
         */
         await this.initialize();
 
@@ -109,7 +109,7 @@ export default class ScanbotSDKService {
             containerId: containerId,
             overlay: {
                 visible: true,
-                
+
                 textFormat: 'TextAndFormat',
                 automaticSelectionEnabled: false,
                 style: {
@@ -117,7 +117,6 @@ export default class ScanbotSDKService {
                     highlightedPolygonStrokeColor: '#3DEC4A'
                 },
             },
-            style: { window: { widthProportion: 0.8, } },
             onBarcodesDetected: onBarcodesDetected,
             onError: (error: Error) => {
                 console.log("Encountered error scanning barcodes: ", error);

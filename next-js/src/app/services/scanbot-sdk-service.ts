@@ -21,8 +21,8 @@ export default class ScanbotSDKService {
     * After the trial period has expired, all SDK functions and UI components will stop working.
     * You can get a free "no-strings-attached" trial license.
     * Please submit the trial license form (https://scanbot.io/trial/) on our website using
-    * "Web SDK" as the license type and a corresponding domain name of your test environment 
-    * (e.g. myapp.example.com or www.mywebsite.com). Every trial license automatically 
+    * "Web SDK" as the license type and a corresponding domain name of your test environment
+    * (e.g. myapp.example.com or www.mywebsite.com). Every trial license automatically
     * includes "localhost" as a domain name for local development purposes.
     */
     LICENSE_KEY = "";
@@ -40,6 +40,7 @@ export default class ScanbotSDKService {
 
         this.sdk = await sdk.initialize({
             licenseKey: this.LICENSE_KEY,
+            engine: "wasm",
         });
     }
 
@@ -48,9 +49,9 @@ export default class ScanbotSDKService {
     private croppingView?: ICroppingViewHandle;
 
     public async createDocumentScanner(containerId: string) {
-        /* 
+        /*
         * Ensure the SDK is initialized. If it's initialized, this function does nothing,
-        * but is necessary e.g. when opening the document url scanner directly. 
+        * but is necessary e.g. when opening the document url scanner directly.
         */
         await this.initialize();
 
@@ -85,9 +86,9 @@ export default class ScanbotSDKService {
     }
 
     async createBarcodeScanner(containerId: string, onBarcodeFound: (code: Barcode) => void) {
-        /* 
+        /*
         * Ensure the SDK is initialized. If it's initialized, this function does nothing,
-        * but is necessary e.g. when opening the barcode url scanner directly. 
+        * but is necessary e.g. when opening the barcode url scanner directly.
         */
         await this.initialize();
 
@@ -110,7 +111,6 @@ export default class ScanbotSDKService {
                 },
             },
             returnBarcodeImage: true,
-            style: { window: { widthProportion: 0.8, } },
             onBarcodesDetected: (e: BarcodeResult) => {
                 // Process the result as you see fit
                 console.log("Detected barcodes: ", e.barcodes);

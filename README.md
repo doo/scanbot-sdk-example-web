@@ -67,10 +67,10 @@ npm run dev
 
 ### Plain JavaScript App
 
-The vanilla JavaScript app downloads the Scanbot Web SDK from an unofficial CDN:
+The vanilla JavaScript app needs to download the SDK from npm. To do this, run the script
 
 ```
-https://cdn.jsdelivr.net/npm/scanbot-web-sdk@1.0.0-rc1/bundle/ScanbotSDK.min.js
+plain-js/download-sdk.sh
 ```
 
 To run the JavaScript example:

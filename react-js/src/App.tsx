@@ -170,7 +170,7 @@ export default class App extends React.Component<any, any> {
                 // You can override onBarcodeFound and create your own implementation for custom styling, e.g.
                 // if you wish to only color in certain types of barcodes, you can find and pick them, as demonstrated below:
                 if (code.format === "QR_CODE") {
-                  polygon.style({ fill: "rgba(255, 255, 0, 0.3)", stroke: "yellow" })
+                  polygon?.style({ fill: "rgba(255, 255, 0, 0.3)", stroke: "yellow" })
                 }
               }
             },
@@ -446,7 +446,7 @@ export default class App extends React.Component<any, any> {
 
   async onVINDetected(textData: TextDataScannerResult) {
     if (!textData) return;
-    
+
     // The VIN scanner does not return empty results, so we can skip 'validated' check here
     // However, validated will still be true if several frames detected the same number
     ScanbotSdkService.instance.vinScanner?.pauseDetection();
@@ -457,7 +457,7 @@ export default class App extends React.Component<any, any> {
   formatBarcodes(codes: Barcode[]): string {
     return JSON.stringify(
       codes.map((code: Barcode) => {
-        return code.parsedText || `${code.text} (${code.format})`;
+        return code.parsedDocument || `${code.text} (${code.format})`;
       })
     );
   }

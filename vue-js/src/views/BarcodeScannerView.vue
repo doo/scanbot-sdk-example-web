@@ -80,8 +80,7 @@ onMounted(async () => {
         }
       }
     },
-    showFinder: !isOverlayScanner.value,
-    style: { window: { widthProportion: 0.8, } },
+    finder: { visible: !isOverlayScanner.value },
   };
 
   try {
@@ -120,8 +119,8 @@ async function onBarcodesDetected(result: BarcodeResult) {
 function formatBarcodes(codes: Barcode[]): string {
   return JSON.stringify(
     codes.map((code: Barcode) => {
-      if (code.parsedText) {
-        return code.parsedText;
+      if (code.parsedDocument) {
+        return code.parsedDocument;
       } else {
         return code.text + " (" + code.format + ") ";
       }

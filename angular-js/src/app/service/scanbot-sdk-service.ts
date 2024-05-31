@@ -9,9 +9,6 @@ import {
   ICroppingViewHandle,
   DocumentScannerConfiguration,
   CroppingViewConfiguration,
-  BinarizationFilter,
-  ColorFilter,
-  ImageFilter,
   PdfGenerationOptions,
   PdfGenerator,
   TiffGenerationOptions,
@@ -54,7 +51,7 @@ export class ScanbotSdkService {
   }
 
   constructor() {
-    const options = { licenseKey: "" };
+    const options = { licenseKey: "", engine: "assets/wasm" };
     ScanbotSDK.initialize(options).then((result) => {
       this.instance = result;
       if (this.onReady) {

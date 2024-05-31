@@ -28,3 +28,7 @@ chrome-user-data
 react-js/publish.sh
 
 .angular/
+
+# Downloaded ScanbotSDK binaries
+wasm/
+plain-js/scanbot-web-sdk/

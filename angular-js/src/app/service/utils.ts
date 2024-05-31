@@ -17,8 +17,8 @@ export class Utils {
   static formatBarcodes(codes: Barcode[]): string {
     return JSON.stringify(
       codes.map((code: Barcode) => {
-        if (code.parsedText) {
-          return code.parsedText;
+        if (code.parsedDocument) {
+          return code.parsedDocument;
         } else {
           return code.text + " (" + code.format + ") ";
         }
