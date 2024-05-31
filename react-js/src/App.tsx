@@ -452,12 +452,6 @@ export default class App extends React.Component<any, any> {
     ScanbotSdkService.instance.vinScanner?.pauseDetection();
     await MiscUtils.alert(textData.text!);
     setTimeout(() => { ScanbotSdkService.instance.vinScanner?.resumeDetection() }, 500);
-    this.createOcrEngine({ mode: "VIN" });
-    this.createOcrEngine();
-  }
-
-  async createOcrEngine(options?: { mode: string }) {
-
   }
 
   formatBarcodes(codes: Barcode[]): string {
