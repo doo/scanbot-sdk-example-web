@@ -33,6 +33,11 @@ export class Features {
       route: RoutePath.VINScanner,
     },
     {
+      id: RoutePath.CheckScanner,
+      name: "Check Scanner",
+      route: RoutePath.CheckScanner,
+    },
+    {
       id: RoutePath.ScanAndCount,
       name: "Scan & Count",
       route: RoutePath.ScanAndCount,

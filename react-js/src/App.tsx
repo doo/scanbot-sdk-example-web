@@ -31,6 +31,7 @@ import TextDataScannerComponent from "./rtu-ui/text-data-scanner-component";
 import ResultParser from "./service/result-parser";
 import { IBarcodePolygonHandle, IBarcodePolygonLabelHandle } from "scanbot-web-sdk/@types/model/configuration/selection-overlay-configuration";
 import VINScannerComponent from "./rtu-ui/vin-scanner-component";
+import CheckScannerPage from "./pages/check-scanner-page";
 
 export default class App extends React.Component<any, any> {
   constructor(props: any) {
@@ -266,6 +267,10 @@ export default class App extends React.Component<any, any> {
       );
     }
 
+    if (route === RoutePath.CheckScanner) {
+      return <CheckScannerPage />
+    }
+    
     if (route === RoutePath.CroppingView) {
       if (!Pages.instance.hasActiveItem()) {
         RoutingService.instance.reset();

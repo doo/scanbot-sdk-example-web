@@ -28,6 +28,7 @@ import { IMrzScannerHandle } from "scanbot-web-sdk/@types/interfaces/i-mrz-scann
 import { ContourDetectionResult } from "scanbot-web-sdk/@types/model/document/contour-detection-result";
 import { VINScannerConfiguration } from "scanbot-web-sdk/@types/model/configuration/vin-scanner-configuration";
 import { UserGuidanceConfiguration, ViewFinderConfiguration } from "scanbot-web-sdk/@types/ui2/configuration";
+import CheckRecognizer, { CheckRecognizerResult } from "scanbot-web-sdk/@types/service/check-recognizer";
 
 const filters = {
 	"ScanbotBinarizationFilter": ScanbotSDK.imageFilters.ScanbotBinarizationFilter,
@@ -355,5 +356,14 @@ export class ScanbotSdkService {
 
 	async cropAndRotateImageCcw(image: ArrayBuffer, polygon: Polygon, rotations: number): Promise<Uint8Array> {
 		return await this.sdk!.cropAndRotateImageCcw(image, polygon, rotations);
+	}
+
+	checkRecognizer: CheckRecognizer | undefined;
+	async recognizeCheck(image: ArrayBuffer): Promise<CheckRecognizerResult> {
+
+		if (!this.checkRecognizer) {
+			this.checkRecognizer = await this.sdk!.createCheckRecognizer();
+		}
+		return await this.checkRecognizer.process(image);
 	}
 }

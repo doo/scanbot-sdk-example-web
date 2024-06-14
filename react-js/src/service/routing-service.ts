@@ -17,6 +17,7 @@ export enum RoutePath {
   CroppingView = "cropping-view",
   BarcodeScanner = "barcode-scanner",
   BarcodeScannerWithOverlay = "barcode-scanner-with-overlay",
+  CheckScanner = "check-scanner"
 }
 
 export class RoutingService {
