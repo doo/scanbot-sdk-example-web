@@ -1,4 +1,4 @@
-Open Source libraries used in Scanbot Web SDK 5.1.0
+Open Source libraries used in Scanbot Web SDK 5.1.2
 ----------------------------------------------------------------------------------------
 
 @fontsource/roboto 5.0.8
