@@ -2,7 +2,7 @@
 
 set -e
 
-VERSION=5.1.0
+VERSION=5.1.2
 
 rm -rf scanbot-web-sdk/
 
