@@ -76,7 +76,7 @@ onMounted(async () => {
         // You can override onBarcodeFound and create your own implementation for custom styling, e.g.
         // if you wish to only color in certain types of barcodes, you can find and pick them, as demonstrated below:
         if (code.format === "QR_CODE") {
-          polygon.style({ fill: "rgba(255, 255, 0, 0.3)", stroke: "yellow" })
+          polygon?.style({ fill: "rgba(255, 255, 0, 0.3)", stroke: "yellow" })
         }
       }
     },
