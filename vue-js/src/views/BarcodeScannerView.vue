@@ -102,7 +102,7 @@ onBeforeUnmount(async () => {
 
 function onCameraSwap() {
   if (barcodeScanner.value) {
-    barcodeScanner.value.swapCameraFacing();
+    barcodeScanner.value.swapCameraFacing(true);
   }
 }
 
