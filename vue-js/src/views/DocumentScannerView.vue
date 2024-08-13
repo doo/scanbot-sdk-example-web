@@ -104,7 +104,7 @@ onBeforeUnmount(async () => {
 function onCameraSwap() {
   console.log("onCameraSwap")
   if (documentScanner.value) {
-    documentScanner.value.swapCameraFacing();
+    documentScanner.value.swapCameraFacing(true);
   }
 }
 
