@@ -19,7 +19,7 @@ export function applyBarcodeItemMapperConfig(config: BarcodeScannerConfiguration
                  */
                 title: `Some product ${barcode.text}`,
                 subtitle: barcode.type,
-                barcodeImage: "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png"
+                barcodeImage: "https://avatars.githubusercontent.com/u/1454920"
             })
         });
     }

@@ -30,7 +30,7 @@ export function applySingleScanningUseCase(config: BarcodeScannerConfiguration) 
     // Configure the cancel button of the confirmation sheet.
     useCase.cancelButton.text = "Close";
     useCase.cancelButton.foreground.color = "#C8193C";
-    useCase.cancelButton.background.fillColor = "#00000000";
+    useCase.cancelButton.background.fillColor = "#FFFFFF30";
 
     // Configure the submit button of the confirmation sheet.
     useCase.submitButton.text = "Submit";
