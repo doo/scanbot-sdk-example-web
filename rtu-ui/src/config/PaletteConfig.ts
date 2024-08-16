@@ -23,7 +23,7 @@ export function applyPaletteConfig(config: BarcodeScannerConfiguration) {
     config.palette.sbColorOutline = "#EFEFEF";
     config.palette.sbColorOnSurfaceVariant = "#707070";
     config.palette.sbColorOnSurface = "#000000";
-    config.palette.sbColorSurfaceLow = "#2600000";
-    config.palette.sbColorSurfaceHigh = "#7A00000";
-    config.palette.sbColorModalOverlay = "#A300000";
+    config.palette.sbColorSurfaceLow = "#00000026";
+    config.palette.sbColorSurfaceHigh = "#0000007A";
+    config.palette.sbColorModalOverlay = "#000000A3";
 }

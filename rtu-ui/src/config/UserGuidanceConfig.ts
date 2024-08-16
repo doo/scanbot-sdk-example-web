@@ -18,5 +18,5 @@ export function applyUserGuidanceConfig(config: BarcodeScannerConfiguration) {
     config.userGuidance.title.color = "#FFFFFF";
 
     // Configure the background.
-    config.userGuidance.background.fillColor = "#7A000000";
+    config.userGuidance.background.fillColor = "#0000007A";
 }
