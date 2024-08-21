@@ -163,9 +163,14 @@ export default class App extends React.Component<any, any> {
         <BarcodeScannerComponent
           ref={(ref) => (this._barcodeScannerWithOverlay = ref)}
           sdk={this.state.sdk}
+            // Please note that this additionalConfig parameter is a convenience prop to make
+            // our example code more re-usable, this is not a part of the Scanbot SDK API.
+            // Please see 'createBarcodeScanner' method in scanbot-sdk-service.ts to see its usage.
           additionalConfig={{
             overlay: {
               visible: true,
+              automaticSelectionEnabled: true,
+              countingRepeatDelay: 2000,
               onBarcodeFound: (code: Barcode, polygon: IBarcodePolygonHandle, label: IBarcodePolygonLabelHandle) => {
                 // You can override onBarcodeFound and create your own implementation for custom styling, e.g.
                 // if you wish to only color in certain types of barcodes, you can find and pick them, as demonstrated below:
