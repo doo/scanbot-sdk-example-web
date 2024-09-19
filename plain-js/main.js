@@ -19,7 +19,13 @@ window.onload = async () => {
 
   this.resizeContent();
 
-  Utils.getElementById("pick-document-button").onclick = (e) => {
+  Utils.getElementById("pick-document-button").onclick = async (e) => {
+
+    const config = new ScanbotSDK.UI.Config.BarcodeScannerConfiguration();
+    const result = await ScanbotSDK.UI.createBarcodeScanner(config);
+    console.log("Result:", result);
+    return;
+
     const picker = Utils.getElementByClassName("file-picker");
     picker.click();
 
