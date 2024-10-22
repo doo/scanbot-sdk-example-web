@@ -6,11 +6,11 @@
  * For maintainers: whenever changing this code, ensure that links using it are still pointing to valid lines!
  */
 
-import { BarcodeItem, BarcodeMappedData, BarcodeScannerConfiguration } from "scanbot-web-sdk/@types/ui2/configuration";
+import { UIConfig } from "scanbot-web-sdk/@types";
 
-export function applyBarcodeItemMapperConfig(config: BarcodeScannerConfiguration) {
+export function applyBarcodeItemMapperConfig(config: UIConfig.BarcodeScannerConfiguration) {
 
-    config.useCase.barcodeInfoMapping.barcodeItemMapper = (barcode: BarcodeItem): Promise<BarcodeMappedData> => {
+    config.useCase.barcodeInfoMapping.barcodeItemMapper = (barcode: UIConfig.BarcodeItem): Promise<UIConfig.BarcodeMappedData> => {
         return new Promise((resolve) => {
             resolve({
                 /** 

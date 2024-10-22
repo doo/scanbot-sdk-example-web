@@ -7,9 +7,9 @@
  */
 
 import ScanbotSDK from "scanbot-web-sdk/ui";
-import { BarcodeScannerConfiguration } from "scanbot-web-sdk/@types/ui2/configuration";
+import { UIConfig } from "scanbot-web-sdk/@types";
 
-export function applyMultipleScanUseCase(config: BarcodeScannerConfiguration) {
+export function applyMultipleScanUseCase(config: UIConfig.BarcodeScannerConfiguration) {
 
     const useCase = new ScanbotSDK.UI.Config.MultipleScanningMode();
 

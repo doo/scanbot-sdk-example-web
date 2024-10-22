@@ -6,14 +6,11 @@
  * For maintainers: whenever changing this code, ensure that links using it are still pointing to valid lines!
  */
 
-import {
-    BarcodeScannerConfiguration,
-    MultipleScanningMode
-} from "scanbot-web-sdk/@types/ui2/configuration";
+import { UIConfig } from "scanbot-web-sdk/@types";
 
-export function applySheetMode(config: BarcodeScannerConfiguration) {
+export function applySheetMode(config: UIConfig.BarcodeScannerConfiguration) {
 
-    const useCase = config.useCase as MultipleScanningMode;
+    const useCase = config.useCase as UIConfig.MultipleScanningMode;
 
     useCase.sheet.mode = "COLLAPSED_SHEET"
 
