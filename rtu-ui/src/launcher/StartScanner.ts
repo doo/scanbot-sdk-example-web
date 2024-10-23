@@ -7,9 +7,9 @@
  */
 
 import ScanbotSDK from "scanbot-web-sdk/ui";
-import { BarcodeScannerConfiguration } from "scanbot-web-sdk/@types/ui2/configuration";
+import { UIConfig } from "scanbot-web-sdk/@types";
 
-export default function startScanner(config: BarcodeScannerConfiguration) {
+export default function startScanner(config: UIConfig.BarcodeScannerConfiguration) {
 	// TODO: Configure as needed
 	const result = ScanbotSDK.UI.createBarcodeScanner(config);
 	// TODO: Process & present the result as needed

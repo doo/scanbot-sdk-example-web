@@ -6,9 +6,9 @@
  * For maintainers: whenever changing this code, ensure that links using it are still pointing to valid lines!
  */
 
-import { BarcodeScannerConfiguration } from "scanbot-web-sdk/@types/ui2/configuration";
+import { UIConfig } from "scanbot-web-sdk/@types";
 
-export function applyPaletteConfig(config: BarcodeScannerConfiguration) {
+export function applyPaletteConfig(config: UIConfig.BarcodeScannerConfiguration) {
 
     config.palette.sbColorPrimary = "#C8193C";
     config.palette.sbColorPrimaryDisabled = "#F5F5F5";

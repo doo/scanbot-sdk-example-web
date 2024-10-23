@@ -27,7 +27,7 @@ import { BarcodeFormat } from "scanbot-web-sdk/@types/model/barcode/barcode-form
 import { IMrzScannerHandle } from "scanbot-web-sdk/@types/interfaces/i-mrz-scanner-handle";
 import { ContourDetectionResult } from "scanbot-web-sdk/@types/model/document/contour-detection-result";
 import { VINScannerConfiguration } from "scanbot-web-sdk/@types/model/configuration/vin-scanner-configuration";
-import { UserGuidanceConfiguration, ViewFinderConfiguration } from "scanbot-web-sdk/@types/ui2/configuration";
+import { UIConfig } from "scanbot-web-sdk/@types";
 
 const filters = {
 	"ScanbotBinarizationFilter": ScanbotSDK.imageFilters.ScanbotBinarizationFilter,
@@ -199,7 +199,7 @@ export class ScanbotSdkService {
 					height: 1,
 				},
 				overlayColor: "rgba(0, 0, 0, 0.5)",
-			} as ViewFinderConfiguration,
+			} as UIConfig.ViewFinderConfiguration,
 			userGuidance: {
 				visible: true,
 				title: {
@@ -210,7 +210,7 @@ export class ScanbotSdkService {
 					strokeColor: "green",
 					fillColor: "rgba(0, 255, 0, 0.2)",
 				}
-			} as UserGuidanceConfiguration,
+			} as UIConfig.UserGuidanceConfiguration,
 			...additionalConfig
 		};
 

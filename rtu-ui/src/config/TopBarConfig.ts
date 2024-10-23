@@ -6,9 +6,9 @@
  * For maintainers: whenever changing this code, ensure that links using it are still pointing to valid lines!
  */
 
-import { BarcodeScannerConfiguration } from "scanbot-web-sdk/@types/ui2/configuration";
+import { UIConfig } from "scanbot-web-sdk/@types";
 
-export function applyTopBarConfig(config: BarcodeScannerConfiguration) {
+export function applyTopBarConfig(config: UIConfig.BarcodeScannerConfiguration) {
     
     // Set the top bar mode.
     config.topBar.mode = "GRADIENT";

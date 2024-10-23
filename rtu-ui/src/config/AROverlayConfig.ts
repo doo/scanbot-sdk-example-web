@@ -6,9 +6,9 @@
  * For maintainers: whenever changing this code, ensure that links using it are still pointing to valid lines!
  */
 
-import { BarcodeScannerConfiguration } from "scanbot-web-sdk/@types/ui2/configuration";
+import { UIConfig } from "scanbot-web-sdk/@types";
 
-export function applyAROverlayUseCaseConfig(config: BarcodeScannerConfiguration) {
+export function applyAROverlayUseCaseConfig(config: UIConfig.BarcodeScannerConfiguration) {
     // Configure AR Overlay.
     config.useCase.arOverlay.visible = true;
     config.useCase.arOverlay.automaticSelectionEnabled = false;

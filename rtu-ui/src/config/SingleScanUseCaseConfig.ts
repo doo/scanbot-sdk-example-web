@@ -7,9 +7,9 @@
  */
 
 import ScanbotSDK from "scanbot-web-sdk/ui";
-import { BarcodeScannerConfiguration } from "scanbot-web-sdk/@types/ui2/configuration";
+import { UIConfig } from "scanbot-web-sdk/@types";
 
-export function applySingleScanningUseCase(config: BarcodeScannerConfiguration) {
+export function applySingleScanningUseCase(config: UIConfig.BarcodeScannerConfiguration) {
 
     const useCase = new ScanbotSDK.UI.Config.SingleScanningMode();
 
