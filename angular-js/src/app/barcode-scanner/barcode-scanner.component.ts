@@ -109,6 +109,7 @@ export class BarcodeScannerComponent implements OnInit {
       preferredCamera: 'camera2 0, facing back',
       overlay: {
         visible: isOverlyScanner,
+        countingRepeatDelay: -1,
         onBarcodeFound: (code: Barcode, polygon: IBarcodePolygonHandle, label: IBarcodePolygonLabelHandle) => {
           // You can override onBarcodeFound and create your own implementation for custom styling, e.g.
           // if you wish to only color in certain types of barcodes, you can find and pick them, as demonstrated below:

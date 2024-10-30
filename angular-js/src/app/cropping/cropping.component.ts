@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewEncapsulation } from "@angular/core";
 import { Router } from "@angular/router";
 import { ScanbotSdkService } from "../service/scanbot-sdk-service";
 import { DocumentRepository } from "../service/document-repository";
@@ -9,6 +9,7 @@ import { RoutePaths } from "../model/RoutePaths";
   selector: "app-cropping",
   templateUrl: "./cropping.component.html",
   styleUrls: ["./cropping.component.scss"],
+  encapsulation: ViewEncapsulation.ShadowDom
 })
 export class CroppingComponent implements OnInit {
   router: Router;
@@ -43,8 +44,15 @@ export class CroppingComponent implements OnInit {
       return;
     }
 
+    /**
+     * If you're using ViewEncapsulation.ShadowDom, providing 'containerId' will not work, as it's not accessible using conventional methods.
+     * In this case, it's required that you provide the container property directly, by accessing the shadowRoot yourself, as shown below.
+     */
+    const shadow = document.querySelector("app-cropping").shadowRoot;
+    const container = shadow.getElementById("cropping-view-container");
+
     const options = {
-      containerId: "cropping-view-container",
+      container: container,
       image: this.repository.getActiveItem().original,
       polygon: this.repository.getActiveItem().polygon,
       disableScroll: true,
