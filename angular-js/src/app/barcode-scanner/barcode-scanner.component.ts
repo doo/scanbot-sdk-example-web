@@ -1,5 +1,5 @@
 
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewEncapsulation } from "@angular/core";
 import { Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
 
@@ -23,6 +23,7 @@ import { Utils } from "../service/utils";
   selector: "app-barcode-scanner",
   templateUrl: "./barcode-scanner.component.html",
   styleUrls: ["./barcode-scanner.component.scss"],
+  encapsulation: ViewEncapsulation.ShadowDom
 })
 export class BarcodeScannerComponent implements OnInit {
   router: Router;
@@ -93,9 +94,16 @@ export class BarcodeScannerComponent implements OnInit {
 
     const isOverlyScanner = this.isOverlayScanner();
 
+    /**
+     * If you're using ViewEncapsulation.ShadowDom, providing 'containerId' will not work, as it's not accessible using conventional methods.
+     * In this case, it's required that you provide the container property directly, by accessing the shadowRoot yourself, as shown below.
+     */
+    const shadow = document.querySelector("app-barcode-scanner").shadowRoot;
+    const container = shadow.getElementById(ScanbotSdkService.BARCODE_SCANNER_CONTAINER_ID);
+
     const configuration: BarcodeScannerConfiguration = {
       onBarcodesDetected: this.onBarcodesDetected.bind(this),
-      containerId: ScanbotSdkService.BARCODE_SCANNER_CONTAINER_ID,
+      container: container,
       barcodeFormats,
       onError: this.barcodeScannerError.bind(this),
       preferredCamera: 'camera2 0, facing back',
