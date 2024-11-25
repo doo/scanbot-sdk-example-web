@@ -14,6 +14,7 @@ import { applyIntroductionScreenConfig } from "./config/IntroductionScreenConfig
 import { applyLocalizationConfig } from "./config/LocalizationConfig.ts";
 import { applyScanningScreenConfig } from "./config/ScanningScreenConfig.ts";
 import { applyPaletteConfig } from "./config/PaletteConfig.ts";
+import { applyReviewScreenConfig } from "./config/ReviewScreenConfig.ts";
 
 function App() {
 
@@ -54,6 +55,7 @@ function App() {
         { name: "Modified Localization Config", configModifier: applyLocalizationConfig },
         { name: "Modified Palette Config", configModifier: applyPaletteConfig },
         { name: "Modified Scanning Screen Config", configModifier: applyScanningScreenConfig },
+        { name: "Modified Review Screen Config", configModifier: applyReviewScreenConfig },
     ];
 
     return (
