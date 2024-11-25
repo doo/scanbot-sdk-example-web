@@ -19,6 +19,7 @@ import { applyCroppingScreenConfig } from "./config/CroppingScreenConfig.ts";
 import { applySinglePageScanningConfig } from "./config/SinglePageScanningConfig.ts";
 import { applyMultiPageScanningConfig } from "./config/MultiPageScanningConfig.ts";
 import { applySinglePageScanningWithFinderConfig } from "./config/SinglePageScanningWithFinderConfig.ts";
+import { applyAutomaticFiltering } from "./config/AutomaticFilteringConfig.ts";
 
 function App() {
 
@@ -64,6 +65,7 @@ function App() {
         { name: "Single-Page Scanning without review", configModifier: applySinglePageScanningConfig },
         { name: "Multi-Page Scanning with review", configModifier: applyMultiPageScanningConfig },
         { name: "Single-Page Scanning with Finder Overlay", configModifier: applySinglePageScanningWithFinderConfig },
+        { name: "Automatic Filtering Config", configModifier: applyAutomaticFiltering },
     ];
 
     return (
