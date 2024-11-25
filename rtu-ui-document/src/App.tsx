@@ -17,6 +17,7 @@ import { applyPaletteConfig } from "./config/PaletteConfig.ts";
 import { applyReviewScreenConfig } from "./config/ReviewScreenConfig.ts";
 import { applyCroppingScreenConfig } from "./config/CroppingScreenConfig.ts";
 import { applySinglePageScanningConfig } from "./config/SinglePageScanningConfig.ts";
+import { applyMultiPageScanningConfig } from "./config/MultiPageScanningConfig.ts";
 
 function App() {
 
@@ -60,6 +61,7 @@ function App() {
         { name: "Modified Review Screen Config", configModifier: applyReviewScreenConfig },
         { name: "Modified Cropping Screen Config", configModifier: applyCroppingScreenConfig },
         { name: "Single-Page Scanning without review", configModifier: applySinglePageScanningConfig },
+        { name: "Multi-Page Scanning with review", configModifier: applyMultiPageScanningConfig },
     ];
 
     return (
