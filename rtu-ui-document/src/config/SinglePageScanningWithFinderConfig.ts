@@ -27,6 +27,5 @@ export function applySinglePageScanningWithFinderConfig(config: UIConfig.Documen
     config.screens.camera.viewFinder.style.cornerRadius = 10;
     config.screens.camera.viewFinder.style.strokeColor = "#FFFFFF";
     config.screens.camera.viewFinder.style.strokeWidth = 3;
-    config.screens.camera.viewFinder.aspectRatio = new ScanbotSDK.UI.Config.AspectRatio(1, 1);
-
+    config.screens.camera.viewFinder.aspectRatio = new ScanbotSDK.Config.Geometry.AspectRatio({height: 1, width: 1});
 }
