@@ -82,7 +82,9 @@ function App() {
                             scenario.configModifier(configuration);
                             const result = await ScanbotSDK.UI.createDocumentScanner(configuration);
                             console.log('Scan result', result);
-                            await ScanbotSDK.instance.storage.insertSBDocument(result.document);
+                            if (result?.document) {
+                                await ScanbotSDK.instance.storage.insertSBDocument(result.document);
+                            }
                         }}
                     />)
                 }
