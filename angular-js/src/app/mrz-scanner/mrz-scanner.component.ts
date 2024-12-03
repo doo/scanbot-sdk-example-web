@@ -4,7 +4,7 @@ import { ScanbotSdkService } from "../service/scanbot-sdk-service";
 import { DocumentRepository } from "../service/document-repository";
 import { NavigationUtils } from "../service/navigation-utils";
 import { ToastrService } from "ngx-toastr";
-import { MrzResult } from "scanbot-web-sdk/@types/model/mrz/mrz-result";
+import { MrzScannerResult } from "scanbot-web-sdk/@types";
 import { Utils } from "../service/utils";
 
 @Component({
@@ -76,7 +76,7 @@ export class MrzScannerComponent implements OnInit {
     return input[key] ? (input[key].value + this.toConfidenceString(input, key)) : ''
   }
 
-  async onMrzDetected(mrz: MrzResult) {
+  async onMrzDetected(mrz: MrzScannerResult) {
     let text = "";
 
     text += "Document Type: " + this.parseMRZValue(mrz, 'documentType') + "<br>";

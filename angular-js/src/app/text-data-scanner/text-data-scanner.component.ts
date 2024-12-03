@@ -4,7 +4,7 @@ import { ScanbotSdkService } from "../service/scanbot-sdk-service";
 import { DocumentRepository } from "../service/document-repository";
 import { NavigationUtils } from "../service/navigation-utils";
 import { ToastrService } from "ngx-toastr";
-import { TextDataScannerConfiguration, TextDataScannerResult } from "scanbot-web-sdk/@types";
+import { TextPatternScannerResult, TextPatternScannerViewConfiguration } from "scanbot-web-sdk/@types";
 import { Utils } from "../service/utils";
 
 @Component({
@@ -43,10 +43,9 @@ export class TextDataScannerComponent implements OnInit {
   }
 
   async startScanner() {
-    const configuration: TextDataScannerConfiguration = {
+    const configuration: TextPatternScannerViewConfiguration = {
       containerId: ScanbotSdkService.TEXTDATA_SCANNER_CONTAINER_ID,
       onTextDetected: this.onTextDetected.bind(this),
-      supportedLanguages: ['eng', 'deu'],
       onError: this.textDataScannerError.bind(this),
       preferredCamera: 'camera2 0, facing back'
     };
@@ -64,13 +63,13 @@ export class TextDataScannerComponent implements OnInit {
     alert(e.name + ': ' + e.message);
   }
 
-  async onTextDetected(textData: TextDataScannerResult) {
+  async onTextDetected(textData: TextPatternScannerResult) {
     if (!textData) return;
 
-    if (textData.validated) {
+    if (textData.validationSuccessful) {
       this.sdk.setTextDataScannerDetectionStatus(true);
 
-      await Utils.alert(textData.text);
+      await Utils.alert(textData.rawText);
 
       setTimeout(() => {
         this.sdk.setTextDataScannerDetectionStatus(false);
