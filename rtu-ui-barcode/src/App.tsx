@@ -24,7 +24,7 @@ import SBStorage from './service/SBStorage';
 function App() {
 
 	const navigate = useNavigate();
-	
+
 	useEffect(() => {
 		async function init() {
 			await ScanbotSDK.initialize({
@@ -34,8 +34,8 @@ function App() {
 				* After the trial period has expired, all SDK functions and UI components will stop working.
 				* You can get a free "no-strings-attached" trial license.
 				* Please submit the trial license form (https://scanbot.io/trial/) on our website using
-				* "Web SDK" as the license type and a corresponding domain name of your test environment 
-				* (e.g. myapp.example.com or www.mywebsite.com). Every trial license automatically 
+				* "Web SDK" as the license type and a corresponding domain name of your test environment
+				* (e.g. myapp.example.com or www.mywebsite.com). Every trial license automatically
 				* includes "localhost" as a domain name for local development purposes.
 				*/
 				licenseKey: '',
@@ -45,7 +45,7 @@ function App() {
 				 * Simply run 'npm run copy-wasm' to copy the wasm files to the public folder.
 				 * cf the bash script in the package.json file.
 				 */
-				engine: "wasm"
+				enginePath: "wasm"
 			});
 		}
 		init();
@@ -91,7 +91,7 @@ function App() {
 
 				}} />
 				<Divider style={{ paddingTop: 10 }} />
-				<FeatureListItem text="Scan Results" icon={<ListAlt />} onClick={async () => { 
+				<FeatureListItem text="Scan Results" icon={<ListAlt />} onClick={async () => {
 					navigate('scan-results');
 				}} />
 			</List>
