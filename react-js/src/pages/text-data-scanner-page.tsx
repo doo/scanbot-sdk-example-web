@@ -3,7 +3,7 @@ import { ScanbotSdkService } from "../service/scanbot-sdk-service";
 
 export default class TextDataScannerPage extends React.Component<any, any> {
   async componentDidMount(): Promise<void> {
-    await ScanbotSdkService.instance.createTextDataScanner(
+    await ScanbotSdkService.instance.createTextPatternScanner(
       this.props.onTextDatasDetected,
       this.props.onTextDataDetectionError,
     );

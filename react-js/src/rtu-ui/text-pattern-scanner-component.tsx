@@ -1,10 +1,10 @@
-import { TextDataScannerResult } from "scanbot-web-sdk/@types";
+import { TextPatternScannerResult } from "scanbot-web-sdk/@types";
 import { ScanbotSdkService } from "../service/scanbot-sdk-service";
 import BaseScannerComponent from "./common/base-scanner-component";
 import { AnimationType } from "./enum/animation-type";
 import { MiscUtils } from "../utils/misc-utils";
 
-export default class TextDataScannerComponent extends BaseScannerComponent {
+export default class TextPatternScannerComponent extends BaseScannerComponent {
   render() {
     return this.controller(
       ScanbotSdkService.TEXTDATA_SCANNER_CONTAINER,
@@ -19,7 +19,7 @@ export default class TextDataScannerComponent extends BaseScannerComponent {
     );
   }
 
-  onTextDataDetected(result: TextDataScannerResult) {
+  onTextDataDetected(result: TextPatternScannerResult) {
     this.props.onTextDataDetected(result);
   }
 
@@ -33,7 +33,7 @@ export default class TextDataScannerComponent extends BaseScannerComponent {
     this.pushType = type;
     this.updateAnimationType(type, async () => {
       try {
-        await ScanbotSdkService.instance.createTextDataScanner(
+        await ScanbotSdkService.instance.createTextPatternScanner(
           this.onTextDataDetected.bind(this),
           this.onTextDataScannerError.bind(this)
         );

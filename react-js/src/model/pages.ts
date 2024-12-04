@@ -1,10 +1,22 @@
+import { Image, Polygon } from "scanbot-web-sdk/@types";
+import { Filters } from "../service/scanbot-sdk-service";
+
+export type Page = {
+  original: Image;
+  filtered?: Image;
+  filter?: keyof typeof Filters;
+  cropped?: Image;
+  polygon?: Polygon;
+  rotations?: number;
+}
+
 export default class Pages {
   public static instance = new Pages();
 
-  private list: any[] = [];
+  private list: Page[] = [];
   private activeIndex: number = -1;
 
-  public add(page: any) {
+  public add(page: Page) {
     this.list.push(page);
   }
 

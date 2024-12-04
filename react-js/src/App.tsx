@@ -2,7 +2,7 @@ import React from "react";
 import { AppBar } from "@material-ui/core";
 import Swal from "sweetalert2";
 
-import { Barcode, BarcodeResult, TextDataScannerResult } from "scanbot-web-sdk/@types";
+import { BarcodeItem, BarcodeScannerResult, CroppedDetectionResult, MrzScannerResult, TextPatternScannerResult, VinScannerResult } from "scanbot-web-sdk/@types";
 
 import { NavigationContent } from "./subviews/navigation-content";
 import { Toast } from "./subviews/toast";
@@ -26,8 +26,7 @@ import BarcodeScannerComponent from "./rtu-ui/barcode-scanner-component";
 import Barcodes from "./model/barcodes";
 import ErrorLabel from "./subviews/error-label";
 import MrzScannerComponent from "./rtu-ui/mrz-scanner-component";
-import { MrzResult } from "scanbot-web-sdk/@types/model/mrz/mrz-result";
-import TextDataScannerComponent from "./rtu-ui/text-data-scanner-component";
+import TextPatternScannerComponent from "./rtu-ui/text-pattern-scanner-component";
 import ResultParser from "./service/result-parser";
 import { IBarcodePolygonHandle, IBarcodePolygonLabelHandle } from "scanbot-web-sdk/@types/model/configuration/selection-overlay-configuration";
 import VINScannerComponent from "./rtu-ui/vin-scanner-component";
@@ -166,11 +165,11 @@ export default class App extends React.Component<any, any> {
           additionalConfig={{
             overlay: {
               visible: true,
-              onBarcodeFound: (code: Barcode, polygon: IBarcodePolygonHandle, label: IBarcodePolygonLabelHandle) => {
+              onBarcodeFound: (code: BarcodeItem, polygon: IBarcodePolygonHandle, label: IBarcodePolygonLabelHandle) => {
                 // You can override onBarcodeFound and create your own implementation for custom styling, e.g.
                 // if you wish to only color in certain types of barcodes, you can find and pick them, as demonstrated below:
                 if (code.format === "QR_CODE") {
-                  polygon?.style({ fill: "rgba(255, 255, 0, 0.3)", stroke: "yellow" })
+                  polygon?.style({ fillColor: "rgba(255, 255, 0, 0.3)", strokeColor: "yellow" })
                 }
               }
             },
@@ -200,11 +199,11 @@ export default class App extends React.Component<any, any> {
   }
 
   _textDataScannerHtmlComponent: any;
-  _textDataScanner?: TextDataScannerComponent | null;
+  _textDataScanner?: TextPatternScannerComponent | null;
   textDataScanner() {
     if (!this._textDataScannerHtmlComponent) {
       this._textDataScannerHtmlComponent = (
-        <TextDataScannerComponent
+        <TextPatternScannerComponent
           ref={(ref) => (this._textDataScanner = ref)}
           sdk={this.state.sdk}
           onTextDataDetected={this.onTextDataDetected.bind(this)}
@@ -241,7 +240,7 @@ export default class App extends React.Component<any, any> {
           additionalConfig={{ scanAndCount: { enabled: true }, showFinder: false }}
           hideCameraSwapButtons={true}
           showBottomActionBar={false}
-          onBarcodesDetected={(barcodes: Barcode[]) => {
+          onBarcodesDetected={(barcodes: BarcodeItem[]) => {
             // Handle results as you please
           }}
         />
@@ -377,19 +376,19 @@ export default class App extends React.Component<any, any> {
       title: "Select filter",
       input: "select",
       inputOptions: ScanbotSdkService.instance.availableFilters(),
-      inputPlaceholder: page.filter ?? "none",
+      inputPlaceholder: page!.filter ?? "none",
     });
 
     const filter = ScanbotSdkService.instance.filterNameByIndex(result.value);
 
     // "None" is not an actual filter, only used in this example app
     if (filter === "none") {
-      page.filter = undefined;
-      page.filtered = undefined;
+      page!.filter = undefined;
+      page!.filtered = undefined;
     } else {
-      page.filter = filter;
-      page.filtered = await ScanbotSdkService.instance.applyFilter(
-        page.cropped ?? page.original,
+      page!.filter = filter;
+      page!.filtered = await ScanbotSdkService.instance.applyFilter(
+        page!.cropped ?? page!.original,
         filter
       );
     }
@@ -407,14 +406,19 @@ export default class App extends React.Component<any, any> {
     RoutingService.instance.route(RoutePath.ImageResults);
   }
 
-  async onDocumentDetected(result: any) {
-    Pages.instance.add(result);
+  async onDocumentDetected(result: CroppedDetectionResult) {
+    Pages.instance.add({
+        original: result.originalImage,
+        cropped: result.croppedImage ?? undefined,
+        polygon: result.pointsNormalized,
+        rotations: 0,
+    });
     ScanbotSdkService.instance.sdk?.utils.flash();
 
     console.log("Document detection result:", result);
   }
 
-  async onBarcodesDetected(result: BarcodeResult) {
+  async onBarcodesDetected(result: BarcodeScannerResult) {
     Barcodes.instance.addAll(result.barcodes);
     // If you have any additional processing to do, consider pausing
     // the scanner here, else you might (will) receive multiple results:
@@ -424,7 +428,7 @@ export default class App extends React.Component<any, any> {
     });
   }
 
-  async onMrzDetected(mrz: MrzResult) {
+  async onMrzDetected(mrz: MrzScannerResult) {
     ScanbotSdkService.instance.mrzScanner?.pauseDetection();
     const text = ResultParser.MRZToString(mrz);
     await MiscUtils.alert(text);
@@ -434,30 +438,30 @@ export default class App extends React.Component<any, any> {
     }, 1000);
   }
 
-  async onTextDataDetected(textData: TextDataScannerResult) {
+  async onTextDataDetected(textData: TextPatternScannerResult) {
     if (!textData) return;
 
-    if (textData.validated) {
+    if (textData.validationSuccessful) {
       ScanbotSdkService.instance.textDataScanner?.pauseDetection();
-      await MiscUtils.alert(textData.text!);
+      await MiscUtils.alert(textData.rawText!);
       setTimeout(() => { ScanbotSdkService.instance.textDataScanner?.resumeDetection() }, 500);
     }
   }
 
-  async onVINDetected(textData: TextDataScannerResult) {
+  async onVINDetected(textData: VinScannerResult) {
     if (!textData) return;
 
     // The VIN scanner does not return empty results, so we can skip 'validated' check here
     // However, validated will still be true if several frames detected the same number
     ScanbotSdkService.instance.vinScanner?.pauseDetection();
-    await MiscUtils.alert(textData.text!);
+    await MiscUtils.alert(textData.textResult.rawText);
     setTimeout(() => { ScanbotSdkService.instance.vinScanner?.resumeDetection() }, 500);
   }
 
-  formatBarcodes(codes: Barcode[]): string {
+  formatBarcodes(codes: BarcodeItem[]): string {
     return JSON.stringify(
-      codes.map((code: Barcode) => {
-        return code.parsedDocument || `${code.text} (${code.format})`;
+      codes.map((code: BarcodeItem) => {
+        return code.extractedDocument || `${code.text} (${code.format})`;
       })
     );
   }
@@ -517,8 +521,8 @@ export default class App extends React.Component<any, any> {
       const image = await ImageUtils.pick(ImageUtils.MIME_TYPE_JPEG, document.getElementById(feature.id) as any);
 
       const contourDetectionResult = await ScanbotSdkService.instance.detectDocument(image.original);
-      if (contourDetectionResult.success === true && contourDetectionResult.polygon) {
-        const cropped = await ScanbotSdkService.instance.cropAndRotateImageCcw(image.original, contourDetectionResult.polygon, 0);
+      if (contourDetectionResult.status.startsWith('OK') && contourDetectionResult.pointsNormalized) {
+        const cropped = await ScanbotSdkService.instance.cropImage(image.original, contourDetectionResult.pointsNormalized);
         const documentDetectionResult = { ...contourDetectionResult, original: image.original, cropped: cropped };
 
         Pages.instance.add(documentDetectionResult);

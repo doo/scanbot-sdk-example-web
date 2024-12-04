@@ -1,8 +1,8 @@
-import { MrzResult } from "scanbot-web-sdk/@types/model/mrz/mrz-result";
 import { ScanbotSdkService } from "../service/scanbot-sdk-service";
 import BaseScannerComponent from "./common/base-scanner-component";
 import { AnimationType } from "./enum/animation-type";
 import { MiscUtils } from "../utils/misc-utils";
+import { MrzScannerResult } from "scanbot-web-sdk/@types";
 
 export default class MrzScannerComponent extends BaseScannerComponent {
   render() {
@@ -19,7 +19,7 @@ export default class MrzScannerComponent extends BaseScannerComponent {
     );
   }
 
-  onMrzsDetected(result: MrzResult) {
+  onMrzsDetected(result: MrzScannerResult) {
     this.props.onMrzsDetected(result);
   }
 
@@ -38,7 +38,7 @@ export default class MrzScannerComponent extends BaseScannerComponent {
           this.onMrzScannerError.bind(this)
         );
       } catch (e) {
-        this.onMrzScannerError(e);
+        this.onMrzScannerError(e as any);
         this.pop()
       }
     });

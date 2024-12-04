@@ -49,7 +49,7 @@ export default class DocumentScannerComponent extends BaseScannerComponent {
           this.onDocumentScannerError.bind(this),
         );
       } catch (e) {
-        this.onDocumentScannerError(e);
+        this.onDocumentScannerError(e as any);
         this.pop()
       }
     });

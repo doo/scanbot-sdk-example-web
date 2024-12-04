@@ -1,4 +1,4 @@
-import { TextDataScannerResult } from "scanbot-web-sdk/@types";
+import { TextPatternScannerResult } from "scanbot-web-sdk/@types";
 import { ScanbotSdkService } from "../service/scanbot-sdk-service";
 import BaseScannerComponent from "./common/base-scanner-component";
 import { AnimationType } from "./enum/animation-type";
@@ -19,7 +19,7 @@ export default class VINScannerComponent extends BaseScannerComponent {
     );
   }
 
-  onVINDetected(result: TextDataScannerResult) {
+  onVINDetected(result: TextPatternScannerResult) {
     this.props.onVINDetected(result);
   }
 
