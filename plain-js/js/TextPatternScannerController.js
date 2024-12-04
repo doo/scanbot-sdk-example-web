@@ -1,9 +1,9 @@
-class TextDataScannerController {
+class TextPatternScannerController {
 
     constructor() {
-        this.container = Utils.getElementByClassName("text-data-scanner-controller");
+        this.container = Utils.getElementByClassName("text-pattern-scanner-controller");
 
-        Utils.getElementByClassName("text-data-scanner-button").onclick = async (e) => {
+        Utils.getElementByClassName("text-pattern-scanner-button").onclick = async (e) => {
             await this.show();
         }
     }
@@ -11,28 +11,28 @@ class TextDataScannerController {
     async show() {
         this.container.style.display = "block";
         const config = {
-            containerId: Config.textDataScannerContainerId(),
+            containerId: Config.textPatternScannerContainerId(),
             onTextDetected: (textData) => {
-                this.onTextDataDetected(textData);
+                this.onTextDetected(textData);
             },
             onError: onScannerError,
-            ocrResolutionLimit: 400,
-            supportedLanguages: ['eng', 'deu'],
+            ocrConfiguration: {
+                ocrResolutionLimit: 400
+            },
             preferredCamera: 'camera2 0, facing back'
         };
 
-        this.textDataScanner = await scanbotSDK.createTextDataScanner(config);
+        this.textDataScanner = await scanbotSDK.createTextPatternScanner(config);
     }
 
-    async onTextDataDetected(textData) {
+    async onTextDetected(textData) {
         if (!textData) return;
 
-        if (textData.validated) {
+        if (textData.validationSuccessful) {
             if (typeof this.textDataScanner !== 'undefined') {
                 await this.textDataScanner.pauseDetection();
             }
-
-            await Utils.alert(textData.text);
+            await Utils.alert(textData.rawText);
 
             if (typeof this.textDataScanner !== 'undefined') {
                 setTimeout(() => {
