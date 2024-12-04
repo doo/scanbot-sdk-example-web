@@ -2,12 +2,7 @@ import ScanbotSDK from "scanbot-web-sdk";
 import { IBarcodeScannerHandle } from "scanbot-web-sdk/@types/interfaces/i-barcode-scanner-handle";
 import { ICroppingViewHandle } from "scanbot-web-sdk/@types/interfaces/i-cropping-view-handle";
 import { IDocumentScannerHandle } from "scanbot-web-sdk/@types/interfaces/i-document-scanner-handle";
-import { Barcode } from "scanbot-web-sdk/@types/model/barcode/barcode";
-import { BarcodeResult } from "scanbot-web-sdk/@types/model/barcode/barcode-result";
-import { BarcodeScannerConfiguration } from "scanbot-web-sdk/@types/model/configuration/barcode-scanner-configuration";
-import { CroppingViewConfiguration } from "scanbot-web-sdk/@types/model/configuration/cropping-view-configuration";
-import { DocumentScannerConfiguration } from "scanbot-web-sdk/@types/model/configuration/document-scanner-configuration";
-import { DocumentDetectionResult } from "scanbot-web-sdk/@types/model/document/document-detection-result";
+import { BarcodeItem, BarcodeScannerViewConfiguration, CroppedDetectionResult, CroppingViewConfiguration, DocumentScannerViewConfiguration } from "scanbot-web-sdk/@types";
 
 export default class ScanbotSDKService {
 
@@ -40,7 +35,7 @@ export default class ScanbotSDKService {
 
         this.sdk = await sdk.initialize({
             licenseKey: this.LICENSE_KEY,
-            engine: "wasm",
+            enginePath: "/wasm",
         });
     }
 
@@ -55,14 +50,16 @@ export default class ScanbotSDKService {
         */
         await this.initialize();
 
-        const config: DocumentScannerConfiguration = {
+        const config: DocumentScannerViewConfiguration = {
             containerId: containerId,
-            onDocumentDetected: async (e: DocumentDetectionResult) => {
+            onDocumentDetected: async (e) => {
 
                 // Assign each document resul an identifier to access its details later
                 // and pre-process the image into a base64 string for display
                 const id = (Math.random() + 1).toString(36).substring(7);
-                const base64 = await ScanbotSDKService.instance.sdk!.toDataUrl(e.cropped ?? e.original);
+                const base64 = await ScanbotSDKService.instance.sdk!.toDataUrl(
+                    await ScanbotSDKService.instance.sdk!.imageToJpeg(e.croppedImage ?? e.originalImage)
+                );
                 this.documents.push({ id: id, image: base64, result: e });
 
                 // Make use of ScanbotSDK utility function flash to indicate that a document has been detected
@@ -77,7 +74,7 @@ export default class ScanbotSDKService {
                 outline: {
                     polygon: {
                         strokeCapturing: "green",
-                        strokeWidth: 4,
+                        strokeWidthCapturing: 2,
                     },
                 },
             },
@@ -85,14 +82,14 @@ export default class ScanbotSDKService {
         this.documentScanner = await this.sdk?.createDocumentScanner(config);
     }
 
-    async createBarcodeScanner(containerId: string, onBarcodeFound: (code: Barcode) => void) {
+    async createBarcodeScanner(containerId: string, onBarcodeFound: (code: BarcodeItem) => void) {
         /*
         * Ensure the SDK is initialized. If it's initialized, this function does nothing,
         * but is necessary e.g. when opening the barcode url scanner directly.
         */
         await this.initialize();
 
-        const config: BarcodeScannerConfiguration = {
+        const config: BarcodeScannerViewConfiguration = {
             containerId: containerId,
             overlay: {
                 visible: true,
@@ -110,8 +107,7 @@ export default class ScanbotSDKService {
                     onBarcodeFound(code);
                 },
             },
-            returnBarcodeImage: true,
-            onBarcodesDetected: (e: BarcodeResult) => {
+            onBarcodesDetected: (e) => {
                 // Process the result as you see fit
                 console.log("Detected barcodes: ", e.barcodes);
             },
@@ -160,8 +156,8 @@ export default class ScanbotSDKService {
 
         const configuration: CroppingViewConfiguration = {
             containerId: containerId,
-            image: document.original as Uint8Array,
-            polygon: document.polygon,
+            image: document.originalImage,
+            polygon: document.pointsNormalized,
             disableScroll: true,
             // rotations: document.rotations ?? 0,
             style: {
@@ -198,10 +194,12 @@ export default class ScanbotSDKService {
         if (!document) {
             return;
         }
-        document.result!.cropped = result?.image;
-        document.result!.polygon = result?.polygon;
+        document.result!.croppedImage = result?.image ?? null;
+        document.result!.pointsNormalized = result?.polygon ?? [];
 
-        document.image = await ScanbotSDKService.instance.sdk!.toDataUrl(result?.image!);
+        document.image = await ScanbotSDKService.instance.sdk!.toDataUrl(
+            await ScanbotSDKService.instance.sdk!.imageToJpeg(result?.image!)
+        );
         this.onCropApplied();
     }
 }
@@ -213,5 +211,7 @@ export default class ScanbotSDKService {
 export class ScanbotDocument {
     id?: string;
     image?: string;
-    result?: DocumentDetectionResult;
+    result?: Writeable<CroppedDetectionResult>;
 }
+
+type Writeable<T> = { -readonly [P in keyof T]: T[P] };
