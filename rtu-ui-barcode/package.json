@@ -19,7 +19,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-router-dom": "6.22.3",
-    "scanbot-web-sdk": "7.0.0-dev.2"
+    "scanbot-web-sdk": "7.0.0-dev.6"
   },
   "devDependencies": {
     "@types/react": "18.2.66",

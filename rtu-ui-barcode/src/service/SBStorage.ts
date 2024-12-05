@@ -1,17 +1,17 @@
 
-import { BarcodeScannerUIItem } from "scanbot-web-sdk/@types/ui2/configuration/barcode/BarcodeScannerUIResult";
+import { UIConfig } from "scanbot-web-sdk/@types";
 
 export default class SBStorage {
 
     public static readonly instance = new SBStorage();
 
-    private barcodes: BarcodeScannerUIItem[] = [];
+    private barcodes: UIConfig.BarcodeScannerUiItem[] = [];
 
-    public addBarcode(barcode: BarcodeScannerUIItem) {
+    public addBarcode(barcode: UIConfig.BarcodeScannerUiItem) {
         this.barcodes.push(barcode);
     }
 
-    addBarcodes(items: BarcodeScannerUIItem[]) {
+    addBarcodes(items: UIConfig.BarcodeScannerUiItem[]) {
         this.barcodes = [...this.barcodes, ...items];
     }
 
