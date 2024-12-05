@@ -39,7 +39,35 @@ function App() {
                 * (e.g. myapp.example.com or www.mywebsite.com). Every trial license automatically 
                 * includes "localhost" as a domain name for local development purposes.
                 */
-                licenseKey: '',
+                licenseKey:
+                    "JXEWlYVzRWEq5bbVcG4Yt05JVoGxPS" +
+                    "hnVgrFY1J362acGTFyAHi9brPHLOJf" +
+                    "GCOwZcvcT6TGdEY2rh/mHjfi+3bv64" +
+                    "ocjzFDoXfYEwOIgLVOCPnn6zGSMTdj" +
+                    "dGe+fj4Sa93P9YOYVPhq4bgNcPQP+7" +
+                    "cYkPPpfvQPkDj0QKQxAfdTSqaUT9Xk" +
+                    "i7TrNcAcCBL7oiP6gio355msmyCmZ4" +
+                    "6yoWc2AqQ+QHXSr5pbHxKrWtUF8LJN" +
+                    "kXR87198PhJ+PuXEEAwN7JDcHZ/4jp" +
+                    "RNSw4Pso9jUiwvE4ClhiYaNTw6XftL" +
+                    "ZmvQW72ppywwz8sT6DdoA/YrKVYlLm" +
+                    "xG5q4TiZ1qUw==\nU2NhbmJvdFNESw" +
+                    "psb2NhbGhvc3R8c2NhbmJvdHNkay13" +
+                    "YXNtLWRlYnVnaG9zdC5zMy1ldS13ZX" +
+                    "N0LTEuYW1hem9uYXdzLmNvbXxzY2Fu" +
+                    "Ym90c2RrLXdhc20tYWFyZS5zMy1ldS" +
+                    "13ZXN0LTEuYW1hem9uYXdzLmNvbXxz" +
+                    "Y2FuYm90c2RrLXdlYnNkay1kZW1vLn" +
+                    "MzLWV1LXdlc3QtMS5hbWF6b25hd3Mu" +
+                    "Y29tfHdlYnNkay1kZW1vLWludGVybm" +
+                    "FsLnNjYW5ib3QuaW98c2NhbmJvdHNk" +
+                    "ay13YXNtLWFhcmUtMi5zMy1ldS13ZX" +
+                    "N0LTEuYW1hem9uYXdzLmNvbXxzY2Fu" +
+                    "Ym90LXNkay1leGFtcGxlLXdlYi1iZW" +
+                    "4uczMtZXUtd2VzdC0xLmFtYXpvbmF3" +
+                    "cy5jb218Ki5uZ3Jvay1mcmVlLmFwcA" +
+                    "oxNzM1Njg5NTk5CjEwNDg1NzUKOA==" +
+                    "\n",
                 /**
                  * We have designated a custom path for the wasm file in the public folder.
                  * This also means wasm binaries are copied from ScanbotSDK's node_modules to the wasm folder.
@@ -89,7 +117,7 @@ function App() {
                     />)
                 }
                 <Divider style={{ paddingTop: 10 }} />
-                <FeatureListItem enabled={true} text="Last Scan Result" icon={<ListAlt />} onClick={async () => {
+                <FeatureListItem enabled={true} text="Saved Scan Results" icon={<ListAlt />} onClick={async () => {
                     navigate('scan-results');
                 }} />
             </List>

@@ -1,18 +1,20 @@
 import { ArrowBack } from "@mui/icons-material";
 import { AppBar, IconButton, Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 class Props {
     isBackButtonVisible?: boolean;
 }
 
 export function BackButton(props: { isVisible: boolean }) {
+    const navigate = useNavigate();
 
     if (!props.isVisible) {
         return null;
     }
     return (
         <IconButton aria-label="delete" size="small" style={{ width: 50, height: 50 }} onClick={() => {
-            window.history.back();
+            navigate("/");
         }}>
             <ArrowBack fontSize="inherit" style={{ color: "white", fontSize: 25 }} />
         </IconButton>

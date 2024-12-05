@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 import NavigationBar from "../subviews/NavigationBar";
-import { DocumentScannerUIResult, SBDocument, SBDocumentData } from "scanbot-web-sdk/@types";
+import { SBDocument } from "scanbot-web-sdk/@types";
 import { useEffect, useState } from "react";
 import ScanbotSDK from "scanbot-web-sdk/ui";
 
@@ -14,43 +14,56 @@ export default function DocumentResultPage() {
         })();
     }, []);
 
-    if (documentIds === null) {
-        return <p>"Loading..."</p>;
-    }
-
-    if (documentIds.length === 0) {
-        return <p>"No documents in storage."</p>;
-    }
-
     return <>
-        {documentIds.map((documentId) => <DocumentEntry key={documentId} documentId={documentId} />)}
+        <Box sx={{ width: '100%', height: "100%", bgcolor: 'background.paper' }}>
+            <NavigationBar isBackButtonVisible={true} />
+            {documentIds === null && <p>Loading...</p>}
+            {documentIds?.length === 0 && <p>No documents in storage.</p>}
+            {documentIds?.map((documentId) =>
+                <DocumentEntry
+                    key={documentId}
+                    documentId={documentId}
+                    onAfterDelete={() => {
+                        setDocumentIds((prev) => prev?.filter((id) => id !== documentId) || []);
+                    }}
+                />
+            )}
+        </Box>
     </>;
 }
 
-function DocumentEntry(props: { documentId: number }) {
-    const [document, setDocument] = useState<SBDocumentData | null>(null);
+function DocumentEntry(props: { documentId: number, onAfterDelete: () => void }) {
+    const [document, setDocument] = useState<SBDocument | null>(null);
     const [pagesImageUrls, setPagesImageUrls] = useState<string[]>([]);
     useEffect(() => {
         (async () => {
-            const doc = await ScanbotSDK.instance.storage.getSBDocument(props.documentId);
+            const doc = await ScanbotSDK.UI.SBDocument.loadFromStorage(props.documentId);
             setDocument(doc);
 
-            const urls: Promise<string>[] = [];
+            const urls: string[] = [];
             for (const page of doc.pages) {
-                urls.push(await page.finalImageUrl());
+                const documentImageId = page.getData().documentImageId;
+                if (documentImageId !== null) {
+                    const image = await ScanbotSDK.instance.storage.getSBPageImage(documentImageId);
+                    const url = await ScanbotSDK.instance.toDataUrl(
+                        await ScanbotSDK.instance.imageToJpeg(image)
+                    );
+                    urls.push(url);
+                }
             }
+            setPagesImageUrls(urls);
         })();
-    }, []);
+    }, [props.documentId]);
 
     async function saveAsPdf() {
-        if (!props.documentScanResult || !ScanbotSDK.instance) {
+        if (!document || !ScanbotSDK.instance) {
             return;
         }
         const pdf = await ScanbotSDK.instance.beginPdf({});
-        await pdf.addPages(props.documentScanResult.document);
+        await pdf.addPages(document);
         const pdfData = await pdf.complete();
         const dataUrl = URL.createObjectURL(new Blob([pdfData], { type: 'application/pdf' }));
-        const a = document.createElement('a');
+        const a = window.document.createElement('a');
         a.href = dataUrl;
         a.download = 'scanbot-sdk-document.pdf';
         a.click();
@@ -59,21 +72,24 @@ function DocumentEntry(props: { documentId: number }) {
 
     return (
         <Box sx={{ width: '100%', height: "100%", bgcolor: 'background.paper' }}>
-            <NavigationBar isBackButtonVisible={true} />
-            {!props.documentScanResult && "No document scan result available yet."}
-            {props.documentScanResult && <>
-                <h2>Output file generation:</h2>
-                <p>
+            {!document && "No document scan result available yet."}
+            {document && <>
+                <p style={{marginTop: 40}}>
+                    <h4 style={{ display: "inline", margin: 10 }}>Document {document.data.id}</h4>
                     <button onClick={saveAsPdf}>Save as PDF</button>
+                    <button onClick={async () => {
+                        await document.delete();
+                        props.onAfterDelete();
+                    }}>
+                        Delete
+                    </button>
                 </p>
-                <h2>Pages: </h2>
-                <ul>
+                <h5 style={{margin:10}}>{document.pages.length} pages: </h5>
+                <p>
                     {pagesImageUrls.map((imageUrl, index) => <>
-                        <li key={index}>
-                            <img src={imageUrl} alt={`Page ${index + 1}`} />
-                        </li>
+                        <img key={index} style={{ maxWidth: 50, margin: 10 }} src={imageUrl} alt={`Page ${index + 1}`} />
                     </>)}
-                </ul>
+                </p>
             </>}
         </Box>
     );

@@ -8,7 +8,7 @@
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "postinstall": "mkdir -p public/wasm && cp -r node_modules/scanbot-web-sdk/bundle/bin/document-scanner/* public/wasm"
+    "postinstall": "mkdir -p public/wasm && cp -r node_modules/scanbot-web-sdk/bundle/bin/complete/* public/wasm"
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",
@@ -19,7 +19,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-router-dom": "6.22.3",
-    "scanbot-web-sdk": "file:./scanbot-web-sdk-6.0.0-dev.2.tgz"
+    "scanbot-web-sdk": "7.0.0-dev.6"
   },
   "devDependencies": {
     "@types/react": "18.2.66",

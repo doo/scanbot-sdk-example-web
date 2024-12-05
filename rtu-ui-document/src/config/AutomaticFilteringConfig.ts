@@ -10,10 +10,10 @@ import ScanbotSDK from "scanbot-web-sdk/ui";
 
 export function applyAutomaticFiltering(config: UIConfig.DocumentScanningFlow) {
     // Set default filter with default values for the document scanner.
-    config.outputSettings.defaultFilter = new ScanbotSDK.Config.ParametricFilters.ScanbotBinarizationFilter();
+    config.outputSettings.defaultFilter = new ScanbotSDK.Config.ScanbotBinarizationFilter();
 
     //or you can set custom filter with custom values
-    config.outputSettings.defaultFilter = new ScanbotSDK.Config.ParametricFilters.WhiteBlackPointFilter({
+    config.outputSettings.defaultFilter = new ScanbotSDK.Config.WhiteBlackPointFilter({
         blackPoint: 0.1,
         whitePoint: 0.9
     });
