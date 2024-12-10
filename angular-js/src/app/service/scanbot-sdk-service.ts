@@ -17,7 +17,10 @@ import {
   BarcodeScannerViewConfiguration,
   DocumentScannerViewConfiguration,
   MrzScannerViewConfiguration,
-  DocumentDataExtractorViewConfiguration, PdfConfiguration, TiffWriterParameters, ParametricFilter,
+  DocumentDataExtractorViewConfiguration,
+  PdfConfiguration,
+  TiffGeneratorParameters,
+  ParametricFilter,
 } from "scanbot-web-sdk/@types";
 
 import { IMrzScannerHandle } from "scanbot-web-sdk/@types/interfaces/i-mrz-scanner-handle";
@@ -26,6 +29,7 @@ import { Utils } from "./utils";
 
 @Injectable()
 export class ScanbotSdkService {
+
   static CONTAINER_ID = "scanbot-camera-container";
   static BARCODE_SCANNER_CONTAINER_ID = "barcode-scanner-container";
   static MRZ_SCANNER_CONTAINER_ID = "mrz-scanner-container";
@@ -153,7 +157,7 @@ export class ScanbotSdkService {
   }
 
   async generateTIFF(pages: any[]) {
-    const options: Partial<TiffWriterParameters> = {
+    const options: Partial<TiffGeneratorParameters> = {
       dpi: 123,
     };
     const generator: TiffGenerator = await this.instance.beginTiff(options);

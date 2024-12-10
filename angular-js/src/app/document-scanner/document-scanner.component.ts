@@ -65,6 +65,10 @@ export class DocumentScannerComponent implements OnInit {
           NOT_ACQUIRED: "Hold the device over a document to start scanning.",
           OK_BUT_ORIENTATION_MISMATCH: "Please rotate the device to portrait mode.",
         },
+        initializing: {
+          enabled: true,
+          value: "Please wait a moment...",
+        },
       },
       style: {
         // Note that alternatively, styling the document scanner is also possible using CSS classes.
