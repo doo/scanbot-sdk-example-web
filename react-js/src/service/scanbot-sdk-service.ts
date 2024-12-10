@@ -17,7 +17,7 @@ import {
 	TextPatternScannerViewConfiguration,
 	VinScannerViewConfiguration,
 	VinScannerResult, IMrzScannerHandle, ITextPatternScannerHandle, BarcodeFormat,
-	UIConfig, PdfConfiguration, TiffWriterParameters, Image
+	UIConfig, PdfConfiguration, TiffGeneratorParameters, Image
 } from "scanbot-web-sdk/@types";
 
 import Pages from "../model/pages";
@@ -339,7 +339,7 @@ export class ScanbotSdkService {
 	}
 
 	async generateTIFF(pages: any[]) {
-		const options: Partial<TiffWriterParameters> = {
+		const options: Partial<TiffGeneratorParameters> = {
 			dpi: 72,
 		};
 		const generator: TiffGenerator = await this.sdk!.beginTiff(options);
