@@ -5,14 +5,13 @@ export default class SBStorage {
 
     public static readonly instance = new SBStorage();
 
-    private barcodes: UIConfig.BarcodeItem[] = [];
+    private barcodes: UIConfig.BarcodeScannerUiItem[] = [];
 
-    public addBarcode(barcode: UIConfig.BarcodeItem) {
+    public addBarcode(barcode: UIConfig.BarcodeScannerUiItem) {
         this.barcodes.push(barcode);
     }
 
-    addBarcodes(items: UIConfig.BarcodeItem[]) {
-
+    addBarcodes(items: UIConfig.BarcodeScannerUiItem[]) {
         this.barcodes = [...this.barcodes, ...items];
     }
 

@@ -60,9 +60,9 @@ export class HomeComponent implements OnInit {
       const image = await ImageUtils.pick(ImageUtils.MIME_TYPE_JPEG);
 
       const contourDetectionResult = await this.sdk.detectDocument(image.original);
-      if (contourDetectionResult.success === true && contourDetectionResult.polygon) {
-        const cropped = await this.sdk.cropAndRotateImageCcw(image.original, contourDetectionResult.polygon, 0);
-        const documentDetectionResult = { ...contourDetectionResult, original: image.original, cropped: cropped };
+      if (contourDetectionResult.status.startsWith('OK') === true && contourDetectionResult.pointsNormalized) { //TODO
+        const cropped = await this.sdk.cropAndRotateImageCcw(image.original, contourDetectionResult.pointsNormalized, 0);
+        const documentDetectionResult = { ...contourDetectionResult, original: image.original, cropped };
 
         this.documents.add(documentDetectionResult);
         await Utils.alert("Detection successful");
@@ -72,10 +72,11 @@ export class HomeComponent implements OnInit {
     }
 
     if (e.id === FeatureId.BarcodePicker) {
-      const result = await ImageUtils.pick(ImageUtils.MIME_TYPE_JPEG, true);
+      const result = await ImageUtils.pick(ImageUtils.MIME_TYPE_JPEG);
+      console.log('result', result);
 
       const detection = await this.sdk?.detectBarcodes(
-        result.data
+        result.original
       );
       if (detection !== undefined) {
         await Utils.alert(Utils.formatBarcodes(detection.barcodes));

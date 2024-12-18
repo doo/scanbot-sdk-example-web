@@ -21,8 +21,8 @@ class CroppingViewController {
                 "detection-result-image"
             ).getAttribute("index");
             this.results[index].filtered = undefined;
-            this.results[index].cropped = result.image;
-            this.results[index].polygon = result.polygon;
+            this.results[index].croppedImage = result.image;
+            this.results[index].pointsNormalized = result.polygon;
             this.results[index].rotations = result.rotations;
 
             if (this.results[index].filter) {
@@ -47,8 +47,8 @@ class CroppingViewController {
 
         const options = {
             containerId: Config.croppingViewContainerId(),
-            image: this.results[resultIndex].original,
-            polygon: this.results[resultIndex].polygon,
+            image: this.results[resultIndex].originalImage,
+            polygon: this.results[resultIndex].pointsNormalized,
             rotations: rotations,
             disableScroll: true,
             style: {

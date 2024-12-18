@@ -61,8 +61,7 @@ export class ImageUtils {
     const extension = name.split(".")[1];
     const a = document.createElement("a");
     document.body.appendChild(a);
-    // @ts-ignore
-    a.style = "display: none";
+    a.style.display = "none";
     const blob = new Blob([data], { type: `application/${extension}` });
     const url = window.URL.createObjectURL(blob);
     a.href = url;
@@ -102,7 +101,9 @@ export class ImageUtils {
       };
       // The most accurate (albeit perhaps not most optimal)
       // way to get the actual width and height is to load it into an image object
-      image.src = await sdk.toDataUrl(data);
+      image.src = await sdk.toDataUrl(
+        await sdk.imageToJpeg(data)
+      );
     });
   }
 

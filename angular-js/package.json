@@ -8,7 +8,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "postinstall": "cp -R node_modules/scanbot-web-sdk/bundle/bin/complete src/assets/wasm"
+    "postinstall": "cp -R node_modules/scanbot-web-sdk/bundle/bin/complete/* src/assets/wasm"
   },
   "private": true,
   "dependencies": {
@@ -28,7 +28,7 @@
     "tslib": "1.14.1",
     "zone.js": "0.13.1",
     "@types/node": "^12.19.15",
-    "scanbot-web-sdk": "5.1.3"
+    "scanbot-web-sdk": "7.0.0-rc.2"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "16.1.3",

@@ -1,5 +1,5 @@
 import React from "react";
-import Pages from "../model/pages";
+import Pages, { Page } from "../model/pages";
 import { GridList, GridListTile } from "@material-ui/core";
 import { Styles } from "../model/styles";
 
@@ -52,9 +52,9 @@ export default class ImageResultsPage extends React.Component<any, any> {
     );
   }
 
-  async imageFromPage(page: any): Promise<string> {
+  async imageFromPage(page: Page): Promise<string> {
     return await this.props.sdk.toDataUrl(
-      page.filtered ?? page.cropped ?? page.original
+      await this.props.sdk.imageToJpeg(page.filtered ?? page.cropped ?? page.original)
     );
   }
 }

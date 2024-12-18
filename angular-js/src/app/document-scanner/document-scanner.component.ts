@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import {
   DocumentDetectionResult,
-  DocumentScannerConfiguration,
+  DocumentScannerConfiguration, DocumentScannerViewConfiguration,
 } from "scanbot-web-sdk/@types";
 import { ScanbotSdkService } from "../service/scanbot-sdk-service";
 import { Router } from "@angular/router";
@@ -45,22 +45,29 @@ export class DocumentScannerComponent implements OnInit {
   }
 
   async startScanner() {
-    const configuration: DocumentScannerConfiguration = {
+    const configuration: DocumentScannerViewConfiguration = {
       onDocumentDetected: this.onDocumentDetected.bind(this),
       containerId: ScanbotSdkService.CONTAINER_ID,
       text: {
         hint: {
           OK: "Capturing your document...",
-          OK_SmallSize: "The document is too small. Try moving closer.",
-          OK_BadAngles:
+          OK_BUT_TOO_SMALL: "The document is too small. Try moving closer.",
+          OK_BUT_BAD_ANGLES:
             "This is a bad camera angle. Hold the device straight over the document.",
-          OK_BadAspectRatio:
+          OK_BUT_BAD_ASPECT_RATIO:
             "Rotate the device sideways, so that the document fits better into the screen.",
-          OK_OffCenter: "Try holding the device at the center of the document.",
-          Error_NothingDetected:
+          OK_BUT_OFF_CENTER: "Try holding the device at the center of the document.",
+          OK_BUT_TOO_DARK: "It is too dark. Try turning on a light.",
+          ERROR_NOTHING_DETECTED:
             "Please hold the device over a document to start scanning.",
-          Error_Brightness: "It is too dark. Try turning on a light.",
-          Error_Noise: "Please move the document to a clear surface.",
+          ERROR_TOO_DARK: "It is too dark. Try turning on a light.",
+          ERROR_TOO_NOISY: "Please move the document to a clear surface.",
+          NOT_ACQUIRED: "Hold the device over a document to start scanning.",
+          OK_BUT_ORIENTATION_MISMATCH: "Please rotate the device to portrait mode.",
+        },
+        initializing: {
+          enabled: true,
+          value: "Please wait a moment...",
         },
       },
       style: {
@@ -69,7 +76,7 @@ export class DocumentScannerComponent implements OnInit {
         outline: {
           polygon: {
             strokeCapturing: "green",
-            strokeWidth: 4
+            strokeWidthCapturing: 4
           }
         }
       },

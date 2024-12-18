@@ -1,5 +1,5 @@
 import { ScanbotSdkService } from "../service/scanbot-sdk-service";
-import { BarcodeResult } from "scanbot-web-sdk/@types";
+import { BarcodeScannerResult } from "scanbot-web-sdk/@types";
 import BaseScannerComponent from "./common/base-scanner-component";
 import { AnimationType } from "./enum/animation-type";
 import Barcodes from "../model/barcodes";
@@ -21,7 +21,7 @@ export default class BarcodeScannerComponent extends BaseScannerComponent {
     );
   }
 
-  onBarcodesDetected(result: BarcodeResult) {
+  onBarcodesDetected(result: BarcodeScannerResult) {
     this.props.onBarcodesDetected(result);
     const label = document.getElementById("count-label");
     if (label) {

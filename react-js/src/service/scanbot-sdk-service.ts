@@ -3,37 +3,33 @@ import ScanbotSDK from "scanbot-web-sdk";
 
 // Other typings should be imported from @types
 import {
-	DocumentScannerConfiguration,
 	IDocumentScannerHandle,
 	CroppingViewConfiguration,
 	ICroppingViewHandle,
-	BarcodeScannerConfiguration,
 	IBarcodeScannerHandle,
-	TiffGenerationOptions,
-	PdfGenerationOptions,
 	TiffGenerator,
 	PdfGenerator,
 	Polygon,
-	TextDataScannerConfiguration,
-	ITextDataScannerHandle,
-	MrzScannerConfiguration,
-	TextDataScannerResult,
-	DocumentDetectionResult,
+	CroppedDetectionResult,
+	DocumentScannerViewConfiguration,
+	BarcodeScannerViewConfiguration,
+	MrzScannerViewConfiguration,
+	TextPatternScannerViewConfiguration,
+	VinScannerViewConfiguration,
+	VinScannerResult, IMrzScannerHandle, ITextPatternScannerHandle, BarcodeFormat,
+	UIConfig, PdfConfiguration, TiffGeneratorParameters, Image
 } from "scanbot-web-sdk/@types";
 
 import Pages from "../model/pages";
 import { ImageUtils } from "../utils/image-utils";
-import { BarcodeFormat } from "scanbot-web-sdk/@types/model/barcode/barcode-format";
-import { IMrzScannerHandle } from "scanbot-web-sdk/@types/interfaces/i-mrz-scanner-handle";
-import { ContourDetectionResult } from "scanbot-web-sdk/@types/model/document/contour-detection-result";
-import { VINScannerConfiguration } from "scanbot-web-sdk/@types/model/configuration/vin-scanner-configuration";
-import { UIConfig } from "scanbot-web-sdk/@types";
+import { DocumentDetectionResult } from "scanbot-web-sdk/@types/core-types";
 
-const filters = {
-	"ScanbotBinarizationFilter": ScanbotSDK.imageFilters.ScanbotBinarizationFilter,
-	"GrayscaleFilter": ScanbotSDK.imageFilters.GrayscaleFilter,
-	"ContrastFilter": ScanbotSDK.imageFilters.ContrastFilter,
-	"ColorDocumentFilter": ScanbotSDK.imageFilters.ColorDocumentFilter,
+export const Filters = {
+	"ScanbotBinarizationFilter": ScanbotSDK.Config.ScanbotBinarizationFilter,
+	"GrayscaleFilter": ScanbotSDK.Config.GrayscaleFilter,
+	"ContrastFilter": ScanbotSDK.Config.ContrastFilter,
+	"ColorDocumentFilter": ScanbotSDK.Config.ColorDocumentFilter,
+	"WhiteBlackPointFilter": ScanbotSDK.Config.WhiteBlackPointFilter,
 }
 
 export class ScanbotSdkService {
@@ -54,15 +50,15 @@ export class ScanbotSdkService {
 	documentScanner?: IDocumentScannerHandle;
 	barcodeScanner?: IBarcodeScannerHandle;
 	mrzScanner?: IMrzScannerHandle;
-	textDataScanner?: ITextDataScannerHandle;
-	vinScanner?: ITextDataScannerHandle;
+	textDataScanner?: ITextPatternScannerHandle;
+	vinScanner?: ITextPatternScannerHandle;
 	croppingView?: ICroppingViewHandle;
 
 	public async initialize() {
 		this.sdk = await ScanbotSDK.initialize({
 			licenseKey: this.license,
 			// WASM files are copied to this directory by the npm postinstall script
-			engine: 'wasm'
+			enginePath: './wasm/'
 		});
 		return this.sdk;
 	}
@@ -94,33 +90,36 @@ export class ScanbotSdkService {
 		return this.sdk?.createDocumentQualityAnalyzer();
 	}
 
-	public async analyzeDocumentQuality(result: DocumentDetectionResult) {
+	public async analyzeDocumentQuality(result: CroppedDetectionResult) {
 		/**
 		 * Initialization of the analyzer can cause a strain on your user interface,
 		 * In a real-life scenario, consider creating the analyzer once on app/scanner startup, not for every scan.
 		 */
 		const analyzer = await ScanbotSdkService.instance.createDocumentQualityAnalyzer();
-		console.log('Document quality analysis:', await analyzer?.analyze(result.original));
+		console.log('Document quality analysis:', await analyzer?.analyze(result.originalImage));
 		await analyzer?.release();
 	}
 
-	public async createDocumentScanner(detectionCallback: any, errorCallback: (e: Error) => void) {
-		const config: DocumentScannerConfiguration = {
+	public async createDocumentScanner(detectionCallback: (e: CroppedDetectionResult) => void, errorCallback: (e: Error) => void) {
+		const config: DocumentScannerViewConfiguration = {
 			onDocumentDetected: detectionCallback,
 			containerId: ScanbotSdkService.DOCUMENT_SCANNER_CONTAINER,
 			text: {
 				hint: {
 					OK: "Capturing your document...",
-					OK_SmallSize: "The document is too small. Try moving closer.",
-					OK_BadAngles:
+					OK_BUT_TOO_SMALL: "The document is too small. Try moving closer.",
+					OK_BUT_BAD_ANGLES:
 						"This is a bad camera angle. Hold the device straight over the document.",
-					OK_BadAspectRatio:
+					OK_BUT_BAD_ASPECT_RATIO:
 						"Rotate the device sideways, so that the document fits better into the screen.",
-					OK_OffCenter: "Try holding the device at the center of the document.",
-					Error_NothingDetected:
+					OK_BUT_OFF_CENTER: "Try holding the device at the center of the document.",
+					ERROR_NOTHING_DETECTED:
 						"Please hold the device over a document to start scanning.",
-					Error_Brightness: "It is too dark. Try turning on a light.",
-					Error_Noise: "Please move the document to a clear surface.",
+					ERROR_TOO_DARK: "It is too dark. Try turning on a light.",
+					ERROR_TOO_NOISY: "Please move the document to a clear surface.",
+					NOT_ACQUIRED: "No document detected.",
+					OK_BUT_ORIENTATION_MISMATCH: "The document seems to be upside down. Please rotate the device or document",
+					OK_BUT_TOO_DARK: "A document was detected, but it is too dark. Try turning on a light.",
 				},
 			},
 			style: {
@@ -147,7 +146,6 @@ export class ScanbotSdkService {
 
 	public async createBarcodeScanner(callback: any, errorCallback: (e: Error) => void, additionalConfig: any = {}) {
 		const barcodeFormats: BarcodeFormat[] = [
-			"ONE_D",
 			"AZTEC",
 			"CODABAR",
 			"CODE_39",
@@ -157,12 +155,13 @@ export class ScanbotSdkService {
 			"EAN_8",
 			"EAN_13",
 			"ITF",
-			"MAXICODE",
+			"MAXI_CODE",
 			"PDF_417",
 			"QR_CODE",
+			"DATABAR",
+			"DATABAR_EXPANDED",
 			"UPC_A",
 			"UPC_E",
-			"UPC_EAN_EXTENSION",
 			"MSI_PLESSEY",
 			"IATA_2_OF_5",
 			"INDUSTRIAL_2_OF_5",
@@ -173,13 +172,18 @@ export class ScanbotSdkService {
 			"JAPAN_POST",
 			"ROYAL_TNT_POST",
 			"AUSTRALIA_POST",
-			"DATABAR",
-			"DATABAR_EXPANDED",
 			"DATABAR_LIMITED",
-			"GS1_COMPOSITE"
+			"MICRO_PDF_417",
+			"GS1_COMPOSITE",
+			"RMQR_CODE",
+			"CODE_11",
+			"CODE_32",
+			"PHARMA_CODE",
+			"PHARMA_CODE_TWO_TRACK",
+			"PZN",
 		];
 
-		const config: BarcodeScannerConfiguration = {
+		const config: BarcodeScannerViewConfiguration = {
 			containerId: ScanbotSdkService.BARCODE_SCANNER_CONTAINER,
 			captureDelay: 1000,
 			onBarcodesDetected: callback,
@@ -222,7 +226,7 @@ export class ScanbotSdkService {
 	}
 
 	public async createMrzScanner(onMrzDetected: any, errorCallback: (e: Error) => void) {
-		const config: MrzScannerConfiguration = {
+		const config: MrzScannerViewConfiguration = {
 			containerId: ScanbotSdkService.MRZ_SCANNER_CONTAINER,
 			onMrzDetected: onMrzDetected,
 			onError: errorCallback,
@@ -244,30 +248,29 @@ export class ScanbotSdkService {
 		this.vinScanner?.dispose();
 	}
 
-	public async createTextDataScanner(onTextDetected: any, errorCallback: (e: Error) => void) {
-		const config: TextDataScannerConfiguration = {
+	public async createTextPatternScanner(onTextDetected: any, errorCallback: (e: Error) => void) {
+		const config: TextPatternScannerViewConfiguration = {
 			containerId: ScanbotSdkService.TEXTDATA_SCANNER_CONTAINER,
 			onTextDetected: onTextDetected,
-			supportedLanguages: ['eng', 'deu'],
 			onError: errorCallback,
 			preferredCamera: 'camera2 0, facing back'
 		};
 
-		this.textDataScanner = await this.sdk!.createTextDataScanner(config);
+		this.textDataScanner = await this.sdk!.createTextPatternScanner(config);
 	}
 
 	public async createVINScanner(onVINDetected: any, errorCallback: (e: Error) => void) {
 
-		const config: VINScannerConfiguration = {
+		const config: VinScannerViewConfiguration = {
 			containerId: ScanbotSdkService.VIN_SCANNER_CONTAINER,
-			onTextDetected: (e: TextDataScannerResult) => {
+			onVinDetected: (e: VinScannerResult) => {
 				console.log("VIN detected: ", e);
 				onVINDetected(e);
 			},
 			onError: errorCallback,
 		}
 
-		this.vinScanner = await this.sdk!.createVINScanner(config);
+		this.vinScanner = await this.sdk!.createVinScanner(config);
 	}
 
 	public async openCroppingView(page: any) {
@@ -286,48 +289,49 @@ export class ScanbotSdkService {
 	}
 
 	public availableFilters() {
-		return ["none"].concat(Object.keys(filters)) as ("none" | keyof typeof filters)[];
+		return ["none"].concat(Object.keys(Filters)) as ("none" | keyof typeof Filters)[];
 	}
 
 	public filterNameByIndex(value: string) {
 		return this.availableFilters()[parseInt(value)];
 	}
 
-	public async applyFilter(image: ArrayBuffer, filterName: keyof typeof filters) {
-		const filter = new filters[filterName]();
-		const imageProcessor = await this.sdk!.createImageProcessor(image);
-		await imageProcessor.applyFilter(filter);
-		const result = await imageProcessor.processedImage();
-		await imageProcessor.release();
-		return result;
+	public async applyFilter(image: Image, filterName: keyof typeof Filters) {
+		const filter = new Filters[filterName]();
+		return this.sdk!.imageFilter(image, filter);
 	}
 
 	async documentImageAsBase64(index: number) {
 		const bytes = Pages.instance.imageAtIndex(index);
 		if (bytes) {
-			return await this.sdk!.toDataUrl(bytes);
+			return await this.sdk!.toDataUrl(
+				await this.sdk!.imageToJpeg(bytes)
+			);
 		}
 	}
 
 	async reapplyFilter() {
 		const existing = Pages.instance.getActiveItem();
-		if (!existing.filter) {
+		if (!existing!.filter) {
 			return;
 		}
-		existing.filtered = await this.applyFilter(
-			existing.cropped,
-			existing.filter
+		existing!.filtered = await this.applyFilter(
+			existing!.cropped!,
+			existing!.filter
 		);
 	}
 
 	async generatePDF(pages: any[]) {
-		const options: PdfGenerationOptions = {
-			standardPaperSize: "A4",
-			pageDirection: "PORTRAIT"
+		const options: Partial<PdfConfiguration> = {
+			pageSize: "A4",
+			pageDirection: "PORTRAIT",
+			dpi: 300,
+			jpegQuality: 95,
 		};
 		const generator: PdfGenerator = await this.sdk!.beginPdf(options);
 		for (const page of pages) {
 			let image = page.filtered ?? page.cropped ?? page.original;
+			image = await this.sdk!.imageToJpeg(image);
 			image = await ImageUtils.downscale(this.sdk!, image);
 			await generator.addPage(image);
 		}
@@ -335,25 +339,23 @@ export class ScanbotSdkService {
 	}
 
 	async generateTIFF(pages: any[]) {
-		const options: TiffGenerationOptions = {
+		const options: Partial<TiffGeneratorParameters> = {
 			dpi: 72,
 		};
 		const generator: TiffGenerator = await this.sdk!.beginTiff(options);
 		for (const page of pages) {
-			const image = page.cropped ?? page.original;
-			const imageProcessor = await this.sdk!.createImageProcessor(image);
-			await imageProcessor.applyFilter(new ScanbotSDK.imageFilters.ScanbotBinarizationFilter());
-			await generator.addPage(await imageProcessor.processedImage());
-			await imageProcessor.release();
+			let image = page.cropped ?? page.original;
+			image = await this.sdk?.imageFilter(image, new ScanbotSDK.Config.ScanbotBinarizationFilter());
+			await generator.addPage(image);
 		}
 		return await generator.complete();
 	}
 
-	async detectDocument(image: ArrayBuffer): Promise<ContourDetectionResult> {
+	async detectDocument(image: ArrayBuffer): Promise<DocumentDetectionResult> {
 		return await this.sdk!.detectDocument(image);
 	}
 
-	async cropAndRotateImageCcw(image: ArrayBuffer, polygon: Polygon, rotations: number): Promise<Uint8Array> {
-		return await this.sdk!.cropAndRotateImageCcw(image, polygon, rotations);
+	async cropImage(image: ArrayBuffer, polygon: Polygon): Promise<Image> {
+		return await this.sdk!.imageCrop(image, polygon);
 	}
 }

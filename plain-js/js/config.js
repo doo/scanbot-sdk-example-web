@@ -15,7 +15,7 @@ class Config {
   static mrzScannerContainerId() {
     return "mrz-scanner-container";
   }
-  static textDataScannerContainerId() {
+  static textPatternScannerContainerId() {
     return "text-data-scanner-container";
   }
   static croppingViewContainerId() {
@@ -24,7 +24,6 @@ class Config {
 
   static barcodeScannerConfig() {
     const barcodeFormats = [
-      "ONE_D",
       "AZTEC",
       "CODABAR",
       "CODE_39",
@@ -34,12 +33,13 @@ class Config {
       "EAN_8",
       "EAN_13",
       "ITF",
-      "MAXICODE",
+      "MAXI_CODE",
       "PDF_417",
       "QR_CODE",
+      "DATABAR",
+      "DATABAR_EXPANDED",
       "UPC_A",
       "UPC_E",
-      "UPC_EAN_EXTENSION",
       "MSI_PLESSEY",
       "IATA_2_OF_5",
       "INDUSTRIAL_2_OF_5",
@@ -50,24 +50,25 @@ class Config {
       "JAPAN_POST",
       "ROYAL_TNT_POST",
       "AUSTRALIA_POST",
-      "DATABAR",
-      "DATABAR_EXPANDED",
       "DATABAR_LIMITED",
-      "GS1_COMPOSITE"
+      "MICRO_PDF_417",
+      "GS1_COMPOSITE",
+      "RMQR_CODE",
+      "CODE_11",
+      "CODE_32",
+      "PHARMA_CODE",
+      "PHARMA_CODE_TWO_TRACK",
+      "PZN"
     ];
 
     return {
-      // style: {
-      //     window: {
-      //         borderColor: "blue"
-      //     },
-      //     text: {
-      //         color: "red",
-      //         weight: 500
-      //     }
-      // },
-      returnBarcodeImage: true,
-      barcodeFormats: barcodeFormats,
+      detectionParameters: {
+        barcodeFormatConfigurations: [
+          new ScanbotSDK.Config.BarcodeFormatCommonConfiguration({
+            formats: barcodeFormats,
+          })
+        ]
+      },
       preferredCamera: 'camera2 0, facing back'
     };
 

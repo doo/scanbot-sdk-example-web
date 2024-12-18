@@ -1,4 +1,3 @@
-
 /**
  * Used to encode Uint8Array to base64 and vice versa. 
  * This necessary in order to effectively store our scanned pages in localStorage.
@@ -7,7 +6,7 @@ export default class Codec {
 
     private static readonly TYPE_PREFIX = "data:image/jpeg;base64,";
 
-    static async encodeBytes(bytes: Uint8Array | string | undefined): Promise<string> {
+    static async encodeBytes(bytes: ArrayBuffer | string | undefined): Promise<string> {
 
         if (!bytes) {
             return "";

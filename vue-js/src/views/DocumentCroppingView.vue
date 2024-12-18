@@ -21,7 +21,7 @@
 
 <script setup lang="ts">
 import PageLayout from "@/components/PageLayout.vue";
-import { inject, onBeforeMount, onBeforeUnmount, onMounted, ref } from "vue";
+import { inject, onBeforeMount, onBeforeUnmount, onMounted, ref, toRaw } from "vue";
 import { useRouter } from "vue-router";
 import { type Document, useDocumentsStore } from "@/stores/documents";
 import ScanbotSDK from "scanbot-web-sdk";
@@ -101,7 +101,7 @@ async function onApplyClick() {
   if (document.value!.content.filter && document.value!.content.filter != "none") {
     document.value!.content.filtered = await Filters.applyFilter(
       await scanbotSDK,
-      document.value!.content.cropped,
+      toRaw(document.value!.content.cropped!),
       document.value!.content.filter
     );
   }

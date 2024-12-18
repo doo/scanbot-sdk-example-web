@@ -37,8 +37,8 @@ class DocumentListController {
         }
         ViewUtils.showLoading();
         const generator = await scanbotSDK.beginPdf({
-            standardPaperSize: "A4",
-            landscape: true,
+            pageSize: "A4",
+            pageDirection: "LANDSCAPE",
         });
         await addAllPagesTo(generator);
         const bytes = await generator.complete();

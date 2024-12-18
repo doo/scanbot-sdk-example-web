@@ -30,7 +30,6 @@ import { useRouter } from "vue-router";
 import Swal from 'sweetalert2'
 import 'sweetalert2/dist/sweetalert2.css'
 import { Filters } from "@/misc/Filters";
-import type { ImageFilter } from "scanbot-web-sdk/@types";
 import { swalAlert } from "@/misc/swalAlert";
 
 const router = useRouter();
@@ -59,15 +58,15 @@ function openCroppingView() {
 }
 
 async function onFilterClick() {
-  console.log(document.value)
+  console.log("document.value", document.value)
   const result = await Swal.fire({
     title: "Select filter",
     input: "select",
-    inputOptions: Filters.availableFilters(),
+    inputOptions: Filters.availableFilters,
     inputValue: document.value?.content.filter ?? "none",
   });
 
-  const filter = Filters.availableFilters()[result.value];
+  const filter = Filters.availableFilters[result.value];
 
   if (filter === "none") {
     document.value!.content.filter = undefined;

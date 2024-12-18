@@ -1,20 +1,20 @@
-import { Barcode } from "scanbot-web-sdk/@types";
+import { BarcodeItem } from "scanbot-web-sdk/@types";
 
 export default class Barcodes {
   public static instance = new Barcodes();
 
-  private list: Barcode[] = [];
+  private list: BarcodeItem[] = [];
 
   count() {
     return this.list.length;
   }
 
-  public add(code: Barcode) {
+  public add(code: BarcodeItem) {
     this.list.push(code);
   }
 
-  public addAll(codes: Barcode[]) {
-    codes.forEach((code: Barcode) => {
+  public addAll(codes: BarcodeItem[]) {
+    codes.forEach((code: BarcodeItem) => {
       this.add(code);
     });
   }

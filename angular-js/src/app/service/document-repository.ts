@@ -1,14 +1,17 @@
 import { Injectable } from "@angular/core";
-import { Barcode, Polygon } from "scanbot-web-sdk/@types";
+import { BarcodeItem, Image, Polygon } from "scanbot-web-sdk/@types";
+import type {  } from "scanbot-web-sdk/@types/core-types";
 
 @Injectable()
 export class DocumentRepository {
-  private readonly pages: any[];
-  private activeIndex: number = -1;
 
   constructor() {
     this.pages = [];
   }
+  private readonly pages: any[];
+  private activeIndex = -1;
+
+  private readonly _barcodes: BarcodeItem[] = [];
 
   add(page: any) {
     this.pages.push(page);
@@ -22,7 +25,7 @@ export class DocumentRepository {
     return this.pages;
   }
 
-  updateActiveItem(image: Uint8Array, polygon: Polygon, rotations: number) {
+  updateActiveItem(image: Image, polygon: Polygon, rotations: number) {
     this.pages[this.activeIndex].cropped = image;
     this.pages[this.activeIndex].polygon = polygon;
     this.pages[this.activeIndex].rotations = rotations;
@@ -31,7 +34,7 @@ export class DocumentRepository {
   hasActiveItem() {
     return this.activeIndex !== -1;
   }
-  
+
   getActiveItem() {
     return this.pages[this.activeIndex];
   }
@@ -45,10 +48,8 @@ export class DocumentRepository {
     this.activeIndex = index;
   }
 
-  private readonly _barcodes: Barcode[] = [];
-
-  public addBarcodes(barcodes: Barcode[]) {
-    barcodes.forEach((barcode: Barcode) => {
+  public addBarcodes(barcodes: BarcodeItem[]) {
+    barcodes.forEach((barcode: BarcodeItem) => {
       this._barcodes.push(barcode);
     });
   }
