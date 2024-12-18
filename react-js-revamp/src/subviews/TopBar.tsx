@@ -2,7 +2,7 @@ import { Box, IconButton } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 
-export const Height = 50;
+export const TopBarHeight = 50;
 
 class Props {
     isBackNavigationEnabled?: boolean = false;
@@ -17,7 +17,7 @@ export function TopBar(props: Props) {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            height: Height,
+            height: TopBarHeight,
             width: "100vw",
         }}>
             <Box style={{ flexBasis: 0, flexGrow: 1 }}>

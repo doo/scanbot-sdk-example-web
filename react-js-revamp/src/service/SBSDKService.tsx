@@ -10,7 +10,14 @@ export enum ContainerId {
 
 export default class SBSDKService {
 
-    private static sdk: SBSDKService;
+    public static get SDK(): ScanbotSDK {
+        if (!this.sdk) {
+            throw new Error("Scanbot SDK not initialized yet!");
+        }
+        return this.sdk;
+    }
+
+    private static sdk: ScanbotSDK;
 
     /*
     * TODO add the license key here.
@@ -22,8 +29,9 @@ export default class SBSDKService {
     static readonly license = "";
 
     public static async initialize() {
+        // The SDK needs to be initialized before any other call and only once in the application's lifecycle.
+        // This should be preferably done in the main component, after your site is loaded
         if (!this.sdk) {
-
             this.sdk = await ScanbotSDK.initialize({
                 licenseKey: this.license,
                 // As of v7, you're required to define the location of WebAssembly binaries.
