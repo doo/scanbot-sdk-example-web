@@ -5,6 +5,7 @@ import { Code, DirectionsCar, DocumentScanner, QrCodeScanner, TextIncrease } fro
 
 import FeatureListItem from "./subviews/FeatureListItem.tsx";
 import SectionHeader from "./subviews/SectionHeader.tsx";
+import { TopBar } from "./subviews/TopBar.tsx";
 
 
 function App() {
@@ -12,7 +13,8 @@ function App() {
     const navigate = useNavigate();
 
     return (
-        <Box style={{width: "100vw", height: "100vh"}}>
+        <Box style={{ width: "100vw", height: "100vh", backgroundColor: "white" }}>
+            <TopBar title={"Scanbot SDK"} />
             <List sx={{}}>
 
                 <SectionHeader title={"Classic Scanners"} />

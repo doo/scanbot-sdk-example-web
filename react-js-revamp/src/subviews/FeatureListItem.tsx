@@ -3,6 +3,8 @@ import { ListItem, ListItemButton, ListItemIcon, ListItemText, SvgIconTypeMap } 
 import { MouseEventHandler } from "react";
 import { OverridableComponent } from "@mui/material/OverridableComponent";
 
+export const TextColor = "rgb(90, 90, 90)";
+
 export class Props {
     onClick!: MouseEventHandler<HTMLDivElement>;
     text!: string;
@@ -10,13 +12,14 @@ export class Props {
 }
 
 export default function FeatureListItem(props: Props) {
+
     return (
         <ListItem sx={{ width: "100%" }}>
             <ListItemIcon>
-                <props.icon style={{ color: "lightgray" }} />
+                <props.icon style={{ color: TextColor }} />
             </ListItemIcon>
             <ListItemButton onClick={props.onClick}>
-                <ListItemText style={{ color: "lightgray" }} primary={props.text} />
+                <ListItemText style={{ color: TextColor }} primary={props.text} />
             </ListItemButton>
         </ListItem>
     );
