@@ -1,12 +1,41 @@
-import { Box } from "@mui/material";
-import { TopBar } from "../subviews/TopBar.tsx";
-import { ContainerId } from "../service/SBSDKService.tsx";
+import { useRef, useEffect } from "react";
+import {
+    BarcodeScannerResultWithSize,
+    BarcodeScannerViewConfiguration,
+    IBarcodeScannerHandle,
+} from "scanbot-web-sdk/@types";
+
+import SBSDKService, { ContainerId } from "../service/SBSDKService.tsx";
+import SBSDKPage from "./subviews/SBSDKPage.tsx";
 
 export default function BarcodeScannerPage() {
-    return (
-        <Box style={{ width: "100vw", height: "100vh" }}>
-            <TopBar title={"Barcode Scanner"} isBackNavigationEnabled={true} />
-            <div id={ContainerId.BarcodeScanner} style={{ width: "100%", height: "100%" }}></div>
-        </Box>
-    )
+
+    const handle = useRef<IBarcodeScannerHandle | null>(null);
+
+    const onBarcodesDetected = (result: BarcodeScannerResultWithSize) => {
+        console.log("Detected barcodes: ", result);
+    };
+
+    useEffect(() => {
+
+        async function load() {
+            await SBSDKService.initialize();
+            const config: BarcodeScannerViewConfiguration = {
+                containerId: ContainerId.BarcodeScanner,
+                onBarcodesDetected: onBarcodesDetected,
+            };
+            handle.current = await SBSDKService.SDK.createBarcodeScanner(config);
+        }
+
+        load().then(() => {
+            console.log("Scanbot SDK Barcode Scanner is ready!");
+        });
+
+        return () => {
+            // If the component unmounts, and the scanner has been initialized, dispose the SDK scanner instance
+            handle.current?.dispose();
+        }
+    }, []);
+
+    return <SBSDKPage title={"Barcode Scanner"} containerId={ContainerId.BarcodeScanner} />
 }

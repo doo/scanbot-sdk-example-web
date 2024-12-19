@@ -1,16 +1,19 @@
 import { useRef, useEffect } from "react";
-import { Box } from "@mui/material";
-import { CroppedDetectionResult, DocumentScannerViewConfiguration, IDocumentScannerHandle } from "scanbot-web-sdk/@types";
+import {
+    CroppedDetectionResult,
+    DocumentScannerViewConfiguration,
+    IDocumentScannerHandle
+} from "scanbot-web-sdk/@types";
 
-import { TopBarHeight, TopBar } from "../subviews/TopBar.tsx";
 import SBSDKService, { ContainerId } from "../service/SBSDKService.tsx";
+import SBSDKPage from "./subviews/SBSDKPage.tsx";
 
 export default function DocumentScannerPage() {
 
     const handle = useRef<IDocumentScannerHandle | null>(null);
 
-    const onDocumentDetected = (document: CroppedDetectionResult) => {
-        console.log("Detected document: ", document);
+    const onDocumentDetected = (result: CroppedDetectionResult) => {
+        console.log("Detected document: ", result);
     };
 
     useEffect(() => {
@@ -29,14 +32,10 @@ export default function DocumentScannerPage() {
         });
 
         return () => {
+            // If the component unmounts, and the scanner has been initialized, dispose the SDK scanner instance
             handle.current?.dispose();
         }
     }, []);
 
-    return (
-        <Box style={{ width: "100vw", height: "100vh" }}>
-            <TopBar title={"Document Scanner"} isBackNavigationEnabled={true} />
-            <div id={ContainerId.DocumentScanner} style={{ width: "100%", height: `calc(100% - ${TopBarHeight}px)` }} />
-        </Box>
-    )
+    return <SBSDKPage title={"Document Scanner"} containerId={ContainerId.DocumentScanner} />
 }

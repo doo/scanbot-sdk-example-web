@@ -10,15 +10,6 @@ export enum ContainerId {
 
 export default class SBSDKService {
 
-    public static get SDK(): ScanbotSDK {
-        if (!this.sdk) {
-            throw new Error("Scanbot SDK not initialized yet!");
-        }
-        return this.sdk;
-    }
-
-    private static sdk: ScanbotSDK;
-
     /*
     * TODO add the license key here.
     * Please note: The Scanbot Web SDK has, without a license key, a trial period for one minute per session!
@@ -42,5 +33,15 @@ export default class SBSDKService {
             });
         }
     }
+
+    public static get SDK(): ScanbotSDK {
+        if (!this.sdk) {
+            throw new Error("Scanbot SDK not initialized yet!");
+        }
+        return this.sdk;
+    }
+
+    private static sdk: ScanbotSDK;
+
 }
 
