@@ -1,8 +1,8 @@
 
 import { Box } from "@mui/material";
 
-import { TopBarHeight, TopBar } from "../../subviews/TopBar.tsx";
-import { ContainerId } from "../../service/SBSDKService.tsx";
+import { TopBarHeight, TopBar } from "./TopBar.tsx";
+import { ContainerId } from "../service/SBSDKService.tsx";
 
 export default function SBSDKPage(props: { title: string, containerId: ContainerId }) {
 

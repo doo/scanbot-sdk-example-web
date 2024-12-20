@@ -1,4 +1,7 @@
 
+import { RawImage, SBStoreCroppedDetectionResult, SBStoreImage } from "scanbot-web-sdk/@types";
+import SBSDKService from "./SBSDKService.tsx";
+
 export enum MimeType {
     Jpeg = "image/jpeg"
 }
@@ -42,5 +45,43 @@ export default class ImageUtils {
                 };
             };
         });
+    }
+
+    static createBase64Image(item: SBStoreCroppedDetectionResult, images?: SBStoreImage[]): Promise<string> {
+        return new Promise((resolve) => {
+            const original = images ? images.find(i => i.documentId === item.id && i.type === "original")?.data : item.originalImage;
+            const cropped = images ? images.find(i => i.documentId === item.id && i.type === "cropped")?.data as RawImage : item.croppedImage;
+
+            if (cropped) {
+                SBSDKService.SDK.imageToJpeg(cropped).then((data) => {
+                    ImageUtils.toDataUrl(data).then((base64) => {
+                        resolve(base64);
+                    });
+                });
+            } else if (original) {
+                const canvas = ImageUtils.createImageDataCanvas(original as ImageData);
+                const base64 = canvas.toDataURL("image/png");
+                resolve(base64);
+            }
+        });
+    }
+
+    static toDataUrl(buffer: ArrayBuffer): Promise<string> {
+        return new Promise((resolve, reject) => {
+            const blob = new Blob([buffer], { type: 'image/jpeg' });
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result as string);
+            reader.onerror = () => reject(reader.error);
+            reader.readAsDataURL(blob);
+        });
+    }
+
+    public static createImageDataCanvas(data: ImageData): HTMLCanvasElement {
+        const canvas = document.createElement("canvas");
+        canvas.className = "scanbot-sdk-canvas-element";
+        canvas.width = data.width;
+        canvas.height = data.height;
+        canvas.getContext("2d")?.putImageData(data, 0, 0);
+        return canvas;
     }
 }

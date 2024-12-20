@@ -37,7 +37,7 @@ export default class SBSDKService {
 
     public static get SDK(): ScanbotSDK {
         if (!this.sdk) {
-            throw new Error("Scanbot SDK not initialized yet!");
+            this.initialize()
         }
         return this.sdk;
     }

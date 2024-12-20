@@ -1,6 +1,18 @@
 import { Alert, Box, List, Snackbar } from "@mui/material";
 import { useNavigate } from 'react-router-dom';
-import { Code, DirectionsCar, DocumentScanner, DocumentScannerTwoTone, FindInPage, History, ImageSearch, Info, QrCode, QrCodeScanner, TextIncrease } from "@mui/icons-material";
+import {
+    Code,
+    DirectionsCar,
+    DocumentScanner,
+    DocumentScannerTwoTone,
+    FindInPage,
+    History,
+    ImageSearch,
+    Info,
+    QrCode,
+    QrCodeScanner,
+    TextIncrease
+} from "@mui/icons-material";
 import ScanbotSDK from "scanbot-web-sdk/ui";
 
 import FeatureListItem from "./subviews/FeatureListItem.tsx";
@@ -80,8 +92,8 @@ function App() {
                     const info = await SBSDKService.SDK?.getLicenseInfo();
                     setToast(JSON.stringify(info));
                 }} />
-                <FeatureListItem icon={History} text='View Image results' onClick={() => {
-
+                <FeatureListItem icon={History} text='View Stored Data' onClick={() => {
+                    navigate('stored-data');
                 }} />
             </List>
 

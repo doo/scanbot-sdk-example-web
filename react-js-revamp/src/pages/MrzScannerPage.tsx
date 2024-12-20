@@ -2,7 +2,7 @@ import { useRef, useEffect } from "react";
 import { IMrzScannerHandle, MrzScannerResult, MrzScannerViewConfiguration, } from "scanbot-web-sdk/@types";
 
 import SBSDKService, { ContainerId } from "../service/SBSDKService.tsx";
-import SBSDKPage from "./subviews/SBSDKPage.tsx";
+import SBSDKPage from "../subviews/SBSDKPage.tsx";
 
 export default function MRZScannerPage() {
 
