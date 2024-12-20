@@ -1,6 +1,16 @@
 import { Box, List } from "@mui/material";
 import { useNavigate } from 'react-router-dom';
-import { Code, DirectionsCar, DocumentScanner, QrCodeScanner, TextIncrease } from "@mui/icons-material";
+import {
+    Code,
+    DirectionsCar,
+    DocumentScanner,
+    DocumentScannerTwoTone,
+    FindInPage, History,
+    ImageSearch, Info,
+    QrCode,
+    QrCodeScanner,
+    TextIncrease
+} from "@mui/icons-material";
 import ScanbotSDK from "scanbot-web-sdk/ui";
 
 import FeatureListItem from "./subviews/FeatureListItem.tsx";
@@ -20,7 +30,7 @@ function App() {
     return (
         <Box style={{ width: "100vw", height: "100vh", backgroundColor: "white" }}>
             <TopBar title={"Scanbot Web SDK"} />
-            <List sx={{}}>
+            <List sx={{ padding: 0 }}>
 
                 <SectionHeader title={"Classic Scanners"} />
                 <FeatureListItem icon={DocumentScanner} text='Document Scanner View' onClick={() => {
@@ -40,19 +50,35 @@ function App() {
                 }} />
 
                 <SectionHeader title={"Ready-To-Use Components"} paddingTop={10} />
-                <FeatureListItem icon={DocumentScanner} text='Document Scanner UI' onClick={async () => {
+                <FeatureListItem icon={DocumentScannerTwoTone} text='Document Scanner UI' onClick={async () => {
                     // Configure your document scanner as needed
                     const config = new ScanbotSDK.UI.Config.DocumentScanningFlow();
                     config.screens.camera.backgroundColor = '#FF0000';
                     const result = await ScanbotSDK.UI.createDocumentScanner(config);
                     console.log('Scan result', result);
                 }} />
-                <FeatureListItem icon={QrCodeScanner} text='Barcode Scanner UI' onClick={async () => {
+                <FeatureListItem icon={QrCode} text='Barcode Scanner UI' onClick={async () => {
                     // Configure your barcode scanner as needed
                     const config = new ScanbotSDK.UI.Config.BarcodeScannerConfiguration();
                     config.useCase = new ScanbotSDK.UI.Config.SingleScanningMode();
                     const result = await ScanbotSDK.UI.createBarcodeScanner(config);
                     console.log('Barcode result', result);
+                }} />
+
+                <SectionHeader title={"Data Extraction"} />
+                <FeatureListItem icon={FindInPage} text='Detect document from .jpeg' onClick={() => {
+
+                }} />
+                <FeatureListItem icon={ImageSearch} text='Detect barcodes on .jpeg' onClick={() => {
+
+                }} />
+
+                <SectionHeader title={"Miscellaneous"} />
+                <FeatureListItem icon={Info} text='License info' onClick={() => {
+
+                }} />
+                <FeatureListItem icon={History} text='View Image results' onClick={() => {
+
                 }} />
             </List>
         </Box>
