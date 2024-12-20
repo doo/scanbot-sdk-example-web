@@ -1,4 +1,5 @@
-import ScanbotSDK from "scanbot-web-sdk";
+// Make sure to load the UI bundle if you want to use Ready-To-Use UI Components
+import ScanbotSDK from "scanbot-web-sdk/ui";
 
 export enum ContainerId {
     DocumentScanner = "document-scanner-container",
