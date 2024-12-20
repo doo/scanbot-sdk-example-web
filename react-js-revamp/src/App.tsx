@@ -1,27 +1,20 @@
-import { Box, List } from "@mui/material";
+import { Alert, Box, List, Snackbar } from "@mui/material";
 import { useNavigate } from 'react-router-dom';
-import {
-    Code,
-    DirectionsCar,
-    DocumentScanner,
-    DocumentScannerTwoTone,
-    FindInPage, History,
-    ImageSearch, Info,
-    QrCode,
-    QrCodeScanner,
-    TextIncrease
-} from "@mui/icons-material";
+import { Code, DirectionsCar, DocumentScanner, DocumentScannerTwoTone, FindInPage, History, ImageSearch, Info, QrCode, QrCodeScanner, TextIncrease } from "@mui/icons-material";
 import ScanbotSDK from "scanbot-web-sdk/ui";
 
 import FeatureListItem from "./subviews/FeatureListItem.tsx";
 import SectionHeader from "./subviews/SectionHeader.tsx";
 import { TopBar } from "./subviews/TopBar.tsx";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import SBSDKService from "./service/SBSDKService.tsx";
+import ImageUtils, { MimeType } from "./service/ImageUtils.ts";
 
 function App() {
 
     const navigate = useNavigate();
+
+    const [toast, setToast] = React.useState<string | null>(null);
 
     useEffect(() => {
         SBSDKService.initialize();
@@ -66,21 +59,42 @@ function App() {
                 }} />
 
                 <SectionHeader title={"Data Extraction"} />
-                <FeatureListItem icon={FindInPage} text='Detect document from .jpeg' onClick={() => {
-
+                <FeatureListItem icon={FindInPage} text='Detect document from .jpeg' onClick={async () => {
+                    const image = await ImageUtils.pick(MimeType.Jpeg);
+                    const result = await SBSDKService.SDK?.detectDocument(image);
+                    setToast(`Document detection Complete. Status: ${result?.status}`);
                 }} />
-                <FeatureListItem icon={ImageSearch} text='Detect barcodes on .jpeg' onClick={() => {
+                <FeatureListItem icon={ImageSearch} text='Detect barcodes on .jpeg' onClick={async () => {
+                    const image = await ImageUtils.pick(MimeType.Jpeg);
+                    const result = await SBSDKService.SDK?.detectBarcodes(image);
 
+                    let text = `Detected Barcodes: `;
+                    text += result.barcodes.map((barcode, i) => {
+                        return `(${i + 1}) ${barcode.text} (${barcode.format})`;
+                    }).join("\n");
+                    setToast(text);
                 }} />
 
                 <SectionHeader title={"Miscellaneous"} />
-                <FeatureListItem icon={Info} text='License info' onClick={() => {
-
+                <FeatureListItem icon={Info} text='License info' onClick={async () => {
+                    const info = await SBSDKService.SDK?.getLicenseInfo();
+                    setToast(JSON.stringify(info));
                 }} />
                 <FeatureListItem icon={History} text='View Image results' onClick={() => {
 
                 }} />
             </List>
+
+            <Snackbar open={toast !== null} autoHideDuration={3000} onClose={() => setToast(null)}>
+                <Alert
+                    onClose={() => setToast(null)}
+                    severity="success"
+                    variant="filled"
+                    sx={{ width: '100%' }}
+                >
+                    {toast}
+                </Alert>
+            </Snackbar>
         </Box>
     )
 }
