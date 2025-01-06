@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ImageListItem, Skeleton } from "@mui/material";
 import { SBStoreCroppedDetectionResult } from "scanbot-web-sdk/@types";
-import SBSDKService from "../service/SBSDKService";
+import SBSDKService from "../service/SBSDKService.ts";
 import ImageUtils from "../service/ImageUtils.ts";
 
 export class Props {

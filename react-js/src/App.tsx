@@ -19,7 +19,7 @@ import FeatureListItem from "./subviews/FeatureListItem.tsx";
 import SectionHeader from "./subviews/SectionHeader.tsx";
 import { TopBar } from "./subviews/TopBar.tsx";
 import React, { useEffect } from "react";
-import SBSDKService from "./service/SBSDKService.tsx";
+import SBSDKService from "./service/SBSDKService.ts";
 import ImageUtils, { MimeType } from "./service/ImageUtils.ts";
 
 function App() {

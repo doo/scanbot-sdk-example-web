@@ -1,6 +1,6 @@
 
 import { RawImage, SBStoreCroppedDetectionResult, SBStoreImage } from "scanbot-web-sdk/@types";
-import SBSDKService from "./SBSDKService.tsx";
+import SBSDKService from "./SBSDKService.ts";
 
 export enum MimeType {
     Jpeg = "image/jpeg"

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { SBStoreCroppedDetectionResult } from "scanbot-web-sdk/@types";
-import SBSDKService from "../service/SBSDKService.tsx";
+import SBSDKService from "../service/SBSDKService.ts";
 import ImageUtils from "../service/ImageUtils.ts";
 import { Box } from "@mui/material";
 import { TopBar } from "../subviews/TopBar.tsx";

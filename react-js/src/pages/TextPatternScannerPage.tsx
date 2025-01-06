@@ -5,7 +5,7 @@ import {
     TextPatternScannerViewConfiguration,
 } from "scanbot-web-sdk/@types";
 
-import SBSDKService, { ContainerId } from "../service/SBSDKService.tsx";
+import SBSDKService, { ContainerId } from "../service/SBSDKService.ts";
 import SBSDKPage from "../subviews/SBSDKPage.tsx";
 
 export default function TextPatternScannerPage() {

@@ -2,7 +2,7 @@
 import { Box } from "@mui/material";
 
 import { TopBarHeight, TopBar } from "./TopBar.tsx";
-import { ContainerId } from "../service/SBSDKService.tsx";
+import { ContainerId } from "../service/SBSDKService.ts";
 
 export default function SBSDKPage(props: { title: string, containerId: ContainerId }) {
 
