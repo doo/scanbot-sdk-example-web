@@ -17,6 +17,7 @@ export default function DocumentScannerPage() {
         // Flash the screen to indicate that a document was detected
         SBSDKService.SDK.utils.flash();
         console.log("Detected document: ", result);
+        await SBSDKService.SDK.storage.storeCroppedDetectionResult(result);
 
         if (result.croppedImage) {
             // If a cropped image is available, it means a document was detected and we can analyze the quality of it.
