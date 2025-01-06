@@ -12,8 +12,18 @@ export default function DocumentScannerPage() {
 
     const handle = useRef<IDocumentScannerHandle | null>(null);
 
-    const onDocumentDetected = (result: CroppedDetectionResult) => {
+    const onDocumentDetected = async (result: CroppedDetectionResult) => {
+
+        // Flash the screen to indicate that a document was detected
+        SBSDKService.SDK.utils.flash();
         console.log("Detected document: ", result);
+
+        if (result.croppedImage) {
+            // If a cropped image is available, it means a document was detected and we can analyze the quality of it.
+            const analyzer = await SBSDKService.SDK.createDocumentQualityAnalyzer({});
+            const analysis = await analyzer.analyze(result.croppedImage);
+            console.log("Document quality analysis: ", analysis);
+        }
     };
 
     useEffect(() => {
