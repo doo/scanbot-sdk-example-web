@@ -84,4 +84,22 @@ export default class ImageUtils {
         canvas.getContext("2d")?.putImageData(data, 0, 0);
         return canvas;
     }
+
+    private static uuidv4() {
+        return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, c =>
+            (+c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> +c / 4).toString(16)
+        );
+    }
+
+    public static saveImage(data: ArrayBuffer, type: string) {
+        const link = document.createElement('a');
+        link.style.display = 'none';
+        document.body.appendChild(link);
+
+        const blob = new Blob([data], { type: type });
+        link.href = URL.createObjectURL(blob);
+        const extension = type.split("/")[1];
+        link.download = `${this.uuidv4()}.${extension}`;
+        link.click();
+    }
 }
