@@ -38,7 +38,7 @@ export default function DocumentScannerPage() {
             let processed = await SBSDKService.SDK.imageRotate(result.croppedImage, "CLOCKWISE_90");
             processed = await SBSDKService.SDK.imageCrop(processed, polygon);
             const jpeg = await SBSDKService.SDK.imageToJpeg(processed);
-            ImageUtils.saveImage(jpeg, "image/jpeg");
+            // ImageUtils.saveImage(jpeg, "image/jpeg");
         }
     };
 
