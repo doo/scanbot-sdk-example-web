@@ -45,7 +45,7 @@ export class CroppingComponent implements OnInit {
 
     const options = {
       containerId: "cropping-view-container",
-      image: this.repository.getActiveItem().original,
+      image: this.repository.getActiveItem().originalImage,
       polygon: this.repository.getActiveItem().polygon,
       disableScroll: true,
       rotations: this.repository.getActiveItem().rotations ?? 0,

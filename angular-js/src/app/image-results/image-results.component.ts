@@ -36,9 +36,7 @@ export class ImageResultsComponent implements OnInit {
 
     const pages = this.repository.getPages();
     if (pages.length > 0) {
-      NavigationUtils.getElementByClassName(
-        "nothing-to-display-hint"
-      ).style.display = "none";
+      NavigationUtils.getElementByClassName("nothing-to-display-hint").style.display = "none";
     }
 
     let i = 0;

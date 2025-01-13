@@ -1,17 +1,13 @@
-import type {BinarizationFilter, ColorFilter, ImageFilter} from "scanbot-web-sdk/@types";
 import ScanbotSDK from "scanbot-web-sdk";
+import type { Image, ParametricFilter } from "scanbot-web-sdk/@types";
+import { toRaw } from "vue";
 
 export class Filters {
-  public static availableFilters(): ("none" | keyof typeof ScanbotSDK.imageFilters)[] {
-    return ["none", "ScanbotBinarizationFilter", "GrayscaleFilter", "ContrastFilter", "ColorDocumentFilter"];
-    }
+  public static availableFilters = 
+    ["none", "ScanbotBinarizationFilter", "GrayscaleFilter", "ContrastFilter", "ColorDocumentFilter"] as const;
 
-  public static async applyFilter(scanbotSDK: ScanbotSDK, image: ArrayBuffer, filterName: keyof typeof ScanbotSDK.imageFilters) {
-    const imageProcessor = await scanbotSDK.createImageProcessor(image);
-    const filter = new ScanbotSDK.imageFilters[filterName]();
-    await imageProcessor.applyFilter(filter);
-    const result = imageProcessor.processedImage();
-    await imageProcessor.release();
-    return result;
+  public static async applyFilter(scanbotSDK: ScanbotSDK, image: Image, filterName: Exclude<typeof Filters.availableFilters[number], "none">) {
+    const filter: ParametricFilter = new ScanbotSDK.Config[filterName]();
+    return await scanbotSDK.imageFilter(toRaw(image), filter);
   }
 }

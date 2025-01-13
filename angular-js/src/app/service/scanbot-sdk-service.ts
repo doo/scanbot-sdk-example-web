@@ -7,30 +7,30 @@ import ScanbotSDK from "scanbot-web-sdk/webpack";
 import {
   IDocumentScannerHandle,
   ICroppingViewHandle,
-  DocumentScannerConfiguration,
   CroppingViewConfiguration,
-  PdfGenerationOptions,
   PdfGenerator,
-  TiffGenerationOptions,
   TiffGenerator,
-  BarcodeScannerConfiguration,
   IBarcodeScannerHandle,
   Polygon,
-  ContourDetectionResult,
-  BarcodeResult,
-  ITextDataScannerHandle,
-  TextDataScannerConfiguration
+  ITextPatternScannerHandle,
+  Image,
+  BarcodeScannerViewConfiguration,
+  DocumentScannerViewConfiguration,
+  MrzScannerViewConfiguration,
+  DocumentDataExtractorViewConfiguration,
+  PdfConfiguration,
+  TiffGeneratorParameters,
+  ParametricFilter,
 } from "scanbot-web-sdk/@types";
 
 import { IMrzScannerHandle } from "scanbot-web-sdk/@types/interfaces/i-mrz-scanner-handle";
-import { MrzScannerConfiguration } from "scanbot-web-sdk/@types/model/configuration/mrz-scanner-configuration";
-import { BarcodeFormat } from "scanbot-web-sdk/@types/model/barcode/barcode-format";
-import { EngineMode } from "scanbot-web-sdk/@types/model/barcode/engine-mode";
 import { IScannerCommon } from "scanbot-web-sdk/@types/interfaces/i-scanner-common-handle";
 import { Utils } from "./utils";
+import { SBDocumentResult } from "./document-repository";
 
 @Injectable()
 export class ScanbotSdkService {
+
   static CONTAINER_ID = "scanbot-camera-container";
   static BARCODE_SCANNER_CONTAINER_ID = "barcode-scanner-container";
   static MRZ_SCANNER_CONTAINER_ID = "mrz-scanner-container";
@@ -43,7 +43,7 @@ export class ScanbotSdkService {
   private documentScanner: IDocumentScannerHandle;
   private barcodeScanner: IBarcodeScannerHandle;
   private mrzScanner: IMrzScannerHandle;
-  private textDataScanner: ITextDataScannerHandle;
+  private textDataScanner: ITextPatternScannerHandle;
   private cropper: ICroppingViewHandle;
 
   isReady(): boolean {
@@ -51,7 +51,7 @@ export class ScanbotSdkService {
   }
 
   constructor() {
-    const options = { licenseKey: "", engine: "assets/wasm" };
+    const options = { licenseKey: "", enginePath: "assets/wasm" };
     ScanbotSDK.initialize(options).then((result) => {
       this.instance = result;
       if (this.onReady) {
@@ -60,13 +60,13 @@ export class ScanbotSdkService {
     });
   }
 
-  async scanDocuments(configuration: DocumentScannerConfiguration) {
+  async scanDocuments(configuration: DocumentScannerViewConfiguration) {
     this.documentScanner = await this.instance.createDocumentScanner(
       configuration
     );
   }
 
-  async scanBarcodes(configuration: BarcodeScannerConfiguration, finderVisible: boolean = true) {
+  async scanBarcodes(configuration: BarcodeScannerViewConfiguration, finderVisible: boolean = true) {
     this.barcodeScanner = await this.instance.createBarcodeScanner(
       configuration
     );
@@ -74,12 +74,12 @@ export class ScanbotSdkService {
     this.barcodeScanner.setFinderVisible(finderVisible);
   }
 
-  async scanMrz(configuration: MrzScannerConfiguration) {
+  async scanMrz(configuration: MrzScannerViewConfiguration) {
     this.mrzScanner = await this.instance.createMrzScanner(configuration);
   }
 
-  async scanTextData(configuration: TextDataScannerConfiguration) {
-    this.textDataScanner = await this.instance.createTextDataScanner(configuration);
+  async scanTextData(configuration: DocumentDataExtractorViewConfiguration) {
+    this.textDataScanner = await this.instance.createTextPatternScanner(configuration);
   }
 
   async setTextDataScannerDetectionStatus(pause: boolean) {
@@ -133,72 +133,74 @@ export class ScanbotSdkService {
     return await this.cropper.apply();
   }
 
-  async toDataUrl(page: any) {
-    return await this.instance.toDataUrl(
-      page.filtered ?? page.cropped ?? page.original
-    );
+  async toDataUrl(page: SBDocumentResult) {
+    const image = page.filteredImage ?? page.croppedImage ?? page.originalImage;
+    return await this.instance.toDataUrl(await this.instance.imageToJpeg(image));
   }
 
   async licenseInfoString() {
     return JSON.stringify(await this.instance.getLicenseInfo());
   }
 
-  async generatePDF(pages: any[]) {
-    const options: PdfGenerationOptions = {
-      standardPaperSize: "A4",
+  async generatePDF(pages: SBDocumentResult[]) {
+    const options: Partial<PdfConfiguration> = {
+      pageSize: "A4",
       pageDirection: "PORTRAIT"
     };
     const generator: PdfGenerator = await this.instance.beginPdf(options);
     for (const page of pages) {
-      await generator.addPage(page.filtered ?? page.cropped ?? page.original);
+      await generator.addPage(page.filteredImage ?? page.croppedImage ?? page.originalImage);
     }
     return await generator.complete();
   }
 
-  async generateTIFF(pages: any[]) {
-    const options: TiffGenerationOptions = {
+  async generateTIFF(pages: SBDocumentResult[]) {
+    const options: Partial<TiffGeneratorParameters> = {
       dpi: 123,
     };
     const generator: TiffGenerator = await this.instance.beginTiff(options);
     for (const page of pages) {
-      const image = page.cropped ?? page.original;
-      await generator.addPage(await this.applyFilter(image, "ScanbotBinarizationFilter"));
+      const image = (page.croppedImage ?? page.originalImage) as ArrayBuffer;
+      await generator.addPage(await this.applyFilter(image, new ScanbotSDK.Config.ScanbotBinarizationFilter()));
     }
     return await generator.complete();
   }
 
-  public async applyFilter(image: ArrayBuffer, filter: keyof typeof ScanbotSDK.imageFilters) {
-    const imageProcessor = await this.instance.createImageProcessor(image);
-    await imageProcessor.applyFilter(new ScanbotSDK.imageFilters[filter]());
-    const result = await imageProcessor.processedImage();
-    await imageProcessor.release();
-    return result;
+  public async applyFilter(image: ArrayBuffer, filter: ParametricFilter) {
+    return await this.instance.imageFilter(image, filter)
   }
 
-  public availableFilters(): ("none" | keyof typeof ScanbotSDK.imageFilters)[] {
+  public stringifiedFilters(): string[] {
+    return this.availableFilters().map((filter) => {
+      return filter === "none" ? "none" : filter._type;
+    });
+  }
+
+  public availableFilters(): ("none" | ParametricFilter)[] {
     return [
       "none",
-      "ScanbotBinarizationFilter",
-      "GrayscaleFilter",
-      "ContrastFilter",
-      "ColorDocumentFilter",
+      new ScanbotSDK.Config.ScanbotBinarizationFilter(),
+      new ScanbotSDK.Config.GrayscaleFilter(),
+      new ScanbotSDK.Config.ContrastFilter(),
+      new ScanbotSDK.Config.ColorDocumentFilter(),
     ];
   }
 
-  filterByIndex(value: string): "none" | keyof typeof ScanbotSDK.imageFilters {
+  filterByIndex(value: string): "none" | ParametricFilter {
     return this.availableFilters()[parseInt(value, 10)];
   }
 
-  async detectBarcodes(base64: string, engineMode?: EngineMode, barcodeFormats?: BarcodeFormat[]): Promise<BarcodeResult> {
-    return await this.instance!.detectBarcodes(base64, engineMode, barcodeFormats);
+  async detectBarcodes(image: Image) {
+    return await this.instance.detectBarcodes(image);
   }
 
-  async detectDocument(image: ArrayBuffer): Promise<ContourDetectionResult> {
-    return await this.instance!.detectDocument(image);
+  async detectDocument(image: Image) {
+    return await this.instance.detectDocument(image);
   }
 
-  async cropAndRotateImageCcw(image: ArrayBuffer, polygon: Polygon, rotations: number): Promise<Uint8Array> {
-    return await this.instance!.cropAndRotateImageCcw(image, polygon, rotations);
+  async cropAndRotateImageCcw(image: ArrayBuffer, polygon: Polygon, rotations: number): Promise<Image> {
+    const cropped = await this.instance.imageCrop(image, polygon);
+    return await this.instance.imageRotate(cropped, ScanbotSDK.Config.ImageRotationValues[rotations % 4], 'CONSUME_IMAGE');
   }
 
   public swapDocumentScannerCameraFacing() {
@@ -238,7 +240,7 @@ export class ScanbotSdkService {
     if (cameras) {
       const currentCameraInfo = scanner?.getActiveCameraInfo();
       if (currentCameraInfo) {
-        const cameraIndex = cameras.findIndex((cameraInfo) => { return cameraInfo.deviceId == currentCameraInfo.deviceId });
+        const cameraIndex = cameras.findIndex((cameraInfo) => { return cameraInfo.deviceId === currentCameraInfo.deviceId });
         const newCameraIndex = (cameraIndex + 1) % (cameras.length);
         await Utils.alertHtml(
           `Current camera: ${currentCameraInfo.label}.<br/>Switching to: ${cameras[newCameraIndex].label}`

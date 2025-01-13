@@ -30,7 +30,7 @@
 
 import { useDocumentsStore } from "@/stores/documents";
 import PageLayout from "@/components/PageLayout.vue";
-import { inject, onBeforeMount, ref } from "vue";
+import { inject, onBeforeMount, ref, toRaw } from "vue";
 import ScanbotSDK from "scanbot-web-sdk";
 import fileDownload from "js-file-download";
 import { RouterLink } from "vue-router";
@@ -58,7 +58,7 @@ async function download(type: "pdf" | "tiff") {
   const createGenerator = {
     pdf: async () => {
       return (await scanbotSDK).beginPdf({
-        standardPaperSize: "A4",
+        pageSize: "A4",
         pageDirection: "PORTRAIT"
       });
     },
@@ -71,7 +71,7 @@ async function download(type: "pdf" | "tiff") {
   const generator = await createGenerator[type]();
 
   for (const doc of documentsStore.documents) {
-    let page = doc.content.filtered ?? doc.content.cropped ?? doc.content.original;
+    let page = toRaw(doc.content.filtered ?? doc.content.cropped ?? doc.content.original);
     if (type === "tiff") {
       page = await Filters.applyFilter(await scanbotSDK, page, "ScanbotBinarizationFilter");
     }

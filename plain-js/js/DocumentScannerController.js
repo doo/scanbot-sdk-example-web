@@ -20,9 +20,11 @@ class DocumentScannerController {
 
         const config = {
             containerId: Config.scannerContainerId(),
-            acceptedAngleScore: 60,
-            acceptedSizeScore: 60,
-            autoCaptureSensitivity: 0.66,
+            detectionParameters: {
+                acceptedAngleScore: 60,
+                acceptedSizeScore: 60,
+                autoCaptureSensitivity: 0.66,
+            },
             autoCaptureEnabled: true,
             ignoreBadAspectRatio: false,
             style: {
@@ -30,9 +32,10 @@ class DocumentScannerController {
                 // For details see https://docs.scanbot.io/document-scanner-sdk/web/features/document-scanner/document-scanner-ui/
                 outline: {
                     polygon: {
-                        strokeWidth: 40,
+                        strokeWidthCapturing: 8,
                         fillCapturing: "rgba(0, 255, 0, 0.2)",
                         strokeCapturing: "green",
+                        strokeWidthSearching: 4,
                         fillSearching: "rgba(255, 0, 0, 0.2)",
                         strokeSearching: "red",
                     }
@@ -45,16 +48,17 @@ class DocumentScannerController {
             text: {
                 hint: {
                     OK: "Capturing your document...",
-                    OK_SmallSize: "The document is too small. Try moving closer.",
-                    OK_BadAngles:
+                    OK_BUT_TOO_SMALL: "The document is too small. Try moving closer.",
+                    OK_BUT_BAD_ANGLES:
                         "This is a bad camera angle. Hold the device straight over the document.",
-                    OK_BadAspectRatio:
+                    OK_BUT_BAD_ASPECT_RATIO:
                         "Rotate the device sideways, so that the document fits better into the screen.",
-                    OK_OffCenter: "Try holding the device at the center of the document.",
-                    Error_NothingDetected:
+                    OK_BUT_OFF_CENTER: "Try holding the device at the center of the document.",
+                    ERROR_NOTHING_DETECTED:
                         "Please hold the device over a document to start scanning.",
-                    Error_Brightness: "It is too dark. Try turning on a light.",
-                    Error_Noise: "Please move the document to a clear surface.",
+                    ERROR_TOO_DARK: "It is too dark. Try turning on a light.",
+                    ERROR_TOO_NOISY: "Please move the document to a clear surface.",
+                    // Check the documentation for a complete list of available states.
                 },
             },
             preferredCamera: 'camera2 0, facing back'

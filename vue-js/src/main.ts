@@ -24,7 +24,7 @@ const LICENSE_KEY = "";
 // The path to the Scanbot SDK WebAssembly modules is made available by the static-copy plugin,
 // which is configured in the vite.config.ts file.
 const enginePath = "/scanbot-web-sdk/";
-const scanbotSDK = ScanbotSDK.initialize({ licenseKey: LICENSE_KEY, engine: enginePath });
+const scanbotSDK = ScanbotSDK.initialize({ licenseKey: LICENSE_KEY, enginePath: enginePath });
 app.provide("scanbotSDK", scanbotSDK);
 
 app.use(createPinia())
