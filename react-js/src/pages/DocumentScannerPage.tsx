@@ -39,6 +39,7 @@ export default function DocumentScannerPage() {
             processed = await SBSDKService.SDK.imageCrop(processed, polygon);
             const jpeg = await SBSDKService.SDK.imageToJpeg(processed);
             // ImageUtils.saveImage(jpeg, "image/jpeg");
+            console.log("Processed image: ", jpeg);
         }
     };
 

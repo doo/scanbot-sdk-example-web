@@ -1,12 +1,13 @@
 import { Component, OnInit } from "@angular/core";
 import {
+  CroppedDetectionResult,
   DocumentDetectionResult,
   DocumentScannerConfiguration, DocumentScannerViewConfiguration,
 } from "scanbot-web-sdk/@types";
 import { ScanbotSdkService } from "../service/scanbot-sdk-service";
 import { Router } from "@angular/router";
 import { NavigationUtils } from "../service/navigation-utils";
-import { DocumentRepository } from "../service/document-repository";
+import { DocumentRepository, SBDocumentResult } from "../service/document-repository";
 import ViewUtils from "../service/view-utils";
 import { Utils } from "../service/utils";
 
@@ -97,9 +98,14 @@ export class DocumentScannerComponent implements OnInit {
     Utils.alert(e.name + ': ' + e.message);
   }
 
-  async onDocumentDetected(result: DocumentDetectionResult) {
+  async onDocumentDetected(result: CroppedDetectionResult) {
     ViewUtils.flash();
-    this.documents.add(result);
+    const document: SBDocumentResult = {
+      originalImage: result.originalImage,
+      croppedImage: result.croppedImage,
+      polygon: result.pointsNormalized,
+    }
+    this.documents.add(document);
     const counter = NavigationUtils.getElementByClassName(
       "scanner-page-counter"
     );

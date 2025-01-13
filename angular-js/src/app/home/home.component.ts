@@ -3,15 +3,17 @@ import { Router } from "@angular/router";
 import { ScanbotSdkService } from "../service/scanbot-sdk-service";
 import { NavigationUtils } from "../service/navigation-utils";
 import { ImageUtils } from "../service/image-utils";
-import { DocumentRepository } from "../service/document-repository";
+import { DocumentRepository, SBDocumentResult } from "../service/document-repository";
 import { RoutePaths } from "../model/RoutePaths";
 import { Utils } from "../service/utils";
+import { DocumentDetectionResult } from "scanbot-web-sdk/@types";
 
 export enum FeatureId {
   DocumentPicker,
   BarcodePicker,
   License,
 }
+
 @Component({
   selector: "app-home",
   templateUrl: "./home.component.html",
@@ -59,12 +61,11 @@ export class HomeComponent implements OnInit {
     if (e.id === FeatureId.DocumentPicker) {
       const image = await ImageUtils.pick(ImageUtils.MIME_TYPE_JPEG);
 
-      const contourDetectionResult = await this.sdk.detectDocument(image.original);
-      if (contourDetectionResult.status.startsWith('OK') === true && contourDetectionResult.pointsNormalized) { //TODO
-        const cropped = await this.sdk.cropAndRotateImageCcw(image.original, contourDetectionResult.pointsNormalized, 0);
-        const documentDetectionResult = { ...contourDetectionResult, original: image.original, cropped };
-
-        this.documents.add(documentDetectionResult);
+      const result = await this.sdk.detectDocument(image.original);
+      if (result.status.startsWith('OK') === true && result.pointsNormalized) {
+        const cropped = await this.sdk.cropAndRotateImageCcw(image.original, result.pointsNormalized, 0);
+        const document: SBDocumentResult = { ...result, originalImage: image.original, croppedImage: cropped };
+        this.documents.add(document);
         await Utils.alert("Detection successful");
       } else {
         await Utils.alert("Detection failed");

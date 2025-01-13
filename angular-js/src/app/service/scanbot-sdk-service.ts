@@ -26,6 +26,7 @@ import {
 import { IMrzScannerHandle } from "scanbot-web-sdk/@types/interfaces/i-mrz-scanner-handle";
 import { IScannerCommon } from "scanbot-web-sdk/@types/interfaces/i-scanner-common-handle";
 import { Utils } from "./utils";
+import { SBDocumentResult } from "./document-repository";
 
 @Injectable()
 export class ScanbotSdkService {
@@ -132,37 +133,34 @@ export class ScanbotSdkService {
     return await this.cropper.apply();
   }
 
-  async toDataUrl(page: any) {
-    return await this.instance.toDataUrl(
-      await this.instance.imageToJpeg(
-        page.filtered ?? page.cropped ?? page.original
-      )
-    );
+  async toDataUrl(page: SBDocumentResult) {
+    const image = page.filteredImage ?? page.croppedImage ?? page.originalImage;
+    return await this.instance.toDataUrl(await this.instance.imageToJpeg(image));
   }
 
   async licenseInfoString() {
     return JSON.stringify(await this.instance.getLicenseInfo());
   }
 
-  async generatePDF(pages: any[]) {
+  async generatePDF(pages: SBDocumentResult[]) {
     const options: Partial<PdfConfiguration> = {
       pageSize: "A4",
       pageDirection: "PORTRAIT"
     };
     const generator: PdfGenerator = await this.instance.beginPdf(options);
     for (const page of pages) {
-      await generator.addPage(page.filtered ?? page.cropped ?? page.original);
+      await generator.addPage(page.filteredImage ?? page.croppedImage ?? page.originalImage);
     }
     return await generator.complete();
   }
 
-  async generateTIFF(pages: any[]) {
+  async generateTIFF(pages: SBDocumentResult[]) {
     const options: Partial<TiffGeneratorParameters> = {
       dpi: 123,
     };
     const generator: TiffGenerator = await this.instance.beginTiff(options);
     for (const page of pages) {
-      const image = page.cropped ?? page.original;
+      const image = (page.croppedImage ?? page.originalImage) as ArrayBuffer;
       await generator.addPage(await this.applyFilter(image, new ScanbotSDK.Config.ScanbotBinarizationFilter()));
     }
     return await generator.complete();
@@ -170,6 +168,12 @@ export class ScanbotSdkService {
 
   public async applyFilter(image: ArrayBuffer, filter: ParametricFilter) {
     return await this.instance.imageFilter(image, filter)
+  }
+
+  public stringifiedFilters(): string[] {
+    return this.availableFilters().map((filter) => {
+      return filter === "none" ? "none" : filter._type;
+    });
   }
 
   public availableFilters(): ("none" | ParametricFilter)[] {
