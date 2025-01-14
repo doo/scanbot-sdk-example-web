@@ -8,7 +8,7 @@
         "build": "tsc -b && vite build",
         "lint": "eslint .",
         "preview": "vite preview",
-        "postinstall": "cp -R node_modules/scanbot-web-sdk/bundle/bin/complete public/wasm"
+        "postinstall": "cp -R node_modules/scanbot-web-sdk/bundle/bin/complete/* public/wasm"
     },
     "dependencies": {
         "@emotion/react": "11.14.0",
