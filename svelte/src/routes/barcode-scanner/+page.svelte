@@ -4,14 +4,14 @@
 
 	import ScanbotSDKService from '../../service/scanbot-sdk-service';
 	import Header from '../../subviews/Header.svelte';
-	import type { BarcodeResult } from 'scanbot-web-sdk/@types/model/barcode/barcode-result';
+	import type { BarcodeScannerResultWithSize } from 'scanbot-web-sdk/@types/model/barcode/barcode-result';
 	import Toasts from '../../subviews/toast/Toasts.svelte';
 
 	// Optionally set default options here
 	const options = {};
 
 	onMount(async () => {
-		ScanbotSDKService.instance.createBarcodeScanner('barcode-scanner', (result: BarcodeResult) => {
+		ScanbotSDKService.instance.createBarcodeScanner('barcode-scanner', (result: BarcodeScannerResultWithSize) => {
 			console.log('found barcode', result);
 			const code = result.barcodes.length > 0 ? result.barcodes[0] : undefined;
 			console.log('code', code);

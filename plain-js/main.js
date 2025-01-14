@@ -15,7 +15,7 @@ window.onload = async () => {
   documentScannerController = new DocumentScannerController(results, documentListController);
   barcodeScannerController = new BarcodeScannerController();
   mrzScannerController = new MrzScannerController();
-  textDataScannerController = new TextDataScannerController();
+  textDataScannerController = new TextPatternScannerController();
 
   this.resizeContent();
 
@@ -31,11 +31,11 @@ window.onload = async () => {
 
       reader.onload = async (e) => {
         const result = await scanbotSDK.detectDocument(reader.result);
-
-        if (result.success === true) {
-          const cropped = await scanbotSDK.cropAndRotateImageCcw(reader.result, result.polygon, 0);
-          result.original = reader.result;
-          result.cropped = cropped;
+        
+        if (result.status.startsWith('OK')) {
+          const cropped = await scanbotSDK.imageCrop(reader.result, result.pointsNormalized);
+          result.originalImage = reader.result;
+          result.croppedImage = cropped;
 
           results.push(result);
           await documentListController.show();
@@ -91,7 +91,7 @@ window.onload = async () => {
         barcodeScannerController.close();
       } else if (controller.includes("mrz-scanner-controller")) {
         mrzScannerController.close();
-      } else if (controller.includes("text-data-scanner-controller")) {
+      } else if (controller.includes("text-pattern-scanner-controller")) {
         textDataScannerController.close();
       } else if (controller.includes("detection-results-controller")) {
         documentListController.close();
@@ -141,7 +141,7 @@ window.onload = async () => {
   scanbotSDK = await ScanbotSDK.initialize({
     licenseKey: Config.license(),
     // Use the provided download-sdk.sh script to download the SDK locally and make the following path available.
-    engine: './scanbot-web-sdk/bin/complete/'
+    enginePath: './scanbot-web-sdk/bin/complete/'
   });
 
   ViewUtils.hideLoading();

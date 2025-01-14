@@ -8,7 +8,7 @@ export class ImageUtils {
       picker.id = 'picker';
       document.body.appendChild(picker);
       document.getElementById("picker").style.visibility = "hidden";
-      
+
       picker.type = "file";
       picker.accept = mime;
       picker.click();
@@ -32,7 +32,7 @@ export class ImageUtils {
             // @ts-ignore
             resolve({ original: new Uint8Array(result) });
           }
-          
+
           picker.remove();
         };
       };

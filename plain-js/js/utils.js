@@ -3,16 +3,20 @@ class Utils {
     if (result.filtered) {
       return result.filtered;
     }
-    if (result.cropped) {
-      return result.cropped;
+    if (result.croppedImage) {
+      return result.croppedImage;
     }
 
-    return result.original;
+    return result.originalImage;
   }
 
   static async renderDetectionResult(index) {
     const result = results[index];
-    const image = await scanbotSDK.toDataUrl(Utils.imageToDisplay(result));
+    const image = await scanbotSDK.toDataUrl(
+        await scanbotSDK.imageToJpeg(
+          Utils.imageToDisplay(result)
+        )
+    );
     return (
       "<img index='" +
       index +
@@ -26,7 +30,11 @@ class Utils {
     let html = "";
     for (let i = 0; i < results.length; i++) {
       const result = results[i];
-      const image = await scanbotSDK.toDataUrl(Utils.imageToDisplay(result));
+      const image = await scanbotSDK.toDataUrl(
+          await scanbotSDK.imageToJpeg(
+              Utils.imageToDisplay(result)
+          )
+      );
       html +=
         "<img index='" +
         i +
@@ -79,10 +87,6 @@ class Utils {
   }
 
   static async applyFilter(image, filterName) {
-    const imageProcessor = await scanbotSDK.createImageProcessor(image);
-    await imageProcessor.applyFilter(new ScanbotSDK.imageFilters[filterName]());
-    const result = await imageProcessor.processedImage();
-    await imageProcessor.release();
-    return result;
+    return await scanbotSDK.imageFilter(image, new ScanbotSDK.Config[filterName]());
   }
 }
