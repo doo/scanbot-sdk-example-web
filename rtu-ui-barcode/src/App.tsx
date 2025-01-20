@@ -56,7 +56,7 @@ function App() {
 			<NavigationBar />
 			<List>
 				<FeatureListItem text="Single-Barcode Scanner" icon={<QrCode />} onClick={async () => {
-					const config = new ScanbotSDK.UI.Config.BarcodeScannerConfiguration();
+					const config = new ScanbotSDK.UI.Config.BarcodeScannerScreenConfiguration();
 					applySingleScanningUseCase(config);
 					applyPaletteConfig(config);
 					applyActionBarConfig(config);
@@ -67,7 +67,7 @@ function App() {
 					}
 				}} />
 				<FeatureListItem text="Multi-Barcode Scanner" icon={<QrCode2 />} onClick={async () => {
-					const config = new ScanbotSDK.UI.Config.BarcodeScannerConfiguration();
+					const config = new ScanbotSDK.UI.Config.BarcodeScannerScreenConfiguration();
 					applyMultipleScanUseCase(config);
 					applySheetMode(config);
 					applyBarcodeItemMapperConfig(config);
@@ -78,7 +78,7 @@ function App() {
 					}
 				}} />
 				<FeatureListItem text="Multi-Scanner with AR Overlay" icon={<QrCodeScanner />} onClick={async () => {
-					const config = new ScanbotSDK.UI.Config.BarcodeScannerConfiguration();
+					const config = new ScanbotSDK.UI.Config.BarcodeScannerScreenConfiguration();
 					applyTopBarConfig(config);
 					applyUserGuidanceConfig(config);
 					applyMultipleScanUseCase(config);

@@ -8,6 +8,6 @@
 
 import { UIConfig } from "scanbot-web-sdk/@types";
 
-export function applyBarcodeFormatsConfig(config: UIConfig.BarcodeScannerConfiguration) {
-    config.recognizerConfiguration.barcodeFormats = ["MICRO_QR_CODE", "PDF_417", "QR_CODE", "UPC_A"];
+export function applyBarcodeFormatsConfig(config: UIConfig.BarcodeScannerScreenConfiguration) {
+    config.scannerConfiguration.barcodeFormats = ["MICRO_QR_CODE", "PDF_417", "QR_CODE", "UPC_A"];
 }

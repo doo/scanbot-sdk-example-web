@@ -9,7 +9,7 @@
 import { UIConfig } from "scanbot-web-sdk/@types";
 import { ExpectedBarcode } from "scanbot-web-sdk/@types/ui2/configuration/barcode/FindAndPickScanningModeUseCase";
 
-export function applyFindAndPickConfig(config: UIConfig.BarcodeScannerConfiguration) {
+export function applyFindAndPickConfig(config: UIConfig.BarcodeScannerScreenConfiguration) {
 
     const useCase = new UIConfig.FindAndPickScanningMode();
 

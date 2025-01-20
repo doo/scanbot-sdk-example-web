@@ -2,13 +2,13 @@
 /**
  * This code snippet is to be used only as a part of the website documentation.
  * It is not intended for any use outside of the support of documentation by Scanbot SDK GmbH employees.
- * 
+ *
  * For maintainers: whenever changing this code, ensure that links using it are still pointing to valid lines!
  */
 
 import { UIConfig } from "scanbot-web-sdk/@types";
 
-export function applyPaletteConfig(config: UIConfig.BarcodeScannerConfiguration) {
+export function applyPaletteConfig(config: UIConfig.BarcodeScannerScreenConfiguration) {
 
     config.palette.sbColorPrimary = "#C8193C";
     config.palette.sbColorPrimaryDisabled = "#F5F5F5";

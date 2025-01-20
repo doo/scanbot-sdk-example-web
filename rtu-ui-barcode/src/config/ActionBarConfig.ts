@@ -2,13 +2,13 @@
 /**
  * This code snippet is to be used only as a part of the website documentation.
  * It is not intended for any use outside of the support of documentation by Scanbot SDK GmbH employees.
- * 
+ *
  * For maintainers: whenever changing this code, ensure that links using it are still pointing to valid lines!
  */
 
 import { UIConfig } from "scanbot-web-sdk/@types";
 
-export function applyActionBarConfig(config: UIConfig.BarcodeScannerConfiguration) {
+export function applyActionBarConfig(config: UIConfig.BarcodeScannerScreenConfiguration) {
 
 	config.actionBar.flashButton.visible = true;
 
@@ -24,7 +24,7 @@ export function applyActionBarConfig(config: UIConfig.BarcodeScannerConfiguratio
 	config.actionBar.zoomButton.visible = true
 
 	// Configure the inactive state of the zoom button.
-	// The zoom button has no active state - it only switches between zoom levels. 
+	// The zoom button has no active state - it only switches between zoom levels.
 	// For configuring those please refer to camera configuring
 	config.actionBar.zoomButton.backgroundColor = "#0000007A";
 	config.actionBar.zoomButton.foregroundColor = "#FFFFFF";

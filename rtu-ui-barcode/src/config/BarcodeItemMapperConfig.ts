@@ -9,7 +9,7 @@
 import { UIConfig } from "scanbot-web-sdk/@types";
 import { BarcodeScannerUiItem } from "scanbot-web-sdk/@types/ui2/configuration/barcode/BarcodeScannerUIResult";
 
-export function applyBarcodeItemMapperConfig(config: UIConfig.BarcodeScannerConfiguration) {
+export function applyBarcodeItemMapperConfig(config: UIConfig.BarcodeScannerScreenConfiguration) {
 
     const useCase = config.useCase as UIConfig.MultipleScanningMode;
     useCase.barcodeInfoMapping.barcodeItemMapper = (item: BarcodeScannerUiItem): Promise<UIConfig.BarcodeMappedData> => {
