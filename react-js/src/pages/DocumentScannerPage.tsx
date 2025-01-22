@@ -5,9 +5,8 @@ import {
     IDocumentScannerHandle, Point
 } from "scanbot-web-sdk/@types";
 
-import SBSDKService, { ContainerId } from "../service/SBSDKService.ts";
-import SBSDKPage from "../subviews/SBSDKPage.tsx";
-import ImageUtils from "../service/ImageUtils.ts";
+import SBSDKService, { ContainerId } from "../service/SBSDKService";
+import SBSDKPage from "../subviews/SBSDKPage";
 
 export default function DocumentScannerPage() {
 

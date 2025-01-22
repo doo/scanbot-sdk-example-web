@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { Box, ImageList } from "@mui/material";
 import { SBStoreCroppedDetectionResult } from "scanbot-web-sdk/@types";
 
-import SBSDKService from "../service/SBSDKService.ts";
-import { TopBar } from "../subviews/TopBar.tsx";
-import DetectionResultImage from "../subviews/DetectionResultImage.tsx";
+import SBSDKService from "../service/SBSDKService";
+import { TopBar } from "../subviews/TopBar";
+import DetectionResultImage from "../subviews/DetectionResultImage";
 
 export default function StoredDataPage() {
 

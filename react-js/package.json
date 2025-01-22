@@ -19,7 +19,7 @@
         "react": "19.0.0",
         "react-dom": "19.0.0",
         "react-router-dom": "6.28.0",
-        "scanbot-web-sdk": "7.0.0-rc.2"
+        "scanbot-web-sdk": "7.0.0-rc.5"
     },
     "devDependencies": {
         "@eslint/js": "^9.15.0",

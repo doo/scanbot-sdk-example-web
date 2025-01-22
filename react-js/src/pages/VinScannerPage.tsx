@@ -1,8 +1,8 @@
 import { useRef, useEffect } from "react";
 import { ITextPatternScannerHandle, VinScannerResult, VinScannerViewConfiguration, } from "scanbot-web-sdk/@types";
 
-import SBSDKService, { ContainerId } from "../service/SBSDKService.ts";
-import SBSDKPage from "../subviews/SBSDKPage.tsx";
+import SBSDKService, { ContainerId } from "../service/SBSDKService";
+import SBSDKPage from "../subviews/SBSDKPage";
 
 export default function VINScannerPage() {
 

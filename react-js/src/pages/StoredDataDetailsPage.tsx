@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { SBStoreCroppedDetectionResult } from "scanbot-web-sdk/@types";
-import SBSDKService from "../service/SBSDKService.ts";
-import ImageUtils from "../service/ImageUtils.ts";
 import { Box } from "@mui/material";
-import { TopBar } from "../subviews/TopBar.tsx";
+import { SBStoreCroppedDetectionResult } from "scanbot-web-sdk/@types";
+
+import SBSDKService from "../service/SBSDKService";
+import ImageUtils from "../service/ImageUtils";
+import { TopBar } from "../subviews/TopBar";
 
 export default function StorageDetailsPage() {
 

@@ -1,5 +1,6 @@
-import { Alert, Box, List, Snackbar } from "@mui/material";
+import React, { useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
+import { Alert, Box, List, Snackbar } from "@mui/material";
 import {
     Code,
     DirectionsCar,
@@ -13,14 +14,13 @@ import {
     QrCodeScanner,
     TextIncrease
 } from "@mui/icons-material";
-import ScanbotSDK from "scanbot-web-sdk/ui";
 
-import FeatureListItem from "./subviews/FeatureListItem.tsx";
-import SectionHeader from "./subviews/SectionHeader.tsx";
-import { TopBar } from "./subviews/TopBar.tsx";
-import React, { useEffect } from "react";
-import SBSDKService from "./service/SBSDKService.ts";
-import ImageUtils, { MimeType } from "./service/ImageUtils.ts";
+import ScanbotSDK from "scanbot-web-sdk/ui";
+import FeatureListItem from "./subviews/FeatureListItem";
+import SectionHeader from "./subviews/SectionHeader";
+import { TopBar } from "./subviews/TopBar";
+import SBSDKService from "./service/SBSDKService";
+import ImageUtils, { MimeType } from "./service/ImageUtils";
 
 function App() {
 
@@ -64,7 +64,7 @@ function App() {
                 }} />
                 <FeatureListItem icon={QrCode} text='Barcode Scanner UI' onClick={async () => {
                     // Configure your barcode scanner as needed
-                    const config = new ScanbotSDK.UI.Config.BarcodeScannerConfiguration();
+                    const config = new ScanbotSDK.UI.Config.BarcodeScannerScreenConfiguration();
                     config.useCase = new ScanbotSDK.UI.Config.SingleScanningMode();
                     const result = await ScanbotSDK.UI.createBarcodeScanner(config);
                     console.log('Barcode result', result);

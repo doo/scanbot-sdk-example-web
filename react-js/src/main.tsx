@@ -1,14 +1,15 @@
 import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.tsx'
 import { HashRouter, Route, Routes } from 'react-router-dom'
-import DocumentScannerPage from "./pages/DocumentScannerPage.tsx";
-import VinScannerPage from "./pages/VinScannerPage.tsx";
-import TextPatternScannerPage from "./pages/TextPatternScannerPage.tsx";
-import MrzScannerPage from "./pages/MrzScannerPage.tsx";
-import BarcodeScannerPage from "./pages/BarcodeScannerPage.tsx";
-import StoredDataPage from "./pages/StoredDataPage.tsx";
-import StoredDataDetailsPage from './pages/StoredDataDetailsPage.tsx';
+
+import './index.css'
+import App from './App'
+import DocumentScannerPage from "./pages/DocumentScannerPage";
+import VinScannerPage from "./pages/VinScannerPage";
+import TextPatternScannerPage from "./pages/TextPatternScannerPage";
+import MrzScannerPage from "./pages/MrzScannerPage";
+import BarcodeScannerPage from "./pages/BarcodeScannerPage";
+import StoredDataPage from "./pages/StoredDataPage";
+import StoredDataDetailsPage from './pages/StoredDataDetailsPage';
 
 createRoot(document.getElementById('root')!).render(
     <HashRouter>
