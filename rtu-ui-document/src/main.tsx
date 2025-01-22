@@ -1,10 +1,10 @@
 import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App.tsx'
-
-import "./main.css"
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
-import DocumentResultPage from "./pages/DocumentResultPage.tsx";
+import ReactDOM from 'react-dom/client'
+
+import App from './App'
+import "./main.css"
+import DocumentResultPage from "./pages/DocumentResultPage";
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
 	<React.StrictMode>

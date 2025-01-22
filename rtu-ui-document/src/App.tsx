@@ -4,22 +4,22 @@ import { Box, Divider, List } from '@mui/material';
 import { ListAlt } from '@mui/icons-material';
 
 import ScanbotSDK from 'scanbot-web-sdk/ui';
-
+import type { UIConfig } from "scanbot-web-sdk/@types";
 
 import FeatureListItem from './subviews/FeatureListItem';
 import NavigationBar from './subviews/NavigationBar';
-import type { UIConfig } from "scanbot-web-sdk/@types";
-import { applyAcknowledgeScreenConfig } from "./config/AcknowledgeScreenConfig.ts";
-import { applyIntroductionScreenConfig } from "./config/IntroductionScreenConfig.ts";
-import { applyLocalizationConfig } from "./config/LocalizationConfig.ts";
-import { applyScanningScreenConfig } from "./config/ScanningScreenConfig.ts";
-import { applyPaletteConfig } from "./config/PaletteConfig.ts";
-import { applyReviewScreenConfig } from "./config/ReviewScreenConfig.ts";
-import { applyCroppingScreenConfig } from "./config/CroppingScreenConfig.ts";
-import { applySinglePageScanningConfig } from "./config/SinglePageScanningConfig.ts";
-import { applyMultiPageScanningConfig } from "./config/MultiPageScanningConfig.ts";
-import { applySinglePageScanningWithFinderConfig } from "./config/SinglePageScanningWithFinderConfig.ts";
-import { applyAutomaticFiltering } from "./config/AutomaticFilteringConfig.ts";
+
+import { applyPaletteConfig } from "./config/PaletteConfig";
+import { applyLocalizationConfig } from "./config/LocalizationConfig";
+import { applyAutomaticFiltering } from "./config/AutomaticFilteringConfig";
+import { applyReviewScreenConfig } from "./config/ReviewScreenConfig";
+import { applyScanningScreenConfig } from "./config/ScanningScreenConfig";
+import { applyCroppingScreenConfig } from "./config/CroppingScreenConfig";
+import { applyAcknowledgeScreenConfig } from "./config/AcknowledgeScreenConfig";
+import { applyMultiPageScanningConfig } from "./config/MultiPageScanningConfig";
+import { applyIntroductionScreenConfig } from "./config/IntroductionScreenConfig";
+import { applySinglePageScanningConfig } from "./config/SinglePageScanningConfig";
+import { applySinglePageScanningWithFinderConfig } from "./config/SinglePageScanningWithFinderConfig";
 
 function App() {
 

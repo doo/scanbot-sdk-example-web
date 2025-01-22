@@ -1,8 +1,10 @@
-import { Box } from "@mui/material";
-import NavigationBar from "../subviews/NavigationBar";
-import { SBDocument } from "scanbot-web-sdk/@types";
 import { useEffect, useState } from "react";
+import { Box } from "@mui/material";
 import ScanbotSDK from "scanbot-web-sdk/ui";
+import { SBDocument } from "scanbot-web-sdk/@types";
+import NavigationBar from "../subviews/NavigationBar";
+
+
 
 export default function DocumentResultPage() {
     const [documentIds, setDocumentIds] = useState<number[] | null>(null);
