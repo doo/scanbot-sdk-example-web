@@ -63,7 +63,8 @@ onMounted(async () => {
     "CODE_32",
     "PHARMA_CODE",
     "PHARMA_CODE_TWO_TRACK",
-    "PZN"
+    "PZN_7",
+    "PZN_8"
   ];
 
 
