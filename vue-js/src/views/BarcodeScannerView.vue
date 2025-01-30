@@ -7,14 +7,22 @@
 
 
 <script setup lang="ts">
-import { useRouter } from "vue-router";
 import { inject, onBeforeMount, onMounted, onBeforeUnmount, ref } from "vue";
-import PageLayout from "@/components/PageLayout.vue";
-import { type BarcodeFormat, BarcodeItem, BarcodeScannerResultWithSize, type BarcodeScannerViewConfiguration, type IBarcodeScannerHandle } from "scanbot-web-sdk/@types";
-import { onError } from "@/misc/onError";
-import ScanbotSDK from "scanbot-web-sdk";
+import { useRouter } from "vue-router";
 import * as toastr from "toastr";
 import "toastr/build/toastr.min.css";
+
+import ScanbotSDK from "scanbot-web-sdk";
+import { 
+  type BarcodeFormat, 
+  BarcodeItem, 
+  BarcodeScannerResultWithSize, 
+  type BarcodeScannerViewConfiguration, 
+  type IBarcodeScannerHandle 
+} from "scanbot-web-sdk/@types";
+import { onError } from "@/misc/onError";
+
+import PageLayout from "@/components/PageLayout.vue";
 import { switchCamera } from "@/misc/switchCamera";
 
 const isLoading = ref(true);
@@ -66,7 +74,6 @@ onMounted(async () => {
     "PZN_7",
     "PZN_8"
   ];
-
 
   const configuration: BarcodeScannerViewConfiguration = {
     onBarcodesDetected: onBarcodesDetected,
