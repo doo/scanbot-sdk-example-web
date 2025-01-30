@@ -1,6 +1,6 @@
 <template>
   <PageLayout :is-loading="isLoading" title="Barcode Scanner" :hasCameraControls="true" @on-camera-swap="onCameraSwap"
-    @on-camera-switch="onCameraSwitch">
+              @on-camera-switch="onCameraSwitch">
     <div id="barcode-scanner-container"></div>
   </PageLayout>
 </template>
