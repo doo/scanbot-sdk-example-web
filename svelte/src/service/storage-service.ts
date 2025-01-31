@@ -28,9 +28,9 @@ export default class StorageService {
             if (key.startsWith(StorageService.DOCUMENT_PREFIX)) {
                 const value = items[key];
                 const document: ScanbotDocument = JSON.parse(value);
-                document.original = await Codec.decodeBytes(document.original as string);
+                document.original = await Codec.decodeBytes(document.original as any as string);
                 if (document.cropped) {
-                    document.cropped = await Codec.decodeBytes(document.cropped as string);
+                    document.cropped = await Codec.decodeBytes(document.cropped as any as string);
                 }
 
 

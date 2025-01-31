@@ -4,7 +4,6 @@ import { ScanbotSdkService } from "../service/scanbot-sdk-service";
 import { DocumentRepository } from "../service/document-repository";
 import { NavigationUtils } from "../service/navigation-utils";
 import Swal from "sweetalert2";
-import { ImageFilter } from "scanbot-web-sdk/@types";
 import { RoutePaths } from "../model/RoutePaths";
 
 @Component({
@@ -67,22 +66,20 @@ export class ImageDetailsComponent implements OnInit {
     const result = await Swal.fire({
       title: "Select filter",
       input: "select",
-      inputOptions: this.sdk.availableFilters(),
-      inputPlaceholder: this.repository.getActiveItem().filter ?? "none",
+      inputOptions: this.sdk.stringifiedFilters(),
+      inputPlaceholder: this.repository.getActiveItem().filter?._type ?? "none",
     });
 
     const filter = this.sdk.filterByIndex(result.value);
-
     const page = this.repository.getActiveItem();
+
     if (filter === "none") {
       page.filter = undefined;
-      page.filtered = undefined;
+      page.filteredImage = undefined;
     } else {
       page.filter = filter;
-      page.filtered = await this.sdk.applyFilter(
-        page.cropped ?? page.original,
-        filter
-      );
+      const buffer = (page.croppedImage ?? page.originalImage) as ArrayBuffer;
+      page.filteredImage = await this.sdk.applyFilter(buffer, filter);
     }
 
     await this.loadImage();

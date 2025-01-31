@@ -1,4 +1,4 @@
-import { Barcode } from "scanbot-web-sdk/@types";
+import { BarcodeItem } from "scanbot-web-sdk/@types";
 import Swal from "sweetalert2";
 
 export class Utils {
@@ -14,11 +14,11 @@ export class Utils {
     return result;
   }
 
-  static formatBarcodes(codes: Barcode[]): string {
+  static formatBarcodes(codes: BarcodeItem[]): string {
     return JSON.stringify(
-      codes.map((code: Barcode) => {
-        if (code.parsedDocument) {
-          return code.parsedDocument;
+      codes.map((code: BarcodeItem) => {
+        if (code.extractedDocument) {
+          return code.extractedDocument;
         } else {
           return code.text + " (" + code.format + ") ";
         }
@@ -31,6 +31,6 @@ export class Utils {
   }
 
   static async alertHtml(html: string) {
-    await Swal.fire({html: html});
+    await Swal.fire({html});
   }
 }

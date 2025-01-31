@@ -4,20 +4,19 @@ import { Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
 
 import {
-  Barcode,
-  BarcodeResult,
-  BarcodeScannerConfiguration,
+  BarcodeFormat, BarcodeItem,
+  BarcodeScannerConfiguration, BarcodeScannerResult, BarcodeScannerViewConfiguration,
 } from "scanbot-web-sdk/@types";
 import {
   IBarcodePolygonHandle,
-  IBarcodePolygonLabelHandle
+  IBarcodePolygonLabelHandle,
 } from "scanbot-web-sdk/@types/model/configuration/selection-overlay-configuration";
-import { BarcodeFormat } from "scanbot-web-sdk/@types/model/barcode/barcode-format";
 
 import { ScanbotSdkService } from "../service/scanbot-sdk-service";
 import { DocumentRepository } from "../service/document-repository";
 import { NavigationUtils } from "../service/navigation-utils";
 import { Utils } from "../service/utils";
+import ScanbotSDK from "scanbot-web-sdk/webpack";
 
 @Component({
   selector: "app-barcode-scanner",
@@ -58,7 +57,6 @@ export class BarcodeScannerComponent implements OnInit {
 
   async startScanner() {
     const barcodeFormats: BarcodeFormat[] = [
-      "ONE_D",
       "AZTEC",
       "CODABAR",
       "CODE_39",
@@ -68,12 +66,13 @@ export class BarcodeScannerComponent implements OnInit {
       "EAN_8",
       "EAN_13",
       "ITF",
-      "MAXICODE",
+      "MAXI_CODE",
       "PDF_417",
       "QR_CODE",
+      "DATABAR",
+      "DATABAR_EXPANDED",
       "UPC_A",
       "UPC_E",
-      "UPC_EAN_EXTENSION",
       "MSI_PLESSEY",
       "IATA_2_OF_5",
       "INDUSTRIAL_2_OF_5",
@@ -84,28 +83,40 @@ export class BarcodeScannerComponent implements OnInit {
       "JAPAN_POST",
       "ROYAL_TNT_POST",
       "AUSTRALIA_POST",
-      "DATABAR",
-      "DATABAR_EXPANDED",
       "DATABAR_LIMITED",
+      "MICRO_PDF_417",
       "GS1_COMPOSITE",
+      "RMQR_CODE",
+      "CODE_11",
+      "CODE_32",
+      "PHARMA_CODE",
+      "PHARMA_CODE_TWO_TRACK",
+      "PZN_7",
+      "PZN_8"
     ];
 
 
     const isOverlyScanner = this.isOverlayScanner();
 
-    const configuration: BarcodeScannerConfiguration = {
+    const configuration: BarcodeScannerViewConfiguration = {
       onBarcodesDetected: this.onBarcodesDetected.bind(this),
       containerId: ScanbotSdkService.BARCODE_SCANNER_CONTAINER_ID,
-      barcodeFormats,
+      detectionParameters: {
+        barcodeFormatConfigurations: [
+          new ScanbotSDK.Config.BarcodeFormatCommonConfiguration({
+            formats: barcodeFormats
+          })
+        ]
+      },
       onError: this.barcodeScannerError.bind(this),
       preferredCamera: 'camera2 0, facing back',
       overlay: {
         visible: isOverlyScanner,
-        onBarcodeFound: (code: Barcode, polygon: IBarcodePolygonHandle, label: IBarcodePolygonLabelHandle) => {
+        onBarcodeFound: (code: BarcodeItem, polygon: IBarcodePolygonHandle, label: IBarcodePolygonLabelHandle) => {
           // You can override onBarcodeFound and create your own implementation for custom styling, e.g.
           // if you wish to only color in certain types of barcodes, you can find and pick them, as demonstrated below:
           if (code.format === "QR_CODE") {
-            polygon?.style({ fill: "rgba(255, 255, 0, 0.3)", stroke: "yellow" })
+            polygon?.style({ fillColor: "rgba(255, 255, 0, 0.3)", strokeColor: "yellow" });
           }
         }
       },
@@ -142,7 +153,7 @@ export class BarcodeScannerComponent implements OnInit {
     Utils.alert(e.name + ': ' + e.message);
   }
 
-  async onBarcodesDetected(result: BarcodeResult) {
+  async onBarcodesDetected(result: BarcodeScannerResult) {
     this.documents.addBarcodes(result.barcodes);
     this.toastr.success(Utils.formatBarcodes(result.barcodes), "Detected Barcodes!");
     const counter = NavigationUtils.getElementByClassName("barcode-counter");

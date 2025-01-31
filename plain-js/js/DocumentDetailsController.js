@@ -17,9 +17,9 @@ class DocumentDetailsController {
             if (filter === "none") {
                 this.results[index].filtered = undefined;
             } else {
-                let toFilter = this.results[index].cropped;
+                let toFilter = this.results[index].croppedImage;
                 if (!toFilter) {
-                    toFilter = this.results[index].original;
+                    toFilter = this.results[index].originalImage;
                 }
 
                 this.results[index].filter = filter;

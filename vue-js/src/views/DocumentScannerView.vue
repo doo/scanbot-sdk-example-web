@@ -19,7 +19,7 @@
 import PageLayout from "@/components/PageLayout.vue";
 import { inject, onBeforeMount, onBeforeUnmount, onMounted, ref } from "vue";
 import type ScanbotSDK from "scanbot-web-sdk";
-import type { IDocumentScannerHandle, DocumentDetectionResult } from "scanbot-web-sdk/@types";
+import type { IDocumentScannerHandle, DocumentScannerViewConfiguration, CroppedDetectionResult } from "scanbot-web-sdk/@types";
 import { RouterLink, useRouter } from "vue-router";
 import { useDocumentsStore } from "@/stores/documents.js";
 import { onError } from "@/misc/onError";
@@ -42,10 +42,12 @@ onBeforeMount(() => {
 onMounted(async () => {
   const scanbotSDK: ScanbotSDK = await inject("scanbotSDK")!;
 
-  const config = {
+  const config: DocumentScannerViewConfiguration = {
     containerId: 'scanbot-document-scanner-ui-container',
-    acceptedAngleScore: 60,
-    acceptedSizeScore: 60,
+    detectionParameters: {
+      acceptedAngleScore: 60,
+      acceptedSizeScore: 60,
+    },
     autoCaptureSensitivity: 0.66,
     autoCaptureEnabled: true,
     ignoreBadAspectRatio: false,
@@ -54,32 +56,41 @@ onMounted(async () => {
       // For details see https://docs.scanbot.io/document-scanner-sdk/web/features/document-scanner/document-scanner-ui/
       outline: {
         polygon: {
-          strokeWidth: 5,
+          strokeWidthCapturing: 5,
           fillCapturing: "rgba(0, 255, 0, 0.2)",
           strokeCapturing: "green",
+          strokeWidthSearching: 5,
           fillSearching: "rgba(255, 0, 0, 0.2)",
           strokeSearching: "red",
         }
       }
     },
-    onDocumentDetected: (result: DocumentDetectionResult) => {
+    onDocumentDetected: (result: CroppedDetectionResult) => {
       scanbotSDK.utils.flash();
-      documentsStore.addDocument(result);
+      documentsStore.addDocument({
+        original: result.originalImage,
+        cropped: result.croppedImage ?? undefined,
+        polygon: result.pointsNormalized,
+      });
     },
     onError: onError,
     text: {
       hint: {
         OK: "Capturing your document...",
-        OK_SmallSize: "The document is too small. Try moving closer.",
-        OK_BadAngles:
+        OK_BUT_TOO_SMALL: "The document is too small. Try moving closer.",
+        OK_BUT_BAD_ANGLES:
           "This is a bad camera angle. Hold the device straight over the document.",
-        OK_BadAspectRatio:
+        OK_BUT_BAD_ASPECT_RATIO:
           "Rotate the device sideways, so that the document fits better into the screen.",
-        OK_OffCenter: "Try holding the device at the center of the document.",
-        Error_NothingDetected:
+        OK_BUT_OFF_CENTER: "Try holding the device at the center of the document.",
+        ERROR_NOTHING_DETECTED:
           "Please hold the device over a document to start scanning.",
-        Error_Brightness: "It is too dark. Try turning on a light.",
-        Error_Noise: "Please move the document to a clear surface.",
+        ERROR_TOO_DARK: "It is too dark. Try turning on a light.",
+        ERROR_TOO_NOISY: "Please move the document to a clear surface.",
+        OK_BUT_TOO_DARK: "It is too dark. Try turning on a light.",
+        OK_BUT_ORIENTATION_MISMATCH:
+          "Please hold the device in portrait orientation.",
+        NOT_ACQUIRED: "Please hold the device over a document to start scanning.",
       },
     },
     preferredCamera: 'camera2 0, facing back'

@@ -21,6 +21,13 @@ export default defineConfig({
       structured: false
     })
   ],
+  build: {
+    rollupOptions: {
+      external: [
+        "scanbot-web-sdk/@types"
+      ],
+    },
+  },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
