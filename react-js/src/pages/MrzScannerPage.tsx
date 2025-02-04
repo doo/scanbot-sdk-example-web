@@ -15,9 +15,10 @@ export default function MRZScannerPage() {
     useEffect(() => {
 
         async function load() {
+            const element = document.getElementById(ContainerId.MrzScanner) as HTMLElement;
             await SBSDKService.initialize();
             const config: MrzScannerViewConfiguration = {
-                containerId: ContainerId.MrzScanner,
+                container: element,
                 onMrzDetected: onMrzDetected,
             };
             handle.current = await SBSDKService.SDK.createMrzScanner(config);
