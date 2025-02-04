@@ -24,7 +24,6 @@ export default function DocumentScannerPage() {
             const analyzer = await SBSDKService.SDK.createDocumentQualityAnalyzer({});
             const analysis = await analyzer.analyze(result.croppedImage);
             console.log("Document quality analysis: ", analysis);
-
             const min = 0.2;
             const max = 0.8;
             const polygon: Point[] = [
