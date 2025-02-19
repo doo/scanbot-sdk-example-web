@@ -23,6 +23,9 @@ export default function BarcodeScannerPage() {
             const config: BarcodeScannerViewConfiguration = {
                 containerId: ContainerId.BarcodeScanner,
                 onBarcodesDetected: onBarcodesDetected,
+                detectionParameters: {
+                    returnBarcodeImage: true,
+                }
             };
             handle.current = await SBSDKService.SDK.createBarcodeScanner(config);
         }
