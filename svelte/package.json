@@ -30,7 +30,7 @@
 		"tslib": "2.4.1",
 		"typescript": "5.0.3",
 		"vite": "4.4.2",
-		"scanbot-web-sdk": "7.0.1"
+		"scanbot-web-sdk": "7.0.2"
 	},
 	"type": "module"
 }
