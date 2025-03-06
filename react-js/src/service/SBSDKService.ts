@@ -20,6 +20,13 @@ export default class SBSDKService {
     */
     static readonly license = "";
 
+    /*
+     * We have included an example of how to load the license key from the environment variables.
+     * The .env file includes an expired license key, which won't allow ScanbotSDK to be used, not even for one minute.
+     * To get a valid license key, please follow the instructions above.
+     */
+    // static readonly license = import.meta.env.VITE_EXPIRED_SCANBOT_LICENSE_KEY;
+
     public static async initialize() {
         // The SDK needs to be initialized before any other call and only once in the application's lifecycle.
         // This should be preferably done in the main component, after your site is loaded
