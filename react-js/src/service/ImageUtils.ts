@@ -1,4 +1,3 @@
-
 import { RawImage, SBStoreCroppedDetectionResult, SBStoreImage } from "scanbot-web-sdk/@types";
 import SBSDKService from "./SBSDKService";
 
@@ -91,15 +90,14 @@ export default class ImageUtils {
         );
     }
 
-    public static saveImage(data: ArrayBuffer, type: string) {
+    public static save(data: ArrayBuffer, mimeType: string, filename: string) {
         const link = document.createElement('a');
         link.style.display = 'none';
         document.body.appendChild(link);
-
-        const blob = new Blob([data], { type: type });
+        const blob = new Blob([data], { type: mimeType });
         link.href = URL.createObjectURL(blob);
-        const extension = type.split("/")[1];
-        link.download = `${this.uuidv4()}.${extension}`;
+
+        link.download = filename;
         link.click();
     }
 }
