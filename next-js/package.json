@@ -15,7 +15,7 @@
         "react-dom": "^18",
         "react-loading-skeleton": "^3.4.0",
         "react-toastify": "^10.0.4",
-        "scanbot-web-sdk": "7.0.2"
+        "scanbot-web-sdk": "7.1.0"
     },
     "devDependencies": {
         "@types/node": "^20",
