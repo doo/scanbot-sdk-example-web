@@ -5,10 +5,15 @@
  * For maintainers: whenever changing this code, ensure that links using it are still pointing to valid lines!
  */
 import ScanbotSDK from "scanbot-web-sdk/ui";
+import { UIConfig } from "scanbot-web-sdk/@types";
 
-export function applyPaletteConfig() {
-    // For demonstration purposes, we create a new configuration object.
-    const config = new ScanbotSDK.UI.Config.MrzScannerScreenConfiguration();
+export function applyPaletteConfig(config?: UIConfig.MrzScannerScreenConfiguration) {
+
+    if (!config) {
+        // If missing create a new configuration object, else apply configuration to the parameter.
+        config = new ScanbotSDK.UI.Config.MrzScannerScreenConfiguration();
+    }
+
     // Retrieve the instance of the palette from the configuration object.
     const palette = config.palette;
 

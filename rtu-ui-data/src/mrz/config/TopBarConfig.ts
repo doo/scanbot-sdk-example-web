@@ -7,13 +7,20 @@
 import ScanbotSDK from "scanbot-web-sdk/ui";
 import { UIConfig } from "scanbot-web-sdk/@types";
 
-export function applyLocalizationConfig(config?: UIConfig.MrzScannerScreenConfiguration) {
+export function applyTopBarConfig(config?: UIConfig.MrzScannerScreenConfiguration) {
 
     if (!config) {
         // If missing create a new configuration object, else apply configuration to the parameter.
         config = new ScanbotSDK.UI.Config.MrzScannerScreenConfiguration();
     }
 
-    config.localization.topUserGuidance = "This will be displayed at the top of the screen";
-    config.localization.cameraPermissionCloseButton = "The 'close' button title of the camera permission dialog.";
+    // Set the top bar mode.
+    config.topBar.mode = "GRADIENT";
+
+    // Set the background color which will be used as a gradient.
+    config.topBar.backgroundColor = "#C8193C";
+
+    // Configure the cancel button.
+    config.topBar.cancelButton.text = "Cancel";
+    config.topBar.cancelButton.foreground.color = "#FFFFFF";
 }
