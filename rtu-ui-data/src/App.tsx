@@ -38,6 +38,7 @@ function App() {
                 <div style={{ margin: 10, padding: 10, borderBottom: "1px solid gray" }} onClick={async () => {
                     const config = new ScanbotSDK.UI.Config.MrzScannerScreenConfiguration();
                     const result = await ScanbotSDK.UI.createMrzScanner(config);
+
                     console.log("MRZ Scanner result: ", result);
                 }}>MRZ Scanner</div>
             </div>
