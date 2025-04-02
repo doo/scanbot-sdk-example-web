@@ -1,11 +1,14 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import ScanbotSDK from "scanbot-web-sdk/ui";
+import toast, { Toaster } from 'react-hot-toast';
 
 function App() {
 
+    const [sdk, setSdk] = useState<ScanbotSDK | null>(null);
+
     useEffect(() => {
         async function init() {
-            await ScanbotSDK.initialize({
+            const sdk = await ScanbotSDK.initialize({
                 /*
                 * TODO add the license key here.
                 * Please note: The Scanbot Web SDK will run without a license key for one minute per session!
@@ -25,6 +28,7 @@ function App() {
                  */
                 enginePath: "wasm"
             });
+            setSdk(sdk);
         }
 
         init();
@@ -35,13 +39,42 @@ function App() {
             style={{ display: "flex", flexDirection: "column", alignItems: "center", height: "100vh", width: "100vw" }}>
             <h2>RTU-UI Data Parsers</h2>
             <div style={{ width: "100%" }}>
-                <div style={{ margin: 10, padding: 10, borderBottom: "1px solid gray" }} onClick={async () => {
-                    const config = new ScanbotSDK.UI.Config.MrzScannerScreenConfiguration();
-                    const result = await ScanbotSDK.UI.createMrzScanner(config);
+                <div style={{ margin: 10, padding: 10, borderBottom: "1px solid gray", cursor: "pointer" }}
+                     onClick={async () => {
+                         const config = new ScanbotSDK.UI.Config.MrzScannerScreenConfiguration();
 
-                    console.log("MRZ Scanner result: ", result);
-                }}>MRZ Scanner</div>
+                         const info = await sdk?.getLicenseInfo();
+                         if (info === undefined) {
+                             console.log("License info: ", info);
+                             toast.error("License info missing. Are you sure you've initialized the SDK?");
+                             return;
+                         }
+                         if (!info.isValid()) {
+                             toast.error("License invalid. Status: " + info.status);
+                             return;
+                         }
+
+                         const result = await ScanbotSDK.UI.createMrzScanner(config);
+
+                         if (result === null) {
+                             toast.error("Failed to scan MRZ. Did your user maybe press cancel?");
+                             return;
+                         }
+
+                         const document = result.mrzDocument;
+                         const message = `
+                            Recognized: ${document?.type.name}
+                            Confidence: ${document?.confidence}
+                            Fields: ${document?.fields.length}
+                            See console.log for more details.
+                            `;
+                         toast.success(message, { duration: 3000 });
+                         console.log("Full MRZ document: ", document);
+
+                     }}>MRZ Scanner
+                </div>
             </div>
+            <Toaster />
         </div>
     );
 }
