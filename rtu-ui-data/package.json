@@ -14,7 +14,7 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hot-toast": "^2.5.2",
-    "scanbot-web-sdk": "7.2.0-rc.3"
+    "scanbot-web-sdk": "7.2.0-rc.4"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
