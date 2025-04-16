@@ -1,4 +1,4 @@
-import { RawImage, SBStoreCroppedDetectionResult, SBStoreImage } from "scanbot-web-sdk/@types";
+import { Image, PdfPageOptions, RawImage, SBStoreCroppedDetectionResult, SBStoreImage } from "scanbot-web-sdk/@types";
 import SBSDKService from "./SBSDKService";
 
 export enum MimeType {
@@ -6,6 +6,13 @@ export enum MimeType {
 }
 
 export default class ImageUtils {
+
+    public static async generatePdf (image: Image, filename: string, options: PdfPageOptions) {
+        const generator = await SBSDKService.SDK.beginPdf({})
+        await generator.addPage(image, options);
+        const pdf = await generator.complete();
+        ImageUtils.save(pdf, "application/pdf", filename);
+    }
 
     public static pick(mime: MimeType): Promise<Uint8Array> {
         return new Promise<Uint8Array>((resolve) => {
@@ -84,7 +91,8 @@ export default class ImageUtils {
         return canvas;
     }
 
-    private static uuidv4() {
+    // @ts-expect-error Unused, but important demonstrative function
+    private static uuidV4() {
         return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, c =>
             (+c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> +c / 4).toString(16)
         );
