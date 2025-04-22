@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import ScanbotSDK from "scanbot-web-sdk/ui";
 import toast, { Toaster } from 'react-hot-toast';
+import { Launcher } from "./mrz/Launcher.ts";
 
 function App() {
 
@@ -41,11 +42,9 @@ function App() {
             <div style={{ width: "100%" }}>
                 <div style={{ margin: 10, padding: 10, borderBottom: "1px solid gray", cursor: "pointer" }}
                      onClick={async () => {
-                         const config = new ScanbotSDK.UI.Config.MrzScannerScreenConfiguration();
 
                          const info = await sdk?.getLicenseInfo();
                          if (info === undefined) {
-                             console.log("License info: ", info);
                              toast.error("License info missing. Are you sure you've initialized the SDK?");
                              return;
                          }
@@ -54,23 +53,8 @@ function App() {
                              return;
                          }
 
-                         const result = await ScanbotSDK.UI.createMrzScanner(config);
-
-                         if (result === null) {
-                             toast.error("Failed to scan MRZ. Did your user maybe press cancel?");
-                             return;
-                         }
-
-                         const document = result.mrzDocument;
-                         const message = `
-                            Recognized: ${document?.type.name}
-                            Confidence: ${document?.confidence}
-                            Fields: ${document?.fields.length}
-                            See console.log for more details.
-                            `;
-                         toast.success(message, { duration: 3000 });
-                         console.log("Full MRZ document: ", document);
-
+                         const result = await Launcher.execute();
+                         toast.success(result, { duration: 3000 });
                      }}>MRZ Scanner
                 </div>
             </div>

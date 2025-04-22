@@ -16,7 +16,9 @@ export class Launcher {
             return "No MRZ document found";
         }
 
-        const mapped = result?.mrzDocument.fields.map(field => { return `${field.type}:  ${field.value}` });
+        const mapped = result?.mrzDocument.fields.map(field => {
+            return `${field.type.name}:  ${field.value?.text}`
+        });
         return mapped.join("\n");
     }
 }
