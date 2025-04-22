@@ -6,11 +6,6 @@
  */
 import ScanbotSDK from "scanbot-web-sdk/ui";
 import { UIConfig } from "scanbot-web-sdk/@types";
-import {
-    MrzIntroCustomImage,
-    MrzIntroDefaultImage,
-    MrzIntroNoImage
-} from "scanbot-web-sdk/@types/ui2/configuration/mrz/MRZScannerIntroScreenConfiguration";
 
 export function applyIntroConfig(config?: UIConfig.MrzScannerScreenConfiguration) {
 
@@ -32,11 +27,11 @@ export function applyIntroConfig(config?: UIConfig.MrzScannerScreenConfiguration
 
     // Configure the image for the introduction screen.
     // If you want to have no image...
-    intro.image = new MrzIntroNoImage();
+    intro.image = new ScanbotSDK.UI.Config.MrzIntroNoImage();
     // For a custom image...
-    intro.image = new MrzIntroCustomImage({ uri: "https://example.com/image.jpg" });
+    intro.image = new ScanbotSDK.UI.Config.MrzIntroCustomImage({ uri: "https://example.com/image.jpg" });
     // Or you can also use our default image.
-    intro.image = new MrzIntroDefaultImage();
+    intro.image = new ScanbotSDK.UI.Config.MrzIntroDefaultImage();
 
     // Configure the color of the handler on top.
     intro.handlerColor = "#EFEFEF";
