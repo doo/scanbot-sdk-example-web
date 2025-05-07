@@ -22,6 +22,7 @@ export function Toast(props: Props) {
                 severity="success"
                 variant="filled"
                 sx={{ width: '100%' }}
+                style={{ maxWidth: "90%" }}
             >
                 {toast}
             </Alert>

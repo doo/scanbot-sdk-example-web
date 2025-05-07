@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import React, { useRef, useEffect } from "react";
 import { IMrzScannerHandle, MrzScannerResult, MrzScannerViewConfiguration, } from "scanbot-web-sdk/@types";
 
 import SBSDKService, { ContainerId } from "../service/SBSDKService";
@@ -7,9 +7,10 @@ import SBSDKPage from "../subviews/SBSDKPage";
 export default function MRZScannerPage() {
 
     const handle = useRef<IMrzScannerHandle | null>(null);
+    const [toast, setToast] = React.useState<string | undefined>(undefined);
 
     const onMrzDetected = (result: MrzScannerResult) => {
-        console.log("Detected MRZ: ", result);
+        setToast(JSON.stringify(result));
     };
 
     useEffect(() => {
@@ -34,5 +35,5 @@ export default function MRZScannerPage() {
         }
     }, []);
 
-    return <SBSDKPage title={"MRZ Scanner"} containerId={ContainerId.MrzScanner} />
+    return <SBSDKPage title={"MRZ Scanner"} containerId={ContainerId.MrzScanner} toast={toast} />
 }

@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import React, { useRef, useEffect } from "react";
 import {
     ITextPatternScannerHandle,
     TextPatternScannerResult,
@@ -11,9 +11,14 @@ import SBSDKPage from "../subviews/SBSDKPage";
 export default function TextPatternScannerPage() {
 
     const handle = useRef<ITextPatternScannerHandle | null>(null);
+    const [toast, setToast] = React.useState<string | undefined>(undefined);
 
     const onTextDetected = (result: TextPatternScannerResult) => {
-        console.log("Detected Text: ", result);
+        if (result.rawText === "") {
+            // Pointless to show empty text
+            return;
+        }
+        setToast(JSON.stringify(result));
     };
 
     useEffect(() => {
@@ -37,5 +42,5 @@ export default function TextPatternScannerPage() {
         }
     }, []);
 
-    return <SBSDKPage title={"Text pattern Scanner"} containerId={ContainerId.TextPatternScanner} />
+    return <SBSDKPage title={"Text pattern Scanner"} containerId={ContainerId.TextPatternScanner} toast={toast} />
 }
