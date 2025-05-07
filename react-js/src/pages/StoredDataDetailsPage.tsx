@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Box } from "@mui/material";
+import { Box, Button, CircularProgress } from "@mui/material";
 import { SBStoreCroppedDetectionResult } from "scanbot-web-sdk/@types";
 
 import SBSDKService from "../service/SBSDKService";
@@ -11,6 +11,7 @@ export default function StorageDetailsPage() {
 
     const [item, setItem] = useState<SBStoreCroppedDetectionResult | null>(null);
     const [base64Image, setBase64Image] = useState<string | undefined>(undefined);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
 
@@ -26,14 +27,42 @@ export default function StorageDetailsPage() {
         }
 
         async function loadItem() {
-            const result = await SBSDKService.SDK.storage.getCroppedDetectionResult(itemId);
+            setIsLoading(true);
+            const sdk = await SBSDKService.awaitSDK();
+            const result = await sdk.storage.getCroppedDetectionResult(itemId);
             setItem(result);
             const base64 = await ImageUtils.createBase64Image(result);
             setBase64Image(base64);
+            setIsLoading(false);
         }
 
         loadItem();
     }, []);
+
+    async function runDQA() {
+        if (!item) {
+            return;
+        }
+        setIsLoading(true);
+        const image = item.croppedImage ?? item.originalImage;
+        const analyzer = await SBSDKService.SDK.createDocumentQualityAnalyzer({})
+        const result = await analyzer.analyze(image);
+        setIsLoading(false);
+        console.log("Document quality analysis: ", result);
+    }
+
+    async function runOCR() {
+        if (!item) {
+            return;
+        }
+
+        setIsLoading(true);
+        const image = item.croppedImage ?? item.originalImage;
+        const engine = await SBSDKService.SDK.createOcrEngine()
+        const result = await engine.performOcr(image);
+        setIsLoading(false);
+        console.log("OCR result: ", result);
+    }
 
     return (
         <Box style={{
@@ -47,9 +76,25 @@ export default function StorageDetailsPage() {
             <TopBar title={"Document Details"} isBackNavigationEnabled={true} />
             <h2 style={{ color: TextColor }}>Storage Details</h2>
             <h3 style={{ color: TextColor }}>Item ID: {item?.id}</h3>
-            <img src={base64Image}
-                 alt={`Storage image ${item?.id}`}
-                 style={{ width: "90%", maxHeight: 500, objectFit: "contain" }}
+            {base64Image && <Box style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                width: "100%",
+                height: "100%",
+            }}>
+                <img src={base64Image}
+                     alt={`Storage image ${item?.id}`}
+                     style={{ width: "90%", maxHeight: 500, objectFit: "contain" }}
+                />
+                <Box style={{ paddingLeft: "5%", paddingTop: 10 }}>
+                    <Button onClick={runDQA}>Run Document Quality Analysis</Button>
+                    <Button onClick={runOCR}>Run Optical Character Recognition</Button>
+                </Box>
+            </Box>}
+            <CircularProgress
+                style={{ position: "absolute", top: "40%", visibility: isLoading ? "visible" : "hidden" }}
+                color="primary"
             />
         </Box>
     )

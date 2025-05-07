@@ -49,6 +49,13 @@ export default class SBSDKService {
         return this.sdk;
     }
 
+    public static async awaitSDK() {
+        if (!this.sdk) {
+            await this.initialize();
+        }
+        return this.sdk;
+    }
+
     private static sdk: ScanbotSDK;
 
 }

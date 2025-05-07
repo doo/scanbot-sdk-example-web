@@ -13,7 +13,8 @@ export default function StoredDataPage() {
     useEffect(() => {
 
         async function loadStorageData() {
-            const result = await SBSDKService.SDK.storage.getCroppedDetectionResults(false);
+            const sdk = await SBSDKService.awaitSDK();
+            const result = await sdk.storage.getCroppedDetectionResults(false);
             setDetectionResults(result);
         }
 
