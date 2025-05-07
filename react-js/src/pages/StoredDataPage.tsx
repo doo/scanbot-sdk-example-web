@@ -21,7 +21,7 @@ export default function StoredDataPage() {
     }, []);
 
     return (
-        <Box style={{ width: "100vw", height: "100vh" }}>
+        <Box style={{ width: "100vw", height: "100vh", backgroundColor: "white" }}>
             <TopBar title={"Stored Data"} isBackNavigationEnabled={true} />
             <ImageList cols={3} rowHeight={164} style={{ padding: 20 }}>
                 {detectionResults.map((item) => (

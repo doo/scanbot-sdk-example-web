@@ -5,6 +5,7 @@ import { SBStoreCroppedDetectionResult } from "scanbot-web-sdk/@types";
 import SBSDKService from "../service/SBSDKService";
 import ImageUtils from "../service/ImageUtils";
 import { TopBar } from "../subviews/TopBar";
+import { TextColor } from "../subviews/FeatureListItem.tsx";
 
 export default function StorageDetailsPage() {
 
@@ -35,12 +36,21 @@ export default function StorageDetailsPage() {
     }, []);
 
     return (
-        <Box style={{ display: "flex", flexDirection: "column", alignItems: "center", width: "100vw", height: "100vh" }}>
+        <Box style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            width: "100vw",
+            height: "100vh",
+            backgroundColor: "white"
+        }}>
             <TopBar title={"Document Details"} isBackNavigationEnabled={true} />
-            <h1>Storage Details</h1>
-            <h3>Item ID: {item?.id}</h3>
-            <img src={base64Image} alt={`Storage image ${item?.id}`}
-                 style={{ width: "90%", maxHeight: 500, objectFit: "contain" }} />
+            <h2 style={{ color: TextColor }}>Storage Details</h2>
+            <h3 style={{ color: TextColor }}>Item ID: {item?.id}</h3>
+            <img src={base64Image}
+                 alt={`Storage image ${item?.id}`}
+                 style={{ width: "90%", maxHeight: 500, objectFit: "contain" }}
+            />
         </Box>
     )
 }

@@ -24,7 +24,7 @@ export default function DocumentScannerPage() {
             const analyzer = await SBSDKService.SDK.createDocumentQualityAnalyzer({});
             const analysis = await analyzer.analyze(result.croppedImage);
             console.log("Document quality analysis: ", analysis);
-            
+
             // Rotate the image 360 degrees clockwise, just for the hell of it
             let rotated = await SBSDKService.SDK.imageRotate(result.croppedImage, "CLOCKWISE_180");
             rotated = await SBSDKService.SDK.imageRotate(rotated, "CLOCKWISE_180");
