@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Alert, Box, Button, CircularProgress, Snackbar } from "@mui/material";
+import { Box, Button, CircularProgress } from "@mui/material";
 import { Image, SBStoreCroppedDetectionResult } from "scanbot-web-sdk/@types";
 
 import SBSDKService from "../service/SBSDKService";
 import ImageUtils from "../service/ImageUtils";
 import { TopBar } from "../subviews/TopBar";
 import { TextColor } from "../subviews/FeatureListItem.tsx";
+import { Toast } from "../subviews/Toast.tsx";
 
 export default function StorageDetailsPage() {
 
@@ -13,7 +14,7 @@ export default function StorageDetailsPage() {
     const [base64Image, setBase64Image] = useState<string | undefined>(undefined);
     const [isLoading, setIsLoading] = useState(false);
     const [rotatedImage, setRotatedImage] = useState<Image | undefined>(undefined);
-    const [toast, setToast] = React.useState<string | null>(null);
+    const [toast, setToast] = React.useState<string | undefined>(undefined);
 
     useEffect(() => {
 
@@ -114,16 +115,7 @@ export default function StorageDetailsPage() {
                 color="primary"
             />
 
-            <Snackbar open={toast !== null} autoHideDuration={3000} onClose={() => setToast(null)}>
-                <Alert
-                    onClose={() => setToast(null)}
-                    severity="success"
-                    variant="filled"
-                    sx={{ width: '100%' }}
-                >
-                    {toast}
-                </Alert>
-            </Snackbar>
+            <Toast text={toast} />
         </Box>
     )
 }

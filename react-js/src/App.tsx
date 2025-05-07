@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
-import { Alert, Box, List, Snackbar } from "@mui/material";
+import { Box, List } from "@mui/material";
 import {
     Code,
     DirectionsCar,
@@ -21,12 +21,13 @@ import SectionHeader from "./subviews/SectionHeader";
 import { TopBar } from "./subviews/TopBar";
 import SBSDKService from "./service/SBSDKService";
 import ImageUtils, { MimeType } from "./service/ImageUtils";
+import { Toast } from "./subviews/Toast.tsx";
 
 function App() {
 
     const navigate = useNavigate();
 
-    const [toast, setToast] = React.useState<string | null>(null);
+    const [toast, setToast] = React.useState<string | undefined>(undefined);
 
     useEffect(() => {
         SBSDKService.initialize();
@@ -97,16 +98,7 @@ function App() {
                 }} />
             </List>
 
-            <Snackbar open={toast !== null} autoHideDuration={3000} onClose={() => setToast(null)}>
-                <Alert
-                    onClose={() => setToast(null)}
-                    severity="success"
-                    variant="filled"
-                    sx={{ width: '100%' }}
-                >
-                    {toast}
-                </Alert>
-            </Snackbar>
+            <Toast text={toast} />
         </Box>
     )
 }
