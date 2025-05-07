@@ -52,16 +52,23 @@ export default class ImageUtils {
             const cropped = images ? images.find(i => i.documentId === item.id && i.type === "cropped")?.data as RawImage : item.croppedImage;
 
             if (cropped) {
-                SBSDKService.SDK.imageToJpeg(cropped).then((data) => {
-                    ImageUtils.toDataUrl(data).then((base64) => {
-                        resolve(base64);
-                    });
-                });
+                const base64 = this.rawImageToBase64(cropped);
+                resolve(base64);
             } else if (original) {
                 const canvas = ImageUtils.createImageDataCanvas(original as ImageData);
                 const base64 = canvas.toDataURL("image/png");
                 resolve(base64);
             }
+        });
+    }
+
+    static rawImageToBase64(item: Image): Promise<string> {
+        return new Promise((resolve) => {
+            SBSDKService.SDK.imageToJpeg(item).then((data) => {
+                ImageUtils.toDataUrl(data).then((base64) => {
+                    resolve(base64);
+                });
+            });
         });
     }
 

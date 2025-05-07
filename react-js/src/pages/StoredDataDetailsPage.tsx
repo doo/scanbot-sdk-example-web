@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Box, Button, CircularProgress } from "@mui/material";
-import { SBStoreCroppedDetectionResult } from "scanbot-web-sdk/@types";
+import { Image, SBStoreCroppedDetectionResult } from "scanbot-web-sdk/@types";
 
 import SBSDKService from "../service/SBSDKService";
 import ImageUtils from "../service/ImageUtils";
@@ -12,6 +12,7 @@ export default function StorageDetailsPage() {
     const [item, setItem] = useState<SBStoreCroppedDetectionResult | null>(null);
     const [base64Image, setBase64Image] = useState<string | undefined>(undefined);
     const [isLoading, setIsLoading] = useState(false);
+    const [rotatedImage, setRotatedImage] = useState<Image | undefined>(undefined);
 
     useEffect(() => {
 
@@ -64,6 +65,21 @@ export default function StorageDetailsPage() {
         console.log("OCR result: ", result);
     }
 
+    async function rotateImage() {
+        if (!item) {
+            return;
+        }
+
+        setIsLoading(true);
+        const image = rotatedImage ?? item.croppedImage ?? item.originalImage;
+        const rotated = await SBSDKService.SDK.imageRotate(image, "CLOCKWISE_90");
+        setRotatedImage(rotated);
+
+        const base64 = await ImageUtils.rawImageToBase64(rotated);
+        setBase64Image(base64);
+        setIsLoading(false);
+    }
+
     return (
         <Box style={{
             display: "flex",
@@ -74,8 +90,7 @@ export default function StorageDetailsPage() {
             backgroundColor: "white"
         }}>
             <TopBar title={"Document Details"} isBackNavigationEnabled={true} />
-            <h2 style={{ color: TextColor }}>Storage Details</h2>
-            <h3 style={{ color: TextColor }}>Item ID: {item?.id}</h3>
+            <h2 style={{ color: TextColor }}>Storage Details | Item ID: {item?.id}</h2>
             {base64Image && <Box style={{
                 display: "flex",
                 flexDirection: "column",
@@ -90,6 +105,7 @@ export default function StorageDetailsPage() {
                 <Box style={{ paddingLeft: "5%", paddingTop: 10 }}>
                     <Button onClick={runDQA}>Run Document Quality Analysis</Button>
                     <Button onClick={runOCR}>Run Optical Character Recognition</Button>
+                    <Button onClick={rotateImage}>Rotate Image</Button>
                 </Box>
             </Box>}
             <CircularProgress
