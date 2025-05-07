@@ -1,9 +1,5 @@
 import { useRef, useEffect } from "react";
-import {
-    CroppedDetectionResult,
-    DocumentScannerViewConfiguration,
-    IDocumentScannerHandle, Point
-} from "scanbot-web-sdk/@types";
+import { CroppedDetectionResult, DocumentScannerViewConfiguration, IDocumentScannerHandle } from "scanbot-web-sdk/@types";
 
 import SBSDKService, { ContainerId } from "../service/SBSDKService";
 import SBSDKPage from "../subviews/SBSDKPage";

@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Box, Button, CircularProgress } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Alert, Box, Button, CircularProgress, Snackbar } from "@mui/material";
 import { Image, SBStoreCroppedDetectionResult } from "scanbot-web-sdk/@types";
 
 import SBSDKService from "../service/SBSDKService";
@@ -13,6 +13,7 @@ export default function StorageDetailsPage() {
     const [base64Image, setBase64Image] = useState<string | undefined>(undefined);
     const [isLoading, setIsLoading] = useState(false);
     const [rotatedImage, setRotatedImage] = useState<Image | undefined>(undefined);
+    const [toast, setToast] = React.useState<string | null>(null);
 
     useEffect(() => {
 
@@ -49,7 +50,7 @@ export default function StorageDetailsPage() {
         const analyzer = await SBSDKService.SDK.createDocumentQualityAnalyzer({})
         const result = await analyzer.analyze(image);
         setIsLoading(false);
-        console.log("Document quality analysis: ", result);
+        setToast("Quality: " + JSON.stringify(result.quality));
     }
 
     async function runOCR() {
@@ -62,7 +63,7 @@ export default function StorageDetailsPage() {
         const engine = await SBSDKService.SDK.createOcrEngine()
         const result = await engine.performOcr(image);
         setIsLoading(false);
-        console.log("OCR result: ", result);
+        setToast(JSON.stringify(result.text));
     }
 
     async function rotateImage() {
@@ -112,6 +113,17 @@ export default function StorageDetailsPage() {
                 style={{ position: "absolute", top: "40%", visibility: isLoading ? "visible" : "hidden" }}
                 color="primary"
             />
+
+            <Snackbar open={toast !== null} autoHideDuration={3000} onClose={() => setToast(null)}>
+                <Alert
+                    onClose={() => setToast(null)}
+                    severity="success"
+                    variant="filled"
+                    sx={{ width: '100%' }}
+                >
+                    {toast}
+                </Alert>
+            </Snackbar>
         </Box>
     )
 }
