@@ -61,14 +61,16 @@ function App() {
                     const config = new ScanbotSDK.UI.Config.DocumentScanningFlow();
                     config.screens.camera.backgroundColor = '#FF0000';
                     const result = await ScanbotSDK.UI.createDocumentScanner(config);
-                    console.log('Scan result', result);
+                    setToast(`Scan result: ${JSON.stringify(result)}`);
                 }} />
                 <FeatureListItem icon={QrCode} text='Barcode Scanner UI' onClick={async () => {
                     // Configure your barcode scanner as needed
                     const config = new ScanbotSDK.UI.Config.BarcodeScannerScreenConfiguration();
+
                     config.useCase = new ScanbotSDK.UI.Config.SingleScanningMode();
                     const result = await ScanbotSDK.UI.createBarcodeScanner(config);
-                    console.log('Barcode result', result);
+
+                    setToast(`Barcode result: ${JSON.stringify(result)}`);
                 }} />
 
                 <SectionHeader title={"Data Extraction"} />
