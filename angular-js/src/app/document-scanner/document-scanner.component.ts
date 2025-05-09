@@ -1,8 +1,6 @@
 import { Component, OnInit, ViewEncapsulation } from "@angular/core";
 import {
-  CroppedDetectionResult,
-  DocumentDetectionResult,
-  DocumentScannerConfiguration, DocumentScannerViewConfiguration,
+  CroppedDetectionResult, DocumentScannerViewConfiguration,
 } from "scanbot-web-sdk/@types";
 import { ScanbotSdkService } from "../service/scanbot-sdk-service";
 import { Router } from "@angular/router";
@@ -14,8 +12,7 @@ import { Utils } from "../service/utils";
 @Component({
   selector: "app-document-scanner",
   templateUrl: "./document-scanner.component.html",
-  styleUrls: ["./document-scanner.component.scss"],
-  encapsulation: ViewEncapsulation.ShadowDom
+  styleUrls: ["./document-scanner.component.scss"]
 })
 export class DocumentScannerComponent implements OnInit {
   router: Router;
@@ -47,17 +44,10 @@ export class DocumentScannerComponent implements OnInit {
   }
 
   async startScanner() {
-    /**
-     * If you're using ViewEncapsulation.ShadowDom, providing 'containerId' will not work,
-     * as it's not accessible using conventional methods. In this case, it's required that you provide
-     * the container property directly, by accessing the shadowRoot yourself, as shown below.
-     */
-    const shadow = document.querySelector("app-document-scanner").shadowRoot;
-    const container = shadow.getElementById(ScanbotSdkService.CONTAINER_ID);
 
     const configuration: DocumentScannerViewConfiguration = {
       onDocumentDetected: this.onDocumentDetected.bind(this),
-      container,
+      containerId: ScanbotSdkService.CONTAINER_ID,
       text: {
         hint: {
           OK: "Capturing your document...",
