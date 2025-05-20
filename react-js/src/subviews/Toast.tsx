@@ -24,7 +24,7 @@ export function Toast(props: ToastProps) {
                 onClose={() => setToast(null)}
                 severity={props.color === "YELLOW" ? "warning" : "success"}
                 variant="filled"
-                sx={{ width: '100%' }}
+                sx={{ width: '100%', whiteSpace: 'pre-line' }}
                 style={{ maxWidth: "90%", maxHeight: "80%" }}
             >
                 {toast}

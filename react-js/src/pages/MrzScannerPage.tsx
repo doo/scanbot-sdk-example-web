@@ -10,7 +10,19 @@ export default function MRZScannerPage() {
     const [toast, setToast] = React.useState<string | undefined>(undefined);
 
     const onMrzDetected = (result: MrzScannerResult) => {
-        setToast(JSON.stringify(result));
+
+        let text = "";
+        if (result.document?.fields) {
+            for (const field of result.document.fields) {
+                if (field.type.commonType !== null) {
+                    text += `${field.type.commonType}: ${field.value?.text}\n`;
+                }
+            }
+        } else {
+            text = JSON.stringify(result.rawMRZ);
+        }
+
+        setToast(text);
     };
 
     useEffect(() => {
