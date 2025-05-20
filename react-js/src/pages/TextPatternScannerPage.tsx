@@ -7,18 +7,22 @@ import {
 
 import SBSDKService, { ContainerId } from "../service/SBSDKService";
 import SBSDKPage from "../subviews/SBSDKPage";
+import { ToastProps } from "../subviews/Toast.tsx";
 
 export default function TextPatternScannerPage() {
 
     const handle = useRef<ITextPatternScannerHandle | null>(null);
-    const [toast, setToast] = React.useState<string | undefined>(undefined);
+    const [toast, setToast] = React.useState<ToastProps | undefined>(undefined);
 
     const onTextDetected = (result: TextPatternScannerResult) => {
         if (result.rawText === "") {
             // Pointless to show empty text
             return;
         }
-        setToast(JSON.stringify(result.rawText));
+        setToast({
+            text: JSON.stringify(result.rawText),
+            color: result.validationSuccessful ? "GREEN" : "YELLOW"
+        });
     };
 
     useEffect(() => {

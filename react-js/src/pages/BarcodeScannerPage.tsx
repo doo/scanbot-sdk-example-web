@@ -41,5 +41,5 @@ export default function BarcodeScannerPage() {
         }
     }, []);
 
-    return <SBSDKPage title={"Barcode Scanner"} containerId={ContainerId.BarcodeScanner} toast={toast} />
+    return <SBSDKPage title={"Barcode Scanner"} containerId={ContainerId.BarcodeScanner} toast={{ text: toast }} />
 }

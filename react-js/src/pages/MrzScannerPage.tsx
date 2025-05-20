@@ -35,5 +35,6 @@ export default function MRZScannerPage() {
         }
     }, []);
 
-    return <SBSDKPage title={"MRZ Scanner"} containerId={ContainerId.MrzScanner} toast={toast} />
+    return <SBSDKPage title={"MRZ Scanner"} containerId={ContainerId.MrzScanner}
+                      toast={{ text: toast, color: "GREEN" }} />
 }
