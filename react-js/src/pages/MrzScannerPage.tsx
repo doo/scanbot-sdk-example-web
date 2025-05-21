@@ -11,6 +11,11 @@ export default function MRZScannerPage() {
 
     const onMrzDetected = (result: MrzScannerResult) => {
 
+        if (!result.success) {
+            console.log("Detected MRZ, but result not validated (likely frame accumulation count not satisfied).");
+            return;
+        }
+
         let text = "";
         if (result.document?.fields) {
             for (const field of result.document.fields) {
