@@ -41,5 +41,9 @@ export default function DocumentScannerPage() {
         }
     }, []);
 
-    return <SBSDKPage title={"Document Scanner"} containerId={ContainerId.DocumentScanner} toast={toast} />
+    return <SBSDKPage
+        title={"Document Scanner"}
+        containerId={ContainerId.DocumentScanner}
+        toast={{ text: toast, color: "GREEN" }}
+    />
 }

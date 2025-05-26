@@ -34,5 +34,9 @@ export default function VINScannerPage() {
         }
     }, []);
 
-    return <SBSDKPage title={"VIN Scanner"} containerId={ContainerId.VinScanner} toast={toast} />
+    return <SBSDKPage
+        title={"VIN Scanner"}
+        containerId={ContainerId.VinScanner}
+        toast={{ text: toast, color: "GREEN" }}
+    />
 }
