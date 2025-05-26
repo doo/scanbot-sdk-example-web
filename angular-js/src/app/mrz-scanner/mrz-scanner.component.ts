@@ -63,30 +63,24 @@ export class MrzScannerComponent implements OnInit {
     Utils.alert(e.name + ': ' + e.message);
   }
 
-  toConfidenceString(input: any, key: string): string {
-    const confidence = input[key].confidence;
+  async onMrzDetected(result: MrzScannerResult) {
 
-    if (!confidence) {
-      return "";
+    if (!result.success) {
+      console.warn("Detected MRZ, but result not validated (likely frame accumulation count not satisfied).");
+      return;
     }
-    return ` (${Number(confidence).toFixed(3)})`
-  }
 
-  parseMRZValue(input: any, key: string) {
-    return input[key] ? (input[key].value + this.toConfidenceString(input, key)) : ''
-  }
-
-  async onMrzDetected(mrz: MrzScannerResult) {
     let text = "";
 
-    text += "Document Type: " + this.parseMRZValue(mrz, 'documentType') + "<br>";
-    text += "First Name: " + this.parseMRZValue(mrz, 'givenNames') + "<br>";
-    text += "Last Name: " + this.parseMRZValue(mrz, 'surname') + "<br>";
-    text += "Issuing Authority: " + this.parseMRZValue(mrz, 'issuingAuthority') + "<br>";
-    text += "Nationality: " + this.parseMRZValue(mrz, "nationality") + "<br>";
-    text += "Birth Date: " + this.parseMRZValue(mrz, "birthDate") + "<br>";
-    text += "Gender: " + this.parseMRZValue(mrz, "gender") + "<br>";
-    text += "Date of Expiry: " + this.parseMRZValue(mrz, "expiryDate") + "<br>";
+    if (result.document?.fields) {
+      for (const field of result.document.fields) {
+        if (field.type.commonType !== null) {
+          text += `${field.type.commonType}: ${field.value?.text}<br>`;
+        }
+      }
+    } else {
+      text = JSON.stringify(result.rawMRZ);
+    }
 
     this.toastr.success(text, "Detected Mrz!", { enableHtml: true });
   }
