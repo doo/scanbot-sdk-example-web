@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import React, { useRef, useEffect } from "react";
 import { IMrzScannerHandle, MrzScannerResult, MrzScannerViewConfiguration, } from "scanbot-web-sdk/@types";
 
 import SBSDKService, { ContainerId } from "../service/SBSDKService";
@@ -7,9 +7,27 @@ import SBSDKPage from "../subviews/SBSDKPage";
 export default function MRZScannerPage() {
 
     const handle = useRef<IMrzScannerHandle | null>(null);
+    const [toast, setToast] = React.useState<string | undefined>(undefined);
 
     const onMrzDetected = (result: MrzScannerResult) => {
-        console.log("Detected MRZ: ", result);
+
+        if (!result.success) {
+            console.log("Detected MRZ, but result not validated (likely frame accumulation count not satisfied).");
+            return;
+        }
+
+        let text = "";
+        if (result.document?.fields) {
+            for (const field of result.document.fields) {
+                if (field.type.commonType !== null) {
+                    text += `${field.type.commonType}: ${field.value?.text}\n`;
+                }
+            }
+        } else {
+            text = JSON.stringify(result.rawMRZ);
+        }
+
+        setToast(text);
     };
 
     useEffect(() => {
@@ -34,5 +52,6 @@ export default function MRZScannerPage() {
         }
     }, []);
 
-    return <SBSDKPage title={"MRZ Scanner"} containerId={ContainerId.MrzScanner} />
+    return <SBSDKPage title={"MRZ Scanner"} containerId={ContainerId.MrzScanner}
+                      toast={{ text: toast, color: "GREEN" }} />
 }

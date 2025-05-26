@@ -37,7 +37,14 @@ export default class SBSDKService {
                 // The binaries are located under node_modules/scanbot-web-sdk/bundle/.
                 // In this example, we're automatically copying the complete bundle directory to the public wasm/ folder.
                 // have a look at package.json's script "postinstall" for more details
-                enginePath: './wasm/'
+                enginePath: './wasm/',
+                onComplete: (error) => {
+                    if (error) {
+                        console.error("SDK initialization failed: ", error);
+                    } else {
+                        console.log("SDK initialized successfully");
+                    }
+                }
             });
         }
     }
@@ -45,6 +52,13 @@ export default class SBSDKService {
     public static get SDK(): ScanbotSDK {
         if (!this.sdk) {
             this.initialize()
+        }
+        return this.sdk;
+    }
+
+    public static async awaitSDK() {
+        if (!this.sdk) {
+            await this.initialize();
         }
         return this.sdk;
     }

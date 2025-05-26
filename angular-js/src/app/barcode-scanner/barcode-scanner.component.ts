@@ -1,5 +1,5 @@
 
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewEncapsulation } from "@angular/core";
 import { Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
 
@@ -22,6 +22,7 @@ import ScanbotSDK from "scanbot-web-sdk/webpack";
   selector: "app-barcode-scanner",
   templateUrl: "./barcode-scanner.component.html",
   styleUrls: ["./barcode-scanner.component.scss"],
+  encapsulation: ViewEncapsulation.ShadowDom
 })
 export class BarcodeScannerComponent implements OnInit {
   router: Router;
@@ -98,9 +99,17 @@ export class BarcodeScannerComponent implements OnInit {
 
     const isOverlyScanner = this.isOverlayScanner();
 
+    /**
+     * If you're using ViewEncapsulation.ShadowDom, providing 'containerId' will not work,
+     * as it's not accessible using conventional methods. In this case, it's required that you provide
+     * the container property directly, by accessing the shadowRoot yourself, as shown below.
+     */
+    const shadow = document.querySelector("app-barcode-scanner").shadowRoot;
+    const container = shadow.getElementById(ScanbotSdkService.BARCODE_SCANNER_CONTAINER_ID);
+
     const configuration: BarcodeScannerViewConfiguration = {
       onBarcodesDetected: this.onBarcodesDetected.bind(this),
-      containerId: ScanbotSdkService.BARCODE_SCANNER_CONTAINER_ID,
+      container: container,
       detectionParameters: {
         barcodeFormatConfigurations: [
           new ScanbotSDK.Config.BarcodeFormatCommonConfiguration({

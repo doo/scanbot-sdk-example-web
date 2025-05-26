@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import React, { useRef, useEffect } from "react";
 import {
     BarcodeScannerResultWithSize,
     BarcodeScannerViewConfiguration,
@@ -11,9 +11,15 @@ import SBSDKPage from "../subviews/SBSDKPage";
 export default function BarcodeScannerPage() {
 
     const handle = useRef<IBarcodeScannerHandle | null>(null);
+    const [toast, setToast] = React.useState<string | undefined>(undefined);
 
     const onBarcodesDetected = (result: BarcodeScannerResultWithSize) => {
-        console.log("Detected barcodes: ", result);
+
+        let text = "";
+        result.barcodes.forEach((barcode) => {
+            text += `${barcode.text} (${barcode.format})\n`;
+        });
+        setToast(text);
     };
 
     useEffect(() => {
@@ -40,5 +46,5 @@ export default function BarcodeScannerPage() {
         }
     }, []);
 
-    return <SBSDKPage title={"Barcode Scanner"} containerId={ContainerId.BarcodeScanner} />
+    return <SBSDKPage title={"Barcode Scanner"} containerId={ContainerId.BarcodeScanner} toast={{ text: toast }} />
 }
