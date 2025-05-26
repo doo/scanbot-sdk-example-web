@@ -14,7 +14,12 @@ export default function BarcodeScannerPage() {
     const [toast, setToast] = React.useState<string | undefined>(undefined);
 
     const onBarcodesDetected = (result: BarcodeScannerResultWithSize) => {
-        setToast(JSON.stringify(result));
+
+        let text = "";
+        result.barcodes.forEach((barcode) => {
+            text += `${barcode.text} (${barcode.format})\n`;
+        });
+        setToast(text);
     };
 
     useEffect(() => {

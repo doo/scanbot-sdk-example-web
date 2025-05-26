@@ -10,7 +10,16 @@ export default function VINScannerPage() {
     const [toast, setToast] = React.useState<string | undefined>(undefined);
 
     const onTextDetected = (result: VinScannerResult) => {
-        setToast(JSON.stringify(result));
+
+        let text = "";
+
+        if (result.barcodeResult.extractedVIN) {
+            text += `Barcode: ${result.barcodeResult.extractedVIN}\n`;
+        }
+        if (result.textResult.rawText) {
+            text += `Text: ${result.textResult.rawText} (${result.textResult.confidence.toFixed(2)}%)\n`;
+        }
+        setToast(text);
     };
 
     useEffect(() => {
