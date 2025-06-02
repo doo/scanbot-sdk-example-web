@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from "react";
-import { CroppedDetectionResult, DocumentScannerViewConfiguration, IDocumentScannerHandle } from "scanbot-web-sdk/@types";
+import { DocumentScannerScanResponse, DocumentScannerViewConfiguration, IDocumentScannerHandle } from "scanbot-web-sdk/@types";
 
 import SBSDKService, { ContainerId } from "../service/SBSDKService";
 import SBSDKPage from "../subviews/SBSDKPage";
@@ -9,12 +9,14 @@ export default function DocumentScannerPage() {
     const handle = useRef<IDocumentScannerHandle | null>(null);
     const [toast, setToast] = React.useState<string | undefined>(undefined);
 
-    const onDocumentDetected = async (result: CroppedDetectionResult) => {
+    const onDocumentDetected = async (response: DocumentScannerScanResponse) => {
+        const result = response.result.detectionResult;
         // Flash the screen to indicate that a document was detected
         SBSDKService.SDK.utils.flash();
         // setToast(JSON.stringify(result));
         setToast(`Detected Document (status: " + ${result.status}; points: ${JSON.stringify(result.points)}  ")`);
-        await SBSDKService.SDK.storage.storeCroppedDetectionResult(result);
+        // TODO rename 'storeCroppedDetectionResult'
+        await SBSDKService.SDK.storage.storeCroppedDetectionResult(response);
     };
 
     useEffect(() => {

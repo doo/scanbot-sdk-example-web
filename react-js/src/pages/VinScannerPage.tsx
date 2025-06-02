@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from "react";
-import { ITextPatternScannerHandle, VinScannerResult, VinScannerViewConfiguration, } from "scanbot-web-sdk/@types";
+import { Image, ITextPatternScannerHandle, VinScannerResult, VinScannerViewConfiguration, } from "scanbot-web-sdk/@types";
 
 import SBSDKService, { ContainerId } from "../service/SBSDKService";
 import SBSDKPage from "../subviews/SBSDKPage";
@@ -9,7 +9,10 @@ export default function VINScannerPage() {
     const handle = useRef<ITextPatternScannerHandle | null>(null);
     const [toast, setToast] = React.useState<string | undefined>(undefined);
 
-    const onTextDetected = (result: VinScannerResult) => {
+    // TODO VinScannerResponse type
+    const onTextDetected = (e: { result: VinScannerResult, originalImage: Image }) => {
+
+        const result = e.result;
 
         let text = "";
 
