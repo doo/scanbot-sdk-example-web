@@ -13,12 +13,12 @@ import * as toastr from "toastr";
 import "toastr/build/toastr.min.css";
 
 import ScanbotSDK from "scanbot-web-sdk";
-import { 
-  type BarcodeFormat, 
+import type { 
+  BarcodeFormat, 
   BarcodeItem, 
   BarcodeScannerResultWithSize, 
-  type BarcodeScannerViewConfiguration, 
-  type IBarcodeScannerHandle 
+  BarcodeScannerViewConfiguration, 
+  IBarcodeScannerHandle 
 } from "scanbot-web-sdk/@types";
 import { onError } from "@/misc/onError";
 
