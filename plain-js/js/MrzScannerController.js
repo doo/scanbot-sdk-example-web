@@ -36,30 +36,28 @@ class MrzScannerController {
         }
     }
 
-    async onMrzDetected(mrz) {
-        this.mrzScanner.pauseDetection();
-        
-        console.log(mrz);
+    async onMrzDetected(result) {
+
+        if (!result.success) {
+            console.warn("Detected MRZ, but result not validated (likely frame accumulation count not satisfied).");
+            return;
+        }
 
         let text = "";
-        if (mrz && mrz.success) {
-            text += "Document Type: " + this.parseMRZValue(mrz, "DocumentType") + "\n";
-            text += "First Name: " + this.parseMRZValue(mrz, "GivenNames") + "\n";
-            text += "Last Name: " + this.parseMRZValue(mrz, "Surname") + "\n";
-            text += "Issuing Authority: " + this.parseMRZValue(mrz, "IssuingAuthority") + "\n";
-            text += "Nationality: " + this.parseMRZValue(mrz, "Nationality") + "\n";
-            text += "Birth Date: " + this.parseMRZValue(mrz, "BirthDate") + "\n";
-            text += "Gender: " + this.parseMRZValue(mrz, "Gender") + "\n";
-            text += "Date of Expiry: " + this.parseMRZValue(mrz, "ExpiryDate") + "\n";
+        if (result && result.success) {
+            text += "Document Type: " + this.parseMRZValue(result, "DocumentType") + "\n";
+            text += "First Name: " + this.parseMRZValue(result, "GivenNames") + "\n";
+            text += "Last Name: " + this.parseMRZValue(result, "Surname") + "\n";
+            text += "Issuing Authority: " + this.parseMRZValue(result, "IssuingAuthority") + "\n";
+            text += "Nationality: " + this.parseMRZValue(result, "Nationality") + "\n";
+            text += "Birth Date: " + this.parseMRZValue(result, "BirthDate") + "\n";
+            text += "Gender: " + this.parseMRZValue(result, "Gender") + "\n";
+            text += "Date of Expiry: " + this.parseMRZValue(result, "ExpiryDate") + "\n";
         } else {
             text = "No MRZ fields detected";
         }
 
         await Utils.alert(text);
-
-        setTimeout(() => {
-            this.mrzScanner.resumeDetection();
-        }, 1000);
     }
 
     parseMRZValue(input, key) {

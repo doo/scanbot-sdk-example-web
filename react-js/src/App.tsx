@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
-import { Alert, Box, List, Snackbar } from "@mui/material";
+import { Box, List } from "@mui/material";
 import {
     Code,
     DirectionsCar,
@@ -21,12 +21,13 @@ import SectionHeader from "./subviews/SectionHeader";
 import { TopBar } from "./subviews/TopBar";
 import SBSDKService from "./service/SBSDKService";
 import ImageUtils, { MimeType } from "./service/ImageUtils";
+import { Toast } from "./subviews/Toast.tsx";
 
 function App() {
 
     const navigate = useNavigate();
 
-    const [toast, setToast] = React.useState<string | null>(null);
+    const [toast, setToast] = React.useState<string | undefined>(undefined);
 
     useEffect(() => {
         SBSDKService.initialize();
@@ -60,14 +61,16 @@ function App() {
                     const config = new ScanbotSDK.UI.Config.DocumentScanningFlow();
                     config.screens.camera.backgroundColor = '#FF0000';
                     const result = await ScanbotSDK.UI.createDocumentScanner(config);
-                    console.log('Scan result', result);
+                    setToast(`Scan result: ${JSON.stringify(result)}`);
                 }} />
                 <FeatureListItem icon={QrCode} text='Barcode Scanner UI' onClick={async () => {
                     // Configure your barcode scanner as needed
                     const config = new ScanbotSDK.UI.Config.BarcodeScannerScreenConfiguration();
+
                     config.useCase = new ScanbotSDK.UI.Config.SingleScanningMode();
                     const result = await ScanbotSDK.UI.createBarcodeScanner(config);
-                    console.log('Barcode result', result);
+
+                    setToast(`Barcode result: ${JSON.stringify(result)}`);
                 }} />
 
                 <SectionHeader title={"Data Extraction"} />
@@ -97,16 +100,7 @@ function App() {
                 }} />
             </List>
 
-            <Snackbar open={toast !== null} autoHideDuration={3000} onClose={() => setToast(null)}>
-                <Alert
-                    onClose={() => setToast(null)}
-                    severity="success"
-                    variant="filled"
-                    sx={{ width: '100%' }}
-                >
-                    {toast}
-                </Alert>
-            </Snackbar>
+            <Toast text={toast} />
         </Box>
     )
 }
