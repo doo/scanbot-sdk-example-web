@@ -1,5 +1,6 @@
-import { Image, PdfPageOptions, RawImage, SBStoreCroppedDetectionResult, SBStoreImage } from "scanbot-web-sdk/@types";
+import { Image, PdfPageOptions, SBStoreCroppedDetectionResult, SBStoreImage } from "scanbot-web-sdk/@types";
 import SBSDKService from "./SBSDKService";
+import ScanbotSDK from "scanbot-web-sdk/ui";
 
 export enum MimeType {
     Jpeg = "image/jpeg"
@@ -48,21 +49,37 @@ export default class ImageUtils {
 
     static createBase64Image(item: SBStoreCroppedDetectionResult, images?: SBStoreImage[]): Promise<string> {
         return new Promise((resolve) => {
-            const original = images ? images.find(i => i.documentId === item.id && i.type === "original")?.data : item.originalImage;
-            const cropped = images ? images.find(i => i.documentId === item.id && i.type === "cropped")?.data as RawImage : item.croppedImage;
+            const original = images ? images.find(i => i.documentId === item.id && i.type === "original") : item.originalImage;
+            const cropped = images ? images.find(i => i.documentId === item.id && i.type === "cropped") : item.result?.croppedImage;
+
+            let image: Image;
 
             if (cropped) {
-                const base64 = this.rawImageToBase64(cropped);
-                resolve(base64);
+                if (cropped instanceof SBStoreImage) {
+                    image = ScanbotSDK.Config.Image.fromWrappedImage(cropped.data);
+                } else {
+                    image = cropped;
+                }
             } else if (original) {
-                const canvas = ImageUtils.createImageDataCanvas(original as ImageData);
-                const base64 = canvas.toDataURL("image/png");
-                resolve(base64);
+                if (original instanceof SBStoreImage) {
+                    image = ScanbotSDK.Config.Image.fromWrappedImage(original.data);
+                } else {
+                    image = original;
+                }
+            } else {
+                return resolve("");
             }
+
+            resolve(ImageUtils.rawImageToBase64(image));
         });
     }
 
-    static rawImageToBase64(item: Image): Promise<string> {
+    static rawImageToBase64(item: Image | undefined): Promise<string> {
+
+        if (!item) {
+            return Promise.reject(new Error("Image is undefined"));
+        }
+
         return new Promise((resolve) => {
             SBSDKService.SDK.imageToJpeg(item).then((data) => {
                 ImageUtils.toDataUrl(data).then((base64) => {
@@ -80,15 +97,6 @@ export default class ImageUtils {
             reader.onerror = () => reject(reader.error);
             reader.readAsDataURL(blob);
         });
-    }
-
-    public static createImageDataCanvas(data: ImageData): HTMLCanvasElement {
-        const canvas = document.createElement("canvas");
-        canvas.className = "scanbot-sdk-canvas-element";
-        canvas.width = data.width;
-        canvas.height = data.height;
-        canvas.getContext("2d")?.putImageData(data, 0, 0);
-        return canvas;
     }
 
     // @ts-expect-error Temporarily unused, but important convenience function

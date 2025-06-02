@@ -75,14 +75,16 @@ function App() {
 
                 <SectionHeader title={"Data Extraction"} />
                 <FeatureListItem icon={FindInPage} text='Detect document from .jpeg' onClick={async () => {
-                    const image = await ImageUtils.pick(MimeType.Jpeg);
+                    const data = await ImageUtils.pick(MimeType.Jpeg);
+                    const image = ScanbotSDK.Config.Image.fromEncodedBinaryData(data);
                     const result = await SBSDKService.SDK?.detectDocument(image);
                     setToast(`Document detection Complete. Status: ${result?.status}`);
                 }} />
                 <FeatureListItem icon={ImageSearch} text='Detect barcodes on .jpeg' onClick={async () => {
-                    const image = await ImageUtils.pick(MimeType.Jpeg);
-                    const result = await SBSDKService.SDK?.detectBarcodes(image);
-
+                    const data = await ImageUtils.pick(MimeType.Jpeg);
+                    const image = ScanbotSDK.Config.Image.fromEncodedBinaryData(data);
+                    const response = await SBSDKService.SDK?.detectBarcodes(image);
+                    const result = response?.result;
                     let text = `Detected Barcodes: `;
                     text += result.barcodes.map((barcode, i) => {
                         return `(${i + 1}) ${barcode.text} (${barcode.format})`;
