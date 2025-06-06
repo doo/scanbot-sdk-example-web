@@ -78,8 +78,11 @@ function App() {
                     const config = new ScanbotSDK.UI.Config.MrzScannerScreenConfiguration();
 
                     const result = await ScanbotSDK.UI.createMrzScanner(config);
-
-                    setToast(`MRZ result: ${processMrzResult(result?.mrzDocument)}`);
+                    if (result === null) {
+                        setToast("MRZ detection failed or not validated.");
+                        return;
+                    }
+                    setToast(`MRZ result: ${processMrzResult(result.mrzDocument)}`);
                 }} />
 
                 <SectionHeader title={"Data Extraction"} />
