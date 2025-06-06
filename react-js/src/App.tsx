@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import { Box, List } from "@mui/material";
 import {
-    Code,
+    Code, CodeOutlined,
     DirectionsCar,
     DocumentScanner,
     DocumentScannerTwoTone,
@@ -22,6 +22,7 @@ import { TopBar } from "./subviews/TopBar";
 import SBSDKService from "./service/SBSDKService";
 import ImageUtils, { MimeType } from "./service/ImageUtils";
 import { Toast } from "./subviews/Toast.tsx";
+import { processMrzResult } from "./pages/MrzScannerPage.tsx";
 
 function App() {
 
@@ -71,6 +72,14 @@ function App() {
                     const result = await ScanbotSDK.UI.createBarcodeScanner(config);
 
                     setToast(`Barcode result: ${JSON.stringify(result)}`);
+                }} />
+                <FeatureListItem icon={CodeOutlined} text='Mrz Scanner UI' onClick={async () => {
+                    // Configure your Mrz scanner as needed
+                    const config = new ScanbotSDK.UI.Config.MrzScannerScreenConfiguration();
+
+                    const result = await ScanbotSDK.UI.createMrzScanner(config);
+
+                    setToast(`MRZ result: ${processMrzResult(result?.mrzDocument)}`);
                 }} />
 
                 <SectionHeader title={"Data Extraction"} />
