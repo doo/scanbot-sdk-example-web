@@ -5,29 +5,26 @@ import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-document-scanner',
-  imports: [
-    RouterLink
-  ],
-  templateUrl: './document-scanner.component.html',
-  styleUrl: './document-scanner.component.css'
+  imports: [RouterLink],
+  template: `
+    <div class="scanner-container" id="document-scanner-container"></div>`,
+  styles: `:host {
+    height: 100%;
+  }`
 })
 export class DocumentScannerComponent implements OnInit, OnDestroy {
 
   service = inject(ScanbotService);
-
   handle?: IDocumentScannerHandle;
 
   async ngOnInit() {
-    console.log('Document Scanner Component OnInit');
-    const container = document.getElementById('document-scanner-container');
-    console.log('Container Element:', container);
-    const sdk = await this.service.getSdk();
 
+    const sdk = await this.service.getSdk();
     const config: DocumentScannerViewConfiguration = {
-      containerId: 'document-scanner-container', // The ID of the HTML element where the scanner will be rendered
+      containerId: 'document-scanner-container'
     };
+    
     sdk.createDocumentScanner(config).then((scanner) => {
-      console.log('Document Scanner created successfully:', scanner);
       this.handle = scanner;
     });
   }
