@@ -1,6 +1,26 @@
+<style>
+  .app-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
 
-<nav style="background-color: pink; height: 50px; width: 100%">
+  .navigation {
+    background-color: #c8193c;
+    height: 50px;
+    color: white;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    font-size: 15px;
+    font-family: "Roboto", sans-serif;
+  }
+</style>
 
-</nav>
+<div class="app-container">
+  <nav class="navigation">
+    Scanbot SDK | Angular Example
+  </nav>
 
-<router-outlet />
+  <router-outlet />
+</div>
