@@ -6,7 +6,8 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "postinstall": "mkdir -p public/wasm/ && cp -R node_modules/scanbot-web-sdk/bundle/bin/complete/* public/wasm"
   },
   "private": true,
   "dependencies": {

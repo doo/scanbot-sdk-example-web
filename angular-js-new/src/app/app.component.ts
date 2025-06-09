@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { RouterOutlet, Router } from '@angular/router';
+import { ScanbotService } from '../service/scanbot.service';
 
 @Component({
   selector: 'app-root',
@@ -8,5 +9,23 @@ import { RouterOutlet } from '@angular/router';
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'angular-js-new';
+
+  scanbotSDK = inject(ScanbotService);
+  private router = inject(Router);
+
+
+  constructor() {
+    // Initialize the Scanbot SDK
+    this.scanbotSDK.init().then(() => {
+      console.log('Scanbot SDK initialized successfully');
+
+      this.router.navigate(['/document-scanner']).then(() => {
+        console.log('Navigation to Document Scanner successful');
+      });
+    }).catch(error => {
+      console.error('Error initializing Scanbot SDK:', error);
+    });
+  }
+
+
 }
