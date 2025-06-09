@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import { Box, List } from "@mui/material";
 import {
-    Code,
+    Code, CodeOutlined,
     DirectionsCar,
     DocumentScanner,
     DocumentScannerTwoTone,
@@ -22,6 +22,7 @@ import { TopBar } from "./subviews/TopBar";
 import SBSDKService from "./service/SBSDKService";
 import ImageUtils, { MimeType } from "./service/ImageUtils";
 import { Toast } from "./subviews/Toast.tsx";
+import { processMrzResult } from "./pages/MrzScannerPage.tsx";
 
 function App() {
 
@@ -72,17 +73,30 @@ function App() {
 
                     setToast(`Barcode result: ${JSON.stringify(result)}`);
                 }} />
+                <FeatureListItem icon={CodeOutlined} text='Mrz Scanner UI' onClick={async () => {
+                    // Configure your Mrz scanner as needed
+                    const config = new ScanbotSDK.UI.Config.MrzScannerScreenConfiguration();
+
+                    const result = await ScanbotSDK.UI.createMrzScanner(config);
+                    if (result === null) {
+                        setToast("MRZ detection failed or not validated.");
+                        return;
+                    }
+                    setToast(`MRZ result: ${processMrzResult(result.mrzDocument)}`);
+                }} />
 
                 <SectionHeader title={"Data Extraction"} />
                 <FeatureListItem icon={FindInPage} text='Detect document from .jpeg' onClick={async () => {
-                    const image = await ImageUtils.pick(MimeType.Jpeg);
+                    const data = await ImageUtils.pick(MimeType.Jpeg);
+                    const image = ScanbotSDK.Config.Image.fromEncodedBinaryData(data);
                     const result = await SBSDKService.SDK?.detectDocument(image);
                     setToast(`Document detection Complete. Status: ${result?.status}`);
                 }} />
                 <FeatureListItem icon={ImageSearch} text='Detect barcodes on .jpeg' onClick={async () => {
-                    const image = await ImageUtils.pick(MimeType.Jpeg);
-                    const result = await SBSDKService.SDK?.detectBarcodes(image);
-
+                    const data = await ImageUtils.pick(MimeType.Jpeg);
+                    const image = ScanbotSDK.Config.Image.fromEncodedBinaryData(data);
+                    const response = await SBSDKService.SDK?.detectBarcodes(image);
+                    const result = response?.result;
                     let text = `Detected Barcodes: `;
                     text += result.barcodes.map((barcode, i) => {
                         return `(${i + 1}) ${barcode.text} (${barcode.format})`;

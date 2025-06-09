@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Box, Button, CircularProgress } from "@mui/material";
-import { Image, SBStoreCroppedDetectionResult } from "scanbot-web-sdk/@types";
+import { Image, ImageProcessor, SBStoreCroppedDetectionResult } from "scanbot-web-sdk/@types";
 
 import SBSDKService from "../service/SBSDKService";
 import ImageUtils from "../service/ImageUtils";
 import { TopBar } from "../subviews/TopBar";
 import { TextColor } from "../subviews/FeatureListItem.tsx";
 import { Toast } from "../subviews/Toast.tsx";
+import ScanbotSDK from "scanbot-web-sdk/ui";
 
 export default function StorageDetailsPage() {
 
@@ -15,6 +16,7 @@ export default function StorageDetailsPage() {
     const [isLoading, setIsLoading] = useState(false);
     const [rotatedImage, setRotatedImage] = useState<Image | undefined>(undefined);
     const [toast, setToast] = React.useState<string | undefined>(undefined);
+    const [imageProcessor, setImageProcessor] = useState<ImageProcessor | undefined>(undefined);
 
     useEffect(() => {
 
@@ -34,6 +36,7 @@ export default function StorageDetailsPage() {
             const sdk = await SBSDKService.awaitSDK();
             const result = await sdk.storage.getCroppedDetectionResult(itemId);
             setItem(result);
+            setImageProcessor(await sdk.createImageProcessor());
             const base64 = await ImageUtils.createBase64Image(result);
             setBase64Image(base64);
             setIsLoading(false);
@@ -47,11 +50,12 @@ export default function StorageDetailsPage() {
             return;
         }
         setIsLoading(true);
-        const image = item.croppedImage ?? item.originalImage;
-        const analyzer = await SBSDKService.SDK.createDocumentQualityAnalyzer({})
-        const result = await analyzer.analyze(image);
+        const image = item.result?.croppedImage ?? item.originalImage;
+        const config = new ScanbotSDK.Config.DocumentQualityAnalyzerConfiguration();
+        const analyzer = await SBSDKService.SDK.createDocumentQualityAnalyzer(config);
+        const response = await analyzer.analyzeDocumentQuality(image);
         setIsLoading(false);
-        setToast("Quality: " + JSON.stringify(result.quality));
+        setToast("Quality: " + JSON.stringify(response.result.quality));
     }
 
     async function runOCR() {
@@ -60,11 +64,12 @@ export default function StorageDetailsPage() {
         }
 
         setIsLoading(true);
-        const image = item.croppedImage ?? item.originalImage;
+
+        const image = item.result?.croppedImage ?? item.originalImage;
         const engine = await SBSDKService.SDK.createOcrEngine()
-        const result = await engine.performOcr(image);
+        const response = await engine.run(image);
         setIsLoading(false);
-        setToast(JSON.stringify(result.text));
+        setToast(JSON.stringify(response.result.text));
     }
 
     async function rotateImage() {
@@ -73,11 +78,12 @@ export default function StorageDetailsPage() {
         }
 
         setIsLoading(true);
-        const image = rotatedImage ?? item.croppedImage ?? item.originalImage;
-        const rotated = await SBSDKService.SDK.imageRotate(image, "CLOCKWISE_90");
-        setRotatedImage(rotated);
+        const image = rotatedImage ?? item.result?.croppedImage ?? item.originalImage;
+        const response = await imageProcessor?.rotate(image, "CLOCKWISE_90");
+        const result = response?.result;
+        setRotatedImage(result);
 
-        const base64 = await ImageUtils.rawImageToBase64(rotated);
+        const base64 = await ImageUtils.rawImageToBase64(result);
         setBase64Image(base64);
         setIsLoading(false);
     }
