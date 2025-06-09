@@ -1,10 +1,13 @@
 import { Component, inject } from '@angular/core';
 import { ScanbotService } from '../../service/scanbot.service';
 import { DocumentScannerViewConfiguration } from 'scanbot-web-sdk/@types';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-document-scanner',
-  imports: [],
+  imports: [
+    RouterLink
+  ],
   templateUrl: './document-scanner.component.html',
   styleUrl: './document-scanner.component.css'
 })
