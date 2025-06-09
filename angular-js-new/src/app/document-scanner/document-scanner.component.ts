@@ -1,6 +1,6 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { ScanbotService } from '../../service/scanbot.service';
-import { DocumentScannerViewConfiguration } from 'scanbot-web-sdk/@types';
+import { DocumentScannerViewConfiguration, IDocumentScannerHandle } from 'scanbot-web-sdk/@types';
 import { RouterLink } from '@angular/router';
 
 @Component({
@@ -11,9 +11,11 @@ import { RouterLink } from '@angular/router';
   templateUrl: './document-scanner.component.html',
   styleUrl: './document-scanner.component.css'
 })
-export class DocumentScannerComponent {
+export class DocumentScannerComponent implements OnInit, OnDestroy {
 
   service = inject(ScanbotService);
+
+  handle?: IDocumentScannerHandle;
 
   async ngOnInit() {
     console.log('Document Scanner Component OnInit');
@@ -26,6 +28,11 @@ export class DocumentScannerComponent {
     };
     sdk.createDocumentScanner(config).then((scanner) => {
       console.log('Document Scanner created successfully:', scanner);
+      this.handle = scanner;
     });
+  }
+
+  ngOnDestroy() {
+    this.handle?.dispose();
   }
 }
