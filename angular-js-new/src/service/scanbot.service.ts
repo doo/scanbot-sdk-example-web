@@ -17,13 +17,22 @@ export class ScanbotService {
 
   constructor() { }
 
-  async init(): Promise<void> {
-    if (!this.sdk) {
+  async init(): Promise<boolean> {
+
+    return new Promise(async (resolve) => {
+      if (this.sdk) {
+        resolve(true);
+        return;
+      }
+
       this.sdk = await ScanbotSDK.initialize({
         licenseKey: this.license,
         enginePath: './wasm/',
+        onComplete: (error) => {
+          resolve(!error);
+        }
       });
-    }
+    });
   }
 
   async getSdk(): Promise<ScanbotSDK> {
