@@ -1,0 +1,5 @@
+<p>image-results works!</p>
+
+<div *ngFor="let image of IMAGES">
+  <img [src]="image.src" [attr.alt]="image.caption" [attr.title]="image.caption" width="100" height="100">
+</div>

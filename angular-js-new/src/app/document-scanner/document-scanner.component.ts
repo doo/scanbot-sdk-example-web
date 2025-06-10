@@ -28,7 +28,8 @@ export class DocumentScannerComponent implements OnInit, OnDestroy {
 
     const config: DocumentScannerViewConfiguration = {
       containerId: CONTAINER_ID,
-      onDocumentDetected: (result) => {
+      onDocumentDetected: (response) => {
+        const result = response.result.detectionResult;
         console.log('Document detected:', result);
 
         let message = ``;
@@ -39,6 +40,9 @@ export class DocumentScannerComponent implements OnInit, OnDestroy {
           message = "Detected document with ... todo additional processing"
         }
 
+        sdk.storage.storeCroppedDetectionResult(response).then((id) => {
+          console.log("Detection result stored with ID:", id);
+        });
         this.toast.show(message);
       }
     };
