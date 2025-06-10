@@ -6,11 +6,17 @@ import { Injectable } from '@angular/core';
 export class ToastService {
   constructor() { }
 
-  showToast(message: string, duration: number = 3000) {
+  showToast(message: string, duration: number = 30000) {
+
+    const toastContainer = document.createElement('div');
+    toastContainer.classList.add('toast-container');
+    document.body.appendChild(toastContainer);
+
     const toast = document.createElement('div');
     toast.classList.add('toast');
     toast.textContent = message;
-    document.body.appendChild(toast);
+    toastContainer.appendChild(toast);
+
     setTimeout(() => {
       toast.remove();
     }, duration);

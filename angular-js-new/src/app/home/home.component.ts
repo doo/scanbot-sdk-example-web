@@ -12,8 +12,8 @@ import { ToastService } from '../../service/toast.service';
 })
 export class HomeComponent {
 
-  scanbotSDK = inject(ScanbotService);
-  private toastService = inject(ToastService);
+  private scanbotSDK = inject(ScanbotService);
+  private toast = inject(ToastService);
 
   constructor() {
     this.scanbotSDK.init().then(() => {
@@ -25,7 +25,6 @@ export class HomeComponent {
     const sdk = await this.scanbotSDK.getSdk();
     const licenseInfo = await sdk.getLicenseInfo();
     const message = `${licenseInfo.status}: ${licenseInfo.licenseStatusMessage}\n`;
-    console.log("license info:", licenseInfo);
-    this.toastService.showToast(message);
+    this.toast.showToast(message);
   }
 }

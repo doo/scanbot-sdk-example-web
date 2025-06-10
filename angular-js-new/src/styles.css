@@ -3,6 +3,7 @@ html, body {
   min-height: 100vh;
   height: auto;
   margin: 0;
+  font-family: "Roboto", sans-serif;
 }
 
 .scanner-container {
@@ -15,15 +16,25 @@ html, body {
   display: none;
 }
 
-.toast {
+.toast-container {
   position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+}
+.toast {
   bottom: 20px;
-
-  background-color: #333;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #407343;
   color: #fff;
-  width: 80%;
-  text-align: center;
+  max-width: 80%;
+  min-width: 300px;
   padding: 10px 20px;
+  margin: 10px auto;
   border-radius: 5px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   transition: opacity 0.3s ease-in-out;
