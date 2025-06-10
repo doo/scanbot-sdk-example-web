@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { ScanbotService } from '../../service/scanbot.service';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
+import { ToastService } from '../../service/toast.service';
 
 @Component({
   selector: 'app-home',
@@ -12,25 +13,19 @@ import { Router, RouterLink } from '@angular/router';
 export class HomeComponent {
 
   scanbotSDK = inject(ScanbotService);
-  private router = inject(Router);
-
+  private toastService = inject(ToastService);
 
   constructor() {
-    // Initialize the Scanbot SDK
     this.scanbotSDK.init().then(() => {
       console.log('Scanbot SDK initialized successfully');
-
-      //   this.router.navigate(['/document-scanner']).then(() => {
-      //     console.log('Navigation to Document Scanner successful');
-      //   });
-      // }).catch(error => {
-      //   console.error('Error initializing Scanbot SDK:', error);
     });
   }
 
   async  getLicenseInfo() {
     const sdk = await this.scanbotSDK.getSdk();
     const licenseInfo = await sdk.getLicenseInfo();
-    console.log('License Info:', licenseInfo);
+    const message = `${licenseInfo.status}: ${licenseInfo.licenseStatusMessage}\n`;
+    console.log("license info:", licenseInfo);
+    this.toastService.showToast(message);
   }
 }

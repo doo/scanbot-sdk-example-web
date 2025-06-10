@@ -3,12 +3,13 @@ import { RouterOutlet, Router } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { Location } from '@angular/common';
 import { ScanbotService } from '../service/scanbot.service';
+import { ToastService } from '../service/toast.service';
+
 
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, HomeComponent],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
 })
 export class AppComponent implements OnInit {
 
