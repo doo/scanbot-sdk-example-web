@@ -2,6 +2,7 @@ import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { ScanbotService } from '../../service/scanbot.service';
 import { DocumentScannerViewConfiguration, IDocumentScannerHandle } from 'scanbot-web-sdk/@types';
 import { RouterLink } from '@angular/router';
+import { ToastService } from '../../service/toast.service';
 
 const CONTAINER_ID = 'document-scanner-container';
 
@@ -16,14 +17,31 @@ const CONTAINER_ID = 'document-scanner-container';
 })
 export class DocumentScannerComponent implements OnInit, OnDestroy {
 
-  service = inject(ScanbotService);
+  private scanbot = inject(ScanbotService);
+  private toast = inject(ToastService);
+
   handle?: IDocumentScannerHandle;
 
   async ngOnInit() {
 
-    const sdk = await this.service.getSdk();
+    const sdk = await this.scanbot.getSdk();
 
-    const config: DocumentScannerViewConfiguration = { containerId: CONTAINER_ID };
+    const config: DocumentScannerViewConfiguration = {
+      containerId: CONTAINER_ID,
+      onDocumentDetected: (result) => {
+        console.log('Document detected:', result);
+
+        let message = ``;
+
+        if (result.status === "ERROR_NOTHING_DETECTED") {
+          message = 'No document detected.';
+        } else {
+          message = "Detected document with ... todo additional processing"
+        }
+
+        this.toast.show(message);
+      }
+    };
     this.handle = await sdk.createDocumentScanner(config);
   }
 

@@ -22,6 +22,7 @@ html, body {
   left: 0;
   width: 100%;
   display: flex;
+  z-index: 10000;
 }
 .toast {
   bottom: 20px;

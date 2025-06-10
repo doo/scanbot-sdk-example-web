@@ -25,6 +25,6 @@ export class HomeComponent {
     const sdk = await this.scanbotSDK.getSdk();
     const licenseInfo = await sdk.getLicenseInfo();
     const message = `${licenseInfo.status}: ${licenseInfo.licenseStatusMessage}\n`;
-    this.toast.showToast(message);
+    this.toast.show(message);
   }
 }
