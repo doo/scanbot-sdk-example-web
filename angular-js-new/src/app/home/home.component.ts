@@ -8,7 +8,6 @@ import { Router, RouterLink } from '@angular/router';
     RouterLink
   ],
   templateUrl: './home.component.html',
-  styleUrl: './home.component.css'
 })
 export class HomeComponent {
 
@@ -29,4 +28,9 @@ export class HomeComponent {
     });
   }
 
+  async  getLicenseInfo() {
+    const sdk = await this.scanbotSDK.getSdk();
+    const licenseInfo = await sdk.getLicenseInfo();
+    console.log('License Info:', licenseInfo);
+  }
 }
