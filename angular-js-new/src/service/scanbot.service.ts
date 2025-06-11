@@ -14,13 +14,13 @@ export class ScanbotService {
   readonly license = "";
 
   private sdk!: ScanbotSDK;
-
+  private initialized = false;
   constructor() { }
 
   async init(): Promise<boolean> {
 
     return new Promise(async (resolve) => {
-      if (this.sdk) {
+      if (this.initialized) {
         resolve(true);
         return;
       }
@@ -29,6 +29,7 @@ export class ScanbotService {
         licenseKey: this.license,
         enginePath: './wasm/',
         onComplete: (error) => {
+          this.initialized = true;
           resolve(!error);
         }
       });
