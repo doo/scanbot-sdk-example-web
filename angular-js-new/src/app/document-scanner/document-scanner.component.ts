@@ -8,7 +8,6 @@ const CONTAINER_ID = 'document-scanner-container';
 
 @Component({
   selector: 'app-document-scanner',
-  imports: [RouterLink],
   template: `
     <div class="scanner-container" id=${CONTAINER_ID}></div>`,
   styles: `:host {

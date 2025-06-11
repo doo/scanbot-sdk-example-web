@@ -1,13 +1,11 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { ScanbotService } from '../../service/scanbot.service';
 import { BarcodeScannerViewConfiguration, IBarcodeScannerHandle } from 'scanbot-web-sdk/@types';
-import { RouterLink } from '@angular/router';
 
 const CONTAINER_ID = 'barcode-scanner-container';
 
 @Component({
   selector: 'app-document-scanner',
-  imports: [RouterLink],
   template: `
     <div class="scanner-container" id=${CONTAINER_ID}></div>`,
   styles: `:host {
