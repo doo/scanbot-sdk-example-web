@@ -24,7 +24,6 @@ export class ImageResultsComponent implements OnInit {
   async ngOnInit() {
     const sdk = await this.scanbot.getSdk();
     const results = await sdk.storage.getCroppedDetectionResults(false);
-    console.log("Cropped detection results:", results);
 
     results.forEach((item) => {
 
