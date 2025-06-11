@@ -24,6 +24,7 @@ html, body {
   display: flex;
   z-index: 10000;
 }
+
 .toast {
   bottom: 20px;
   display: flex;
@@ -39,4 +40,5 @@ html, body {
   border-radius: 5px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   transition: opacity 0.3s ease-in-out;
+  word-break: break-word;
 }
