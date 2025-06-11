@@ -2,10 +2,13 @@ import { Component, inject, OnInit } from '@angular/core';
 import { ScanbotService } from '../../service/scanbot.service';
 import ScanbotSDK from 'scanbot-web-sdk';
 import { Image } from 'scanbot-web-sdk/@types';
+import { NgOptimizedImage } from '@angular/common';
 
 @Component({
   selector: 'app-image-results',
-  imports: [],
+  imports: [
+    NgOptimizedImage
+  ],
   templateUrl: './image-results.component.html',
   styleUrl: './image-results.component.css'
 })
