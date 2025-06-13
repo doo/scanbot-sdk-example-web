@@ -1,86 +1,37 @@
-import { Component } from "@angular/core";
-
-import { Router } from "@angular/router";
-import { ScanbotSdkService } from "./service/scanbot-sdk-service";
-import { NavigationUtils } from "./service/navigation-utils";
-import { RoutePaths } from "./model/RoutePaths";
+import { Component, inject, OnInit } from '@angular/core';
+import { RouterOutlet, Router } from '@angular/router';
+import { Location } from '@angular/common';
+import { ScanbotService } from '../service/scanbot.service';
 
 @Component({
-  selector: "app-root",
-  templateUrl: "./app.component.html",
-  styleUrls: ["./app.component.scss"],
+  selector: 'app-root',
+  imports: [RouterOutlet],
+  templateUrl: './app.component.html',
 })
-export class AppComponent {
-  SDK: ScanbotSdkService;
+export class AppComponent implements OnInit {
 
-  router: Router;
+  constructor(private location: Location) { }
 
-  constructor(_router: Router, _sdk: ScanbotSdkService) {
-    this.router = _router;
-    this.SDK = _sdk;
-  }
-  async onBackButtonClick() {
-    let destination = "/";
-    if (NavigationUtils.isAtPath(RoutePaths.DocumentScanner)) {
-      this.SDK.disposeDocumentScanner();
-    }
+  scanbotSDK = inject(ScanbotService);
+  private router = inject(Router);
 
-    if (NavigationUtils.isAtPath(RoutePaths.BarcodeScanner)) {
-      this.SDK.disposeBarcodeScanner();
-    }
+  onBackPress: () => void = () => {
+    this.location.back();
+  };
 
-    if (NavigationUtils.isAtPath(RoutePaths.MrzScanner)) {
-      this.SDK.disposeMrzScanner();
-    }
+  async ngOnInit() {
 
-    if (NavigationUtils.isAtPath(RoutePaths.TextDataScanner)) {
-      this.SDK.disposeTextDataScanner();
-    }
-
-    if (NavigationUtils.isAtPath(RoutePaths.ImageDetails)) {
-      destination = RoutePaths.ImageResults;
-    }
-
-    if (NavigationUtils.isAtPath(RoutePaths.Cropping)) {
-      destination = RoutePaths.ImageDetails;
-    }
-
-    await this.router.navigateByUrl(destination);
+    this.scanbotSDK.init().then(() => {
+      console.log("Scanbot SDK initialization complete");
+    });
+    const backButton = document.querySelector('.back-button');
+    this.router.events.subscribe(() => {
+      if (this.router.url === '/') {
+        backButton?.classList.add('hidden');
+      } else {
+        backButton?.classList.remove('hidden');
+      }
+    });
   }
 
-  async onCameraSwapClick() {
-    if (NavigationUtils.isAtPath(RoutePaths.DocumentScanner)) {
-      this.SDK.swapDocumentScannerCameraFacing();
-    }
-
-    if (NavigationUtils.isAtPath(RoutePaths.BarcodeScanner)) {
-      this.SDK.swapBarcodeScannerCameraFacing();
-    }
-
-    if (NavigationUtils.isAtPath(RoutePaths.MrzScanner)) {
-      this.SDK.swapMrzScannerCameraFacing();
-    }
-
-    if (NavigationUtils.isAtPath(RoutePaths.TextDataScanner)) {
-      this.SDK.swapTextDataScannerCameraFacing();
-    }
-  }
-
-  async onCameraSwitchClick() {
-    if (NavigationUtils.isAtPath(RoutePaths.DocumentScanner)) {
-      this.SDK.switchDocumentScannerCameraFacing();
-    }
-
-    if (NavigationUtils.isAtPath(RoutePaths.BarcodeScanner)) {
-      this.SDK.switchBarcodeScannerCameraFacing();
-    }
-
-    if (NavigationUtils.isAtPath(RoutePaths.MrzScanner)) {
-      this.SDK.switchMrzScannerCameraFacing();
-    }
-
-    if (NavigationUtils.isAtPath(RoutePaths.TextDataScanner)) {
-      this.SDK.switchTextDataScannerCameraFacing();
-    }
-  }
 }

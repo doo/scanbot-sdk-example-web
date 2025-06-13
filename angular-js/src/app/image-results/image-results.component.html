@@ -1,25 +1,29 @@
-<div class="content-container">
-  <mat-grid-list cols="3" rowHeight="120px">
-    <mat-grid-tile
-      (click)="onImageClick(document)"
-      *ngFor="let document of documents"
-      [colspan]="1"
-      [rowspan]="1"
-    >
-      <img [src]="document.image" />
-    </mat-grid-tile>
-  </mat-grid-list>
 
-  <h4 class="nothing-to-display-hint">
-    Nothing to display. Scan or import some documents!
-  </h4>
-</div>
+<style>
 
-<div class="bottom-bar">
-  <button class="bottom-bar-button save-pdf" (click)="savePDF()">
-    SAVE PDF
-  </button>
-  <button class="bottom-bar-button save-tiff" (click)="saveTIFF()">
-    SAVE TIFF
-  </button>
+  .image-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+  }
+
+  .result-image {
+    margin: 5px;
+    border: 1px solid #ccc;
+    background-color: rgba(200, 200, 200, 0.5);
+    border-radius: 4px;
+    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+    object-fit: contain;
+    width: 100px;
+    height: 100px;
+  }
+
+</style>
+<div class="image-container">
+  @for (image of images; track image) {
+    <img class="result-image" [src]=image.base64 [attr.alt]="" [attr.title]="" (click)="onImageClick(image)" />
+  }
 </div>
