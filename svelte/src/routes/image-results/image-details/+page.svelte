@@ -5,9 +5,10 @@
 	import Header from '../../../subviews/Header.svelte';
 	import Crop from '../../../subviews/toast/icon/Crop.svelte';
 	import type { ScanbotDocument } from '../../../service/scanbot-sdk-service';
+	import type { SBStoreCroppedDetectionResult } from "scanbot-web-sdk/@types";
 
 	let id: string | undefined;
-	let document: ScanbotDocument | undefined;
+	let document: SBStoreCroppedDetectionResult | undefined;
 
 	onMount(async () => {
 		await ScanbotSDKService.instance.initialize();
@@ -39,7 +40,7 @@
 		vertical-align: middle;
 	}
 	.action-item-container {
-		
+
 		display: flex;
 		justify-content: center;
 		position: fixed;

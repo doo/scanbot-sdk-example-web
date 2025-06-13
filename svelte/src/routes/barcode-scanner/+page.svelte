@@ -7,14 +7,9 @@
 	import type { BarcodeScannerResultWithSize } from 'scanbot-web-sdk/@types/model/barcode/barcode-result';
 	import Toasts from '../../subviews/toast/Toasts.svelte';
 
-	// Optionally set default options here
-	const options = {};
-
 	onMount(async () => {
 		ScanbotSDKService.instance.createBarcodeScanner('barcode-scanner', (result: BarcodeScannerResultWithSize) => {
-			console.log('found barcode', result);
 			const code = result.barcodes.length > 0 ? result.barcodes[0] : undefined;
-			console.log('code', code);
 			if (code) {
 				const message = `${code.format} - ${code.text}`;
 				const timeout = 3000;

@@ -1,10 +1,11 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import ScanbotSDKService, { ScanbotDocument } from '../../service/scanbot-sdk-service';
+	import ScanbotSDKService from '../../service/scanbot-sdk-service';
 	import Header from '../../subviews/Header.svelte';
+	import type { SBStoreCroppedDetectionResult } from "scanbot-web-sdk/@types";
 
-	let documents: ScanbotDocument[] = [];
-	
+	let documents: SBStoreCroppedDetectionResult[] = [];
+
 	onMount(async () => {
 		documents = await ScanbotSDKService.instance.getDocuments();
 		console.log('Total documents:', documents.length);

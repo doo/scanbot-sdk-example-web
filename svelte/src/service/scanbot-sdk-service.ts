@@ -1,9 +1,5 @@
-
 import type ScanbotSDK from 'scanbot-web-sdk';
 
-
-import StorageService from './storage-service';
-import Utils from '../utils/utils';
 import type {
     BarcodeScannerResultWithSize,
     BarcodeScannerViewConfiguration,
@@ -12,15 +8,18 @@ import type {
     ICroppingViewHandle,
     IDocumentScannerHandle,
     Polygon,
-    CroppedDetectionResult,
     CroppingViewConfiguration,
+    DocumentScannerScanResponse,
+    Image,
+    SBStoreCroppedDetectionResult,
+    SBStorage
 } from 'scanbot-web-sdk/@types';
 
 export class ScanbotDocument {
     id?: string;
     base64?: string;
-    cropped?: Uint8Array;
-    original!: Uint8Array;
+    cropped?: Image;
+    original!: Image;
     polygon?: Polygon;
     rotations?: number;
 }
@@ -35,7 +34,7 @@ export default class ScanbotSDKService {
     private barcodeScanner?: IBarcodeScannerHandle;
     private croppingView?: ICroppingViewHandle;
 
-    private documents!: ScanbotDocument[];
+    private documents!: SBStoreCroppedDetectionResult[];
 
     public async initialize() {
 
@@ -55,9 +54,14 @@ export default class ScanbotSDKService {
         ScanbotSDKService.instance.loadDocuments();
     }
 
+    get storage(): SBStorage | undefined {
+        return this.sdk?.storage;
+    }
+
     public async loadDocuments() {
         if (!this.documents) {
-            this.documents = await StorageService.INSTANCE.getDocuments();
+            const results = await this.storage?.getCroppedDetectionResults(true) ?? [];
+            this.documents = results;
         }
     }
 
@@ -71,15 +75,12 @@ export default class ScanbotSDKService {
 
         const config: DocumentScannerViewConfiguration = {
             containerId: containerId,
-            onDocumentDetected: async (e: CroppedDetectionResult) => {
+            onDocumentDetected: async (e: DocumentScannerScanResponse) => {
                 console.log("Detected document!");
 
                 // Make use of ScanbotSDK utility function flash to indicate that a document has been detected
                 this.sdk?.utils.flash();
-
-                // Pre-process the image to be displayed in the image result gallery.
-                const base64 = await ScanbotSDKService.instance.toDataUrl(e);
-                await this.addDocument(base64, e);
+                await this.addDocument(e);
             },
             onError: (error: Error) => {
                 console.log("Encountered error scanning documents: ", error);
@@ -135,19 +136,12 @@ export default class ScanbotSDKService {
         this.barcodeScanner?.dispose();
     }
 
-    async addDocument(base64: string | undefined, result: CroppedDetectionResult) {
-        const document = {
-            id: Utils.generateId(),
-            base64: base64,
-            original: await this.sdk!.imageToJpeg(result.originalImage),
-            cropped: await this.sdk!.imageToJpeg(result.croppedImage ?? result.originalImage),
-            polygon: result.pointsNormalized
-        };
-
-        this.documents.push(document);
-        console.log("adding document", document);
-
-        await StorageService.INSTANCE.storeDocument(document);
+    async addDocument(response: DocumentScannerScanResponse) {
+        const id = await this.storage?.storeCroppedDetectionResult(response);
+        const retrieved = await this.storage?.getCroppedDetectionResult(id!);
+        if (retrieved) {
+            this.documents.push(retrieved);
+        }
     }
 
     public async getDocuments() {
@@ -155,15 +149,36 @@ export default class ScanbotSDKService {
         return this.documents;
     }
 
-    async getDocument(id: string | undefined): Promise<ScanbotDocument | undefined> {
+    async getDocument(id: string | undefined): Promise<SBStoreCroppedDetectionResult | undefined> {
         await ScanbotSDKService.instance.loadDocuments();
-        return this.documents.find((d) => d.id === id);
+
+        if (!id) {
+            return;
+        }
+
+        return this.documents.find((d) => d.id === parseInt(id));
     }
 
-    public async toDataUrl(document: CroppedDetectionResult) {
+    async getDisplayImage(response: DocumentScannerScanResponse): Promise<Image | undefined> {
+        if (!response.result?.croppedImage && !response.originalImage) {
+            console.warn("No image available in the response to display.");
+            return undefined;
+        }
+        return response.result?.croppedImage ?? response.originalImage;
+    }
+
+    async responseToJpeg(response: DocumentScannerScanResponse): Promise<Uint8Array | undefined> {
+        const image = await this.getDisplayImage(response);
+        if (!image) {
+            return undefined;
+        }
+        return this.sdk?.imageToJpeg(image);
+    }
+
+    public async toDataUrl(document: DocumentScannerScanResponse) {
         return this.sdk?.toDataUrl(
             await this.sdk?.imageToJpeg(
-                document.croppedImage ?? document.originalImage
+                document.result?.croppedImage ?? document.originalImage
             )
         );
     }
@@ -178,10 +193,12 @@ export default class ScanbotSDKService {
 
         const configuration: CroppingViewConfiguration = {
             containerId: containerId,
-            image: document.original,
-            polygon: document.polygon,
+            image: document.originalImage,
+            // TODO polygon no longer exists. either use points or points normalized
+            polygon: document.result.detectionResult.pointsNormalized,
             disableScroll: true,
-            rotations: document.rotations ?? 0,
+            // In this example we do not store rotations, but you can use them to rotate the image
+            rotations: 0,
             style: {
                 padding: 20,
                 polygon: {
@@ -207,17 +224,15 @@ export default class ScanbotSDKService {
         const result = await this.croppingView?.apply();
 
         const document = await this.getDocument(id);
-        if (!document) {
+        if (!document || !result) {
             return
         }
 
-        document.cropped = await this.sdk?.imageToJpeg(result!.image);
-        document.polygon = result?.polygon;
-        document.rotations = result?.rotations;
+        // (document.result as never)["croppedImage"] = result.image;
+        // document.result.detectionResult.polygon = result?.polygon;
 
-        document.base64 = await this.sdk?.toDataUrl(document.cropped ?? document.original);
-
-        await StorageService.INSTANCE.storeDocument(document);
+        // TODO impl. update function for SBStoreCroppedDetectionResult
+        // await this.storage?.storeCroppedDetectionResult(document.result as SBStoreCroppedDetectionResult);
     }
 
 }
