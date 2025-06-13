@@ -13,10 +13,8 @@ import type {
     IDocumentScannerHandle,
     Polygon,
     CroppedDetectionResult,
-    Image,
     CroppingViewConfiguration,
 } from 'scanbot-web-sdk/@types';
-import type { RawImage } from "scanbot-web-sdk/@types/core/bridge/common";
 
 export class ScanbotDocument {
     id?: string;
