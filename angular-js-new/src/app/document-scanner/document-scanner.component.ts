@@ -36,7 +36,8 @@ export class DocumentScannerComponent implements OnInit, OnDestroy {
         if (result.status === "ERROR_NOTHING_DETECTED") {
           message = 'No document detected.';
         } else {
-          message = "Detected document with ... todo additional processing"
+          const status = result.status;
+          message = `Detected document ${status}. Go check out image results page to see the results.`;
         }
 
         sdk.storage.storeCroppedDetectionResult(response).then((id) => {

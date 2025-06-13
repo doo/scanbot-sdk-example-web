@@ -28,6 +28,7 @@ export class ImageResultsComponent implements OnInit {
     results.forEach((item) => {
 
       sdk.storage.getCroppedDetectionResultImage(item.id).then(async (images) => {
+
         if (images && images.length > 0) {
           const original = images.find(i => i.documentId === item.id && i.type === "original");
           const cropped = images.find(i => i.documentId === item.id && i.type === "cropped");
@@ -41,8 +42,8 @@ export class ImageResultsComponent implements OnInit {
           const jpeg = await image.source.toJpeg();
           image.base64 = await this.toDataUrl(jpeg);
           image.detectionResult = item.result.detectionResult;
-
           this.images.push(image);
+
         } else {
           console.warn("No images found for item:", item.id);
         }
