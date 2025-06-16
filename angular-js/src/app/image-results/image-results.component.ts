@@ -23,11 +23,11 @@ export class ImageResultsComponent implements OnInit {
 
   async ngOnInit() {
     const sdk = await this.scanbot.getSdk();
-    const results = await sdk.storage.getCroppedDetectionResults(false);
+    const results = await sdk.storage.getDocumentScannerResponses(false);
 
     results.forEach((item) => {
 
-      sdk.storage.getCroppedDetectionResultImage(item.id).then(async (images) => {
+      sdk.storage.getDocumentScannerResponseImage(item.id).then(async (images) => {
 
         if (images && images.length > 0) {
           const original = images.find(i => i.documentId === item.id && i.type === "original");

@@ -40,7 +40,7 @@ export class DocumentScannerComponent implements OnInit, OnDestroy {
           message = `Detected document ${status}. Go check out image results page to see the results.`;
         }
 
-        sdk.storage.storeCroppedDetectionResult(response).then((id) => {
+        sdk.storage.storeDocumentScannerResponse(response).then((id) => {
           console.log("Detection result stored with ID:", id);
         });
         this.toast.show(message);
