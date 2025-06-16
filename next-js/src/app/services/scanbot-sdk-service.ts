@@ -7,7 +7,7 @@ import {
     BarcodeScannerViewConfiguration,
     CroppingViewConfiguration,
     DocumentScannerViewConfiguration,
-    DocumentScanningResult, DocumentScannerScanResponse
+    DocumentScannerScanResponse
 } from "scanbot-web-sdk/@types";
 
 export default class ScanbotSDKService {
