@@ -2,9 +2,9 @@
     import { onMount } from 'svelte';
     import ScanbotSDKService from '../../service/scanbot-sdk-service';
     import Header from '../../subviews/Header.svelte';
-    import type { SBStoreCroppedDetectionResult } from "scanbot-web-sdk/@types";
+    import type { SBStoreDocumentScannerResponse } from "scanbot-web-sdk/@types";
 
-    let images: { base64: string, document: SBStoreCroppedDetectionResult }[] = [];
+    let images: { base64: string, document: SBStoreDocumentScannerResponse }[] = [];
 
     onMount(async () => {
         await ScanbotSDKService.instance.initialize();

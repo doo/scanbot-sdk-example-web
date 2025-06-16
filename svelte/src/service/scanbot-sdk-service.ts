@@ -11,7 +11,7 @@ import type {
     CroppingViewConfiguration,
     DocumentScannerScanResponse,
     Image,
-    SBStoreCroppedDetectionResult,
+    SBStoreDocumentScannerResponse,
     SBStorage
 } from 'scanbot-web-sdk/@types';
 
@@ -34,7 +34,7 @@ export default class ScanbotSDKService {
     private barcodeScanner?: IBarcodeScannerHandle;
     private croppingView?: ICroppingViewHandle;
 
-    private documents!: SBStoreCroppedDetectionResult[];
+    private documents!: SBStoreDocumentScannerResponse[];
 
     public async initialize() {
 
@@ -60,7 +60,7 @@ export default class ScanbotSDKService {
 
     public async loadDocuments() {
         if (!this.documents) {
-            const results = await this.storage?.getCroppedDetectionResults(true) ?? [];
+            const results = await this.storage?.getDocumentScannerResponses(true) ?? [];
             this.documents = results;
         }
     }
@@ -137,8 +137,8 @@ export default class ScanbotSDKService {
     }
 
     async addDocument(response: DocumentScannerScanResponse) {
-        const id = await this.storage?.storeCroppedDetectionResult(response);
-        const retrieved = await this.storage?.getCroppedDetectionResult(id!);
+        const id = await this.storage?.storeDocumentScannerResponse(response);
+        const retrieved = await this.storage?.getDocumentScannerResponse(id!);
         if (retrieved) {
             this.documents.push(retrieved);
         }
@@ -149,7 +149,7 @@ export default class ScanbotSDKService {
         return this.documents;
     }
 
-    async getDocument(id: string | undefined): Promise<SBStoreCroppedDetectionResult | undefined> {
+    async getDocument(id: string | undefined): Promise<SBStoreDocumentScannerResponse | undefined> {
         await ScanbotSDKService.instance.loadDocuments();
 
         if (!id) {
@@ -194,7 +194,6 @@ export default class ScanbotSDKService {
         const configuration: CroppingViewConfiguration = {
             containerId: containerId,
             image: document.originalImage,
-            // TODO polygon no longer exists. either use points or points normalized
             polygon: document.result.detectionResult.pointsNormalized,
             disableScroll: true,
             // In this example we do not store rotations, but you can use them to rotate the image
@@ -228,6 +227,8 @@ export default class ScanbotSDKService {
             return
         }
 
+        // Scanbot SDK result types are immutable, but javascript types are fundamentally not,
+        // so for simplicity's sake, let's force overwrite properties in this example project.
         const scanningResult = document.result;
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
@@ -236,8 +237,7 @@ export default class ScanbotSDKService {
         // @ts-ignore
         (document.result.detectionResult as never).pointsNormalized = result.polygon;
 
-        // TODO impl. update function for SBStoreCroppedDetectionResult
-        await this.storage?.storeCroppedDetectionResult(document);
+        await this.storage?.storeDocumentScannerResponse(document);
     }
 
 }

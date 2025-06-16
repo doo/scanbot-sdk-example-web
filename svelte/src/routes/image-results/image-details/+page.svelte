@@ -4,10 +4,10 @@
 	import ScanbotSDKService from '../../../service/scanbot-sdk-service';
 	import Header from '../../../subviews/Header.svelte';
 	import Crop from '../../../subviews/toast/icon/Crop.svelte';
-	import type { SBStoreCroppedDetectionResult } from "scanbot-web-sdk/@types";
+	import type { SBStoreDocumentScannerResponse } from "scanbot-web-sdk/@types";
 
 	let id: string | undefined;
-	let document: SBStoreCroppedDetectionResult | undefined;
+	let document: SBStoreDocumentScannerResponse | undefined;
 	let base64: string | undefined;
 
 	onMount(async () => {
