@@ -25,7 +25,7 @@ import { inject, onBeforeMount, onBeforeUnmount, onMounted, ref, toRaw } from "v
 import { useRouter } from "vue-router";
 import { type Document, useDocumentsStore } from "@/stores/documents";
 import ScanbotSDK from "scanbot-web-sdk";
-import type { ICroppingViewHandle } from "scanbot-web-sdk/@types";
+import { CroppingViewConfiguration, type ICroppingViewHandle } from "scanbot-web-sdk/@types";
 import { swalAlert } from "@/misc/swalAlert";
 import { Filters } from "@/misc/Filters";
 
@@ -51,10 +51,11 @@ onMounted(async () => {
     return;
   }
 
-  const options = {
+  console.log("document.value.content", document.value.content);
+  const options: CroppingViewConfiguration = {
     containerId: "cropping-view-container",
-    image: document.value.content.original,
-    polygon: document.value.content.polygon,
+    image: toRaw(document.value.content.original),
+    polygon: toRaw(document.value.content.polygon),
     disableScroll: true,
     rotations: document.value.content.rotations ?? 0,
     style: {
@@ -95,16 +96,21 @@ async function onRotateClick() {
 }
 
 async function onApplyClick() {
+  console.log("Applying cropping changes...");
   const croppingResult = await croppingView.value?.apply();
+  console.log("1");
   document.value!.content.cropped = croppingResult?.image;
   document.value!.content.polygon = croppingResult?.polygon;
+  console.log("2");
   if (document.value!.content.filter && document.value!.content.filter != "none") {
+    console.log("Applying filter:", document.value!.content.filter);
     document.value!.content.filtered = await Filters.applyFilter(
       await scanbotSDK,
       toRaw(document.value!.content.cropped!),
       document.value!.content.filter
     );
   }
+  console.log("3");
   await router.push(detailViewRouteTarget.value);
 }
 </script>

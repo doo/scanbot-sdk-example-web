@@ -19,7 +19,7 @@
 import PageLayout from "@/components/PageLayout.vue";
 import { inject, onBeforeMount, onBeforeUnmount, onMounted, ref } from "vue";
 import type ScanbotSDK from "scanbot-web-sdk";
-import type { IDocumentScannerHandle, DocumentScannerViewConfiguration, CroppedDetectionResult } from "scanbot-web-sdk/@types";
+import type { IDocumentScannerHandle, DocumentScannerViewConfiguration, DocumentScannerScanResponse } from "scanbot-web-sdk/@types";
 import { RouterLink, useRouter } from "vue-router";
 import { useDocumentsStore } from "@/stores/documents.js";
 import { onError } from "@/misc/onError";
@@ -62,12 +62,12 @@ onMounted(async () => {
         }
       }
     },
-    onDocumentDetected: (result: CroppedDetectionResult) => {
+    onDocumentDetected: (result: DocumentScannerScanResponse) => {
       scanbotSDK.utils.flash();
       documentsStore.addDocument({
         original: result.originalImage,
-        cropped: result.croppedImage ?? undefined,
-        polygon: result.pointsNormalized,
+        cropped: result.result.croppedImage ?? undefined,
+        polygon: result.result.detectionResult.pointsNormalized,
       });
     },
     onError: onError,

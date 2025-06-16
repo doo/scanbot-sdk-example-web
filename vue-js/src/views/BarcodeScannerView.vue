@@ -97,7 +97,10 @@ onMounted(async () => {
         }
       }
     },
-    finder: { visible: !isOverlayScanner.value },
+    finder: {
+      _type: "ViewFinderConfiguration",
+      visible: !isOverlayScanner.value 
+    },
   };
 
   try {

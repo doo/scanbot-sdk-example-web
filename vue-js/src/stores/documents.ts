@@ -18,6 +18,7 @@ export type Document = {
   id: number,
   dataUrl?: string
 };
+
 export const useDocumentsStore = defineStore('documents', {
     state: () => ({
         documents: [] as Document[],
@@ -30,7 +31,7 @@ export const useDocumentsStore = defineStore('documents', {
         },
         async updateDataUrls(scanbotSDK: ScanbotSDK) {
             for (const document of this.documents) {
-                await this.updateDataUrl(document, scanbotSDK);
+                await this.updateDataUrl(document as Document, scanbotSDK);
             }
         },
         async updateDataUrl(document: Document, scanbotSDK: ScanbotSDK) {
@@ -47,7 +48,7 @@ export const useDocumentsStore = defineStore('documents', {
             }
         },
         getDocumentById(id: number): Document | undefined {
-            return toRaw(this.documents.find(document => document.id === id));
+            return toRaw(this.documents.find(document => document.id === id)) as Document;
         }
     },
 })
