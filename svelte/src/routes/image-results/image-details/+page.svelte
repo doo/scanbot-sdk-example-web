@@ -4,23 +4,28 @@
 	import ScanbotSDKService from '../../../service/scanbot-sdk-service';
 	import Header from '../../../subviews/Header.svelte';
 	import Crop from '../../../subviews/toast/icon/Crop.svelte';
-	import type { ScanbotDocument } from '../../../service/scanbot-sdk-service';
 	import type { SBStoreCroppedDetectionResult } from "scanbot-web-sdk/@types";
 
 	let id: string | undefined;
 	let document: SBStoreCroppedDetectionResult | undefined;
+	let base64: string | undefined;
 
 	onMount(async () => {
 		await ScanbotSDKService.instance.initialize();
 		id = $page.url.searchParams.get('id') ?? undefined;
 		document = await ScanbotSDKService.instance.getDocument(id);
+		if (document) {
+			base64 = await ScanbotSDKService.instance.toDataUrl(document);
+		} else {
+			console.error('Document not found for id:', id);
+		}
 	});
 </script>
 
 <Header title="Image Details" isBackButtonVisible={true} />
 
 <div class="image-container">
-	<img class="document-image" src={document?.base64} alt="<document>" />
+	<img class="document-image" src={base64} alt="<document>" />
 </div>
 
 <div class="action-item-container">

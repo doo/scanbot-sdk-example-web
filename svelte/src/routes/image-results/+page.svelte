@@ -10,7 +10,7 @@
         await ScanbotSDKService.instance.initialize();
         const documents = await ScanbotSDKService.instance.getDocuments();
         console.log('Total documents:', documents.length);
-        
+
         images = await Promise.all(documents.map(async (doc) => {
 			const base64 = await ScanbotSDKService.instance.toDataUrl(doc);
 			return { base64, document: doc };
