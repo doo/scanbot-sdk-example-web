@@ -228,11 +228,17 @@ export default class ScanbotSDKService {
             return
         }
 
+        console.log("Applying crop to document: ", document.id, " with result: ", result);
+        console.log("Document points: ", document.result.detectionResult.pointsNormalized, document.result.detectionResult.points);
+        const scanningResult = document.result;
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        (scanningResult as never).croppedImage = result.image;
         // (document.result as never)["croppedImage"] = result.image;
         // document.result.detectionResult.polygon = result?.polygon;
 
         // TODO impl. update function for SBStoreCroppedDetectionResult
-        // await this.storage?.storeCroppedDetectionResult(document.result as SBStoreCroppedDetectionResult);
+        await this.storage?.storeCroppedDetectionResult(document);
     }
 
 }
