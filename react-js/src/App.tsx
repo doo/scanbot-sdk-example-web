@@ -90,7 +90,7 @@ function App() {
                     const data = await ImageUtils.pick(MimeType.Jpeg);
                     const image = ScanbotSDK.Config.Image.fromEncodedBinaryData(data);
                     const result = await SBSDKService.SDK?.detectDocument(image);
-                    setToast(`Document detection Complete. Status: ${result?.status}`);
+                    setToast(`Document detection Complete. Status: ${result?.detectionResult.status}`);
                 }} />
                 <FeatureListItem icon={ImageSearch} text='Detect barcodes on .jpeg' onClick={async () => {
                     const data = await ImageUtils.pick(MimeType.Jpeg);

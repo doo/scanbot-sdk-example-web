@@ -1,5 +1,5 @@
 import SBSDKService from "./SBSDKService.ts";
-import { Image, PdfPageOptions, SBStoreCroppedDetectionResult, SBStoreImage } from "scanbot-web-sdk/@types";
+import { Image, PdfPageOptions, SBStoreDocumentScannerResponse, SBStoreImage } from "scanbot-web-sdk/@types";
 import ScanbotSDK from "scanbot-web-sdk/ui";
 
 export enum MimeType {
@@ -47,7 +47,7 @@ export default class ImageUtils {
         });
     }
 
-    static createBase64Image(item: SBStoreCroppedDetectionResult, images?: SBStoreImage[]): Promise<string> {
+    static createBase64Image(item: SBStoreDocumentScannerResponse, images?: SBStoreImage[]): Promise<string> {
         return new Promise((resolve) => {
             const original = images ? images.find(i => i.documentId === item.id && i.type === "original") : item.originalImage;
             const cropped = images ? images.find(i => i.documentId === item.id && i.type === "cropped") : item.result?.croppedImage;

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Box, Button, CircularProgress } from "@mui/material";
-import { Image, ImageProcessor, SBStoreCroppedDetectionResult } from "scanbot-web-sdk/@types";
+import { Image, ImageProcessor, SBStoreDocumentScannerResponse } from "scanbot-web-sdk/@types";
 
 import SBSDKService from "../service/SBSDKService";
 import ImageUtils from "../service/ImageUtils";
@@ -11,7 +11,7 @@ import ScanbotSDK from "scanbot-web-sdk/ui";
 
 export default function StorageDetailsPage() {
 
-    const [item, setItem] = useState<SBStoreCroppedDetectionResult | null>(null);
+    const [item, setItem] = useState<SBStoreDocumentScannerResponse | null>(null);
     const [base64Image, setBase64Image] = useState<string | undefined>(undefined);
     const [isLoading, setIsLoading] = useState(false);
     const [rotatedImage, setRotatedImage] = useState<Image | undefined>(undefined);
@@ -34,7 +34,7 @@ export default function StorageDetailsPage() {
         async function loadItem() {
             setIsLoading(true);
             const sdk = await SBSDKService.awaitSDK();
-            const result = await sdk.storage.getCroppedDetectionResult(itemId);
+            const result = await sdk.storage.getDocumentScannerResponse(itemId);
             setItem(result);
             setImageProcessor(await sdk.createImageProcessor());
             const base64 = await ImageUtils.createBase64Image(result);
@@ -53,7 +53,7 @@ export default function StorageDetailsPage() {
         const image = item.result?.croppedImage ?? item.originalImage;
         const config = new ScanbotSDK.Config.DocumentQualityAnalyzerConfiguration();
         const analyzer = await SBSDKService.SDK.createDocumentQualityAnalyzer(config);
-        const response = await analyzer.analyzeDocumentQuality(image);
+        const response = await analyzer.run(image);
         setIsLoading(false);
         setToast("Quality: " + JSON.stringify(response.result.quality));
     }

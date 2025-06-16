@@ -13,10 +13,8 @@ export default function DocumentScannerPage() {
         const result = response.result.detectionResult;
         // Flash the screen to indicate that a document was detected
         SBSDKService.SDK.utils.flash();
-        // setToast(JSON.stringify(result));
         setToast(`Detected Document (status: " + ${result.status}; points: ${JSON.stringify(result.points)}  ")`);
-        // TODO rename 'storeCroppedDetectionResult'
-        await SBSDKService.SDK.storage.storeCroppedDetectionResult(response);
+        await SBSDKService.SDK.storage.storeDocumentScannerResponse(response);
     };
 
     useEffect(() => {
