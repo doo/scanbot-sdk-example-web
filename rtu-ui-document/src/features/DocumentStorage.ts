@@ -37,7 +37,7 @@ export async function deleteDocument(document: SBDocument): Promise<void> {
     await document.delete();
 }
 
-export async function createAndLoadPdf(document: SBDocument): Promise<Image> {
+export async function createAndLoadPdf(document: SBDocument): Promise<ArrayBuffer> {
     // Creates a PDF from the document, this function also automatically saves the PDF to persistent storage
     const options = {};
     const buffer = await document.createPdf(options);

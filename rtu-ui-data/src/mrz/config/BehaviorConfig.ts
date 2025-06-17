@@ -20,7 +20,7 @@ export function applyBehaviorConfig(config?: UIConfig.MrzScannerScreenConfigurat
     config.cameraConfiguration.flashEnabled = false;
 
     // Configure the UI elements like icons or buttons.
-    // e.g The top bar introduction button.
+    // e.g. The top bar introduction button.
     config.topBarOpenIntroScreenButton.visible = true;
     config.topBarOpenIntroScreenButton.color = "#FFFFFF";
     // Cancel button.

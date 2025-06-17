@@ -4,8 +4,6 @@ import ScanbotSDK from "scanbot-web-sdk/ui";
 import { SBDocument } from "scanbot-web-sdk/@types";
 import NavigationBar from "../subviews/NavigationBar";
 
-
-
 export default function DocumentResultPage() {
     const [documentIds, setDocumentIds] = useState<number[] | null>(null);
 
@@ -35,8 +33,10 @@ export default function DocumentResultPage() {
 }
 
 function DocumentEntry(props: { documentId: number, onAfterDelete: () => void }) {
+
     const [document, setDocument] = useState<SBDocument | null>(null);
     const [pagesImageUrls, setPagesImageUrls] = useState<string[]>([]);
+
     useEffect(() => {
         (async () => {
             const doc = await ScanbotSDK.UI.SBDocument.loadFromStorage(props.documentId);
