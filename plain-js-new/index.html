@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>ScanbotSDK Vanilla.js Example</title>
+</head>
+
+<body style="margin: 0">
+
+<div class="scanner-button-container">
+    <div class="scanner-button" id="barcode-rtuui">Barcode Scanner</div>
+</div>
+</body>
+
+<script type="module">
+    import "https://cdn.jsdelivr.net/npm/scanbot-web-sdk@8.0.0-beta.5/bundle/ScanbotSDK.ui2.min.js";
+
+    /**
+     * WARNING!
+     * We strongly recommend AGAINST using jsdelivr for your production environment.
+     * Please download the SDK and host it on your server.
+     * We only use it for the quickest proof-of-concept implementation.
+     */
+    const cdn = "https://cdn.jsdelivr.net/npm/scanbot-web-sdk@8.0.0-beta.5/bundle/bin/complete/";
+    const sdk = await ScanbotSDK.initialize({ enginePath: cdn, licenseKey: "" });
+
+    document.getElementById("barcode-rtuui").onclick = async () => {
+        const config = new ScanbotSDK.UI.Config.BarcodeScannerScreenConfiguration();
+        const result = await ScanbotSDK.UI.createBarcodeScanner(config);
+        console.log(result);
+    };
+</script>
+
+<style>
+    .scanner-button-container {
+        display: flex;
+        justify-content: center;
+    }
+    .scanner-button {
+        margin: 20px 40px;
+        padding: 10px;
+        color: rgb(50, 50, 50);
+        font-family: Verdana, sans-serif;
+        cursor: pointer;
+        font-weight: 500;
+        width: 100%;
+        border-bottom: 1px solid gray;
+    }
+</style>
+
+</html>
+
+
+
+
