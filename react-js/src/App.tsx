@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import { Box, List } from "@mui/material";
 import {
-    Code,
+    Code, CodeOutlined,
     DirectionsCar,
     DocumentScanner,
     DocumentScannerTwoTone,
@@ -72,7 +72,13 @@ function App() {
 
                     setToast(`Barcode result: ${JSON.stringify(result)}`);
                 }} />
+                <FeatureListItem icon={CodeOutlined} text='MRZ Scanner UI' onClick={async () => {
+                    // Configure your Mrz scanner as needed
+                    const config = new ScanbotSDK.UI.Config.MrzScannerScreenConfiguration();
+                    const result = await ScanbotSDK.UI.createMrzScanner(config);
 
+                    setToast(`MRZ result: ${JSON.stringify(result)}`);
+                }} />
                 <SectionHeader title={"Data Extraction"} />
                 <FeatureListItem icon={FindInPage} text='Detect document from .jpeg' onClick={async () => {
                     const image = await ImageUtils.pick(MimeType.Jpeg);
