@@ -4,7 +4,7 @@ import type { Image, Polygon } from "scanbot-web-sdk/@types";
 import { Filters } from "@/misc/Filters";
 import { toRaw } from "vue";
 
-type DocumentContent = {
+export type DocumentContent = {
   filtered?: Image,
   cropped?: Image,
   original: Image,

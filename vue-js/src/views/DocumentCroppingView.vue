@@ -18,31 +18,34 @@
   </PageLayout>
 </template>
 
-
 <script setup lang="ts">
-import PageLayout from "@/components/PageLayout.vue";
+
 import { inject, onBeforeMount, onBeforeUnmount, onMounted, ref, toRaw } from "vue";
 import { useRouter } from "vue-router";
-import { type Document, useDocumentsStore } from "@/stores/documents";
 import ScanbotSDK from "scanbot-web-sdk";
-import { CroppingViewConfiguration, type ICroppingViewHandle } from "scanbot-web-sdk/@types";
+import type { CroppingViewConfiguration, ICroppingViewHandle } from "scanbot-web-sdk/@types";
+
+import PageLayout from "@/components/PageLayout.vue";
+import { type Document, type DocumentContent, useDocumentsStore } from "@/stores/documents";
 import { swalAlert } from "@/misc/swalAlert";
 import { Filters } from "@/misc/Filters";
 
 const router = useRouter();
 const documents = useDocumentsStore();
-const scanbotSDK: Promise<ScanbotSDK> = inject("scanbotSDK")!;
 
 const document = ref<Document>();
 const isLoading = ref(true);
 const croppingView = ref<ICroppingViewHandle>();
 const detailViewRouteTarget = ref({ name: 'document_detail', params: { id: router.currentRoute.value.params.id } });
+const scanbot = ref<ScanbotSDK>();
 
 onBeforeMount(() => {
   isLoading.value = true;
 });
 
 onMounted(async () => {
+
+  scanbot.value = await inject("scanbotSDK")!;
   document.value = documents.getDocumentById(Number(router.currentRoute.value.params.id));
 
   if (!document.value) {
@@ -50,16 +53,16 @@ onMounted(async () => {
     await router.push({ name: 'home' });
     return;
   }
-
-  console.log("document.value.content", document.value.content);
+  const raw = toRaw(document.value.content);
+  
   const options: CroppingViewConfiguration = {
     containerId: "cropping-view-container",
-    image: toRaw(document.value.content.original),
-    polygon: toRaw(document.value.content.polygon),
+    image: raw.original,
+    polygon: raw.polygon,
     disableScroll: true,
-    rotations: document.value.content.rotations ?? 0,
+    rotations: raw.rotations ?? 0,
     style: {
-      padding: 20,
+      padding: 0,
       polygon: {
         color: "green",
         width: 4,
@@ -74,8 +77,8 @@ onMounted(async () => {
       },
     },
   };
-  croppingView.value = await (await scanbotSDK).openCroppingView(options);
 
+  croppingView.value = await scanbot.value!.openCroppingView(options);
   isLoading.value = false;
 });
 
@@ -85,6 +88,7 @@ onBeforeUnmount(() => {
 
 async function onCroppingClick() {
   isLoading.value = true;
+
   await croppingView.value?.detect();
   isLoading.value = false;
 }
@@ -96,30 +100,24 @@ async function onRotateClick() {
 }
 
 async function onApplyClick() {
-  console.log("Applying cropping changes...");
-  const croppingResult = await croppingView.value?.apply();
-  console.log("1");
+  const croppingResult = await toRaw(croppingView.value)?.apply();
   document.value!.content.cropped = croppingResult?.image;
   document.value!.content.polygon = croppingResult?.polygon;
-  console.log("2");
   if (document.value!.content.filter && document.value!.content.filter != "none") {
-    console.log("Applying filter:", document.value!.content.filter);
     document.value!.content.filtered = await Filters.applyFilter(
-      await scanbotSDK,
+      scanbot.value!,
       toRaw(document.value!.content.cropped!),
       document.value!.content.filter
     );
   }
-  console.log("3");
   await router.push(detailViewRouteTarget.value);
 }
 </script>
-
 
 <style>
 #cropping-view-container {
   margin-top: 68px;
   width: 100%;
-  height: calc(100% - 150px);
+  height: calc(100% - 50px);
 }
 </style>
