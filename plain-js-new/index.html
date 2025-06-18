@@ -11,9 +11,12 @@
 
 <div class="header">ScanbotSDK Vanilla.js Example</div>
 <div class="scanner-button-container">
-    <div class="scanner-button" id="barcode-rtuui">Barcode Scanner</div>
+    <div class="scanner-button" id="document-classic">Classic UI Document Scanner</div>
+    <div class="scanner-button" id="barcode-rtuui">RTU-UI Barcode Scanner</div>
 </div>
 </body>
+
+<div id="document-scanner-container"></div>
 
 <script type="module">
     import "https://cdn.jsdelivr.net/npm/scanbot-web-sdk@8.0.0-beta.5/bundle/ScanbotSDK.ui2.min.js";
@@ -27,6 +30,27 @@
     const cdn = "https://cdn.jsdelivr.net/npm/scanbot-web-sdk@8.0.0-beta.5/bundle/bin/complete/";
     const sdk = await ScanbotSDK.initialize({ enginePath: cdn, licenseKey: "" });
 
+    document.getElementById("document-classic").onclick = async () => {
+
+        const container = document.getElementById("document-scanner-container");
+        container.style.display = "block";
+
+        const config = {
+            container: container,
+            onDocumentDetected: (response) => {
+                const result = response.result.detectionResult;
+                console.log(result);
+                let text = `Document detected! Status: ${result.status}\nClosing scanner in 3 seconds...`;
+                toast(text);
+                setTimeout(() => {
+                    container.style.display = "none";
+                    scanner.dispose();
+                }, 3000);
+            },
+        };
+        const scanner = await sdk.createDocumentScanner(config);
+    }
+
     document.getElementById("barcode-rtuui").onclick = async () => {
         const config = new ScanbotSDK.UI.Config.BarcodeScannerScreenConfiguration();
         const result = await ScanbotSDK.UI.createBarcodeScanner(config);
@@ -37,12 +61,16 @@
             text += `\nBarcode ${index + 1}:\n`;
             text += `${barcode.text} (format: ${barcode.format})\n`;
         });
+        toast(text);
+    };
+
+    function toast(text) {
         Toastify({
             text: text,
             duration: 3000,
             newWindow: true,
-            gravity: "bottom", // `top` or `bottom`
-            position: "center", // `left`, `center` or `right`
+            gravity: "bottom",
+            position: "center",
             style: {
                 background: "linear-gradient(to right, #00b09b, #96c93d)",
                 wordWrap: "break-word",
@@ -50,7 +78,7 @@
                 overflowY: "hidden",
             },
         }).showToast();
-    };
+    }
 </script>
 
 <style>
@@ -64,18 +92,32 @@
         font-weight: 500;
         font-size: 15px;
     }
+
+    #document-scanner-container {
+        display: none;
+        width: 100%;
+        height: 100vh;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 9999;
+        background-color: rgba(0, 0, 0, 0.8);
+    }
+
     .scanner-button-container {
         display: flex;
+        flex-direction: column;
         justify-content: center;
     }
+
     .scanner-button {
-        margin: 20px 40px;
-        padding: 10px;
+        margin: 10px 20px;
+        padding: 10px 10px 10px 0;
         color: rgb(50, 50, 50);
         font-family: Verdana, sans-serif;
         cursor: pointer;
         font-weight: 500;
-        width: 100%;
+        max-width: 100%;
         border-bottom: 1px solid gray;
     }
 
