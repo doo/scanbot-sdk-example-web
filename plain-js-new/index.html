@@ -9,6 +9,7 @@
 
 <body style="margin: 0">
 
+<div class="header">ScanbotSDK Vanilla.js Example</div>
 <div class="scanner-button-container">
     <div class="scanner-button" id="barcode-rtuui">Barcode Scanner</div>
 </div>
@@ -30,10 +31,39 @@
         const config = new ScanbotSDK.UI.Config.BarcodeScannerScreenConfiguration();
         const result = await ScanbotSDK.UI.createBarcodeScanner(config);
         console.log(result);
+        let text = `Found ${result.items.length} barcodes:\n`;
+        result.items.forEach((item, index) => {
+            const barcode = item.barcode;
+            text += `\nBarcode ${index + 1}:\n`;
+            text += `${barcode.text} (format: ${barcode.format})\n`;
+        });
+        Toastify({
+            text: text,
+            duration: 3000,
+            newWindow: true,
+            gravity: "bottom", // `top` or `bottom`
+            position: "center", // `left`, `center` or `right`
+            style: {
+                background: "linear-gradient(to right, #00b09b, #96c93d)",
+                wordWrap: "break-word",
+                maxHeight: "200px",
+                overflowY: "hidden",
+            },
+        }).showToast();
     };
 </script>
 
 <style>
+
+    .header {
+        background-color: rgb(200, 25, 60);
+        color: white;
+        padding: 20px;
+        text-align: center;
+        font-family: Verdana, sans-serif;
+        font-weight: 500;
+        font-size: 15px;
+    }
     .scanner-button-container {
         display: flex;
         justify-content: center;
@@ -48,7 +78,11 @@
         width: 100%;
         border-bottom: 1px solid gray;
     }
+
 </style>
+
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
 </html>
 
