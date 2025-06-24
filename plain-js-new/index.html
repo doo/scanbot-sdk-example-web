@@ -53,7 +53,6 @@
             container: container,
             onDocumentDetected: (response) => {
                 const result = response.result.detectionResult;
-                console.log(result);
                 let text = `Document detected!\nStatus: ${result.status}\nClosing scanner in 3 seconds...`;
                 toast(text);
                 setTimeout(() => {
@@ -68,7 +67,6 @@
     document.getElementById("barcode-rtuui").onclick = async () => {
         const config = new ScanbotSDK.UI.Config.BarcodeScannerScreenConfiguration();
         const result = await ScanbotSDK.UI.createBarcodeScanner(config);
-        console.log(result);
         let text = `Found ${result.items.length} barcodes:\n`;
         result.items.forEach((item, index) => {
             const barcode = item.barcode;
@@ -80,7 +78,6 @@
 
     document.getElementById("license-info").onclick = async () => {
         const result = await sdk.getLicenseInfo();
-        console.log(result);
         let text = `License Information:\n`;
         text += `Status: ${result.status} (${result.licenseStatusMessage})\n`;
         text += `Expiration Date: ${new Date(result.expirationDateString).toLocaleDateString()}\n`;
