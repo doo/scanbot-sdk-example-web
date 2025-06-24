@@ -1,0 +1,28 @@
+
+.header {
+    background-color: rgb(200, 25, 60);
+    color: white;
+    padding: 20px;
+    text-align: center;
+    font-family: Verdana, sans-serif;
+    font-weight: 500;
+    font-size: 15px;
+}
+
+.scanner-button-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.scanner-button {
+    margin: 10px 20px;
+    padding: 10px 10px 10px 0;
+    color: rgb(50, 50, 50);
+    font-family: Verdana, sans-serif;
+    cursor: pointer;
+    font-weight: 300;
+    font-size: 14px;
+    max-width: 100%;
+    border-bottom: 1px solid gray;
+}
