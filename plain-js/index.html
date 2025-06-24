@@ -1,221 +1,112 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
-  <title>Scanbot Web SDK Example</title>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css"
-    integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous" />
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <link rel="stylesheet" type="text/css" href="main.css" />
-  <link rel="stylesheet" type="text/css" href="js/lib/toastify.css" />
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>ScanbotSDK Vanilla.js Example</title>
 </head>
 
-<body>
-  <nav class="navbar navbar-dark" style="background-color: #c8193c">
-    <div class="navbar-brand mb-0 h3">
-      <span class="back-button"></span>Scanbot Web SDK
-    </div>
-  </nav>
+<body style="margin: 0">
 
-  <div class="flash"></div>
-
-  <input class="file-picker" type="file" accept="image/x-png,image/gif,image/jpeg" width="48" height="48" />
-
-  <div class="loading-screen">
-    <div class="progress-bar"></div>
-  </div>
-
-  <div class="content-container">
-    <div class="main-list-item document-scanner-button">Document Scanner</div>
-    <div class="main-list-item barcode-scanner-button">Barcode Scanner</div>
-    <div class="main-list-item barcode-scanner-overlay-button">Barcode Scanner with AR Overlay</div>
-    <div class="main-list-item mrz-scanner-button">MRZ Scanner</div>
-    <div class="main-list-item text-pattern-scanner-button"> Text Pattern Scanner </div>
-    <div class="main-list-item" id="pick-document-button">Pick Document Image</div>
-    <div class="main-list-item" id="pick-barcode-button">Pick Barcode Image</div>
-    <div class="main-list-item scanner-results-button">Document Results</div>
-    <div class="main-list-item license-info-button">License Info</div>
-  </div>
-
-  <div class="controller scanbot-camera-controller">
-    <nav class="navbar navbar-dark">
-      <div class="navbar-brand mb-0 h3">
-        <span class="back-button">&#8249;</span>
-        Document Scanner
-      </div>
-      <div class="spacer"></div>
-      <div class="camera-button-container h3">
-        <span class="camera-swap-button">&#8645;</span>
-        <span class="camera-switch-button">&#8646;</span>
-      </div>
-    </nav>
-    <div id="scanbot-camera-container" class="view-controller-container">
-      <div class="web-sdk-progress-bar"></div>
-    </div>
-    <div class="action-bar">
-      <div class="action-bar-button page-count-indicator">0 PAGES</div>
-      <div class="align-right-button">
-        <button class="action-bar-button detection-done-button">DONE</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="controller barcode-scanner-controller">
-    <nav class="navbar navbar-dark">
-      <div class="navbar-brand mb-0 h3">
-        <span class="back-button">&#8249;</span>
-        Barcode Scanner
-      </div>
-      <div class="spacer"></div>
-      <div class="camera-button-container h3">
-        <span class="camera-swap-button">&#8645;</span>
-        <span class="camera-switch-button">&#8646;</span>
-      </div>
-    </nav>
-    <div id="barcode-scanner-container" class="view-controller-container">
-      <div class="web-sdk-progress-bar"></div>
-    </div>
-    <div class="action-bar">
-      <div class="barcode-result-container"></div>
-    </div>
-  </div>
-
-  <div class="controller barcode-scanner-overlay-controller">
-    <nav class="navbar navbar-dark">
-      <div class="navbar-brand mb-0 h3">
-        <span class="back-button">&#8249;</span>
-        Barcode Scanner with AR Overlay
-      </div>
-      <div class="spacer"></div>
-      <div class="camera-button-container h3">
-        <span class="camera-swap-button">&#8645;</span>
-        <span class="camera-switch-button">&#8646;</span>
-      </div>
-    </nav>
-    <div id="barcode-scanner-overlay-container" class="view-controller-container">
-      <div class="web-sdk-progress-bar"></div>
-    </div>
-    <div class="action-bar">
-      <div class="barcode-result-container"></div>
-    </div>
-  </div>
-
-  <div class="controller mrz-scanner-controller">
-    <nav class="navbar navbar-dark">
-      <div class="navbar-brand mb-0 h3">
-        <span class="back-button">&#8249;</span>
-        MRZ Scanner
-      </div>
-      <div class="spacer"></div>
-      <div class="camera-button-container h3">
-        <span class="camera-swap-button">&#8645;</span>
-        <span class="camera-switch-button">&#8646;</span>
-      </div>
-    </nav>
-    <div id="mrz-scanner-container" class="view-controller-container">
-      <div class="web-sdk-progress-bar"></div>
-    </div>
-    <div class="action-bar"></div>
-  </div>
-
-  <div class="controller text-pattern-scanner-controller">
-    <nav class="navbar navbar-dark">
-      <div class="navbar-brand mb-0 h3">
-        <span class="back-button">&#8249;</span>
-        Text Data Scanner
-      </div>
-      <div class="spacer"></div>
-      <div class="camera-button-container h3">
-        <span class="camera-swap-button">&#8645;</span>
-        <span class="camera-switch-button">&#8646;</span>
-      </div>
-    </nav>
-    <div id="text-data-scanner-container" class="view-controller-container">
-      <div class="web-sdk-progress-bar"></div>
-    </div>
-  </div>
-
-  <div class="controller cropping-controller">
-    <nav class="navbar navbar-dark">
-      <div class="navbar-brand mb-0 h3">
-        <span class="back-button">&#8249;</span>Cropping View
-      </div>
-    </nav>
-    <div id="cropping-view-container" class="view-controller-container"></div>
-    <div class="action-bar cropping-view-action-bar">
-      <button class="action-bar-button detect-button">DETECT</button>
-      <button class="action-bar-button rotate-button">ROTATE</button>
-      <div class="align-right-button">
-        <button class="action-bar-button apply-button">APPLY</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="controller detection-results-controller">
-    <nav class="navbar navbar-dark">
-      <div class="navbar-brand mb-0 h3">
-        <span class="back-button">&#8249;</span>Detection Results
-      </div>
-    </nav>
-    <div class="view-controller-container detection-results-container"></div>
-    <div class="action-bar detection-results-action-bar">
-      <button class="action-bar-button pdf-button">SAVE PDF</button>
-      <button class="action-bar-button tiff-button">SAVE TIFF</button>
-    </div>
-  </div>
-
-  <div class="controller detection-result-controller">
-    <nav class="navbar navbar-dark">
-      <div class="navbar-brand mb-0 h3">
-        <span class="back-button">&#8249;</span>Detection Result
-      </div>
-    </nav>
-    <div class="view-controller-container detection-result-container"></div>
-    <div class="action-bar detection-result-action-bar">
-      <button class="action-bar-button crop-button">CROP</button>
-      <div class="filter-selector-container">
-        <div class="filter-selector-label">FILTER</div>
-        <select class="action-bar-filter-select">
-          <option>none</option>
-          <option>ScanbotBinarizationFilter</option>
-          <option>GrayscaleFilter</option>
-          <option>ContrastFilter</option>
-          <option>ColorDocumentFilter</option>
-        </select>
-      </div>
-      <div class="align-right-button">
-        <button class="action-bar-button delete-button">DELETE</button>
-      </div>
-    </div>
-  </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-    crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"
-    integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/"
-    crossorigin="anonymous"></script>
-
-  <!-- Use the provided download-sdk.sh script to download the SDK locally -->
-  <script src="./scanbot-web-sdk/ScanbotSDK.min.js"></script>
-
-  <!-- After, initialize the Scanbot SDK in your own script -->
-  <script src="js/lib/toastify.js"></script>
-  <script src="js/config.js"></script>
-  <script src="js/utils.js"></script>
-  <script src="js/view-utils.js"></script>
-  <script src="js/CroppingViewController.js"></script>
-  <script src="js/DocumentDetailsController.js"></script>
-  <script src="js/DocumentListController.js"></script>
-  <script src="js/DocumentScannerController.js"></script>
-  <script src="js/BarcodeScannerController.js"></script>
-  <script src="js/MrzScannerController.js"></script>
-  <script src="js/TextPatternScannerController.js"></script>
-  <script src="main.js"></script>
-
-  <div class="version-info"></div>
+<div class="header">ScanbotSDK Vanilla.js Example</div>
+<div class="scanner-button-container">
+    <div class="scanner-button" id="document-classic">Classic UI Document Scanner</div>
+    <div class="scanner-button" id="barcode-rtuui">RTU-UI Barcode Scanner</div>
+    <div class="scanner-button" id="license-info">License Info</div>
+</div>
 </body>
 
+<!--
+ * ScanbotSDK Classic UI components require that you define and style a container element in your HTML.
+ * For this example, we have chosen a full-screen always-on-top fixed position container that we show and hide
+-->
+<div id="document-scanner-container" style="
+    display: none;
+    width: 100%;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    background-color: rgba(0, 0, 0, 0.8);
+"></div>
+
+<script type="module">
+    import "https://cdn.jsdelivr.net/npm/scanbot-web-sdk@8.0.0-beta.5/bundle/ScanbotSDK.ui2.min.js";
+
+    /**
+     * WARNING!
+     * We strongly recommend AGAINST using jsdelivr for your production environment.
+     * Please download the SDK and host it on your server.
+     * We only use it for the quickest proof-of-concept implementation.
+     */
+    const cdn = "https://cdn.jsdelivr.net/npm/scanbot-web-sdk@8.0.0-beta.5/bundle/bin/complete/";
+    const sdk = await ScanbotSDK.initialize({ enginePath: cdn, licenseKey: "" });
+
+    document.getElementById("document-classic").onclick = async () => {
+
+        const container = document.getElementById("document-scanner-container");
+        container.style.display = "block";
+
+        const config = {
+            container: container,
+            onDocumentDetected: (response) => {
+                const result = response.result.detectionResult;
+                let text = `Document detected!\nStatus: ${result.status}\nClosing scanner in 3 seconds...`;
+                toast(text);
+                setTimeout(() => {
+                    container.style.display = "none";
+                    scanner.dispose();
+                }, 3000);
+            },
+        };
+        const scanner = await sdk.createDocumentScanner(config);
+    }
+
+    document.getElementById("barcode-rtuui").onclick = async () => {
+        const config = new ScanbotSDK.UI.Config.BarcodeScannerScreenConfiguration();
+        const result = await ScanbotSDK.UI.createBarcodeScanner(config);
+        let text = `Found ${result.items.length} barcodes:\n`;
+        result.items.forEach((item, index) => {
+            const barcode = item.barcode;
+            text += `\nBarcode ${index + 1}:\n`;
+            text += `${barcode.text} (format: ${barcode.format})\n`;
+        });
+        toast(text);
+    };
+
+    document.getElementById("license-info").onclick = async () => {
+        const result = await sdk.getLicenseInfo();
+        let text = `License Information:\n`;
+        text += `Status: ${result.status} (${result.licenseStatusMessage})\n`;
+        text += `Expiration Date: ${new Date(result.expirationDateString).toLocaleDateString()}\n`;
+        toast(text);
+    };
+
+    function toast(text) {
+        Toastify({
+            text: text,
+            duration: 3000,
+            newWindow: true,
+            gravity: "bottom",
+            position: "center",
+            style: {
+                background: "linear-gradient(to right, #00b09b, #96c93d)",
+                wordWrap: "break-word",
+                maxHeight: "200px",
+                overflowY: "hidden",
+            },
+        }).showToast();
+    }
+</script>
+
+<link rel="stylesheet" type="text/css" href="main.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
 </html>
+
+
+
+
