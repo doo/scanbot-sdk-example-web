@@ -23,7 +23,6 @@ import SBSDKService from "./service/SBSDKService";
 import ImageUtils, { MimeType } from "./service/ImageUtils";
 import { Toast } from "./subviews/Toast.tsx";
 import { processMrzResult } from "./pages/MrzScannerPage.tsx";
-import { ImageClass } from "./_snippets/ImageClass.ts";
 
 function App() {
 
