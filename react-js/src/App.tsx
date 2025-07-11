@@ -23,6 +23,7 @@ import SBSDKService from "./service/SBSDKService";
 import ImageUtils, { MimeType } from "./service/ImageUtils";
 import { Toast } from "./subviews/Toast.tsx";
 import { processMrzResult } from "./pages/MrzScannerPage.tsx";
+import { ImageClass } from "./_snippets/ImageClass.ts";
 
 function App() {
 
@@ -58,8 +59,10 @@ function App() {
 
                 <SectionHeader title={"Ready-To-Use Components"} paddingTop={10} />
                 <FeatureListItem icon={DocumentScannerTwoTone} text='Document Scanner UI' onClick={async () => {
+
                     // Configure your document scanner as needed
                     const config = new ScanbotSDK.UI.Config.DocumentScanningFlow();
+
                     config.screens.camera.backgroundColor = '#FF0000';
                     const result = await ScanbotSDK.UI.createDocumentScanner(config);
                     setToast(`Scan result: ${JSON.stringify(result)}`);
