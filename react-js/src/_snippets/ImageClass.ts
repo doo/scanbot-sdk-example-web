@@ -10,37 +10,25 @@ import ScanbotSDK from "scanbot-web-sdk/ui";
 export class ImageClass {
 
     static async pick() {
-        let picker = document.getElementById("picker") as HTMLInputElement;
-
-        if (!picker) {
-            picker = document.createElement("input") as HTMLInputElement;
-            document.body.appendChild(picker);
-            picker.id = "picker";
-            picker.type = "file";
-        }
-
+        const picker = document.createElement("input") as HTMLInputElement;
+        document.body.appendChild(picker);
+        picker.id = "picker";
+        picker.type = "file";
         picker.click();
 
         picker.onchange = (e) => {
             e.preventDefault();
             const reader = new FileReader();
 
-            const files = picker?.files;
-            if (!files) {
-                return;
-            }
-
+            const files = picker.files!;
             reader.readAsArrayBuffer(files[0]);
 
-            reader.onload = async (e) => {
-                console.log("reader.onload", e, reader.result);
+            reader.onload = async () => {
                 const buffer = reader.result as ArrayBuffer;
                 const image = ScanbotSDK.Config.Image.fromEncodedBinaryData(buffer);
                 console.log("Picked image:", image);
             }
-
         }
-
     }
 
     static async fetch() {
