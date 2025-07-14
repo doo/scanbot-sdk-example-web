@@ -7,7 +7,7 @@
 
 import ScanbotSDK from "scanbot-web-sdk/ui";
 
-export class ImageClass {
+export class ImageObject {
 
     static async pick() {
         const picker = document.createElement("input") as HTMLInputElement;
