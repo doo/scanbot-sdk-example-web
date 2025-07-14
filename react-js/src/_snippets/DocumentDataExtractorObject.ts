@@ -8,7 +8,7 @@
 import ScanbotSDK from "scanbot-web-sdk/ui";
 import { DocumentDataExtractionResult, DocumentDataExtractorViewConfiguration } from "scanbot-web-sdk/@types";
 
-export class DocumentDataExtractObject {
+export class DocumentDataExtractorObject {
 
     async create() {
 
