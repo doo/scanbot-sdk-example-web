@@ -6,7 +6,7 @@
  */
 
 import ScanbotSDK from "scanbot-web-sdk/ui";
-import { CheckScannerViewConfiguration } from "scanbot-web-sdk/@types";
+import { CheckScannerViewConfiguration, CheckScanningResult } from "scanbot-web-sdk/@types";
 
 export class CheckScannerObject {
 
@@ -16,8 +16,8 @@ export class CheckScannerObject {
 
         const config: CheckScannerViewConfiguration = {
             containerId: "<SCANNER-CONTAINER-ID>",
-            onCheckDetected: (response) => {
-                console.log("Check has been detected, process response:", response);
+            onCheckDetected: (result: CheckScanningResult) => {
+                console.log("Check has been detected, process response:", result);
             },
         };
         const scanner = await sdk.createCheckScanner(config);

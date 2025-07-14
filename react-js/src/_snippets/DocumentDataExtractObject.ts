@@ -6,7 +6,7 @@
  */
 
 import ScanbotSDK from "scanbot-web-sdk/ui";
-import { DocumentDataExtractorViewConfiguration } from "scanbot-web-sdk/@types";
+import { DocumentDataExtractionResult, DocumentDataExtractorViewConfiguration } from "scanbot-web-sdk/@types";
 
 export class DocumentDataExtractObject {
 
@@ -16,8 +16,8 @@ export class DocumentDataExtractObject {
 
         const config: DocumentDataExtractorViewConfiguration = {
             containerId: "<SCANNER-CONTAINER-ID>",
-            onDocumentDetected: (response) => {
-                console.log("Document has been detected, process response:", response);
+            onDocumentDetected: (result: DocumentDataExtractionResult) => {
+                console.log("Document has been detected, process result:", result);
             },
         };
         const scanner = await sdk.createDocumentDataExtractor(config);
