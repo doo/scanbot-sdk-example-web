@@ -17,7 +17,7 @@ export class CheckScannerObject {
         const config: CheckScannerViewConfiguration = {
             containerId: "<SCANNER-CONTAINER-ID>",
             onCheckDetected: (result: CheckScanningResult) => {
-                console.log("Check has been detected, process response:", result);
+                console.log("Check has been detected, process result:", result);
             },
         };
         const scanner = await sdk.createCheckScanner(config);
