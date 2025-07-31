@@ -40,8 +40,8 @@ export function applyIntroConfig(config?: UIConfig.MrzScannerScreenConfiguration
     intro.dividerColor = "#EFEFEF";
 
     // Configure the text.
-    intro.text.color = "#000000";
-    intro.text.text = "The Machine Readable Zone (MRZ) is a special code on your ID document " +
+    intro.explanation.color = "#000000";
+    intro.explanation.text = "The Machine Readable Zone (MRZ) is a special code on your ID document " +
         "(such as a passport or ID card) that contains your personal information in a machine-readable format.\n\n" +
         "To scan it, simply hold your camera over the document, so that it aligns with the MRZ section. " +
         "Once scanned, the data will be automatically processed, " +

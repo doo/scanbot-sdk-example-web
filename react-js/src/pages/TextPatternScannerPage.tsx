@@ -1,6 +1,5 @@
 import React, { useRef, useEffect } from "react";
 import {
-    Image,
     ITextPatternScannerHandle,
     TextPatternScannerResult,
     TextPatternScannerViewConfiguration,
@@ -15,8 +14,7 @@ export default function TextPatternScannerPage() {
     const handle = useRef<ITextPatternScannerHandle | null>(null);
     const [toast, setToast] = React.useState<ToastProps | undefined>(undefined);
 
-    const onTextDetected = (response: { result: TextPatternScannerResult; originalImage: Image; }) => {
-        const result = response.result;
+    const onTextDetected = (result: TextPatternScannerResult) => {
         if (result.rawText === "") {
             // Pointless to show empty text
             return;
