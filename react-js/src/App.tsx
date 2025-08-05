@@ -12,7 +12,8 @@ import {
     Info,
     QrCode,
     QrCodeScanner,
-    TextIncrease
+    TextIncrease,
+    Check
 } from "@mui/icons-material";
 
 import ScanbotSDK from "scanbot-web-sdk/ui";
@@ -54,6 +55,9 @@ function App() {
                 }} />
                 <FeatureListItem icon={DirectionsCar} text='VIN Scanner View' onClick={() => {
                     navigate('vin-scanner');
+                }} />
+                <FeatureListItem icon={Check} text='Check Scanner View' onClick={() => {
+                    navigate('check-scanner');
                 }} />
 
                 <SectionHeader title={"Ready-To-Use Components"} paddingTop={10} />
