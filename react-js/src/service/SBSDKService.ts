@@ -2,6 +2,7 @@
 import ScanbotSDK from "scanbot-web-sdk/ui";
 
 export enum ContainerId {
+    DocumentDataExtractor = "document-data-extractor-container",
     CheckScanner = "check-scanner-container",
     DocumentScanner = "document-scanner-container",
     BarcodeScanner = "barcode-scanner-container",

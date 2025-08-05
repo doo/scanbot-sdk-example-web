@@ -11,6 +11,7 @@ import BarcodeScannerPage from "./pages/BarcodeScannerPage";
 import StoredDataPage from "./pages/StoredDataPage";
 import StoredDataDetailsPage from './pages/StoredDataDetailsPage';
 import CheckScannerPage from "./pages/CheckScannerPage.tsx";
+import DocumentDataExtractorPage from "./pages/DocumentDataExtractorPage.tsx";
 
 createRoot(document.getElementById('root')!).render(
     <HashRouter>
@@ -18,6 +19,7 @@ createRoot(document.getElementById('root')!).render(
             <Route path="/" element={<App />} />
             <Route path="barcode-scanner" element={<BarcodeScannerPage />} />
             <Route path="check-scanner" element={<CheckScannerPage />} />
+            <Route path="document-data-extractor" element={<DocumentDataExtractorPage />} />
             <Route path="mrz-scanner" element={<MrzScannerPage />} />
             <Route path="text-pattern-scanner" element={<TextPatternScannerPage />} />
             <Route path="vin-scanner" element={<VinScannerPage />} />

@@ -13,7 +13,8 @@ import {
     QrCode,
     QrCodeScanner,
     TextIncrease,
-    Check
+    Check,
+    PermIdentity
 } from "@mui/icons-material";
 
 import ScanbotSDK from "scanbot-web-sdk/ui";
@@ -58,6 +59,9 @@ function App() {
                 }} />
                 <FeatureListItem icon={Check} text='Check Scanner View' onClick={() => {
                     navigate('check-scanner');
+                }} />
+                <FeatureListItem icon={PermIdentity} text='Document Data Extractor View' onClick={() => {
+                    navigate('document-data-extractor');
                 }} />
 
                 <SectionHeader title={"Ready-To-Use Components"} paddingTop={10} />
