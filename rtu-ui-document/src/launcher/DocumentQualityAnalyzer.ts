@@ -8,9 +8,10 @@
 import ScanbotSDK from "scanbot-web-sdk";
 import { Config, SBDocument } from "scanbot-web-sdk/@types";
 
-export async function analyzeDocumentQuality(document: SBDocument) {
-    const sdk = await ScanbotSDK.initialize({ licenseKey: "", enginePath: "" });
+// Mock the initialization of ScanbotSDK for the example.
+const sdk = await ScanbotSDK.initialize({ licenseKey: "", enginePath: "" });
 
+export async function analyzeDocumentQuality(document: SBDocument) {
     const config = new Config.DocumentQualityAnalyzerConfiguration();
     const analyzer = await sdk.createDocumentQualityAnalyzer(config);
 
