@@ -6,7 +6,7 @@ import { ListAlt, QrCode, QrCode2, QrCodeScanner } from '@mui/icons-material';
 
 import ScanbotSDK from 'scanbot-web-sdk/ui';
 
-import startScanner from './launcher/StartScanner';
+import { startScanner } from './launcher/StartScanner';
 import { applyMultipleScanUseCase } from './config/MultipleScanUseCaseConfig';
 import { applyBarcodeItemMapperConfig } from './config/BarcodeItemMapperConfig';
 import { applySingleScanningUseCase } from './config/SingleScanUseCaseConfig';
