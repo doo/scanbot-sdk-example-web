@@ -9,8 +9,11 @@
 import ScanbotSDK from "scanbot-web-sdk/ui";
 import { UIConfig } from "scanbot-web-sdk/@types";
 
-export async function startScanner(config: UIConfig.BarcodeScannerScreenConfiguration) {
+export async function startScanner(config?: UIConfig.BarcodeScannerScreenConfiguration) {
 	// Configure as needed
+	if (!config) {
+		config = new ScanbotSDK.UI.Config.BarcodeScannerScreenConfiguration();
+	}
 	const result = await ScanbotSDK.UI.createBarcodeScanner(config);
 	// Process & present the result as needed
 	return result;
