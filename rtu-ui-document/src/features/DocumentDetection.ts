@@ -5,7 +5,7 @@
  * For maintainers: whenever changing this code, ensure that links using it are still pointing to valid lines!
  */
 
-import { DocumentScannerUIResult, Point } from "scanbot-web-sdk/@types";
+import { DocumentScannerUIResult } from "scanbot-web-sdk/@types";
 import ScanbotSDK from "scanbot-web-sdk/ui";
 
 // Mock the initialization of ScanbotSDK for the example.
@@ -20,9 +20,7 @@ export async function detectOnDocument(result: DocumentScannerUIResult) {
         const detectionResult = response.detectionResult;
         // Check the result and retrieve the detected polygon.
         if (detectionResult.status === "OK" && detectionResult.pointsNormalized?.length !== 0) {
-            // ScanbotSDK response types are immutable, but every javascript object is fundamentally JSON,
-            // we can easily override these immutable types
-            (page.getData().polygon as never as Point[]) = detectionResult.pointsNormalized;
+            document.apply(page, { polygon: detectionResult.pointsNormalized });
         }
     }
 }

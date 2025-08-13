@@ -15,8 +15,9 @@ export async function filterAndRotate(document: SBDocument) {
         const filter1 = new ScanbotSDK.Config.ScanbotBinarizationFilter({ outputMode: "ANTIALIASED" });
         const filter2 = new ScanbotSDK.Config.BrightnessFilter({ brightness: 0.4});
 
-        // TODO: implement page update functions
-        page.applyFilters([filter1, filter2]);
-        page.applyRotation("CLOCKWISE_90");
+        document.apply(page, {
+            rotations: (page.getData().rotations ?? 0) + 1,
+            filters: [filter1, filter2],
+        });
     }
 }
