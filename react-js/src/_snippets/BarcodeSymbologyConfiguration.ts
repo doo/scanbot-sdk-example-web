@@ -131,6 +131,7 @@ export async function createDocumentParserConfiguration() {
     const config: BarcodeScannerViewConfiguration = {
         detectionParameters: {
             barcodeFormatConfigurations: formatConfigurations,
+            // Example of adding a specific configuration for parsed documents
             extractedDocumentFormats: [
                 "AAMVA",
                 "BOARDING_PASS",
@@ -144,6 +145,32 @@ export async function createDocumentParserConfiguration() {
                 "HIBC"
             ],
             onlyAcceptDocuments: true,
+            engineMode: "NEXT_GEN"
+        }
+    };
+    await sdk.createBarcodeScanner(config);
+}
+
+export async function createRegexParsingConfiguration() {
+    const formatConfigurations: BarcodeFormatConfigurationBase[] = [];
+    const baseConfig = new BarcodeFormatCommonConfiguration({
+        // You can set a regex filter here to limit the barcodes that will be scanned
+        // Here is an example of a regex that matches only  barcodes contained numbers from 0 to 5
+        regexFilter: "\\b[0-5]+\\b",
+        minimum1DQuietZoneSize: 10,
+        stripCheckDigits: false,
+        minimumTextLength: 0,
+        maximumTextLength: 0,
+        gs1Handling: "PARSE",
+        strictMode: true,
+        formats: BarcodeFormats.common,
+        addAdditionalQuietZone: false
+    });
+    formatConfigurations.push(baseConfig);
+
+    const config: BarcodeScannerViewConfiguration = {
+        detectionParameters: {
+            barcodeFormatConfigurations: formatConfigurations,
             engineMode: "NEXT_GEN"
         }
     };
