@@ -20,7 +20,7 @@ export async function detectOnDocument(result: DocumentScannerUIResult) {
         const detectionResult = response.detectionResult;
         // Check the result and retrieve the detected polygon.
         if (detectionResult.status === "OK" && detectionResult.pointsNormalized?.length !== 0) {
-            document.apply(page, { polygon: detectionResult.pointsNormalized });
+            await result.document.apply(page, { polygon: detectionResult.pointsNormalized });
         }
     }
 }
