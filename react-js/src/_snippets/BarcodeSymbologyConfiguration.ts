@@ -125,3 +125,27 @@ export async function createCommonFilteringConfiguration() {
     };
     await sdk.createBarcodeScanner(config);
 }
+
+export async function createDocumentParserConfiguration() {
+    const formatConfigurations: BarcodeFormatConfigurationBase[] = [];
+    const config: BarcodeScannerViewConfiguration = {
+        detectionParameters: {
+            barcodeFormatConfigurations: formatConfigurations,
+            extractedDocumentFormats: [
+                "AAMVA",
+                "BOARDING_PASS",
+                "DE_MEDICAL_PLAN",
+                "MEDICAL_CERTIFICATE",
+                "ID_CARD_PDF_417",
+                "SEPA",
+                "SWISS_QR",
+                "VCARD",
+                "GS1",
+                "HIBC"
+            ],
+            onlyAcceptDocuments: true,
+            engineMode: "NEXT_GEN"
+        }
+    };
+    await sdk.createBarcodeScanner(config);
+}
