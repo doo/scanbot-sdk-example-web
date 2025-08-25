@@ -25,10 +25,10 @@ export class DocumentDataExtractorObject {
 
         // Advanced Configuration. In reality, you would want to configure the scanner before creating it,
         // but for the convenience of separating documentation snippets, it makes sense to do it after.
-        if (!config.detectorParameters) {
+        if (!config.scannerConfiguration) {
             return;
         }
-        config.detectorParameters.documentTrustMode = "TRUSTED";
-        config.detectorParameters.processingMode = "LIVE";
+        config.scannerConfiguration.documentTrustMode = "TRUSTED";
+        config.scannerConfiguration.processingMode = "LIVE";
     }
 }

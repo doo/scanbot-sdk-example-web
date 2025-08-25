@@ -34,7 +34,7 @@ export async function createSingleSymbologyScanner() {
     })
 
     const config: BarcodeScannerViewConfiguration = {
-        detectionParameters: {
+        scannerConfiguration: {
             barcodeFormatConfigurations: [formatConfig],
         }
     };
@@ -98,7 +98,7 @@ export async function createMultipleSymbologyScanner() {
     formatConfigurations.push(code2Of5Config)
 
     const config: BarcodeScannerViewConfiguration = {
-        detectionParameters: {
+        scannerConfiguration: {
             barcodeFormatConfigurations: formatConfigurations,
         }
     };
@@ -119,7 +119,7 @@ export async function createCommonFilteringConfiguration() {
     });
 
     const config: BarcodeScannerViewConfiguration = {
-        detectionParameters: {
+        scannerConfiguration: {
             barcodeFormatConfigurations: [formatConfig],
         }
     };
@@ -129,7 +129,7 @@ export async function createCommonFilteringConfiguration() {
 export async function createDocumentParserConfiguration() {
     const formatConfigurations: BarcodeFormatConfigurationBase[] = [];
     const config: BarcodeScannerViewConfiguration = {
-        detectionParameters: {
+        scannerConfiguration: {
             barcodeFormatConfigurations: formatConfigurations,
             // Example of adding a specific configuration for parsed documents
             extractedDocumentFormats: [
@@ -169,7 +169,7 @@ export async function createRegexParsingConfiguration() {
     formatConfigurations.push(baseConfig);
 
     const config: BarcodeScannerViewConfiguration = {
-        detectionParameters: {
+        scannerConfiguration: {
             barcodeFormatConfigurations: formatConfigurations,
             engineMode: "NEXT_GEN"
         }

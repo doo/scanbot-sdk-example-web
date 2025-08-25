@@ -24,8 +24,10 @@ export default function DocumentScannerPage() {
             const config: DocumentScannerViewConfiguration = {
                 containerId: ContainerId.DocumentScanner,
                 onDocumentDetected: onDocumentDetected,
-                detectionParameters: {
-                    ignoreOrientationMismatch: true
+                scannerConfiguration: {
+                    parameters: {
+                        ignoreOrientationMismatch: true
+                    }
                 }
             };
             handle.current = await SBSDKService.SDK.createDocumentScanner(config);

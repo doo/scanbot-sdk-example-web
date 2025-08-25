@@ -28,7 +28,7 @@ export default function DocumentDataExtractorPage() {
             const config: DocumentDataExtractorViewConfiguration = {
                 containerId: ContainerId.DocumentDataExtractor,
                 onDocumentDetected: onDocumentDetected,
-                detectorParameters: {
+                scannerConfiguration: {
                     configurations: [
                         new ScanbotSDK.Config.DocumentDataExtractorCommonConfiguration()
                     ]
