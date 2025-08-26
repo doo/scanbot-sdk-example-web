@@ -72,7 +72,12 @@ function App() {
 
                     config.screens.camera.backgroundColor = '#FF0000';
                     const result = await ScanbotSDK.UI.createDocumentScanner(config);
-                    setToast(`Scan result: ${JSON.stringify(result)}`);
+
+                    let toast = "Document scanning cancelled";
+                    if (result) {
+                        toast = "Detected document. Pages: " + result?.document.data.pages.length;
+                    }
+                    setToast(toast);
                 }} />
                 <FeatureListItem icon={QrCode} text='Barcode Scanner UI' onClick={async () => {
                     // Configure your barcode scanner as needed
