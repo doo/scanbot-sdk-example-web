@@ -78,7 +78,7 @@ onMounted(async () => {
   const configuration: BarcodeScannerViewConfiguration = {
     onBarcodesDetected: onBarcodesDetected,
     containerId: "barcode-scanner-container",
-    detectionParameters: {
+    scannerConfiguration: {
       barcodeFormatConfigurations: [
         new ScanbotSDK.Config.BarcodeFormatCommonConfiguration({
           formats: barcodeFormats,

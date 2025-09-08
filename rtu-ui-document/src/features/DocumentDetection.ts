@@ -16,10 +16,10 @@ export async function detectOnDocument(result: DocumentScannerUIResult) {
         // Load original image
         const image = await page.loadOriginalImage();
         // Run document detection on the retrieved image.
-        const response = await sdk.detectDocument(image);
-        const detectionResult = response.detectionResult;
+        const detectionResult = await sdk.detectDocument(image);
+
         // Check the result and retrieve the detected polygon.
-        if (detectionResult.status === "OK" && detectionResult.pointsNormalized?.length !== 0) {
+        if (detectionResult?.status === "OK" && detectionResult.pointsNormalized?.length !== 0) {
             await result.document.apply(page, { polygon: detectionResult.pointsNormalized });
         }
     }

@@ -1,6 +1,6 @@
 <template>
   <PageLayout title="Document Scanner" :is-loading=isLoading :hasCameraControls="true" @on-camera-swap="onCameraSwap"
-    @on-camera-switch="onCameraSwitch">
+              @on-camera-switch="onCameraSwitch">
     <div id="scanbot-document-scanner-ui-container" class="scanbot-camera-container"></div>
     <div class="bottom-bar">
       <div class="bottom-bar-button scanner-page-counter" v-html="numPages()"></div>
@@ -44,9 +44,11 @@ onMounted(async () => {
 
   const config: DocumentScannerViewConfiguration = {
     containerId: 'scanbot-document-scanner-ui-container',
-    detectionParameters: {
-      acceptedAngleScore: 60,
-      acceptedSizeScore: 60,
+    scannerConfiguration: {
+      parameters: {
+        acceptedAngleScore: 60,
+        acceptedSizeScore: 60,  
+      }
     },
     autoCaptureSensitivity: 0.66,
     autoCaptureEnabled: true,
@@ -75,18 +77,12 @@ onMounted(async () => {
       hint: {
         OK: "Capturing your document...",
         OK_BUT_TOO_SMALL: "The document is too small. Try moving closer.",
-        OK_BUT_BAD_ANGLES:
-          "This is a bad camera angle. Hold the device straight over the document.",
-        OK_BUT_BAD_ASPECT_RATIO:
-          "Rotate the device sideways, so that the document fits better into the screen.",
-        OK_BUT_OFF_CENTER: "Try holding the device at the center of the document.",
-        ERROR_NOTHING_DETECTED:
-          "Please hold the device over a document to start scanning.",
+        OK_BUT_BAD_ANGLES: "This is a bad camera angle. Hold the device straight over the document.",
+        OK_BUT_BAD_ASPECT_RATIO: "Rotate the device sideways, so that the document fits better into the screen.",
+        ERROR_NOTHING_DETECTED: "Please hold the device over a document to start scanning.",
         ERROR_TOO_DARK: "It is too dark. Try turning on a light.",
-        ERROR_TOO_NOISY: "Please move the document to a clear surface.",
         OK_BUT_TOO_DARK: "It is too dark. Try turning on a light.",
-        OK_BUT_ORIENTATION_MISMATCH:
-          "Please hold the device in portrait orientation.",
+        OK_BUT_ORIENTATION_MISMATCH: "Please hold the device in portrait orientation.",
         NOT_ACQUIRED: "Please hold the device over a document to start scanning.",
       },
     },
