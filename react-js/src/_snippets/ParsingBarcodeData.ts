@@ -7,7 +7,7 @@
 
 import ScanbotSDK from "scanbot-web-sdk/ui";
 import {
-    BarcodeScannerConfiguration, BarcodeScannerRunResponse,
+    BarcodeScannerConfiguration,
     AAMVA, AAMVADocumentType,
     BoardingPass, BoardingPassDocumentType,
     DEMedicalPlan, DEMedicalPlanDocumentType,
@@ -17,7 +17,7 @@ import {
     MedicalCertificate, MedicalCertificateDocumentType,
     SEPA, SEPADocumentType,
     SwissQR, SwissQRDocumentType,
-    VCard, VCardDocumentType
+    VCard, VCardDocumentType, BarcodeScannerResult
 } from "scanbot-web-sdk/@types";
 
 // Mock the ScanbotSDK initialization for this snippet
@@ -46,9 +46,7 @@ export async function configureBarcodeScannerParser() {
     await processResult(response)
 }
 
-export async function processResult(response: BarcodeScannerRunResponse) {
-    const result = response.result;
-
+export async function processResult(result: BarcodeScannerResult) {
     for (const barcode of result.barcodes) {
         const document = barcode.extractedDocument;
 
