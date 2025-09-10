@@ -10,6 +10,10 @@ import { UIConfig } from "scanbot-web-sdk/@types";
 
 export function applyTopBarConfig(config: UIConfig.BarcodeScannerScreenConfiguration) {
 
+    if (!config) {
+        config = new UIConfig.BarcodeScannerScreenConfiguration();
+    }
+
     // Set the top bar mode.
     config.topBar.mode = "GRADIENT";
 

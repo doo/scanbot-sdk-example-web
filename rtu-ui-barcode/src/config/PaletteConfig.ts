@@ -10,6 +10,10 @@ import { UIConfig } from "scanbot-web-sdk/@types";
 
 export function applyPaletteConfig(config: UIConfig.BarcodeScannerScreenConfiguration) {
 
+    if (!config) {
+        config = new UIConfig.BarcodeScannerScreenConfiguration();
+    }
+
     config.palette.sbColorPrimary = "#C8193C";
     config.palette.sbColorPrimaryDisabled = "#F5F5F5";
     config.palette.sbColorNegative = "#FF3737";

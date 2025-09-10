@@ -10,6 +10,10 @@ import { UIConfig } from "scanbot-web-sdk/@types";
 
 export function applyActionBarConfig(config: UIConfig.BarcodeScannerScreenConfiguration) {
 
+	if (!config) {
+		config = new UIConfig.BarcodeScannerScreenConfiguration();
+	}
+
 	config.actionBar.flashButton.visible = true;
 
 	// Configure the inactive state of the flash button.

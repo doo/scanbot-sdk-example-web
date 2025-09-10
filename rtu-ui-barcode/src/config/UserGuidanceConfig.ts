@@ -9,7 +9,11 @@ import { UIConfig } from "scanbot-web-sdk/@types";
 
 export function applyUserGuidanceConfig(config: UIConfig.BarcodeScannerScreenConfiguration) {
 
-    // Hide/unhide the user guidance.
+    if (!config) {
+        config = new UIConfig.BarcodeScannerScreenConfiguration();
+    }
+
+    // Hide/show the user guidance.
     config.userGuidance.visible = true;
 
     // Configure the title.

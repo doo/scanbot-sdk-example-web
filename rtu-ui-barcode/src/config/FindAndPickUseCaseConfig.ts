@@ -11,6 +11,10 @@ import { ExpectedBarcode } from "scanbot-web-sdk/@types/ui2/configuration/barcod
 
 export function applyFindAndPickConfig(config: UIConfig.BarcodeScannerScreenConfiguration) {
 
+    if (!config) {
+        config = new UIConfig.BarcodeScannerScreenConfiguration();
+    }
+
     const useCase = new UIConfig.FindAndPickScanningMode();
 
     useCase.arOverlay.visible = true;

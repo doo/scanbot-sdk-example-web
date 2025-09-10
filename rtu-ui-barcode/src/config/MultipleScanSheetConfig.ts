@@ -10,6 +10,10 @@ import { UIConfig } from "scanbot-web-sdk/@types";
 
 export function applySheetMode(config: UIConfig.BarcodeScannerScreenConfiguration) {
 
+    if (!config) {
+        config = new UIConfig.BarcodeScannerScreenConfiguration();
+    }
+
     const useCase = config.useCase as UIConfig.MultipleScanningMode;
 
     useCase.sheet.mode = "COLLAPSED_SHEET"

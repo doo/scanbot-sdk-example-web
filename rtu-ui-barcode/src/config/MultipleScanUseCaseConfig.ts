@@ -11,6 +11,10 @@ import { UIConfig } from "scanbot-web-sdk/@types";
 
 export function applyMultipleScanUseCase(config: UIConfig.BarcodeScannerScreenConfiguration) {
 
+    if (!config) {
+        config = new UIConfig.BarcodeScannerScreenConfiguration();
+    }
+
     const useCase = new ScanbotSDK.UI.Config.MultipleScanningMode();
 
     // Set the counting mode.
