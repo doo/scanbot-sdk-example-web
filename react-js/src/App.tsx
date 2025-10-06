@@ -69,8 +69,7 @@ function App() {
 
                     // Configure your document scanner as needed
                     const config = new ScanbotSDK.UI.Config.DocumentScanningFlow();
-
-                    config.screens.camera.backgroundColor = '#FF0000';
+                    config.screens.camera.bottomBar.bottomBarMode = "GRADIENT";
                     const result = await ScanbotSDK.UI.createDocumentScanner(config);
 
                     let toast = "Document scanning cancelled";
