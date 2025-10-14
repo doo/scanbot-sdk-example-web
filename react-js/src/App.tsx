@@ -70,7 +70,7 @@ function App() {
                     // Configure your document scanner as needed
                     const config = new ScanbotSDK.UI.Config.DocumentScanningFlow();
 
-                    // If you want use front camera, change camera module as follows:
+                    // If you want to use front camera, change camera module as follows:
                     // config.screens.camera.cameraConfiguration.cameraModule = "FRONT";
                     const result = await ScanbotSDK.UI.createDocumentScanner(config);
 
@@ -83,7 +83,8 @@ function App() {
                 <FeatureListItem icon={QrCode} text='Barcode Scanner UI' onClick={async () => {
                     // Configure your barcode scanner as needed
                     const config = new ScanbotSDK.UI.Config.BarcodeScannerScreenConfiguration();
-
+                    // If you want to use front camera, change camera module as follows:
+                    // config.cameraConfiguration.cameraModule = "FRONT";
                     config.useCase = new ScanbotSDK.UI.Config.SingleScanningMode();
                     const result = await ScanbotSDK.UI.createBarcodeScanner(config);
 
