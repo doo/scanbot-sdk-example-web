@@ -69,7 +69,9 @@ function App() {
 
                     // Configure your document scanner as needed
                     const config = new ScanbotSDK.UI.Config.DocumentScanningFlow();
-                    config.screens.camera.bottomBar.bottomBarMode = "GRADIENT";
+
+                    // If you want use front camera, change camera module as follows:
+                    // config.screens.camera.cameraConfiguration.cameraModule = "FRONT";
                     const result = await ScanbotSDK.UI.createDocumentScanner(config);
 
                     let toast = "Document scanning cancelled";
