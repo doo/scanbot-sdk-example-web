@@ -84,6 +84,7 @@ function App() {
                     // Configure your barcode scanner as needed
                     const config = new ScanbotSDK.UI.Config.BarcodeScannerScreenConfiguration();
                     // If you want to use front camera, change camera module as follows:
+
                     // config.cameraConfiguration.cameraModule = "FRONT";
                     config.useCase = new ScanbotSDK.UI.Config.SingleScanningMode();
                     const result = await ScanbotSDK.UI.createBarcodeScanner(config);
