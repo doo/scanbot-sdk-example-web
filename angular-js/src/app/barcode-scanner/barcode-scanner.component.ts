@@ -36,7 +36,12 @@ export class BarcodeScannerComponent implements OnInit, OnDestroy {
     container.style.height = '100%';
     const sdk = await this.service.getSdk();
 
-    const config: BarcodeScannerViewConfiguration = { container: container as HTMLElement };
+    const config: BarcodeScannerViewConfiguration = {
+      container: container as HTMLElement,
+      onBarcodesDetected: (result) => {
+        console.log('Detected barcodes:', result.barcodes);
+      }
+    };
     this.handle = await sdk.createBarcodeScanner(config);
   }
 
