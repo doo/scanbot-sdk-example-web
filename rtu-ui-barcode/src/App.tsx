@@ -45,7 +45,7 @@ function App() {
 				 * Simply run 'npm run copy-wasm' to copy the wasm files to the public folder.
 				 * cf the bash script in the package.json file.
 				 */
-				enginePath: "wasm"
+				enginePath: "scanbot-web-sdk/bundle/bin/complete/",
 			});
 		}
 		init();

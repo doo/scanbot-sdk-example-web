@@ -7,11 +7,12 @@
  */
 
 import { UIConfig } from "scanbot-web-sdk/@types";
+import ScanbotSDK from "scanbot-web-sdk";
 
 export function applyTopBarConfig(config: UIConfig.BarcodeScannerScreenConfiguration) {
 
     if (!config) {
-        config = new UIConfig.BarcodeScannerScreenConfiguration();
+        config = new ScanbotSDK.UI.Config.BarcodeScannerScreenConfiguration();
     }
 
     // Set the top bar mode.

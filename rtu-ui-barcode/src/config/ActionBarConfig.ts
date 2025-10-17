@@ -5,13 +5,13 @@
  *
  * For maintainers: whenever changing this code, ensure that links using it are still pointing to valid lines!
  */
-
+import ScanbotSDK from "scanbot-web-sdk";
 import { UIConfig } from "scanbot-web-sdk/@types";
 
 export function applyActionBarConfig(config: UIConfig.BarcodeScannerScreenConfiguration) {
 
 	if (!config) {
-		config = new UIConfig.BarcodeScannerScreenConfiguration();
+		config = new ScanbotSDK.UI.Config.BarcodeScannerScreenConfiguration();
 	}
 
 	config.actionBar.flashButton.visible = true;

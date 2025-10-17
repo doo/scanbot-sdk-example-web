@@ -5,14 +5,13 @@
  *
  * For maintainers: whenever changing this code, ensure that links using it are still pointing to valid lines!
  */
-
 import ScanbotSDK from "scanbot-web-sdk/ui";
 import { UIConfig } from "scanbot-web-sdk/@types";
 
 export function applyMultipleScanUseCase(config: UIConfig.BarcodeScannerScreenConfiguration) {
 
     if (!config) {
-        config = new UIConfig.BarcodeScannerScreenConfiguration();
+        config = new ScanbotSDK.UI.Config.BarcodeScannerScreenConfiguration();
     }
 
     const useCase = new ScanbotSDK.UI.Config.MultipleScanningMode();
