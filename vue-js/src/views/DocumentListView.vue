@@ -36,7 +36,7 @@ import fileDownload from "js-file-download";
 import { RouterLink } from "vue-router";
 import { swalAlert } from "@/misc/swalAlert";
 import { Filters } from "@/misc/Filters";
-import type { Image } from "scanbot-web-sdk/@types";
+import { type Image } from "scanbot-web-sdk/@types";
 
 const documentsStore = useDocumentsStore();
 const scanbotSDK: Promise<ScanbotSDK> = inject("scanbotSDK")!;
@@ -69,18 +69,20 @@ async function download(type: "pdf" | "tiff") {
       });
     }
   };
+  
   const generator = await createGenerator[type]();
 
   for (const doc of documentsStore.documents) {
     let page: Image = (doc.content.filtered ?? doc.content.cropped ?? doc.content.original) as Image;
     if (type === "tiff") {
-      page = await Filters.applyFilter(await scanbotSDK, page as Image, "ScanbotBinarizationFilter");
+      page = await Filters.applyFilter(await scanbotSDK, page, "ScanbotBinarizationFilter");
     }
-    await generator.addPage(page);
+    
+    await generator.addPage(toRaw(page));
   }
+  
   const result: ArrayBuffer = await generator.complete();
   fileDownload(result, "scanbotSDK-document." + type, "application/" + type);
-
   isLoading.value = false;
 }
 </script>
