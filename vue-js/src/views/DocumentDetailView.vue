@@ -22,7 +22,6 @@
 </template>
 
 <script setup lang="ts">
-import { type Document, useDocumentsStore } from "@/stores/documents";
 import { inject, onBeforeMount, ref } from "vue";
 import ScanbotSDK from "scanbot-web-sdk";
 import PageLayout from "@/components/PageLayout.vue";
@@ -31,56 +30,56 @@ import Swal from 'sweetalert2'
 import 'sweetalert2/dist/sweetalert2.css'
 import { Filters } from "@/misc/Filters";
 import { swalAlert } from "@/misc/swalAlert";
+import { DocumentStore, type ScanbotDocument } from "@/stores/documents";
 
 const router = useRouter();
-const documents = useDocumentsStore();
 const scanbotSDK: Promise<ScanbotSDK> = inject("scanbotSDK")!;
 
-const document = ref<Document>();
+let document: ScanbotDocument | undefined;
 
 onBeforeMount(async () => {
-  document.value = documents.getDocumentById(Number(router.currentRoute.value.params.id));
-  if (!document.value) {
+  document = DocumentStore.instance.getDocumentById(Number(router.currentRoute.value.params.id));
+  if (!document) {
     await swalAlert("Document not found!");
     await router.push({ name: 'home' });
     return;
   }
-  await documents.updateDataUrl(document.value, await scanbotSDK);
+  await DocumentStore.instance.updateDataUrl(document, await scanbotSDK);
 });
 
 function deleteActiveItem() {
-  documents.removeDocument(document.value!);
+  DocumentStore.instance.removeDocument(document!);
   router.push({ name: 'document_list' });
 }
 
 function openCroppingView() {
-  router.push({ name: 'document_cropping', params: { id: document.value!.id } });
+  router.push({ name: 'document_cropping', params: { id: document!.id } });
 }
 
 async function onFilterClick() {
-  console.log("document.value", document.value)
+  console.log("document.value", document)
   const result = await Swal.fire({
     title: "Select filter",
     input: "select",
     inputOptions: Filters.availableFilters,
-    inputValue: document.value?.content.filter ?? "none",
+    inputValue: document?.content.filter ?? "none",
   });
 
   const filter = Filters.availableFilters[result.value];
 
   if (filter === "none") {
-    document.value!.content.filter = undefined;
-    document.value!.content.filtered = undefined;
+    document!.content.filter = undefined;
+    document!.content.filtered = undefined;
   } else {
-    document.value!.content.filter = filter;
-    document.value!.content.filtered = await Filters.applyFilter(
+    document!.content.filter = filter;
+    document!.content.filtered = await Filters.applyFilter(
       await scanbotSDK,
-      document.value!.content.cropped ?? document.value!.content.original,
+      document!.content.cropped ?? document!.content.original,
       filter
     );
   }
 
-  await documents.updateDataUrl(document.value!, await scanbotSDK);
+  await DocumentStore.instance.updateDataUrl(document!, await scanbotSDK);
 }
 </script>
 

@@ -21,18 +21,17 @@ import { inject, onBeforeMount, onBeforeUnmount, onMounted, ref } from "vue";
 import type ScanbotSDK from "scanbot-web-sdk";
 import type { IDocumentScannerHandle, DocumentScannerViewConfiguration, DocumentScannerScanResponse } from "scanbot-web-sdk/@types";
 import { RouterLink, useRouter } from "vue-router";
-import { useDocumentsStore } from "@/stores/documents.js";
 import { onError } from "@/misc/onError";
 import { switchCamera } from "@/misc/switchCamera";
 import { swalAlert } from "@/misc/swalAlert";
+import { DocumentStore } from "@/stores/documents";
 
 let isLoading = ref(true);
 let documentScanner = ref<IDocumentScannerHandle | null>(null);
 const router = useRouter();
-const documentsStore = useDocumentsStore();
 
 function numPages() {
-  return documentsStore.documents.length + ' pages';
+  return DocumentStore.instance.documents.length + ' pages';
 }
 
 onBeforeMount(() => {
@@ -66,7 +65,7 @@ onMounted(async () => {
     },
     onDocumentDetected: (result: DocumentScannerScanResponse) => {
       scanbotSDK.utils.flash();
-      documentsStore.addDocument({
+      DocumentStore.instance.addDocument({
         original: result.originalImage,
         cropped: result.result.croppedImage ?? undefined,
         polygon: result.result.detectionResult.pointsNormalized,

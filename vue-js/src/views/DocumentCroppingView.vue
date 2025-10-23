@@ -26,14 +26,13 @@ import ScanbotSDK from "scanbot-web-sdk";
 import type { CroppingViewConfiguration, ICroppingViewHandle } from "scanbot-web-sdk/@types";
 
 import PageLayout from "@/components/PageLayout.vue";
-import { type Document, type DocumentContent, useDocumentsStore } from "@/stores/documents";
+import { type ScanbotDocument, DocumentStore } from "@/stores/documents";
 import { swalAlert } from "@/misc/swalAlert";
 import { Filters } from "@/misc/Filters";
 
 const router = useRouter();
-const documents = useDocumentsStore();
 
-const document = ref<Document>();
+let document: ScanbotDocument | undefined;
 const isLoading = ref(true);
 const croppingView = ref<ICroppingViewHandle>();
 const detailViewRouteTarget = ref({ name: 'document_detail', params: { id: router.currentRoute.value.params.id } });
@@ -46,14 +45,14 @@ onBeforeMount(() => {
 onMounted(async () => {
 
   scanbot.value = await inject("scanbotSDK")!;
-  document.value = documents.getDocumentById(Number(router.currentRoute.value.params.id));
+  document = DocumentStore.instance.getDocumentById(Number(router.currentRoute.value.params.id));
 
-  if (!document.value) {
+  if (!document) {
     await swalAlert("Document not found!");
     await router.push({ name: 'home' });
     return;
   }
-  const raw = toRaw(document.value.content);
+  const raw = toRaw(document.content);
   
   const options: CroppingViewConfiguration = {
     containerId: "cropping-view-container",
@@ -101,13 +100,13 @@ async function onRotateClick() {
 
 async function onApplyClick() {
   const croppingResult = await toRaw(croppingView.value)?.apply();
-  document.value!.content.cropped = croppingResult?.image;
-  document.value!.content.polygon = croppingResult?.polygon;
-  if (document.value!.content.filter && document.value!.content.filter != "none") {
-    document.value!.content.filtered = await Filters.applyFilter(
+  document!.content.cropped = croppingResult?.image;
+  document!.content.polygon = croppingResult?.polygon;
+  if (document!.content.filter && document!.content.filter != "none") {
+    document!.content.filtered = await Filters.applyFilter(
       scanbot.value!,
-      toRaw(document.value!.content.cropped!),
-      document.value!.content.filter
+      toRaw(document!.content.cropped!),
+      document!.content.filter
     );
   }
   await router.push(detailViewRouteTarget.value);
