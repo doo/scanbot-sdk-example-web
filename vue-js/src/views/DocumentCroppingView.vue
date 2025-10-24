@@ -109,6 +109,7 @@ async function onApplyClick() {
       document!.content.filter
     );
   }
+  await DocumentStore.instance.updateDataUrl(document!, scanbot.value!);
   await router.push(detailViewRouteTarget.value);
 }
 </script>
