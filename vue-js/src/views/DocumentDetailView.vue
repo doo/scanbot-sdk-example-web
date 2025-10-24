@@ -1,7 +1,7 @@
 <template>
   <PageLayout title="Scanned Page" :back-button-target="{ name: 'document_list' }">
     <div class="content-container">
-      <img class="detail-image" :src="document?.dataUrl" alt="Scanned Page" />
+      <img :key="imageKey" class="detail-image" :src="document?.dataUrl" alt="Scanned Page" />
     </div>
 
     <div class="bottom-bar">
@@ -25,7 +25,7 @@
 import { inject, onBeforeMount, ref } from "vue";
 import ScanbotSDK from "scanbot-web-sdk";
 import PageLayout from "@/components/PageLayout.vue";
-import { useRouter } from "vue-router";
+import { onBeforeRouteUpdate, type RouteParamsRaw, useRouter } from "vue-router";
 import Swal from 'sweetalert2'
 import 'sweetalert2/dist/sweetalert2.css'
 import { Filters } from "@/misc/Filters";
@@ -36,6 +36,7 @@ const router = useRouter();
 const scanbotSDK: Promise<ScanbotSDK> = inject("scanbotSDK")!;
 
 let document: ScanbotDocument | undefined;
+let imageKey = ref(0);
 
 onBeforeMount(async () => {
   document = DocumentStore.instance.getDocumentById(Number(router.currentRoute.value.params.id));
@@ -52,8 +53,8 @@ function deleteActiveItem() {
   router.push({ name: 'document_list' });
 }
 
-function openCroppingView() {
-  router.push({ name: 'document_cropping', params: { id: document!.id } });
+async function openCroppingView() {
+  await router.push({ name: 'document_cropping', params: { id: document!.id } });
 }
 
 async function onFilterClick() {
@@ -80,6 +81,7 @@ async function onFilterClick() {
   }
 
   await DocumentStore.instance.updateDataUrl(document!, await scanbotSDK);
+  imageKey.value += 1;
 }
 </script>
 
