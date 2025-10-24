@@ -38,11 +38,9 @@ export class DocumentStore {
   }
 
   async updateDataUrl(document: ScanbotDocument, scanbotSDK: ScanbotSDK) {
-    document.dataUrl = await scanbotSDK.toDataUrl(
-      await scanbotSDK.imageToJpeg(
-        toRaw(document.content.filtered ?? document.content.cropped ?? document.content.original)
-      )
-    );
+    const image = document.content.filtered ?? document.content.cropped ?? document.content.original;
+    const jpeg = await scanbotSDK.imageToJpeg(image);
+    document.dataUrl = await scanbotSDK.toDataUrl(jpeg.slice().buffer);
   }
 
   removeDocument(document: ScanbotDocument) {
