@@ -7,8 +7,14 @@
  */
 
 import { UIConfig } from "scanbot-web-sdk/@types";
+import ScanbotSDK from "scanbot-web-sdk";
 
 export function applyAROverlayUseCaseConfig(config: UIConfig.BarcodeScannerScreenConfiguration) {
+
+    if (!config) {
+        config = new ScanbotSDK.UI.Config.BarcodeScannerScreenConfiguration();
+    }
+
     // Configure AR Overlay.
     config.useCase.arOverlay.visible = true;
     config.useCase.arOverlay.automaticSelectionEnabled = false;

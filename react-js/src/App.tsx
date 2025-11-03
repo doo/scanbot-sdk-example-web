@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import { Box, List } from "@mui/material";
 import {
-    Code,
+    Code, CodeOutlined,
     DirectionsCar,
     DocumentScanner,
     DocumentScannerTwoTone,
@@ -12,7 +12,9 @@ import {
     Info,
     QrCode,
     QrCodeScanner,
-    TextIncrease
+    TextIncrease,
+    Check,
+    PermIdentity
 } from "@mui/icons-material";
 
 import ScanbotSDK from "scanbot-web-sdk/ui";
@@ -22,6 +24,7 @@ import { TopBar } from "./subviews/TopBar";
 import SBSDKService from "./service/SBSDKService";
 import ImageUtils, { MimeType } from "./service/ImageUtils";
 import { Toast } from "./subviews/Toast.tsx";
+import { processMrzResult } from "./pages/MrzScannerPage.tsx";
 
 function App() {
 
@@ -54,35 +57,63 @@ function App() {
                 <FeatureListItem icon={DirectionsCar} text='VIN Scanner View' onClick={() => {
                     navigate('vin-scanner');
                 }} />
+                <FeatureListItem icon={Check} text='Check Scanner View' onClick={() => {
+                    navigate('check-scanner');
+                }} />
+                <FeatureListItem icon={PermIdentity} text='Document Data Extractor View' onClick={() => {
+                    navigate('document-data-extractor');
+                }} />
 
                 <SectionHeader title={"Ready-To-Use Components"} paddingTop={10} />
                 <FeatureListItem icon={DocumentScannerTwoTone} text='Document Scanner UI' onClick={async () => {
+
                     // Configure your document scanner as needed
                     const config = new ScanbotSDK.UI.Config.DocumentScanningFlow();
-                    config.screens.camera.backgroundColor = '#FF0000';
+
+                    // If you want to use front camera, change camera module as follows:
+                    // config.screens.camera.cameraConfiguration.cameraModule = "FRONT";
                     const result = await ScanbotSDK.UI.createDocumentScanner(config);
-                    setToast(`Scan result: ${JSON.stringify(result)}`);
+
+                    let toast = "Document scanning cancelled";
+                    if (result) {
+                        toast = "Detected document. Pages: " + result?.document.data.pages.length;
+                    }
+                    setToast(toast);
                 }} />
                 <FeatureListItem icon={QrCode} text='Barcode Scanner UI' onClick={async () => {
                     // Configure your barcode scanner as needed
                     const config = new ScanbotSDK.UI.Config.BarcodeScannerScreenConfiguration();
+                    // If you want to use front camera, change camera module as follows:
 
+                    // config.cameraConfiguration.cameraModule = "FRONT";
                     config.useCase = new ScanbotSDK.UI.Config.SingleScanningMode();
                     const result = await ScanbotSDK.UI.createBarcodeScanner(config);
 
                     setToast(`Barcode result: ${JSON.stringify(result)}`);
                 }} />
+                <FeatureListItem icon={CodeOutlined} text='Mrz Scanner UI' onClick={async () => {
+                    // Configure your Mrz scanner as needed
+                    const config = new ScanbotSDK.UI.Config.MrzScannerScreenConfiguration();
+
+                    const result = await ScanbotSDK.UI.createMrzScanner(config);
+                    if (result === null) {
+                        setToast("MRZ detection failed or not validated.");
+                        return;
+                    }
+                    setToast(`MRZ result: ${processMrzResult(result.mrzDocument)}`);
+                }} />
 
                 <SectionHeader title={"Data Extraction"} />
                 <FeatureListItem icon={FindInPage} text='Detect document from .jpeg' onClick={async () => {
-                    const image = await ImageUtils.pick(MimeType.Jpeg);
+                    const data = await ImageUtils.pick(MimeType.Jpeg);
+                    const image = ScanbotSDK.Config.Image.fromEncodedBinaryData(data);
                     const result = await SBSDKService.SDK?.detectDocument(image);
                     setToast(`Document detection Complete. Status: ${result?.status}`);
                 }} />
                 <FeatureListItem icon={ImageSearch} text='Detect barcodes on .jpeg' onClick={async () => {
-                    const image = await ImageUtils.pick(MimeType.Jpeg);
+                    const data = await ImageUtils.pick(MimeType.Jpeg);
+                    const image = ScanbotSDK.Config.Image.fromEncodedBinaryData(data);
                     const result = await SBSDKService.SDK?.detectBarcodes(image);
-
                     let text = `Detected Barcodes: `;
                     text += result.barcodes.map((barcode, i) => {
                         return `(${i + 1}) ${barcode.text} (${barcode.format})`;

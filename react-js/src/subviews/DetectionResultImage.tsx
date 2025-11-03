@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ImageListItem, Skeleton } from "@mui/material";
-import { SBStoreCroppedDetectionResult } from "scanbot-web-sdk/@types";
+import { SBStoreDocumentScannerResponse } from "scanbot-web-sdk/@types";
 import SBSDKService from "../service/SBSDKService.ts";
 import ImageUtils from "../service/ImageUtils.ts";
 
 export class Props {
-    item!: SBStoreCroppedDetectionResult;
+    item!: SBStoreDocumentScannerResponse;
 }
 
 export default function DetectionResultImage(props: Props) {
@@ -15,7 +15,7 @@ export default function DetectionResultImage(props: Props) {
 
     useEffect(() => {
         async function loadImages() {
-            const images = await SBSDKService.SDK.storage.getCroppedDetectionResultImage(props.item.id);
+            const images = await SBSDKService.SDK.storage.getDocumentScannerResponseImage(props.item.id);
             const base64 = await ImageUtils.createBase64Image(props.item, images);
             setBase64Image(base64);
         }

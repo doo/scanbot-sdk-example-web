@@ -1,6 +1,6 @@
 <template>
   <PageLayout title="Document Scanner" :is-loading=isLoading :hasCameraControls="true" @on-camera-swap="onCameraSwap"
-    @on-camera-switch="onCameraSwitch">
+              @on-camera-switch="onCameraSwitch">
     <div id="scanbot-document-scanner-ui-container" class="scanbot-camera-container"></div>
     <div class="bottom-bar">
       <div class="bottom-bar-button scanner-page-counter" v-html="numPages()"></div>
@@ -19,20 +19,19 @@
 import PageLayout from "@/components/PageLayout.vue";
 import { inject, onBeforeMount, onBeforeUnmount, onMounted, ref } from "vue";
 import type ScanbotSDK from "scanbot-web-sdk";
-import type { IDocumentScannerHandle, DocumentScannerViewConfiguration, CroppedDetectionResult } from "scanbot-web-sdk/@types";
+import type { IDocumentScannerHandle, DocumentScannerViewConfiguration, DocumentScannerScanResponse } from "scanbot-web-sdk/@types";
 import { RouterLink, useRouter } from "vue-router";
-import { useDocumentsStore } from "@/stores/documents.js";
 import { onError } from "@/misc/onError";
 import { switchCamera } from "@/misc/switchCamera";
 import { swalAlert } from "@/misc/swalAlert";
+import { DocumentStore } from "@/stores/documents";
 
 let isLoading = ref(true);
 let documentScanner = ref<IDocumentScannerHandle | null>(null);
 const router = useRouter();
-const documentsStore = useDocumentsStore();
 
 function numPages() {
-  return documentsStore.documents.length + ' pages';
+  return DocumentStore.instance.documents.length + ' pages';
 }
 
 onBeforeMount(() => {
@@ -44,16 +43,15 @@ onMounted(async () => {
 
   const config: DocumentScannerViewConfiguration = {
     containerId: 'scanbot-document-scanner-ui-container',
-    detectionParameters: {
-      acceptedAngleScore: 60,
-      acceptedSizeScore: 60,
+    scannerConfiguration: {
+      parameters: {
+        acceptedAngleScore: 60,
+        acceptedSizeScore: 60,  
+      }
     },
     autoCaptureSensitivity: 0.66,
     autoCaptureEnabled: true,
-    ignoreBadAspectRatio: false,
     style: {
-      // Note that alternatively, styling the document scanner is also possible using CSS classes.
-      // For details see https://docs.scanbot.io/document-scanner-sdk/web/features/document-scanner/document-scanner-ui/
       outline: {
         polygon: {
           strokeWidthCapturing: 5,
@@ -65,12 +63,12 @@ onMounted(async () => {
         }
       }
     },
-    onDocumentDetected: (result: CroppedDetectionResult) => {
+    onDocumentDetected: (result: DocumentScannerScanResponse) => {
       scanbotSDK.utils.flash();
-      documentsStore.addDocument({
+      DocumentStore.instance.addDocument({
         original: result.originalImage,
-        cropped: result.croppedImage ?? undefined,
-        polygon: result.pointsNormalized,
+        cropped: result.result.croppedImage ?? undefined,
+        polygon: result.result.detectionResult.pointsNormalized,
       });
     },
     onError: onError,
@@ -78,18 +76,12 @@ onMounted(async () => {
       hint: {
         OK: "Capturing your document...",
         OK_BUT_TOO_SMALL: "The document is too small. Try moving closer.",
-        OK_BUT_BAD_ANGLES:
-          "This is a bad camera angle. Hold the device straight over the document.",
-        OK_BUT_BAD_ASPECT_RATIO:
-          "Rotate the device sideways, so that the document fits better into the screen.",
-        OK_BUT_OFF_CENTER: "Try holding the device at the center of the document.",
-        ERROR_NOTHING_DETECTED:
-          "Please hold the device over a document to start scanning.",
+        OK_BUT_BAD_ANGLES: "This is a bad camera angle. Hold the device straight over the document.",
+        OK_BUT_BAD_ASPECT_RATIO: "Rotate the device sideways, so that the document fits better into the screen.",
+        ERROR_NOTHING_DETECTED: "Please hold the device over a document to start scanning.",
         ERROR_TOO_DARK: "It is too dark. Try turning on a light.",
-        ERROR_TOO_NOISY: "Please move the document to a clear surface.",
         OK_BUT_TOO_DARK: "It is too dark. Try turning on a light.",
-        OK_BUT_ORIENTATION_MISMATCH:
-          "Please hold the device in portrait orientation.",
+        OK_BUT_ORIENTATION_MISMATCH: "Please hold the device in portrait orientation.",
         NOT_ACQUIRED: "Please hold the device over a document to start scanning.",
       },
     },

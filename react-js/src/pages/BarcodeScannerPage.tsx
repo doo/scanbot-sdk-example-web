@@ -29,7 +29,7 @@ export default function BarcodeScannerPage() {
             const config: BarcodeScannerViewConfiguration = {
                 containerId: ContainerId.BarcodeScanner,
                 onBarcodesDetected: onBarcodesDetected,
-                detectionParameters: {
+                scannerConfiguration: {
                     returnBarcodeImage: true,
                 }
             };

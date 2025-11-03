@@ -10,7 +10,6 @@ export default function VINScannerPage() {
     const [toast, setToast] = React.useState<string | undefined>(undefined);
 
     const onTextDetected = (result: VinScannerResult) => {
-
         let text = "";
 
         if (result.barcodeResult.extractedVIN) {

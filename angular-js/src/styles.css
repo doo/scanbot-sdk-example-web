@@ -1,0 +1,44 @@
+
+html, body {
+  min-height: 100vh;
+  height: auto;
+  margin: 0;
+  font-family: "Roboto", sans-serif;
+}
+
+.scanner-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.hidden {
+  display: none;
+}
+
+.toast-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  z-index: 10000;
+}
+
+.toast {
+  bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #407343;
+  color: #fff;
+  max-width: 80%;
+  min-width: 300px;
+  padding: 10px 20px;
+  margin: 10px auto;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  transition: opacity 0.3s ease-in-out;
+  word-break: break-word;
+}

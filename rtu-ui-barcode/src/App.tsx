@@ -6,7 +6,7 @@ import { ListAlt, QrCode, QrCode2, QrCodeScanner } from '@mui/icons-material';
 
 import ScanbotSDK from 'scanbot-web-sdk/ui';
 
-import startScanner from './launcher/StartScanner';
+import { startScanner } from './launcher/StartScanner';
 import { applyMultipleScanUseCase } from './config/MultipleScanUseCaseConfig';
 import { applyBarcodeItemMapperConfig } from './config/BarcodeItemMapperConfig';
 import { applySingleScanningUseCase } from './config/SingleScanUseCaseConfig';
@@ -45,7 +45,7 @@ function App() {
 				 * Simply run 'npm run copy-wasm' to copy the wasm files to the public folder.
 				 * cf the bash script in the package.json file.
 				 */
-				enginePath: "wasm"
+				enginePath: "wasm/",
 			});
 		}
 		init();

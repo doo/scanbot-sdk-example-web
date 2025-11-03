@@ -32,7 +32,7 @@ export default function TextPatternScannerPage() {
             const config: TextPatternScannerViewConfiguration = {
                 containerId: ContainerId.TextPatternScanner,
                 onTextDetected: onTextDetected,
-                ocrConfiguration: {
+                scannerConfiguration: {
                     validator: {
                         // Be sure to specify the type of the validator when using JSON instantiation.
                         _type: "PatternContentValidator",

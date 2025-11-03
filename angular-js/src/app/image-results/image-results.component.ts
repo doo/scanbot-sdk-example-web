@@ -1,68 +1,68 @@
-import { Component, OnInit } from "@angular/core";
-import { Router } from "@angular/router";
-import { ScanbotSdkService } from "../service/scanbot-sdk-service";
-import { DocumentRepository } from "../service/document-repository";
-import { NavigationUtils } from "../service/navigation-utils";
-import { ImageUtils } from "../service/image-utils";
-import { Utils } from "../service/utils";
-import { RoutePaths } from "../model/RoutePaths";
+import { Component, inject, OnInit } from '@angular/core';
+import { ScanbotService } from '../../service/scanbot.service';
+import ScanbotSDK from 'scanbot-web-sdk';
+import { DocumentDetectionResult, DocumentScanningResult, Image } from 'scanbot-web-sdk/@types';
+import { ToastService } from '../../service/toast.service';
+
+class DisplayImage {
+  source?: Image;
+  base64?: string;
+  detectionResult?: DocumentDetectionResult;
+}
 
 @Component({
-  selector: "app-image-results",
-  templateUrl: "./image-results.component.html",
-  styleUrls: ["./image-results.component.scss"],
+  selector: 'app-image-results',
+  templateUrl: './image-results.component.html',
 })
 export class ImageResultsComponent implements OnInit {
-  documents: any[];
 
-  router: Router;
-  sdk: ScanbotSdkService;
-  repository: DocumentRepository;
+  private scanbot = inject(ScanbotService);
+  private toast = inject(ToastService);
 
-  constructor(
-    _router: Router,
-    _sdk: ScanbotSdkService,
-    _documents: DocumentRepository
-  ) {
-    this.router = _router;
-    this.sdk = _sdk;
-    this.repository = _documents;
+  images: DisplayImage[] = [];
 
-    this.documents = [];
+  async ngOnInit() {
+    const sdk = await this.scanbot.getSdk();
+    const results = await sdk.storage.getDocumentScannerResponses(false);
+
+    results.forEach((item) => {
+
+      sdk.storage.getDocumentScannerResponseImage(item.id).then(async (images) => {
+
+        if (images && images.length > 0) {
+          const original = images.find(i => i.documentId === item.id && i.type === "original");
+          const cropped = images.find(i => i.documentId === item.id && i.type === "cropped");
+
+          let image: DisplayImage = new DisplayImage();
+          if (cropped) {
+            image.source = ScanbotSDK.Config.Image.fromWrappedImage(cropped.data);
+          } else {
+            image.source = ScanbotSDK.Config.Image.fromWrappedImage(original!.data);
+          }
+          const jpeg = await image.source.toJpeg();
+          image.base64 = await this.toDataUrl(jpeg);
+          image.detectionResult = item.result.detectionResult;
+          this.images.push(image);
+
+        } else {
+          console.warn("No images found for item:", item.id);
+        }
+      });
+    });
   }
 
-  async ngOnInit(): Promise<void> {
-    NavigationUtils.showBackButton(true);
-
-    const pages = this.repository.getPages();
-    if (pages.length > 0) {
-      NavigationUtils.getElementByClassName("nothing-to-display-hint").style.display = "none";
-    }
-
-    let i = 0;
-    for (const page of pages) {
-      console.log("page", page);
-      this.documents.push({ image: await this.sdk.toDataUrl(page), index: i });
-      i++;
-    }
+  toDataUrl(buffer: ArrayBuffer): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const blob = new Blob([buffer], { type: 'image/jpeg' });
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = () => reject(reader.error);
+      reader.readAsDataURL(blob);
+    });
   }
 
-  async savePDF() {
-    const bytes = await this.sdk.generatePDF(this.repository.getPages());
-    ImageUtils.saveBytes(bytes, Utils.generateUUID() + ".pdf");
-  }
-
-  async saveTIFF() {
-    const bytes = await this.sdk.generateTIFF(this.repository.getPages());
-    ImageUtils.saveBytes(bytes, Utils.generateUUID() + ".tiff");
-  }
-
-  async onImageClick(document: any) {
-    this.repository.setActiveItem(document.index);
-    await this.router.navigateByUrl(RoutePaths.ImageDetails);
-  }
-
-  async onBack() {
-    await this.router.navigateByUrl('/');
+  onImageClick(image: DisplayImage) {
+    const scores = image.detectionResult?.detectionScores;
+    this.toast.show(JSON.stringify(scores));
   }
 }

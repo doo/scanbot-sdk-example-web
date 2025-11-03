@@ -1,8 +1,27 @@
 import React, { useRef, useEffect } from "react";
-import { IMrzScannerHandle, MrzScannerResult, MrzScannerViewConfiguration, } from "scanbot-web-sdk/@types";
+import { GenericDocument, IMrzScannerHandle, MrzScannerResult, MrzScannerViewConfiguration, } from "scanbot-web-sdk/@types";
 
 import SBSDKService, { ContainerId } from "../service/SBSDKService";
 import SBSDKPage from "../subviews/SBSDKPage";
+
+export function processMrzResult(result: GenericDocument | null): string {
+    if (result === null) {
+        return "MRZ detection failed or not validated.";
+    }
+
+    let text = "";
+    if (result?.fields) {
+        for (const field of result.fields) {
+            if (field.type.commonType !== null) {
+                text += `${field.type.commonType}: ${field.value?.text}\n`;
+            }
+        }
+    } else {
+        text = "Did not find any MRZ fields.";
+    }
+
+    return text;
+}
 
 export default function MRZScannerPage() {
 
@@ -10,24 +29,7 @@ export default function MRZScannerPage() {
     const [toast, setToast] = React.useState<string | undefined>(undefined);
 
     const onMrzDetected = (result: MrzScannerResult) => {
-
-        if (!result.success) {
-            console.log("Detected MRZ, but result not validated (likely frame accumulation count not satisfied).");
-            return;
-        }
-
-        let text = "";
-        if (result.document?.fields) {
-            for (const field of result.document.fields) {
-                if (field.type.commonType !== null) {
-                    text += `${field.type.commonType}: ${field.value?.text}\n`;
-                }
-            }
-        } else {
-            text = JSON.stringify(result.rawMRZ);
-        }
-
-        setToast(text);
+        setToast(processMrzResult(result.document));
     };
 
     useEffect(() => {

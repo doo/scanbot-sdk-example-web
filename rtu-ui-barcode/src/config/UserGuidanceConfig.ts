@@ -4,12 +4,16 @@
  *
  * For maintainers: whenever changing this code, ensure that links using it are still pointing to valid lines!
  */
-
+import ScanbotSDK from "scanbot-web-sdk";
 import { UIConfig } from "scanbot-web-sdk/@types";
 
 export function applyUserGuidanceConfig(config: UIConfig.BarcodeScannerScreenConfiguration) {
 
-    // Hide/unhide the user guidance.
+    if (!config) {
+        config = new ScanbotSDK.UI.Config.BarcodeScannerScreenConfiguration();
+    }
+
+    // Hide/show the user guidance.
     config.userGuidance.visible = true;
 
     // Configure the title.

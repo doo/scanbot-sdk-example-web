@@ -5,11 +5,14 @@
  *
  * For maintainers: whenever changing this code, ensure that links using it are still pointing to valid lines!
  */
-
+import ScanbotSDK from "scanbot-web-sdk";
 import { UIConfig } from "scanbot-web-sdk/@types";
-import { ExpectedBarcode } from "scanbot-web-sdk/@types/ui2/configuration/barcode/FindAndPickScanningModeUseCase";
 
 export function applyFindAndPickConfig(config: UIConfig.BarcodeScannerScreenConfiguration) {
+
+    if (!config) {
+        config = new ScanbotSDK.UI.Config.BarcodeScannerScreenConfiguration();
+    }
 
     const useCase = new UIConfig.FindAndPickScanningMode();
 
@@ -26,7 +29,7 @@ export function applyFindAndPickConfig(config: UIConfig.BarcodeScannerScreenConf
 
     useCase.expectedBarcodes = [
         // This will only recognize barcodes with the value "ScanbotSDK test" and will find 5 instances of it.
-        new ExpectedBarcode({ barcodeValue: "ScanbotSDK test", count: 5 }),
+        new ScanbotSDK.UI.Config.ExpectedBarcode({ barcodeValue: "ScanbotSDK test", count: 5 }),
     ];
 
     config.useCase = useCase;

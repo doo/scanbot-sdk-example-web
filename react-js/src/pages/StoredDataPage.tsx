@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Box, ImageList } from "@mui/material";
-import { SBStoreCroppedDetectionResult } from "scanbot-web-sdk/@types";
+import { SBStoreDocumentScannerResponse } from "scanbot-web-sdk/@types";
 
 import SBSDKService from "../service/SBSDKService";
 import { TopBar } from "../subviews/TopBar";
@@ -8,13 +8,13 @@ import DetectionResultImage from "../subviews/DetectionResultImage";
 
 export default function StoredDataPage() {
 
-    const [detectionResults, setDetectionResults] = useState<SBStoreCroppedDetectionResult[]>([]);
+    const [detectionResults, setDetectionResults] = useState<SBStoreDocumentScannerResponse[]>([]);
 
     useEffect(() => {
 
         async function loadStorageData() {
             const sdk = await SBSDKService.awaitSDK();
-            const result = await sdk.storage.getCroppedDetectionResults(false);
+            const result = await sdk.storage.getDocumentScannerResponses(false);
             setDetectionResults(result);
         }
 

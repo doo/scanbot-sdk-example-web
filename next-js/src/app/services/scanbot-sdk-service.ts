@@ -1,8 +1,14 @@
 import ScanbotSDK from "scanbot-web-sdk";
-import { IBarcodeScannerHandle } from "scanbot-web-sdk/@types/interfaces/i-barcode-scanner-handle";
-import { ICroppingViewHandle } from "scanbot-web-sdk/@types/interfaces/i-cropping-view-handle";
-import { IDocumentScannerHandle } from "scanbot-web-sdk/@types/interfaces/i-document-scanner-handle";
-import { BarcodeItem, BarcodeScannerViewConfiguration, CroppedDetectionResult, CroppingViewConfiguration, DocumentScannerViewConfiguration } from "scanbot-web-sdk/@types";
+import {
+    IDocumentScannerHandle,
+    IBarcodeScannerHandle,
+    ICroppingViewHandle,
+    BarcodeItem,
+    BarcodeScannerViewConfiguration,
+    CroppingViewConfiguration,
+    DocumentScannerViewConfiguration,
+    DocumentScannerScanResponse
+} from "scanbot-web-sdk/@types";
 
 export default class ScanbotSDKService {
 
@@ -57,10 +63,10 @@ export default class ScanbotSDKService {
                 // Assign each document resul an identifier to access its details later
                 // and pre-process the image into a base64 string for display
                 const id = (Math.random() + 1).toString(36).substring(7);
-                const base64 = await ScanbotSDKService.instance.sdk!.toDataUrl(
-                    await ScanbotSDKService.instance.sdk!.imageToJpeg(e.croppedImage ?? e.originalImage)
-                );
-                this.documents.push({ id: id, image: base64, result: e });
+                const image = e.result.croppedImage ?? e.originalImage;
+                const jpeg = await ScanbotSDKService.instance.sdk!.imageToJpeg(image);
+                const base64 = await ScanbotSDKService.instance.sdk!.toDataUrl(jpeg);
+                this.documents.push({ id: id, image: base64, response: e });
 
                 // Make use of ScanbotSDK utility function flash to indicate that a document has been detected
                 this.sdk?.utils.flash();
@@ -129,12 +135,15 @@ export default class ScanbotSDKService {
 
 
     private documents: ScanbotDocument[] = [];
+
     public getDocuments() {
         return this.documents;
     }
+
     public hasDocuments() {
         return this.documents.length > 0;
     }
+
     findDocument(id: string) {
         return this.getDocuments().find(d => d.id === id);
     }
@@ -146,7 +155,7 @@ export default class ScanbotSDKService {
             return;
         }
 
-        const document = this.findDocument(id)?.result;
+        const document = this.findDocument(id)?.response;
         if (!document) {
             console.log("No document found for id: ", id);
             return;
@@ -157,7 +166,7 @@ export default class ScanbotSDKService {
         const configuration: CroppingViewConfiguration = {
             containerId: containerId,
             image: document.originalImage,
-            polygon: document.pointsNormalized,
+            polygon: document.result.detectionResult.pointsNormalized,
             disableScroll: true,
             // rotations: document.rotations ?? 0,
             style: {
@@ -194,8 +203,14 @@ export default class ScanbotSDKService {
         if (!document) {
             return;
         }
-        document.result!.croppedImage = result?.image ?? null;
-        document.result!.pointsNormalized = result?.polygon ?? [];
+        const scanningResult = document.response?.result;
+        if (scanningResult) {
+            // Scanbot SDK data types are immutable, but javascript is just a wrapper for json and is fundamentally not.
+            // Quick workaround to cast it to any time to update the properties
+            (scanningResult as any).croppedImage = result?.image ?? null;
+            (scanningResult.detectionResult as any).pointsNormalized = result?.polygon ?? [];
+        }
+
 
         document.image = await ScanbotSDKService.instance.sdk!.toDataUrl(
             await ScanbotSDKService.instance.sdk!.imageToJpeg(result?.image!)
@@ -211,7 +226,7 @@ export default class ScanbotSDKService {
 export class ScanbotDocument {
     id?: string;
     image?: string;
-    result?: Writeable<CroppedDetectionResult>;
+    response?: Writeable<DocumentScannerScanResponse>;
 }
 
 type Writeable<T> = { -readonly [P in keyof T]: T[P] };

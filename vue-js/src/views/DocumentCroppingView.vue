@@ -18,47 +18,50 @@
   </PageLayout>
 </template>
 
-
 <script setup lang="ts">
-import PageLayout from "@/components/PageLayout.vue";
+
 import { inject, onBeforeMount, onBeforeUnmount, onMounted, ref, toRaw } from "vue";
 import { useRouter } from "vue-router";
-import { type Document, useDocumentsStore } from "@/stores/documents";
 import ScanbotSDK from "scanbot-web-sdk";
-import type { ICroppingViewHandle } from "scanbot-web-sdk/@types";
+import type { CroppingViewConfiguration, ICroppingViewHandle } from "scanbot-web-sdk/@types";
+
+import PageLayout from "@/components/PageLayout.vue";
+import { type ScanbotDocument, DocumentStore } from "@/stores/documents";
 import { swalAlert } from "@/misc/swalAlert";
 import { Filters } from "@/misc/Filters";
 
 const router = useRouter();
-const documents = useDocumentsStore();
-const scanbotSDK: Promise<ScanbotSDK> = inject("scanbotSDK")!;
 
-const document = ref<Document>();
+let document: ScanbotDocument | undefined;
 const isLoading = ref(true);
 const croppingView = ref<ICroppingViewHandle>();
 const detailViewRouteTarget = ref({ name: 'document_detail', params: { id: router.currentRoute.value.params.id } });
+const scanbot = ref<ScanbotSDK>();
 
 onBeforeMount(() => {
   isLoading.value = true;
 });
 
 onMounted(async () => {
-  document.value = documents.getDocumentById(Number(router.currentRoute.value.params.id));
 
-  if (!document.value) {
+  scanbot.value = await inject("scanbotSDK")!;
+  document = DocumentStore.instance.getDocumentById(Number(router.currentRoute.value.params.id));
+
+  if (!document) {
     await swalAlert("Document not found!");
     await router.push({ name: 'home' });
     return;
   }
-
-  const options = {
+  const raw = toRaw(document.content);
+  
+  const options: CroppingViewConfiguration = {
     containerId: "cropping-view-container",
-    image: document.value.content.original,
-    polygon: document.value.content.polygon,
+    image: raw.original,
+    polygon: raw.polygon,
     disableScroll: true,
-    rotations: document.value.content.rotations ?? 0,
+    rotations: raw.rotations ?? 0,
     style: {
-      padding: 20,
+      padding: 0,
       polygon: {
         color: "green",
         width: 4,
@@ -73,8 +76,8 @@ onMounted(async () => {
       },
     },
   };
-  croppingView.value = await (await scanbotSDK).openCroppingView(options);
 
+  croppingView.value = await scanbot.value!.openCroppingView(options);
   isLoading.value = false;
 });
 
@@ -84,6 +87,7 @@ onBeforeUnmount(() => {
 
 async function onCroppingClick() {
   isLoading.value = true;
+
   await croppingView.value?.detect();
   isLoading.value = false;
 }
@@ -95,25 +99,25 @@ async function onRotateClick() {
 }
 
 async function onApplyClick() {
-  const croppingResult = await croppingView.value?.apply();
-  document.value!.content.cropped = croppingResult?.image;
-  document.value!.content.polygon = croppingResult?.polygon;
-  if (document.value!.content.filter && document.value!.content.filter != "none") {
-    document.value!.content.filtered = await Filters.applyFilter(
-      await scanbotSDK,
-      toRaw(document.value!.content.cropped!),
-      document.value!.content.filter
+  const croppingResult = await toRaw(croppingView.value)?.apply();
+  document!.content.cropped = croppingResult?.image;
+  document!.content.polygon = croppingResult?.polygon;
+  if (document!.content.filter && document!.content.filter != "none") {
+    document!.content.filtered = await Filters.applyFilter(
+      scanbot.value!,
+      toRaw(document!.content.cropped!),
+      document!.content.filter
     );
   }
+  await DocumentStore.instance.updateDataUrl(document!, scanbot.value!);
   await router.push(detailViewRouteTarget.value);
 }
 </script>
-
 
 <style>
 #cropping-view-container {
   margin-top: 68px;
   width: 100%;
-  height: calc(100% - 150px);
+  height: calc(100% - 50px);
 }
 </style>

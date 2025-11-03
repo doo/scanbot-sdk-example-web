@@ -78,7 +78,7 @@ onMounted(async () => {
   const configuration: BarcodeScannerViewConfiguration = {
     onBarcodesDetected: onBarcodesDetected,
     containerId: "barcode-scanner-container",
-    detectionParameters: {
+    scannerConfiguration: {
       barcodeFormatConfigurations: [
         new ScanbotSDK.Config.BarcodeFormatCommonConfiguration({
           formats: barcodeFormats,
@@ -97,7 +97,10 @@ onMounted(async () => {
         }
       }
     },
-    finder: { visible: !isOverlayScanner.value },
+    finder: {
+      _type: "ViewFinderConfiguration",
+      visible: !isOverlayScanner.value 
+    },
   };
 
   try {
