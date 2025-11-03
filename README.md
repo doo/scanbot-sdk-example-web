@@ -15,7 +15,7 @@ The Scanbot SDK is a set of high-level APIs that lets you integrate barcode and 
 
 The SDK can be implemented into your web app with just a few lines of code and comes with Ready-To-Use UI components.
 
-💡 For more details about the Scanbot Web SDK, please see our [Barcode Scanner](https://docs.scanbot.io/barcode-scanner-sdk/web/introduction/?utm_source=github.com&utm_medium=referral&utm_campaign=dev_sites) or [Document Scanner](https://docs.scanbot.io/document-scanner-sdk/web/introduction/?utm_source=github.com&utm_medium=referral&utm_campaign=dev_sites) documentation.
+💡 For more details about the Scanbot Web SDK, please see our [Barcode Scanner](https://docs.scanbot.io/web/barcode-scanner-sdk/introduction/?utm_source=github.com&utm_medium=referral&utm_campaign=dev_sites) or [Document Scanner](https://docs.scanbot.io/web/document-scanner-sdk/introduction/?utm_source=github.com&utm_medium=referral&utm_campaign=dev_sites) documentation.
 
 ## How to run this example app?
 
@@ -91,13 +91,13 @@ The Web Barcode Scanner library supports all common 1D- or 2D barcodes and multi
 | 2D Barcodes        | [QR Code](https://scanbot.io/glossary/qr-code/?utm_source=github.com&utm_medium=referral&utm_campaign=dev_sites), [Micro QR Code](https://scanbot.io/barcode-scanner-sdk/micro-qr-code/?utm_source=github.com&utm_medium=referral&utm_campaign=dev_sites), [Aztec Code](https://scanbot.io/barcode-scanner-sdk/aztec-code/?utm_source=github.com&utm_medium=referral&utm_campaign=dev_sites), [PDF417 Code](https://scanbot.io/barcode-scanner-sdk/pdf417/?utm_source=github.com&utm_medium=referral&utm_campaign=dev_sites), [Data Matrix Code,](https://scanbot.io/barcode-scanner-sdk/data-matrix/?utm_source=github.com&utm_medium=referral&utm_campaign=dev_sites) [GiroCode](https://scanbot.io/glossary/giro-code/?utm_source=github.com&utm_medium=referral&utm_campaign=dev_sites), [NTIN Code](https://scanbot.io/glossary/gtin/?utm_source=github.com&utm_medium=referral&utm_campaign=dev_sites), [PPN](https://scanbot.io/glossary/ppn/?utm_source=github.com&utm_medium=referral&utm_campaign=dev_sites), [UDI](https://scanbot.io/glossary/udi/?utm_source=github.com&utm_medium=referral&utm_campaign=dev_sites), [Royal Mail Mailmark](https://scanbot.io/barcode-scanner-sdk/royal-mail/?utm_source=github.com&utm_medium=referral&utm_campaign=dev_sites), MaxiCode |
 | Postal Symbologies | USPS Intelligent Mail Barcode (IMb), Royal Mail RM4SCC Barcode, Australia Post 4-State Customer Code, Japan Post 4-State Customer Code, KIX                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
 
-💡 Please visit our [docs](https://docs.scanbot.io/barcode-scanner-sdk/web/supported-barcodes/?utm_source=github.com&utm_medium=referral&utm_campaign=dev_sites) for a complete overview of the supported barcode symbologies.
+💡 Please visit our [docs](https://docs.scanbot.io/web/barcode-scanner-sdk/supported-barcode-symbologies/?utm_source=github.com&utm_medium=referral&utm_campaign=dev_sites) for a complete overview of the supported barcode symbologies.
 
 #### Data Parsers
 
 The Scanbot Web Barcode Scanner SDK supports a variety of data parsers that extract structured information from 2D barcodes such as QR Codes and Data Matrix. These include parsers for documents such as driving licences (AAMVA), boarding passes, medical certificates, SEPA forms, Swiss QR codes and vCard business cards. 
 
-💡 Please refer to our [documentation](https://docs.scanbot.io/barcode-scanner-sdk/web/supported-barcodes/#data-parsers) for a full list of supported data parsers.
+💡 Please refer to our [documentation](https://docs.scanbot.io/web/barcode-scanner-sdk/supported-barcode-symbologies/?utm_source=github.com&utm_medium=referral&utm_campaign=dev_sites#supported-barcode-data-parsers) for a full list of supported data parsers.
 
 ### Document Scanner SDK
 
@@ -136,7 +136,7 @@ As a customer, you also get access to a dedicated support Slack or Microsoft Tea
 
 These examples will run one minute per session without a license. After that, all functionalities and UI components will stop working. 
 
-To try the Scanbot SDK without the one-minute limit, you can request a free, no-strings-attached [7-day trial license](https://scanbot.io/trial/?utm_source=github.com&utm_medium=referral&utm_campaign=dev_sites).
+To try the Scanbot SDK without the one-minute limit, you can request a free, no-strings-attached [7-day trial license](https://docs.scanbot.io/trial/?utm_source=github.com&utm_medium=referral&utm_campaign=dev_sites).
 
 Alternatively, check out our [demo apps](https://scanbot.io/demo-apps/?utm_source=github.com&utm_medium=referral&utm_campaign=dev_sites) to test the SDK.
 
