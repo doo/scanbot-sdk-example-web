@@ -12,6 +12,7 @@ import StoredDataPage from "./pages/StoredDataPage";
 import StoredDataDetailsPage from './pages/StoredDataDetailsPage';
 import CheckScannerPage from "./pages/CheckScannerPage.tsx";
 import DocumentDataExtractorPage from "./pages/DocumentDataExtractorPage.tsx";
+import CroppingPage from './pages/CroppingPage.tsx';
 
 createRoot(document.getElementById('root')!).render(
     <HashRouter>
@@ -26,6 +27,7 @@ createRoot(document.getElementById('root')!).render(
             <Route path="document-scanner" element={<DocumentScannerPage />} />
             <Route path="stored-data" element={<StoredDataPage />} />
             <Route path="stored-data/details" element={<StoredDataDetailsPage />} />
+            <Route path="stored-data/details/crop" element={<CroppingPage />} />
         </Routes>
     </HashRouter>
 )

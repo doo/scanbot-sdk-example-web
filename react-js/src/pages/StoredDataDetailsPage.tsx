@@ -8,8 +8,11 @@ import { TopBar } from "../subviews/TopBar";
 import { TextColor } from "../subviews/FeatureListItem.tsx";
 import { Toast } from "../subviews/Toast.tsx";
 import ScanbotSDK from "scanbot-web-sdk/ui";
+import { useNavigate } from "react-router-dom";
 
 export default function StorageDetailsPage() {
+
+    const navigate = useNavigate();
 
     const [item, setItem] = useState<SBStoreDocumentScannerResponse | null>(null);
     const [base64Image, setBase64Image] = useState<string | undefined>(undefined);
@@ -88,6 +91,10 @@ export default function StorageDetailsPage() {
         setIsLoading(false);
     }
 
+    async function cropImage() {
+        navigate('crop?item=' + item?.id);
+    }
+
     return (
         <Box style={{
             display: "flex",
@@ -110,10 +117,11 @@ export default function StorageDetailsPage() {
                      alt={`Storage image ${item?.id}`}
                      style={{ width: "90%", maxHeight: 500, objectFit: "contain" }}
                 />
-                <Box style={{ paddingLeft: "5%", paddingTop: 10 }}>
+                <Box style={{ paddingLeft: "5%", paddingTop: 10, display: "flex", flexDirection: "column" }}>
                     <Button onClick={runDQA}>Run Document Quality Analysis</Button>
                     <Button onClick={runOCR}>Run Optical Character Recognition</Button>
                     <Button onClick={rotateImage}>Rotate Image</Button>
+                    <Button onClick={cropImage}>Re-crop</Button>
                 </Box>
             </Box>}
             <CircularProgress
