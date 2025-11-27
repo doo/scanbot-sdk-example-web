@@ -18,8 +18,8 @@ export class BarcodeScanningModes {
         const config: BarcodeScannerViewConfiguration = {
             containerId: "<SCANNER-CONTAINER-ID>",
             onBarcodesDetected: (result) => {
-                console.log("Barcodes detected:", result.barcodes);
                 // If you want to scan a single barcode, you'll want to close the scanner after first detection
+                console.log("Barcodes detected:", result.barcodes);
             }
         }
         config.scannerConfiguration!.returnBarcodeImage = true;
@@ -31,9 +31,9 @@ export class BarcodeScanningModes {
         const config: BarcodeScannerViewConfiguration = {
             containerId: "<SCANNER-CONTAINER-ID>",
             onBarcodesDetected: (result) => {
-                console.log("Barcodes detected:", result.barcodes);
                 // In multiple barcode scanning mode, the scanner continues scanning and reporting barcodes
                 // until you explicitly stop or dispose it.
+                console.log("Barcodes detected:", result.barcodes);
             }
         }
         config.scannerConfiguration!.returnBarcodeImage = true;
@@ -48,10 +48,10 @@ export class BarcodeScanningModes {
         return {
             containerId: "<SCANNER-CONTAINER-ID>",
             onBarcodesDetected: (result) => {
-                console.log("Barcodes detected:", result.barcodes);
                 // In batch barcode scanning mode, the scanner continues scanning and reporting barcodes
                 // until you explicitly stop or dispose it.
                 // You can collect the results into a batch for further processing.
+                console.log("Barcodes detected:", result.barcodes);
             }
         };
     }
