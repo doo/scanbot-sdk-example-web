@@ -45,11 +45,8 @@ npm run dev
 
 ### Plain JavaScript App
 
-The vanilla JavaScript app needs to download the SDK from npm. To do this, run the script
-
-```
-plain-js/download-sdk.sh
-```
+The vanilla JavaScript app uses the default CDN as its engine path. 
+We cannot guarantee CDN uptime and therefore recommend against using this solution in production.
 
 To run the JavaScript example:
 
