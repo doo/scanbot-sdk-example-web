@@ -6,7 +6,7 @@
  */
 
 import ScanbotSDK from "scanbot-web-sdk/ui";
-import { BarcodeScannerViewConfiguration } from "scanbot-web-sdk/@types";
+import { BarcodeItem, BarcodeScannerViewConfiguration, IBarcodePolygonHandle, IBarcodePolygonLabelHandle } from "scanbot-web-sdk/@types";
 import { ViewFinderConfiguration } from "scanbot-web-sdk/@types/ui2/configuration/common/ViewFinderConfiguration";
 
 // Mock the ScanbotSDK initialization for this snippet
@@ -99,5 +99,82 @@ export class BarcodeScanningModes {
         } catch (error) {
             alert(error);
         }
+    }
+
+    multiAR(): BarcodeScannerViewConfiguration {
+        return {
+            containerId: "<SCANNER-CONTAINER-ID>",
+            finder: {
+                _type: "ViewFinderConfiguration",
+                visible: false,
+            },
+            overlay: {
+                visible: true,
+                // Barcodes are detected automatically in the AR overlay.
+                automaticSelectionEnabled: true,
+            },
+            onBarcodesDetected: (result) => {
+                console.log("Barcodes detected:", result.barcodes);
+            },
+        };
+    }
+
+    selectAR(): BarcodeScannerViewConfiguration {
+        return {
+            containerId: "<SCANNER-CONTAINER-ID>",
+            finder: {
+                _type: "ViewFinderConfiguration",
+                visible: false,
+            },
+            overlay: {
+                visible: true,
+                // Barcodes are detected only when the user selects them in the AR overlay.
+                automaticSelectionEnabled: false,
+            },
+            onBarcodesDetected: (result) => {
+                console.log("Barcodes detected:", result.barcodes);
+            },
+        };
+    }
+
+    findAndPick(): BarcodeScannerViewConfiguration {
+        return {
+            containerId: "<SCANNER-CONTAINER-ID>",
+            finder: {
+                _type: "ViewFinderConfiguration",
+                visible: false,
+            },
+            scannerConfiguration: {
+                returnBarcodeImage: true,
+            },
+            overlay: {
+                visible: true,
+                // Barcodes are detected only when the user selects them in the AR overlay.
+                automaticSelectionEnabled: false,
+                onBarcodeFound: (code: BarcodeItem, polygon: IBarcodePolygonHandle, label: IBarcodePolygonLabelHandle) => {
+                    // This callback is invoked whenever a barcode is "found" in the camera preview.
+                    // Note that the barcode is not "selected" yet, i.e. onBarcodesDetected is not called yet.
+                    if (code.format === "QR_CODE") {
+                        polygon.style({
+                            fillColor: "rgba(0, 255, 0, 0.3)",
+                            strokeColor: "rgba(0, 255, 0, 1)",
+                        });
+                        label.style({
+                            backgroundColor: "rgba(0, 255, 0, 0.9)",
+                            textColor: "white",
+                        });
+                    } else {
+                        polygon.style({
+                            fillColor: "rgba(255, 255, 255, 0.3)",
+                            strokeColor: "rgba(255, 255, 255, 1)",
+                        });
+                        label.style({
+                            backgroundColor: "rgba(255, 255, 255, 0.9)",
+                            textColor: "black",
+                        });
+                    }
+                }
+            },
+        };
     }
 }
