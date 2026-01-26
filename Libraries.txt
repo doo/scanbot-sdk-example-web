@@ -1,4 +1,4 @@
-Open Source libraries used in Scanbot Web SDK v8.0.0
+Open Source libraries used in Scanbot Web SDK v8.0.1
 ----------------------------------------------------------------------------------------
 
 @types/classnames 2.3.1
