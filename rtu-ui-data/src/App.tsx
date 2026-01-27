@@ -48,7 +48,7 @@ function App() {
                              toast.error("License info missing. Are you sure you've initialized the SDK?");
                              return;
                          }
-                         if (!info.isValid()) {
+                         if (!info.isValid) {
                              toast.error("License invalid. Status: " + info.status);
                              return;
                          }
