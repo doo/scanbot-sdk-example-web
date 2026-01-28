@@ -21,20 +21,30 @@ export function applyBarcodeFormatsConfig(config: UIConfig.BarcodeScannerScreenC
     config.scannerConfiguration.barcodeFormatConfigurations = [
         // Lowest priority
         new ScanbotSDK.Config.BarcodeFormatCommonConfiguration({
-            formats: ["PDF_417", "CODE_128", "UPC_A"],
+            formats: ["PDF_417", "DATA_MATRIX", "CODE_39", "CODE_128", "UPC_A"],
             gs1Handling: "PARSE",
             minimum1DQuietZoneSize: 7
         }),
-        // Mid-priority
-        new ScanbotSDK.Config.BarcodeFormatCommonOneDConfiguration({ formats: ["MICRO_QR_CODE", "QR_CODE", "PDF_417", "UPC_A"] }),
+        // Mid-priority, only applied to one-d barcode formats, overwrites minimum1DQuietZoneSize for CODE_39 from common config
+        new ScanbotSDK.Config.BarcodeFormatCommonOneDConfiguration({
+            formats: ["CODE_39", "CODE_93"],
+            minimum1DQuietZoneSize: 9
+        }),
+        // Mid-priority, only applied to twod barcode formats, overwrites gs1Handling for DATA_MATRIX from common config
+        new ScanbotSDK.Config.BarcodeFormatCommonTwoDConfiguration({
+            formats: ["DATA_MATRIX", "AZTEC"],
+            gs1Handling: "VALIDATE_STRUCTURE"
+        }),
         // Highest priority
         new ScanbotSDK.Config.BarcodeFormatQrCodeConfiguration({ microQr: true, gs1Handling: "DECODE_STRUCTURE" }),
-        // Highest priority, will overwrite gs1Handling for pdf417 from common
+        // Highest priority, overwrites gs1Handling for pdf417 from common
         new ScanbotSDK.Config.BarcodeFormatPdf417Configuration({ gs1Handling: "DECODE_STRUCTURE" }),
-        // Highest priority, will overwrite minimum1DQuietZoneSize for upca
+        // Highest priority, overwrites minimum1DQuietZoneSize for code93 from common oned
+        new ScanbotSDK.Config.BarcodeFormatCode93Configuration({ minimum1DQuietZoneSize: 12 }),
+        // Highest priority, overwrites minimum1DQuietZoneSize for upca from common
         new ScanbotSDK.Config.BarcodeFormatUpcEanConfiguration({
             upca: true,
-            minimum1DQuietZoneSize: 43,
+            minimum1DQuietZoneSize: 11,
             extensions: "ALLOW_5"
         }),
     ];
