@@ -6,13 +6,13 @@
  */
 
 import ScanbotSDK from "scanbot-web-sdk";
-import { Config, SBDocument } from "scanbot-web-sdk/@types";
+import { SBDocument } from "scanbot-web-sdk/@types";
 
 // Mock the initialization of ScanbotSDK for the example.
 const sdk = await ScanbotSDK.initialize({ licenseKey: "", enginePath: "" });
 
 export async function analyzeDocumentQuality(document: SBDocument) {
-    const config = new Config.DocumentQualityAnalyzerConfiguration();
+    const config = new ScanbotSDK.Config.DocumentQualityAnalyzerConfiguration();
     const analyzer = await sdk.createDocumentQualityAnalyzer(config);
 
     for (const page of document.pages) {

@@ -69,7 +69,6 @@ function App() {
 
                     // Configure your document scanner as needed
                     const config = new ScanbotSDK.UI.Config.DocumentScanningFlow();
-
                     // If you want to use front camera, change camera module as follows:
                     // config.screens.camera.cameraConfiguration.cameraModule = "FRONT";
                     const result = await ScanbotSDK.UI.createDocumentScanner(config);

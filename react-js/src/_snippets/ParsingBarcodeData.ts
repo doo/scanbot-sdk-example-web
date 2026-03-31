@@ -8,16 +8,17 @@
 import ScanbotSDK from "scanbot-web-sdk/ui";
 import {
     BarcodeScannerConfiguration,
-    AAMVA, AAMVADocumentType,
-    BoardingPass, BoardingPassDocumentType,
-    DEMedicalPlan, DEMedicalPlanDocumentType,
-    GS1, GS1DocumentType,
-    HIBC, HIBCDocumentType,
-    IDCardPDF417, IDCardPDF417DocumentType,
-    MedicalCertificate, MedicalCertificateDocumentType,
-    SEPA, SEPADocumentType,
-    SwissQR, SwissQRDocumentType,
-    VCard, VCardDocumentType, BarcodeScannerResult
+    AAMVA,
+    BoardingPass,
+    DEMedicalPlan,
+    GS1,
+    HIBC,
+    IDCardPDF417,
+    MedicalCertificate,
+    SEPA,
+    SwissQR,
+    VCard,
+    BarcodeScannerResult
 } from "scanbot-web-sdk/@types";
 
 // Mock the ScanbotSDK initialization for this snippet
@@ -56,51 +57,51 @@ export async function processResult(result: BarcodeScannerResult) {
         }
 
         const type = document.type.name;
-        if (type === AAMVADocumentType) {
+        if (type === AAMVA.DOCUMENT_TYPE) {
             const aamva = new AAMVA(document);
             const title = aamva.titleData;
             const vehicle = aamva.vehicleData;
             const registration = aamva.registrationData;
             console.log("AAMVA Document detected:", title, vehicle, registration);
-        } else if (type === BoardingPassDocumentType) {
+        } else if (type === BoardingPass.DOCUMENT_TYPE) {
             const boardingPass = new BoardingPass(document);
             const passenger = boardingPass.passengerName;
             const legs = boardingPass.legs;
             console.log("Boarding Pass detected:", passenger, legs);
-        } else if (type === MedicalCertificateDocumentType) {
+        } else if (type === MedicalCertificate.DOCUMENT_TYPE) {
             const medicalCertificate = new MedicalCertificate(document);
             const name = medicalCertificate.firstName;
             console.log("Medical Certificate detected:", name);
-        } else if (type === DEMedicalPlanDocumentType) {
+        } else if (type === DEMedicalPlan.DOCUMENT_TYPE) {
             const medicalPlan = new DEMedicalPlan(document);
             const doctor = medicalPlan.doctor;
             const patient = medicalPlan.patient;
             console.log("DE Medical Plan detected:", doctor, patient);
-        } else if (type === IDCardPDF417DocumentType) {
+        } else if (type === IDCardPDF417.DOCUMENT_TYPE) {
             const idCard = new IDCardPDF417(document);
             const firstName = idCard.firstName;
             const lastName = idCard.lastName;
             console.log("ID Card PDF417 detected:", firstName, lastName);
-        } else if (type === GS1DocumentType) {
+        } else if (type === GS1.DOCUMENT_TYPE) {
             const gs1 = new GS1(document);
             const elements = gs1.elements;
             console.log("GS1 Document detected:", elements);
-        } else if (type === SEPADocumentType) {
+        } else if (type === SEPA.DOCUMENT_TYPE) {
             const sepa = new SEPA(document);
             const receiver = sepa.receiverName;
             const amount = sepa.amount;
             console.log("SEPA Document detected:", receiver, amount);
-        } else if (type === SwissQRDocumentType) {
+        } else if (type === SwissQR.DOCUMENT_TYPE) {
             const swissQR = new SwissQR(document);
             const payee = swissQR.payeeName;
             const amount = swissQR.amount;
             console.log("Swiss QR Document detected:", payee, amount);
-        } else if (type === VCardDocumentType) {
+        } else if (type === VCard.DOCUMENT_TYPE) {
             const vCard = new VCard(document);
             const name = vCard.name;
             const emails = vCard.emails;
             console.log("VCard Document detected:", name, emails);
-        } else if (type == HIBCDocumentType) {
+        } else if (type == HIBC.DOCUMENT_TYPE) {
             const hibc = new HIBC(document);
             const lot = hibc.lotNumber;
             const serial = hibc.serialNumber;
