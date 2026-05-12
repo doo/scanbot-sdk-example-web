@@ -55,6 +55,5 @@ export class ImageEnhancer {
         const parameters = new ScanbotSDK.Config.DocumentStraighteningParameters({ straighteningMode: "STRAIGHTEN" });
         const page = result!.document.pages[0];
         result?.document.straightenPage(page, parameters);
-
     }
 }
