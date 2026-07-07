@@ -1,5 +1,5 @@
 <template>
-  <PageLayout title="Document Scanner" :is-loading=isLoading :hasCameraControls="true" @on-camera-swap="onCameraSwap"
+  <PageLayout title="Document Scanner" :is-loading=isLoading :hasCameraControls="true"
               @on-camera-switch="onCameraSwitch">
     <div id="scanbot-document-scanner-ui-container" class="scanbot-camera-container"></div>
     <div class="bottom-bar">
@@ -103,13 +103,6 @@ onBeforeUnmount(async () => {
     documentScanner.value = null;
   }
 });
-
-function onCameraSwap() {
-  console.log("onCameraSwap")
-  if (documentScanner.value) {
-    documentScanner.value.swapCameraFacing(true);
-  }
-}
 
 function onCameraSwitch() {
   if (documentScanner.value) {

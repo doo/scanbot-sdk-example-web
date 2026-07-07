@@ -14,6 +14,7 @@ import {
     QrCodeScanner,
     TextIncrease,
     Check,
+    CreditCard,
     PermIdentity
 } from "@mui/icons-material";
 
@@ -59,6 +60,9 @@ function App() {
                 }} />
                 <FeatureListItem icon={Check} text='Check Scanner View' onClick={() => {
                     navigate('check-scanner');
+                }} />
+                <FeatureListItem icon={CreditCard} text='Credit Card Scanner View' onClick={() => {
+                    navigate('credit-card-scanner');
                 }} />
                 <FeatureListItem icon={PermIdentity} text='Document Data Extractor View' onClick={() => {
                     navigate('document-data-extractor');

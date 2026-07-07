@@ -1,5 +1,5 @@
 <template>
-  <PageLayout :is-loading="isLoading" title="Barcode Scanner" :hasCameraControls="true" @on-camera-swap="onCameraSwap"
+  <PageLayout :is-loading="isLoading" title="Barcode Scanner" :hasCameraControls="true"
               @on-camera-switch="onCameraSwitch">
     <div id="barcode-scanner-container"></div>
   </PageLayout>
@@ -119,12 +119,6 @@ onBeforeUnmount(async () => {
     barcodeScanner.value = null;
   }
 });
-
-function onCameraSwap() {
-  if (barcodeScanner.value) {
-    barcodeScanner.value.swapCameraFacing(true);
-  }
-}
 
 function onCameraSwitch() {
   if (barcodeScanner.value) {

@@ -121,5 +121,9 @@ export default class ImageUtils {
 
         link.download = filename;
         link.click();
+        
+        // Cleanup
+        URL.revokeObjectURL(link.href);
+        link.remove();
     }
 }
