@@ -38,7 +38,7 @@ function App() {
     }, []);
 
     return (
-        <Box style={{ width: "100vw", height: "100vh", backgroundColor: "white" }}>
+        <Box style={{ width: "100%", height: "100vh", backgroundColor: "white" }}>
             <TopBar title={"Scanbot Web SDK"} />
             <List sx={{ padding: 0 }}>
 
