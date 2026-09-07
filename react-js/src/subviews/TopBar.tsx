@@ -18,7 +18,7 @@ export function TopBar(props: Props) {
             justifyContent: "space-between",
             alignItems: "center",
             height: TopBarHeight,
-            width: "100vw",
+            width: "100%",
         }}>
             <Box style={{ flexBasis: 0, flexGrow: 1 }}>
                 <IconButton
