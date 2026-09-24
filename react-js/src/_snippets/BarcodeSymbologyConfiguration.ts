@@ -80,8 +80,8 @@ export async function createMultipleSymbologyScanner() {
         stripCheckDigits: false,
         minimumTextLength: 0,
         maximumTextLength: 0,
-        checksum: true
     });
+
     formatConfigurations.push(code11Config)
 
     const code2Of5Config = new BarcodeFormatCode2Of5Configuration({

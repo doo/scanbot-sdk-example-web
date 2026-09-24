@@ -26,6 +26,7 @@ import SBSDKService from "./service/SBSDKService";
 import ImageUtils, { MimeType } from "./service/ImageUtils";
 import { Toast } from "./subviews/Toast.tsx";
 import { processMrzResult } from "./pages/MrzScannerPage.tsx";
+import { withScrollLock } from "./service/ScrollLock";
 
 function App() {
 
@@ -38,7 +39,7 @@ function App() {
     }, []);
 
     return (
-        <Box style={{ width: "100vw", height: "100vh", backgroundColor: "white" }}>
+        <Box style={{ width: "100%", height: "100vh", backgroundColor: "white" }}>
             <TopBar title={"Scanbot Web SDK"} />
             <List sx={{ padding: 0 }}>
 
@@ -75,7 +76,7 @@ function App() {
                     const config = new ScanbotSDK.UI.Config.DocumentScanningFlow();
                     // If you want to use front camera, change camera module as follows:
                     // config.screens.camera.cameraConfiguration.cameraModule = "FRONT";
-                    const result = await ScanbotSDK.UI.createDocumentScanner(config);
+                    const result = await withScrollLock(() => ScanbotSDK.UI.createDocumentScanner(config));
 
                     let toast = "Document scanning cancelled";
                     if (result) {
@@ -90,7 +91,7 @@ function App() {
 
                     // config.cameraConfiguration.cameraModule = "FRONT";
                     config.useCase = new ScanbotSDK.UI.Config.SingleScanningMode();
-                    const result = await ScanbotSDK.UI.createBarcodeScanner(config);
+                    const result = await withScrollLock(() => ScanbotSDK.UI.createBarcodeScanner(config));
 
                     setToast(`Barcode result: ${JSON.stringify(result)}`);
                 }} />
@@ -98,7 +99,7 @@ function App() {
                     // Configure your Mrz scanner as needed
                     const config = new ScanbotSDK.UI.Config.MrzScannerScreenConfiguration();
 
-                    const result = await ScanbotSDK.UI.createMrzScanner(config);
+                    const result = await withScrollLock(() => ScanbotSDK.UI.createMrzScanner(config));
                     if (result === null) {
                         setToast("MRZ detection failed or not validated.");
                         return;
