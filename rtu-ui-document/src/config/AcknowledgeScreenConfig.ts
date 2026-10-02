@@ -22,12 +22,12 @@ export function applyAcknowledgeScreenConfig(config: UIConfig.DocumentScanningFl
 
     // You can also configure the buttons in the bottom bar of the acknowledgment screen,
     // e.g. to force the user to retake, if the captured document is not OK.
-    acknowledgeScreenConfig.bottomBar.proceedAnywayButton.visible = false;
+    acknowledgeScreenConfig.toolbar.proceedAnywayButton.visible = false;
 
     // Hide the titles of the buttons.
-    acknowledgeScreenConfig.bottomBar.acceptWhenAcceptableButton.title.visible = false;
-    acknowledgeScreenConfig.bottomBar.proceedAnywayButton.documentNotFound.visible = false;
-    acknowledgeScreenConfig.bottomBar.retakeButton.title.visible = false;
+    acknowledgeScreenConfig.toolbar.acceptWhenAcceptableButton.title.visible = false;
+    acknowledgeScreenConfig.toolbar.proceedAnywayButton.documentNotFound.visible = false;
+    acknowledgeScreenConfig.toolbar.retakeButton.title.visible = false;
 
     // Configure the acknowledgment screen's hint message which is shown if the least acceptable quality is not met.
     acknowledgeScreenConfig.uncertainQualityWarning.visible = true;

@@ -9,7 +9,7 @@ import { UIConfig } from "scanbot-web-sdk/@types";
 import ScanbotSDK from "scanbot-web-sdk/ui";
 
 export function applyScanningScreenConfig(config: UIConfig.DocumentScanningFlow) {
-    
+
     // Configure the top user guidance.
     config.screens.camera.topUserGuidance.visible = true;
     config.screens.camera.topUserGuidance.background.fillColor = "#FF0000";
@@ -29,21 +29,21 @@ export function applyScanningScreenConfig(config: UIConfig.DocumentScanningFlow)
     config.screens.camera.userGuidance.statesTitles.captureManual = "The document is ready to be captured";
 
     // Import button is used to import image from the gallery.
-    config.screens.camera.bottomBar.importButton.visible = true;
-    config.screens.camera.bottomBar.importButton.title.visible = true;
-    config.screens.camera.bottomBar.importButton.title.text = "Import";
+    config.screens.camera.toolbar.importButton.visible = true;
+    config.screens.camera.toolbar.importButton.title.visible = true;
+    config.screens.camera.toolbar.importButton.title.text = "Import";
 
     // Configure the auto/manual snap button.
-    config.screens.camera.bottomBar.autoSnappingModeButton.title.visible = true;
-    config.screens.camera.bottomBar.autoSnappingModeButton.title.text = "Auto";
-    config.screens.camera.bottomBar.manualSnappingModeButton.title.visible = true;
-    config.screens.camera.bottomBar.manualSnappingModeButton.title.text = "Manual";
+    config.screens.camera.toolbar.autoSnappingModeButton.title.visible = true;
+    config.screens.camera.toolbar.autoSnappingModeButton.title.text = "Auto";
+    config.screens.camera.toolbar.manualSnappingModeButton.title.visible = true;
+    config.screens.camera.toolbar.manualSnappingModeButton.title.text = "Manual";
 
     // Configure the torch off/on button.
-    config.screens.camera.bottomBar.torchOnButton.title.visible = true
-    config.screens.camera.bottomBar.torchOnButton.title.text = "On"
-    config.screens.camera.bottomBar.torchOffButton.title.visible = true
-    config.screens.camera.bottomBar.torchOffButton.title.text = "Off"
+    config.screens.camera.toolbar.torchOnButton.title.visible = true
+    config.screens.camera.toolbar.torchOnButton.title.text = "On"
+    config.screens.camera.toolbar.torchOffButton.title.visible = true
+    config.screens.camera.toolbar.torchOffButton.title.text = "Off"
 
     // Configure the feedback behavior when an image is captured.
     config.screens.camera.captureFeedback.cameraBlinkEnabled = true
@@ -51,5 +51,5 @@ export function applyScanningScreenConfig(config: UIConfig.DocumentScanningFlow)
 
     // Limit how many pages can be captured.
     config.outputSettings.pagesScanLimit = 3;
-    
+
 }
