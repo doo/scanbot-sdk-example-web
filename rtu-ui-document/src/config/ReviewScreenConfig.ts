@@ -15,9 +15,9 @@ export function applyReviewScreenConfig(config: UIConfig.DocumentScanningFlow) {
     config.screens.review.zoomButton.visible = false;
 
     // Hide the add & retake button.
-    config.screens.review.bottomBar.addButton.visible = false;
-    config.screens.review.bottomBar.retakeButton.visible = false;
+    config.screens.review.toolbar.addButton.barButton.visible = false;
+    config.screens.review.toolbar.retakeButton.barButton.visible = false;
 
     // Hide the reset button in the cropping screen.
-    config.screens.cropping.bottomBar.resetButton.visible = false;
+    config.screens.cropping.toolbar.resetButton.visible = false;
 }

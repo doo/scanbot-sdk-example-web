@@ -23,7 +23,7 @@ export default function SBSDKPage(props: { title: string, containerId: Container
     }, [props.toast]);
 
     return (
-        <Box style={{ width: "100vw", height: "100vh" }}>
+        <Box style={{ width: "100%", height: "100vh" }}>
             <TopBar title={props.title} isBackNavigationEnabled={true} />
             <div id={props.containerId} style={{ width: "100%", height: `calc(100% - ${TopBarHeight}px)` }} />
             <Toast text={toast?.text} color={toast?.color} />

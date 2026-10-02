@@ -23,11 +23,11 @@ export class ImageEnhancer {
             straighteningMode: "STRAIGHTEN"
         });
 
-        // Create a document enhancer instance
-        const enhancer = await sdk.API.DocumentEnhancer.create();
+        // Create a document straightener instance
+        const straightener = await sdk.API.DocumentStraightener.create();
 
-        // Apply straightening to the image using Document Enhancer API
-        const response = await enhancer.straighten(originalImage, parameters);
+        // Apply straightening to the image using Document Straightener API
+        const response = await straightener.run(originalImage, parameters);
 
         console.log("Original image:", originalImage);
         console.log("Straightened image:", response.result.straightenedImage);
