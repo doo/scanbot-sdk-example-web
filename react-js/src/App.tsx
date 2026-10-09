@@ -15,7 +15,8 @@ import {
     TextIncrease,
     Check,
     CreditCard,
-    PermIdentity
+    PermIdentity,
+    Badge
 } from "@mui/icons-material";
 
 import ScanbotSDK from "scanbot-web-sdk/ui";
@@ -67,6 +68,9 @@ function App() {
                 }} />
                 <FeatureListItem icon={PermIdentity} text='Document Data Extractor View' onClick={() => {
                     navigate('document-data-extractor');
+                }} />
+                <FeatureListItem icon={Badge} text='Italian ID Scanner View' onClick={() => {
+                    navigate('italian-id-scanner');
                 }} />
 
                 <SectionHeader title={"Ready-To-Use Components"} paddingTop={10} />

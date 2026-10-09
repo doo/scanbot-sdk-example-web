@@ -13,6 +13,7 @@ import StoredDataDetailsPage from './pages/StoredDataDetailsPage';
 import CheckScannerPage from "./pages/CheckScannerPage.tsx";
 import CreditCardScannerPage from "./pages/CreditCardScannerPage.tsx";
 import DocumentDataExtractorPage from "./pages/DocumentDataExtractorPage.tsx";
+import ItalianIDScanner from "./pages/ItalianIDScanner.tsx";
 
 createRoot(document.getElementById('root')!).render(
     <HashRouter>
@@ -22,6 +23,7 @@ createRoot(document.getElementById('root')!).render(
             <Route path="check-scanner" element={<CheckScannerPage />} />
             <Route path="credit-card-scanner" element={<CreditCardScannerPage />} />
             <Route path="document-data-extractor" element={<DocumentDataExtractorPage />} />
+            <Route path="italian-id-scanner" element={<ItalianIDScanner />} />
             <Route path="mrz-scanner" element={<MrzScannerPage />} />
             <Route path="text-pattern-scanner" element={<TextPatternScannerPage />} />
             <Route path="vin-scanner" element={<VinScannerPage />} />

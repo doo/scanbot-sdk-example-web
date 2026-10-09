@@ -9,7 +9,8 @@ export enum ContainerId {
     BarcodeScanner = "barcode-scanner-container",
     VinScanner = "vin-scanner-container",
     MrzScanner = "mrz-scanner-container",
-    TextPatternScanner = "text-pattern-scanner-container"
+    TextPatternScanner = "text-pattern-scanner-container",
+    ItalianIDScanner = "italian-id-scanner-container"
 }
 
 export default class SBSDKService {
