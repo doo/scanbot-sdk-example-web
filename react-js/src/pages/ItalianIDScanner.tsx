@@ -2,6 +2,7 @@ import React, { useRef, useEffect } from "react";
 import {
     CommonFieldType,
     DocumentDataExtractionResult,
+    DocumentDataExtractionStatus,
     DocumentDataExtractorViewConfiguration,
     GenericDocument,
     IDocumentDataExtractorHandle,
@@ -69,19 +70,38 @@ function processItalianIdResult(document: GenericDocument | null): string {
         : processItalianIdBackResult(document);
 }
 
+const HINT_TEXTS: Record<DocumentDataExtractionStatus, string> = {
+    ERROR_NOTHING_FOUND: "Place the front or back of your Italian ID card in the frame",
+    SCANNING_IN_PROGRESS_STILL_FOCUSING: "Hold still, focusing...",
+    SCANNING_IN_PROGRESS: "Scanning, keep the card steady...",
+    ERROR_BAD_CROP: "Hold the card straight and move it closer or further away",
+    ERROR_UNKNOWN_DOCUMENT: "This is not a supported document",
+    ERROR_UNACCEPTABLE_DOCUMENT: "Please scan an Italian ID card",
+    OK_BUT_LOW_CONFIDENCE_RESULTS: "Low quality scan, please try again",
+    OK_BUT_INVALID_DOCUMENT: "The document could not be validated",
+    OK: "Document scanned successfully",
+};
+
 export default function ItalianIDScanner() {
 
     const handle = useRef<IDocumentDataExtractorHandle | null>(null);
-    const [toast, setToast] = React.useState<string | undefined>(undefined);
+
+    const [hint, setHint] = React.useState<string>(HINT_TEXTS.ERROR_NOTHING_FOUND);
 
     const onDocumentDetected = async (result: DocumentDataExtractionResult) => {
+        setHint(HINT_TEXTS[result.status]);
         const status = result.status;
         if (status === "ERROR_NOTHING_FOUND" || status === "ERROR_UNKNOWN_DOCUMENT") {
             // Handle various error cases, see all DocumentDataExtractionStatus types
             return;
         }
-        console.log("DDE result:", result);
-        setToast(processItalianIdResult(result.document));
+
+        if (status === "OK") {
+            // If front scanning is successful and you require specific data from the back side,
+            // here you would now set the custom hint text to "Please scan the back" or something similar
+            const processed = processItalianIdResult(result.document);
+            console.log("Processed Italian ID result:\n", processed);
+        }
     };
 
     useEffect(() => {
@@ -122,6 +142,17 @@ export default function ItalianIDScanner() {
         };
     }, []);
 
-    return <><SBSDKPage title={"Italian ID Scanner"} containerId={ContainerId.ItalianIDScanner}
-                        toast={{ text: toast }} /><div id="result"></div></>;
+    return <>
+        <SBSDKPage title={"Italian ID Scanner"} containerId={ContainerId.ItalianIDScanner} />
+        <div style={{
+            position: "fixed", left: 0, right: 0, bottom: 48, display: "flex",
+            justifyContent: "center", pointerEvents: "none", zIndex: 10,
+        }}>
+            <div style={{
+                padding: "8px 16px", borderRadius: 8, maxWidth: "90%", textAlign: "center",
+                background: "rgba(0, 0, 0, 0.6)", color: "#fff", fontSize: 16,
+            }}>{hint}</div>
+        </div>
+        <div id="result"></div>
+    </>;
 }
